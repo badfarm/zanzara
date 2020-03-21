@@ -15,10 +15,10 @@ class CommandOperation extends Operation
     /**
      * @inheritDoc
      */
-    function doExecute(Update $update, MiddlewareData $data): void
+    public function handle(Update $update, $next)
     {
         $callback = $this->callback;
-        $callback($update, $data);
+        $callback($update->getMessage());
     }
 
 }

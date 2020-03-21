@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Mosquito\Test\Middleware;
 
-use Mosquito\Operation\MiddlewareData;
 use Mosquito\Operation\MiddlewareInterface;
 use Mosquito\Update\Update;
 
@@ -14,11 +13,14 @@ use Mosquito\Update\Update;
 class ItalyMiddleware implements MiddlewareInterface
 {
 
-    function process(Update $update, MiddlewareData $data): bool
+    /**
+     * @inheritDoc
+     */
+    public function handle(Update $update, $next)
     {
-        $data->add('pizza', 'Margherita');
-
-        return true;
+        echo 'Before Italy Middleware';
+        $next($update);
+        echo 'After Italy Middleware';
     }
 
 }

@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Mosquito\Operation;
 
-use Mosquito\Update\Update;
-
 /**
  *
  */
-abstract class Operation extends MiddlewareCollector
+abstract class Operation extends MiddlewareCollector implements MiddlewareInterface
 {
 
     /**
@@ -28,26 +26,13 @@ abstract class Operation extends MiddlewareCollector
      */
     public function __construct(string $id, callable $callback)
     {
-        parent::__construct();
         $this->id = $id;
         $this->callback = $callback;
+        $this->tip = new MiddlewareNode($this);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function execute(Update $update): void
-    {
-        $res = $this->processMiddleware($update);
-        if ($res) {
-            $this->doExecute($update, $this->middlewareData);
-        }
+    public function getTip(): MiddlewareNode {
+        return $this->tip;
     }
-
-    /**
-     * @param Update $update
-     * @param MiddlewareData $data
-     */
-    abstract function doExecute(Update $update, MiddlewareData $data): void;
 
 }

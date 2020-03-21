@@ -7,7 +7,6 @@ namespace Mosquito\Operation;
 use Mosquito\Update\Update;
 
 /**
- * Interface a middleware must implement.
  *
  */
 interface MiddlewareInterface
@@ -15,9 +14,8 @@ interface MiddlewareInterface
 
     /**
      * @param Update $update
-     * @param MiddlewareData $data
-     * @return bool
+     * @param $next
      */
-    function process(Update $update, MiddlewareData $data): bool;
+    public function handle(Update $update, $next);
 
 }

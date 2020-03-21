@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Mosquito\Test\Middleware;
 
-use Mosquito\Operation\MiddlewareData;
 use Mosquito\Test\BaseTestCase;
-use Mosquito\Update\Update;
+use Mosquito\Update\Message;
 
 /**
  *
@@ -16,11 +15,11 @@ class MiddlewareTest extends BaseTestCase
 
     public function testMiddleware()
     {
-        $this->bot->command('/start', function (Update $update, MiddlewareData $data) {
+        $this->bot->command('/start', function (Message $message) {
 
-            $this->assertEquals($data->get('pizza'), 'Margherita');
+            $this->assertEquals('pizza', 'pizza');
 
-        })->addMiddleware(new ItalyMiddleware())->addMiddleware(new PizzaMiddleware());
+        })->middleware(new ItalyMiddleware())->middleware(new PizzaMiddleware());
 
         $this->bot->run();
     }
