@@ -2,14 +2,14 @@
 <!-- "vendor/bin/phpunit" to run unit tests -->
 <phpunit bootstrap="tests/bootstrap.php">
     <testsuites>
-        <testsuite name="mosquito">
+        <testsuite name="zanzara">
             <directory suffix="Test.php">tests</directory>
         </testsuite>
     </testsuites>
     <!-- for code coverage, xdebug extension required -->
     <filter>
         <whitelist>
-            <directory>src/Mosquito</directory>
+            <directory>src/Zanzara</directory>
         </whitelist>
     </filter>
 </phpunit>

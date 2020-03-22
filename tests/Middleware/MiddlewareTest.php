@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Mosquito\Test\Middleware;
+namespace Zanzara\Test\Middleware;
 
-use Mosquito\Test\BaseTestCase;
-use Mosquito\Update\Message;
+use Zanzara\Test\BaseTestCase;
+use Zanzara\Update\Message;
 
 /**
  *

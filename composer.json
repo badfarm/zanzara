@@ -1,5 +1,5 @@
 {
-    "name": "mosquito/mosquito",
+    "name": "zanzara/zanzara",
     "type": "library",
     "description": "Library to build Telegram bots",
     "keywords": [
@@ -24,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Mosquito\\": "src/Mosquito"
+            "Zanzara\\": "src/Zanzara"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Mosquito\\Test\\": "tests"
+            "Zanzara\\Test\\": "tests"
         }
     }
 }

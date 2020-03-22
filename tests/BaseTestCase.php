@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Mosquito\Test;
+namespace Zanzara\Test;
 
-use Mosquito\Bot;
-use Mosquito\BotConfiguration;
+use Zanzara\Bot;
+use Zanzara\BotConfiguration;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Mosquito\Test\Middleware;
+namespace Zanzara\Test\Middleware;
 
-use Mosquito\Operation\MiddlewareInterface;
-use Mosquito\Update\Update;
+use Zanzara\Operation\MiddlewareInterface;
+use Zanzara\Update\Update;
 
 /**
  *
