@@ -141,7 +141,7 @@ abstract class OperationCollector
      */
     public function middleware(MiddlewareInterface $middleware): self
     {
-        $this->middleware[] = $middleware;
+        array_unshift($this->middleware, $middleware);
         return $this;
     }
 

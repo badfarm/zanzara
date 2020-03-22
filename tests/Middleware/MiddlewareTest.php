@@ -23,12 +23,13 @@ class MiddlewareTest extends TestCase
         $bot = new Bot('test');
         $bot->config()->setUpdateStream(__DIR__ . '/../update_types/message.json');
         $bot->middleware(new FirstMiddleware());
+        $bot->middleware(new SecondMiddleware());
 
         $bot->onUpdate(function (Context $ctx) {
 
-            $this->assertSame('executed', $ctx->get('third'));
+            $this->assertSame('executed', $ctx->get('fourth'));
 
-        })->middleware(new ThirdMiddleware())->middleware(new SecondMiddleware());
+        })->middleware(new FourthMiddleware())->middleware(new ThirdMiddleware());
 
         $bot->run();
     }
