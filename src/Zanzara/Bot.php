@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
-use Zanzara\Update\Update;
+use Zanzara\Operation\Operation;
 
 /**
- * Entry point.
+ * Entry point of the library, the client must create an instance of this class.
  *
  */
 class Bot extends OperationResolver
@@ -16,7 +16,7 @@ class Bot extends OperationResolver
     /**
      * @var BotConfiguration
      */
-    private $configuration;
+    private $config;
 
     /**
      * @var UpdateHandler
@@ -28,9 +28,9 @@ class Bot extends OperationResolver
      */
     public function __construct(string $token)
     {
-        $this->configuration = new BotConfiguration();
-        $this->configuration->setToken($token);
-        $this->updateHandler = new UpdateHandler($this->configuration);
+        $this->config = new BotConfiguration();
+        $this->config->setToken($token);
+        $this->updateHandler = new UpdateHandler($this->config);
     }
 
     /**
@@ -38,7 +38,7 @@ class Bot extends OperationResolver
      */
     public function config(): BotConfiguration
     {
-        return $this->configuration;
+        return $this->config;
     }
 
     /**
@@ -46,14 +46,15 @@ class Bot extends OperationResolver
      */
     public function run(): void
     {
-        $operation = $this->resolve('commands', '/start');
-        //$update = $this->updateHandler->getUpdate();
-        //todo: read update and accordingly to its type retrieve the correct operation/s and execute it/them
-        //todo: why not integrate ngrok "hack" script in the bot?
-        $data = ['update_id' => 111111, 'message' => ['message_id' => 1111, 'date' => 11, 'chat' => ['id' => 1, 'type' => 'private']]];
-        $update = new Update($data);
-        $middlewareTip = $operation->getTip();
-        $middlewareTip($update);
+        $update = $this->updateHandler->getUpdate();
+        $context = new Context($update);
+        $operations = $this->resolve($update);
+        /** @var Operation $operation */
+        foreach ($operations as $operation) {
+            $this->feedMiddlewareStack($operation);
+            $middlewareTip = $operation->getTip();
+            $middlewareTip($context);
+        }
     }
 
 }

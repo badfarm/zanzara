@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Zanzara\Operation;
 
+use Zanzara\MiddlewareInterface;
+
 /**
  *
  */
@@ -18,6 +20,8 @@ abstract class MiddlewareCollector
     protected $tip;
 
     /**
+     * Last in, first out.
+     *
      * @param MiddlewareInterface $middleware
      * @return MiddlewareCollector
      */

@@ -137,7 +137,9 @@ class Update
      */
     private function setUpdateType()
     {
-        if ($this->message) {
+        if ($this->message && $this->message->getSuccessfulPayment()) {
+            $this->updateType = SuccessfulPayment::class;
+        } else if ($this->message) {
             $this->updateType = Message::class;
         } else if ($this->editedMessage) {
             $this->updateType = EditedMessage::class;
@@ -145,8 +147,6 @@ class Update
             $this->updateType = ChannelPost::class;
         } else if ($this->editedChannelPost) {
             $this->updateType = EditedChannelPost::class;
-        } else if ($this->callbackQuery) {
-            $this->updateType = CallbackQuery::class;
         } else if ($this->callbackQuery) {
             $this->updateType = CallbackQuery::class;
         } else if ($this->shippingQuery) {

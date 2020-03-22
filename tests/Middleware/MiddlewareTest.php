@@ -4,24 +4,33 @@ declare(strict_types=1);
 
 namespace Zanzara\Test\Middleware;
 
-use Zanzara\Test\BaseTestCase;
-use Zanzara\Update\Message;
+use PHPUnit\Framework\TestCase;
+use Zanzara\Bot;
+use Zanzara\Context;
 
 /**
  *
  */
-class MiddlewareTest extends BaseTestCase
+class MiddlewareTest extends TestCase
 {
 
+    /**
+     * Tests the middleware stack is executed in the correct order.
+     *
+     */
     public function testMiddleware()
     {
-        $this->bot->command('/start', function (Message $message) {
+        $bot = new Bot('test');
+        $bot->config()->setUpdateStream(__DIR__ . '/../update_types/message.json');
+        $bot->middleware(new FirstMiddleware());
 
-            $this->assertEquals('pizza', 'pizza');
+        $bot->onUpdate(function (Context $ctx) {
 
-        })->middleware(new ItalyMiddleware())->middleware(new PizzaMiddleware());
+            $this->assertSame('executed', $ctx->get('third'));
 
-        $this->bot->run();
+        })->middleware(new ThirdMiddleware())->middleware(new SecondMiddleware());
+
+        $bot->run();
     }
 
 }

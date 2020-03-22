@@ -33,6 +33,11 @@ class BotConfiguration
     private $parseMode = self::PARSE_MODE_HTML;
 
     /**
+     * @var string
+     */
+    private $updateStream = 'php://input';
+
+    /**
      * @var array
      */
     private $redis = [];
@@ -99,6 +104,22 @@ class BotConfiguration
     public function getRedis(): array
     {
         return $this->redis;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUpdateStream(): string
+    {
+        return $this->updateStream;
+    }
+
+    /**
+     * @param string $updateStream
+     */
+    public function setUpdateStream(string $updateStream): void
+    {
+        $this->updateStream = $updateStream;
     }
 
 }

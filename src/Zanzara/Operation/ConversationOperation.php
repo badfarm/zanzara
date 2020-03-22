@@ -9,7 +9,7 @@ use Zanzara\Context;
 /**
  *
  */
-class CommandOperation extends Operation
+class ConversationOperation extends Operation
 {
 
     /**

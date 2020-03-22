@@ -1,0 +1,56 @@
+{
+    "update_id": 52250013,
+    "callback_query": {
+        "id": "666728698454529692",
+        "from": {
+            "id": 111111111,
+            "is_bot": false,
+            "first_name": "John",
+            "username": "john98",
+            "language_code": "it"
+        },
+        "message": {
+            "message_id": 10693,
+            "from": {
+                "id": 222222222,
+                "is_bot": true,
+                "first_name": "JohnBot",
+                "username": "JohnBot"
+            },
+            "chat": {
+                "id": 111111111,
+                "first_name": "John",
+                "username": "john98",
+                "type": "private"
+            },
+            "date": 1572089387,
+            "text": "From here you can manage your rules",
+            "reply_markup": {
+                "inline_keyboard": [
+                    [
+                        {
+                            "text": "\u270d Add rule",
+                            "callback_data": "addRule"
+                        },
+                        {
+                            "text": "Edit rule",
+                            "callback_data": "editRule"
+                        }
+                    ],
+                    [
+                        {
+                            "text": "\ud83d\uddd1 Remove rule",
+                            "callback_data": "removeRule"
+                        },
+                        {
+                            "text": "Read rules",
+                            "callback_data": "readRules"
+                        }
+                    ]
+                ]
+            }
+        },
+        "chat_instance": "4628664761794766620",
+        "data": "addRule"
+    }
+}

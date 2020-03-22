@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Zanzara\Operation;
 
+use Zanzara\MiddlewareInterface;
+
 /**
  *
  */
@@ -31,7 +33,8 @@ abstract class Operation extends MiddlewareCollector implements MiddlewareInterf
         $this->tip = new MiddlewareNode($this);
     }
 
-    public function getTip(): MiddlewareNode {
+    public function getTip(): MiddlewareNode
+    {
         return $this->tip;
     }
 

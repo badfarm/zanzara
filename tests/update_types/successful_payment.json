@@ -1,0 +1,32 @@
+{
+    "update_id": 52250017,
+    "message": {
+        "message_id": 10697,
+        "from": {
+            "id": 111111111,
+            "is_bot": false,
+            "first_name": "John",
+            "username": "john98",
+            "language_code": "it"
+        },
+        "chat": {
+            "id": 111111111,
+            "first_name": "John",
+            "username": "john98",
+            "type": "private"
+        },
+        "date": 1572089662,
+        "successful_payment": {
+            "currency": "EUR",
+            "total_amount": 2500,
+            "invoice_payload": "myPizza",
+            "order_info": {
+                "name": "John John",
+                "phone_number": "0000000000",
+                "email": "john@gmail.com"
+            },
+            "telegram_payment_charge_id": "_",
+            "provider_payment_charge_id": "_"
+        }
+    }
+}

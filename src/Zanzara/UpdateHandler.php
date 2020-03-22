@@ -20,25 +20,33 @@ class UpdateHandler
     /**
      * @var BotConfiguration
      */
-    private $configuration;
+    private $config;
 
     /**
-     * @param BotConfiguration $configuration
+     * @param BotConfiguration $config
      */
-    public function __construct(BotConfiguration $configuration)
+    public function __construct(BotConfiguration $config)
     {
-        $this->configuration = $configuration;
+        $this->config = $config;
     }
 
     public function init(): void
     {
-        $updateMode = $this->configuration->getUpdateMode();
-        if ($updateMode == BotConfiguration::WEBHOOK_MODE) {
-            $updateData = json_decode(file_get_contents('php://input'), true);
-            $this->update = new Update($updateData);
-        } else {
-            // not supported
+        $updateMode = $this->config->getUpdateMode();
+
+        switch ($updateMode) {
+
+            case BotConfiguration::WEBHOOK_MODE:
+                $updateData = json_decode(file_get_contents($this->config->getUpdateStream()), true);
+                $this->update = new Update($updateData);
+                break;
+
+            case BotConfiguration::POLLING_MODE:
+                // not supported
+                break;
+
         }
+
     }
 
     public function getUpdate(): Update

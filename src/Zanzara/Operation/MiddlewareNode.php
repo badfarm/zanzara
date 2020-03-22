@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Zanzara\Operation;
 
-use Zanzara\Update\Update;
+use Zanzara\Context;
+use Zanzara\MiddlewareInterface;
 
 /**
  *
@@ -33,11 +34,11 @@ class MiddlewareNode
     }
 
     /**
-     * @param Update $update
+     * @param Context $ctx
      */
-    public function __invoke(Update $update)
+    public function __invoke(Context $ctx)
     {
-        $this->current->handle($update, $this->next);
+        $this->current->handle($ctx, $this->next);
     }
 
 }

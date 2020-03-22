@@ -4,22 +4,91 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
+use Zanzara\Operation\CallbackQueryOperation;
+use Zanzara\Operation\CommandOperation;
+use Zanzara\Operation\ConversationOperation;
 use Zanzara\Operation\Operation;
+use Zanzara\Operation\PreCheckoutQueryOperation;
+use Zanzara\Operation\SuccessfulPaymentOperation;
+use Zanzara\Operation\UpdateOperation;
+use Zanzara\Update\CallbackQuery;
+use Zanzara\Update\Message;
+use Zanzara\Update\PreCheckoutQuery;
+use Zanzara\Update\ShippingQuery;
+use Zanzara\Update\SuccessfulPayment;
+use Zanzara\Update\Update;
 
 /**
+ * Resolves the operations collected in OperationCollector accordingly to the Telegram Update type.
  *
  */
 abstract class OperationResolver extends OperationCollector
 {
 
     /**
-     * @param string $operationType
-     * @param string $id
-     * @return Operation
+     * @param Update $update
+     * @return array
      */
-    protected function resolve(string $operationType, string $id): Operation
+    protected function resolve(Update $update): array
     {
-        return $this->operations[$operationType][$id];
+        $operations = [];
+
+        switch ($update->getUpdateType()) {
+
+            case Message::class:
+                $text = $update->getMessage()->getText();
+                $operation = $this->findAndPush($operations, CommandOperation::class, $text);
+                if (!$operation) {
+                    $userId = $update->getMessage()->getFrom()->getId();
+                    $userConversation = 'dummyConversation'; // $redis->getConversation($userId)
+                    $this->findAndPush($operations, ConversationOperation::class, $userConversation);
+                }
+                break;
+
+            case CallbackQuery::class:
+                $text = $update->getCallbackQuery()->getMessage()->getText();
+                $this->findAndPush($operations, CallbackQueryOperation::class, $text);
+                break;
+
+            case ShippingQuery::class:
+                $invoicePayload = $update->getShippingQuery()->getInvoicePayload();
+                $this->findAndPush($operations, ShippingQuery::class, $invoicePayload);
+                break;
+
+            case PreCheckoutQuery::class:
+                $invoicePayload = $update->getPreCheckoutQuery()->getInvoicePayload();
+                $this->findAndPush($operations, PreCheckoutQueryOperation::class, $invoicePayload);
+                break;
+
+            case SuccessfulPayment::class:
+                $invoicePayload = $update->getMessage()->getSuccessfulPayment()->getInvoicePayload();
+                $this->findAndPush($operations, SuccessfulPaymentOperation::class, $invoicePayload);
+                break;
+
+        }
+
+        if (isset($this->operations[UpdateOperation::class])) {
+            $operations = array_merge($operations, $this->operations[UpdateOperation::class]);
+        }
+
+        return $operations;
+    }
+
+
+    /**
+     * @param array $operations
+     * @param string $operationType
+     * @param string $operationId
+     * @return Operation|null
+     */
+    private function findAndPush(array &$operations, string $operationType, string $operationId): ?Operation
+    {
+        $res = null;
+        if (isset($this->operations[$operationType][$operationId])) {
+            $res = $this->operations[$operationType][$operationId];
+            $operations[] = $res;
+        }
+        return $res;
     }
 
 }

@@ -11,7 +11,7 @@ class CallbackQuery
 {
 
     /**
-     * @var int
+     * @var string
      */
     private $id;
 
@@ -51,7 +51,7 @@ class CallbackQuery
     public function __construct(array &$data)
     {
         $this->id = $data['id'];
-        $this->from = new User($data['id']);
+        $this->from = new User($data['from']);
         if (isset($data['message'])) {
             $this->message = new Message($data['message']);
         }
@@ -60,17 +60,17 @@ class CallbackQuery
         }
         $this->chatInstance = $data['chat_instance'];
         if (isset($data['data'])) {
-            $this->message = $data['data'];
+            $this->data = $data['data'];
         }
         if (isset($data['game_short_name'])) {
-            $this->message = $data['game_short_name'];
+            $this->gameShortName = $data['game_short_name'];
         }
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }

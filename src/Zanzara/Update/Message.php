@@ -94,7 +94,7 @@ class Message
     /**
      * @var array
      */
-    private $captionEntities;
+    private $captionEntities = [];
 
     /**
      * @var Audio|null
@@ -112,6 +112,31 @@ class Message
     private $animation;
 
     /**
+     * @var Game|null
+     */
+    private $game;
+
+    /**
+     * @var array
+     */
+    private $photo = [];
+
+    /**
+     * @var Sticker|null
+     */
+    private $sticker;
+
+    /**
+     * @var Video|null
+     */
+    private $video;
+
+    /**
+     * @var SuccessfulPayment|null
+     */
+    private $successfulPayment;
+
+    /**
      * @param array $data
      */
     public function __construct(array &$data)
@@ -121,7 +146,7 @@ class Message
             $this->from = new User($data['from']);
         }
         $this->date = $data['date'];
-        $this->from = new Chat($data['chat']);
+        $this->chat = new Chat($data['chat']);
         if (isset($data['forward_from'])) {
             $this->forwardFrom = new User($data['forward_from']);
         }
@@ -175,6 +200,24 @@ class Message
         }
         if (isset($data['animation'])) {
             $this->animation = new Animation($data['animation']);
+        }
+        if (isset($data['game'])) {
+            $this->game = new Game($data['game']);
+        }
+        if (isset($data['photo'])) {
+            $photo = $data['photo'];
+            foreach ($photo as $p) {
+                $this->photo[] = new PhotoSize($p);
+            }
+        }
+        if (isset($data['sticker'])) {
+            $this->sticker = new Sticker($data['sticker']);
+        }
+        if (isset($data['video'])) {
+            $this->video = new Video($data['video']);
+        }
+        if (isset($data['successful_payment'])) {
+            $this->successfulPayment = new SuccessfulPayment($data['successful_payment']);
         }
     }
 
@@ -336,6 +379,30 @@ class Message
     public function getAnimation(): ?Animation
     {
         return $this->animation;
+    }
+
+    /**
+     * @return SuccessfulPayment|null
+     */
+    public function getSuccessfulPayment(): ?SuccessfulPayment
+    {
+        return $this->successfulPayment;
+    }
+
+    /**
+     * @return Game|null
+     */
+    public function getGame(): ?Game
+    {
+        return $this->game;
+    }
+
+    /**
+     * @return Sticker|null
+     */
+    public function getSticker(): ?Sticker
+    {
+        return $this->sticker;
     }
 
 }
