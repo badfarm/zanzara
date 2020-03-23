@@ -1,0 +1,39 @@
+{
+    "update_id": 52259561,
+    "message": {
+        "message_id": 23774,
+        "from": {
+            "id": 222222222,
+            "is_bot": false,
+            "first_name": "Michael",
+            "username": "mscott",
+            "language_code": "it"
+        },
+        "chat": {
+            "id": 222222222,
+            "first_name": "Michael",
+            "username": "mscott",
+            "type": "private"
+        },
+        "date": 1584986526,
+        "poll": {
+            "id": "6037235416870944772",
+            "question": "What time is it",
+            "options": [
+                {
+                    "text": "13",
+                    "voter_count": 0
+                },
+                {
+                    "text": "15",
+                    "voter_count": 0
+                }
+            ],
+            "total_voter_count": 0,
+            "is_closed": false,
+            "is_anonymous": true,
+            "type": "regular",
+            "allows_multiple_answers": false
+        }
+    }
+}

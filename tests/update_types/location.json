@@ -1,0 +1,24 @@
+{
+    "update_id": 52259559,
+    "message": {
+        "message_id": 23772,
+        "from": {
+            "id": 222222222,
+            "is_bot": false,
+            "first_name": "Michael",
+            "username": "mscott",
+            "language_code": "it"
+        },
+        "chat": {
+            "id": 222222222,
+            "first_name": "Michael",
+            "username": "mscott",
+            "type": "private"
+        },
+        "date": 1584986378,
+        "location": {
+            "latitude": 0.000000,
+            "longitude": -1.111111
+        }
+    }
+}

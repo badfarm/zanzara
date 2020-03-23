@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Zanzara;
 
 use JsonMapper;
-use Zanzara\Test\Operation\Contact;
 use Zanzara\Update\Update;
 
 /**

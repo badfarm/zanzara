@@ -1,0 +1,25 @@
+{
+    "update_id": 52259558,
+    "message": {
+        "message_id": 23771,
+        "from": {
+            "id": 222222222,
+            "is_bot": false,
+            "first_name": "Michael",
+            "username": "mscott",
+            "language_code": "it"
+        },
+        "chat": {
+            "id": 222222222,
+            "first_name": "Michael",
+            "username": "mscott",
+            "type": "private"
+        },
+        "date": 1584986332,
+        "contact": {
+            "phone_number": "000000000000",
+            "first_name": "Michael",
+            "user_id": 111111111
+        }
+    }
+}

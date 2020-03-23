@@ -1,0 +1,27 @@
+{
+    "update_id": 52259553,
+    "message": {
+        "message_id": 23766,
+        "from": {
+            "id": 222222222,
+            "is_bot": false,
+            "first_name": "Michael",
+            "username": "mscott",
+            "language_code": "it"
+        },
+        "chat": {
+            "id": 222222222,
+            "first_name": "Michael",
+            "username": "mscott",
+            "type": "private"
+        },
+        "date": 1584985880,
+        "document": {
+            "file_name": "mypdf.pdf",
+            "mime_type": "application/pdf",
+            "file_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "file_unique_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "file_size": 5811
+        }
+    }
+}

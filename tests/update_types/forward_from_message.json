@@ -1,0 +1,29 @@
+{
+    "update_id": 52259550,
+    "message": {
+        "message_id": 23763,
+        "from": {
+            "id": 222222222,
+            "is_bot": false,
+            "first_name": "Michael",
+            "username": "mscott",
+            "language_code": "it"
+        },
+        "chat": {
+            "id": 222222222,
+            "first_name": "Michael",
+            "username": "mscott",
+            "type": "private"
+        },
+        "date": 1584985602,
+        "forward_from": {
+            "id": 222222222,
+            "is_bot": false,
+            "first_name": "Michael",
+            "username": "mscott",
+            "language_code": "it"
+        },
+        "forward_date": 1584291033,
+        "text": "Wait"
+    }
+}

@@ -1,0 +1,40 @@
+{
+    "update_id": 52259549,
+    "edited_message": {
+        "message_id": 23762,
+        "from": {
+            "id": 222222222,
+            "is_bot": false,
+            "first_name": "Michael",
+            "username": "mscott",
+            "language_code": "it"
+        },
+        "chat": {
+            "id": 222222222,
+            "first_name": "Michael",
+            "username": "mscott",
+            "type": "private"
+        },
+        "date": 1584985181,
+        "edit_date": 1584985245,
+        "reply_to_message": {
+            "message_id": 23758,
+            "from": {
+                "id": 222222222,
+                "is_bot": false,
+                "first_name": "Michael",
+                "username": "mscott",
+                "language_code": "it"
+            },
+            "chat": {
+                "id": 222222222,
+                "first_name": "Michael",
+                "username": "mscott",
+                "type": "private"
+            },
+            "date": 1584984730,
+            "text": "\ud83d\udc6e Rules"
+        },
+        "text": "Editing this message"
+    }
+}

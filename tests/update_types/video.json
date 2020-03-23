@@ -1,0 +1,36 @@
+{
+    "update_id": 52259557,
+    "message": {
+        "message_id": 23770,
+        "from": {
+            "id": 222222222,
+            "is_bot": false,
+            "first_name": "Michael",
+            "username": "mscott",
+            "language_code": "it"
+        },
+        "chat": {
+            "id": 222222222,
+            "first_name": "Michael",
+            "username": "mscott",
+            "type": "private"
+        },
+        "date": 1584986212,
+        "video": {
+            "duration": 6,
+            "width": 480,
+            "height": 480,
+            "mime_type": "video/mp4",
+            "thumb": {
+                "file_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                "file_unique_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                "file_size": 18081,
+                "width": 320,
+                "height": 320
+            },
+            "file_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "file_unique_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "file_size": 1384565
+        }
+    }
+}

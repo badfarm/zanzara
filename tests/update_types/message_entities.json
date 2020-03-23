@@ -1,0 +1,33 @@
+{
+    "update_id": 52259551,
+    "message": {
+        "message_id": 23764,
+        "from": {
+            "id": 222222222,
+            "is_bot": false,
+            "first_name": "Michael",
+            "username": "mscott",
+            "language_code": "it"
+        },
+        "chat": {
+            "id": 222222222,
+            "first_name": "Michael",
+            "username": "mscott",
+            "type": "private"
+        },
+        "date": 1584985704,
+        "text": "http://zanzara.com http://pippo.com",
+        "entities": [
+            {
+                "offset": 0,
+                "length": 18,
+                "type": "url"
+            },
+            {
+                "offset": 19,
+                "length": 16,
+                "type": "url"
+            }
+        ]
+    }
+}

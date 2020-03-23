@@ -1,52 +1,56 @@
 {
-    "update_id": 52250013,
+    "update_id": 52259546,
     "callback_query": {
-        "id": "666728698454529692",
+        "id": "666728699048485871",
         "from": {
-            "id": 111111111,
+            "id": 222222222,
             "is_bot": false,
-            "first_name": "John",
-            "username": "john98",
+            "first_name": "Michael",
+            "username": "mscott",
             "language_code": "it"
         },
         "message": {
-            "message_id": 10693,
+            "message_id": 23759,
             "from": {
-                "id": 222222222,
+                "id": 800653059,
                 "is_bot": true,
-                "first_name": "JohnBot",
-                "username": "JohnBot"
+                "first_name": "ScottBot",
+                "username": "ScottBot"
             },
             "chat": {
-                "id": 111111111,
-                "first_name": "John",
-                "username": "john98",
+                "id": 222222222,
+                "first_name": "Michael",
+                "username": "mscott",
                 "type": "private"
             },
-            "date": 1572089387,
-            "text": "From here you can manage your rules",
+            "date": 1584984731,
+            "text": "Manage your data",
             "reply_markup": {
                 "inline_keyboard": [
-                    {
-                        "text": "\u270d Add rule",
-                        "callback_data": "addRule"
-                    },
-                    {
-                        "text": "Edit rule",
-                        "callback_data": "editRule"
-                    },
-                    {
-                        "text": "\ud83d\uddd1 Remove rule",
-                        "callback_data": "removeRule"
-                    },
-                    {
-                        "text": "Read rules",
-                        "callback_data": "readRules"
-                    }
+                    [
+                        {
+                            "text": "Add",
+                            "callback_data": "add"
+                        },
+                        {
+                            "text": "Modify",
+                            "callback_data": "modify"
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Remove",
+                            "callback_data": "remove"
+                        },
+                        {
+                            "text": "Read",
+                            "callback_data": "read"
+                        }
+                    ]
                 ]
             }
         },
         "chat_instance": "4628664761794766620",
-        "data": "addRule"
+        "data": "read"
     }
 }

@@ -7,10 +7,6 @@ namespace Zanzara\Update;
 /**
  * The update received from Telegram.
  *
- * Poll
- * Passport
- * File
- *
  */
 class Update
 {

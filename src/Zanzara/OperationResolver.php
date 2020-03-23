@@ -13,7 +13,7 @@ use Zanzara\Update\SuccessfulPayment;
 use Zanzara\Update\Update;
 
 /**
- * Resolves the operations collected in OperationCollector accordingly to the Telegram Update type.
+ * Resolves the operations collected in OperationCollector accordingly to Telegram Update type.
  *
  */
 abstract class OperationResolver extends OperationCollector
@@ -32,6 +32,7 @@ abstract class OperationResolver extends OperationCollector
             case Message::class:
                 $text = $update->getMessage()->getText();
                 $operation = $this->findAndPush($operations, 'messages', $text);
+                // do not manage the update as conversation if the text is already managed as command/text
                 if (!$operation) {
                     $userId = $update->getMessage()->getFrom()->getId();
                     $userConversation = 'dummyConversation'; // $redis->getConversation($userId)

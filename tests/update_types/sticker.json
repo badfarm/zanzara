@@ -1,0 +1,37 @@
+{
+    "update_id": 52259554,
+    "message": {
+        "message_id": 23767,
+        "from": {
+            "id": 222222222,
+            "is_bot": false,
+            "first_name": "Michael",
+            "username": "mscott",
+            "language_code": "it"
+        },
+        "chat": {
+            "id": 222222222,
+            "first_name": "Michael",
+            "username": "mscott",
+            "type": "private"
+        },
+        "date": 1584985959,
+        "sticker": {
+            "width": 512,
+            "height": 512,
+            "emoji": "\ud83d\ude02",
+            "set_name": "DaisyRomashka",
+            "is_animated": true,
+            "thumb": {
+                "file_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                "file_unique_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                "file_size": 6574,
+                "width": 128,
+                "height": 128
+            },
+            "file_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "file_unique_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "file_size": 9721
+        }
+    }
+}

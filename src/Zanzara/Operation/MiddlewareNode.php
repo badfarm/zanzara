@@ -8,6 +8,9 @@ use Zanzara\Context;
 use Zanzara\MiddlewareInterface;
 
 /**
+ * A node of the middleware stack.
+ * When invoked it executes the middleware code.
+ * The last node is the @see Operation to be executed and does not have a next node.
  *
  */
 class MiddlewareNode

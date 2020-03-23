@@ -11,12 +11,12 @@ class InlineKeyboardMarkup
 {
 
     /**
-     * @var InlineKeyboardButton[]
+     * @var InlineKeyboardButton[][]
      */
     private $inlineKeyboard = [];
 
     /**
-     * @return InlineKeyboardButton[]
+     * @return InlineKeyboardButton[][]
      */
     public function getInlineKeyboard(): array
     {
@@ -24,7 +24,7 @@ class InlineKeyboardMarkup
     }
 
     /**
-     * @param InlineKeyboardButton[] $inlineKeyboard
+     * @param InlineKeyboardButton[][] $inlineKeyboard
      */
     public function setInlineKeyboard(array $inlineKeyboard): void
     {

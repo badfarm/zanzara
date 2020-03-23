@@ -63,7 +63,7 @@ abstract class OperationCollector
      */
     public function onText(string $text, callable $callback): MiddlewareCollector
     {
-        $commandOperation = new Operation($callback, "$text");
+        $commandOperation = new Operation($callback, $text);
         $this->operations['messages'][$text] = $commandOperation;
         return $commandOperation;
     }
@@ -131,7 +131,7 @@ abstract class OperationCollector
      */
     public function onConversation(string $conversationId, callable $callback): MiddlewareCollector
     {
-        $conversationOperation = new ConversationOperation($conversationId, $callback);
+        $conversationOperation = new ConversationOperation($callback, $conversationId);
         $this->operations['conversations'][$conversationId] = $conversationOperation;
         return $conversationOperation;
     }

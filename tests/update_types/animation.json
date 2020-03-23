@@ -1,0 +1,51 @@
+{
+    "update_id": 52259556,
+    "message": {
+        "message_id": 23769,
+        "from": {
+            "id": 222222222,
+            "is_bot": false,
+            "first_name": "Michael",
+            "username": "mscott",
+            "language_code": "it"
+        },
+        "chat": {
+            "id": 222222222,
+            "first_name": "Michael",
+            "username": "mscott",
+            "type": "private"
+        },
+        "date": 1584986007,
+        "animation": {
+            "file_name": "giphy.mp4",
+            "mime_type": "video/mp4",
+            "duration": 2,
+            "width": 480,
+            "height": 360,
+            "thumb": {
+                "file_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                "file_unique_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                "file_size": 15993,
+                "width": 320,
+                "height": 240
+            },
+            "file_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "file_unique_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "file_size": 541685
+        },
+        "document": {
+            "file_name": "giphy.mp4",
+            "mime_type": "video/mp4",
+            "thumb": {
+                "file_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                "file_unique_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                "file_size": 15993,
+                "width": 320,
+                "height": 240
+            },
+            "file_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "file_unique_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "file_size": 541685
+        }
+    }
+}
