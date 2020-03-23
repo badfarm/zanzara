@@ -1,35 +1,36 @@
 {
-    "name": "zanzara/zanzara",
-    "type": "library",
-    "description": "Library to build Telegram bots",
-    "keywords": [
-        "telegram",
-        "bot"
-    ],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Michele Righetti"
-        },
-        {
-            "name": "Mattia Corradi"
-        }
-    ],
-    "require": {
-        "php": "^7.2",
-        "ext-json": "*"
+  "name": "zanzara/zanzara",
+  "type": "library",
+  "description": "Library to build Telegram bots",
+  "keywords": [
+    "telegram",
+    "bot"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Michele Righetti"
     },
-    "require-dev": {
-        "phpunit/phpunit": "^8.5"
-    },
-    "autoload": {
-        "psr-4": {
-            "Zanzara\\": "src/Zanzara"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Zanzara\\Test\\": "tests"
-        }
+    {
+      "name": "Mattia Corradi"
     }
+  ],
+  "require": {
+    "php": "^7.2",
+    "ext-json": "*",
+    "symfony/cache": "^5.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Zanzara\\": "src/Zanzara"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Zanzara\\Test\\": "tests"
+    }
+  }
 }
