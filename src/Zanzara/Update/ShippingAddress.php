@@ -41,24 +41,19 @@ class ShippingAddress
     private $postCode;
 
     /**
-     * @param array $data
-     */
-    public function __construct(array &$data)
-    {
-        $this->countryCode = $data['country_code'];
-        $this->state = $data['state'];
-        $this->city = $data['city'];
-        $this->streetLine1 = $data['street_line1'];
-        $this->streetLine2 = $data['street_line2'];
-        $this->postCode = $data['post_code'];
-    }
-
-    /**
      * @return string
      */
     public function getCountryCode(): string
     {
         return $this->countryCode;
+    }
+
+    /**
+     * @param string $countryCode
+     */
+    public function setCountryCode(string $countryCode): void
+    {
+        $this->countryCode = $countryCode;
     }
 
     /**
@@ -70,11 +65,27 @@ class ShippingAddress
     }
 
     /**
+     * @param string $state
+     */
+    public function setState(string $state): void
+    {
+        $this->state = $state;
+    }
+
+    /**
      * @return string
      */
     public function getCity(): string
     {
         return $this->city;
+    }
+
+    /**
+     * @param string $city
+     */
+    public function setCity(string $city): void
+    {
+        $this->city = $city;
     }
 
     /**
@@ -86,6 +97,14 @@ class ShippingAddress
     }
 
     /**
+     * @param string $streetLine1
+     */
+    public function setStreetLine1(string $streetLine1): void
+    {
+        $this->streetLine1 = $streetLine1;
+    }
+
+    /**
      * @return string
      */
     public function getStreetLine2(): string
@@ -94,11 +113,27 @@ class ShippingAddress
     }
 
     /**
+     * @param string $streetLine2
+     */
+    public function setStreetLine2(string $streetLine2): void
+    {
+        $this->streetLine2 = $streetLine2;
+    }
+
+    /**
      * @return string
      */
     public function getPostCode(): string
     {
         return $this->postCode;
+    }
+
+    /**
+     * @param string $postCode
+     */
+    public function setPostCode(string $postCode): void
+    {
+        $this->postCode = $postCode;
     }
 
 }

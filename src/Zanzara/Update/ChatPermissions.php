@@ -51,42 +51,19 @@ class ChatPermissions
     private $canPinMessages;
 
     /**
-     * @param array $data
-     */
-    public function __construct(array $data)
-    {
-        if (isset($data['can_send_messages'])) {
-            $this->canSendMessages = $data['can_send_messages'];
-        }
-        if (isset($data['can_send_media_messages'])) {
-            $this->canSendMessages = $data['can_send_media_messages'];
-        }
-        if (isset($data['can_send_polls'])) {
-            $this->canSendPolls = $data['can_send_polls'];
-        }
-        if (isset($data['can_send_other_messages'])) {
-            $this->canSendOtherMessages = $data['can_send_other_messages'];
-        }
-        if (isset($data['can_add_web_page_previews'])) {
-            $this->canAddWebPagePreviews = $data['can_add_web_page_previews'];
-        }
-        if (isset($data['can_change_info'])) {
-            $this->canChangeInfo = $data['can_change_info'];
-        }
-        if (isset($data['can_invite_users'])) {
-            $this->canInviteUsers = $data['can_invite_users'];
-        }
-        if (isset($data['can_pin_messages'])) {
-            $this->canPinMessages = $data['can_pin_messages'];
-        }
-    }
-
-    /**
      * @return bool|null
      */
     public function getCanSendMessages(): ?bool
     {
         return $this->canSendMessages;
+    }
+
+    /**
+     * @param bool|null $canSendMessages
+     */
+    public function setCanSendMessages(?bool $canSendMessages): void
+    {
+        $this->canSendMessages = $canSendMessages;
     }
 
     /**
@@ -98,11 +75,27 @@ class ChatPermissions
     }
 
     /**
+     * @param bool|null $canSendMediaMessages
+     */
+    public function setCanSendMediaMessages(?bool $canSendMediaMessages): void
+    {
+        $this->canSendMediaMessages = $canSendMediaMessages;
+    }
+
+    /**
      * @return bool|null
      */
     public function getCanSendPolls(): ?bool
     {
         return $this->canSendPolls;
+    }
+
+    /**
+     * @param bool|null $canSendPolls
+     */
+    public function setCanSendPolls(?bool $canSendPolls): void
+    {
+        $this->canSendPolls = $canSendPolls;
     }
 
     /**
@@ -114,11 +107,27 @@ class ChatPermissions
     }
 
     /**
+     * @param bool|null $canSendOtherMessages
+     */
+    public function setCanSendOtherMessages(?bool $canSendOtherMessages): void
+    {
+        $this->canSendOtherMessages = $canSendOtherMessages;
+    }
+
+    /**
      * @return bool|null
      */
     public function getCanAddWebPagePreviews(): ?bool
     {
         return $this->canAddWebPagePreviews;
+    }
+
+    /**
+     * @param bool|null $canAddWebPagePreviews
+     */
+    public function setCanAddWebPagePreviews(?bool $canAddWebPagePreviews): void
+    {
+        $this->canAddWebPagePreviews = $canAddWebPagePreviews;
     }
 
     /**
@@ -130,6 +139,14 @@ class ChatPermissions
     }
 
     /**
+     * @param bool|null $canChangeInfo
+     */
+    public function setCanChangeInfo(?bool $canChangeInfo): void
+    {
+        $this->canChangeInfo = $canChangeInfo;
+    }
+
+    /**
      * @return bool|null
      */
     public function getCanInviteUsers(): ?bool
@@ -138,11 +155,27 @@ class ChatPermissions
     }
 
     /**
+     * @param bool|null $canInviteUsers
+     */
+    public function setCanInviteUsers(?bool $canInviteUsers): void
+    {
+        $this->canInviteUsers = $canInviteUsers;
+    }
+
+    /**
      * @return bool|null
      */
     public function getCanPinMessages(): ?bool
     {
         return $this->canPinMessages;
+    }
+
+    /**
+     * @param bool|null $canPinMessages
+     */
+    public function setCanPinMessages(?bool $canPinMessages): void
+    {
+        $this->canPinMessages = $canPinMessages;
     }
 
 }

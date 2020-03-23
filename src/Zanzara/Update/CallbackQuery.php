@@ -46,33 +46,19 @@ class CallbackQuery
     private $gameShortName;
 
     /**
-     * @param array $data
-     */
-    public function __construct(array &$data)
-    {
-        $this->id = $data['id'];
-        $this->from = new User($data['from']);
-        if (isset($data['message'])) {
-            $this->message = new Message($data['message']);
-        }
-        if (isset($data['inline_message_id'])) {
-            $this->inlineMessageId = new Message($data['inline_message_id']);
-        }
-        $this->chatInstance = $data['chat_instance'];
-        if (isset($data['data'])) {
-            $this->data = $data['data'];
-        }
-        if (isset($data['game_short_name'])) {
-            $this->gameShortName = $data['game_short_name'];
-        }
-    }
-
-    /**
      * @return string
      */
     public function getId(): string
     {
         return $this->id;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setId(string $id): void
+    {
+        $this->id = $id;
     }
 
     /**
@@ -84,11 +70,27 @@ class CallbackQuery
     }
 
     /**
+     * @param User $from
+     */
+    public function setFrom(User $from): void
+    {
+        $this->from = $from;
+    }
+
+    /**
      * @return Message|null
      */
     public function getMessage(): ?Message
     {
         return $this->message;
+    }
+
+    /**
+     * @param Message|null $message
+     */
+    public function setMessage(?Message $message): void
+    {
+        $this->message = $message;
     }
 
     /**
@@ -100,11 +102,27 @@ class CallbackQuery
     }
 
     /**
+     * @param string|null $inlineMessageId
+     */
+    public function setInlineMessageId(?string $inlineMessageId): void
+    {
+        $this->inlineMessageId = $inlineMessageId;
+    }
+
+    /**
      * @return string
      */
     public function getChatInstance(): string
     {
         return $this->chatInstance;
+    }
+
+    /**
+     * @param string $chatInstance
+     */
+    public function setChatInstance(string $chatInstance): void
+    {
+        $this->chatInstance = $chatInstance;
     }
 
     /**
@@ -116,11 +134,27 @@ class CallbackQuery
     }
 
     /**
+     * @param string|null $data
+     */
+    public function setData(?string $data): void
+    {
+        $this->data = $data;
+    }
+
+    /**
      * @return string|null
      */
     public function getGameShortName(): ?string
     {
         return $this->gameShortName;
+    }
+
+    /**
+     * @param string|null $gameShortName
+     */
+    public function setGameShortName(?string $gameShortName): void
+    {
+        $this->gameShortName = $gameShortName;
     }
 
 }

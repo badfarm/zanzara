@@ -46,29 +46,19 @@ class SuccessfulPayment
     private $providerPaymentChargeId;
 
     /**
-     * @param array $data
-     */
-    public function __construct(array &$data)
-    {
-        $this->currency = $data['currency'];
-        $this->totalAmount = $data['total_amount'];
-        $this->invoicePayload = $data['invoice_payload'];
-        if (isset($data['shipping_option_id'])) {
-            $this->shippingOptionId = $data['shipping_option_id'];
-        }
-        if (isset($data['order_info'])) {
-            $this->orderInfo = new OrderInfo($data['order_info']);
-        }
-        $this->telegramPaymentChargeId = $data['telegram_payment_charge_id'];
-        $this->providerPaymentChargeId = $data['provider_payment_charge_id'];
-    }
-
-    /**
      * @return string
      */
     public function getCurrency(): string
     {
         return $this->currency;
+    }
+
+    /**
+     * @param string $currency
+     */
+    public function setCurrency(string $currency): void
+    {
+        $this->currency = $currency;
     }
 
     /**
@@ -80,11 +70,27 @@ class SuccessfulPayment
     }
 
     /**
+     * @param int $totalAmount
+     */
+    public function setTotalAmount(int $totalAmount): void
+    {
+        $this->totalAmount = $totalAmount;
+    }
+
+    /**
      * @return string
      */
     public function getInvoicePayload(): string
     {
         return $this->invoicePayload;
+    }
+
+    /**
+     * @param string $invoicePayload
+     */
+    public function setInvoicePayload(string $invoicePayload): void
+    {
+        $this->invoicePayload = $invoicePayload;
     }
 
     /**
@@ -96,11 +102,27 @@ class SuccessfulPayment
     }
 
     /**
+     * @param string|null $shippingOptionId
+     */
+    public function setShippingOptionId(?string $shippingOptionId): void
+    {
+        $this->shippingOptionId = $shippingOptionId;
+    }
+
+    /**
      * @return OrderInfo|null
      */
     public function getOrderInfo(): ?OrderInfo
     {
         return $this->orderInfo;
+    }
+
+    /**
+     * @param OrderInfo|null $orderInfo
+     */
+    public function setOrderInfo(?OrderInfo $orderInfo): void
+    {
+        $this->orderInfo = $orderInfo;
     }
 
     /**
@@ -112,11 +134,27 @@ class SuccessfulPayment
     }
 
     /**
+     * @param string $telegramPaymentChargeId
+     */
+    public function setTelegramPaymentChargeId(string $telegramPaymentChargeId): void
+    {
+        $this->telegramPaymentChargeId = $telegramPaymentChargeId;
+    }
+
+    /**
      * @return string
      */
     public function getProviderPaymentChargeId(): string
     {
         return $this->providerPaymentChargeId;
+    }
+
+    /**
+     * @param string $providerPaymentChargeId
+     */
+    public function setProviderPaymentChargeId(string $providerPaymentChargeId): void
+    {
+        $this->providerPaymentChargeId = $providerPaymentChargeId;
     }
 
 }

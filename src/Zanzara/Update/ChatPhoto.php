@@ -31,22 +31,19 @@ class ChatPhoto
     private $bigFileUniqueId;
 
     /**
-     * @param array $data
-     */
-    public function __construct(array $data)
-    {
-        $this->smallFileId = $data['small_file_id'];
-        $this->smallFileUniqueId = $data['small_file_unique_id'];
-        $this->bigFileId = $data['big_file_id'];
-        $this->bigFileUniqueId = $data['big_file_unique_id'];
-    }
-
-    /**
      * @return string
      */
     public function getSmallFileId(): string
     {
         return $this->smallFileId;
+    }
+
+    /**
+     * @param string $smallFileId
+     */
+    public function setSmallFileId(string $smallFileId): void
+    {
+        $this->smallFileId = $smallFileId;
     }
 
     /**
@@ -58,6 +55,14 @@ class ChatPhoto
     }
 
     /**
+     * @param string $smallFileUniqueId
+     */
+    public function setSmallFileUniqueId(string $smallFileUniqueId): void
+    {
+        $this->smallFileUniqueId = $smallFileUniqueId;
+    }
+
+    /**
      * @return string
      */
     public function getBigFileId(): string
@@ -66,11 +71,27 @@ class ChatPhoto
     }
 
     /**
+     * @param string $bigFileId
+     */
+    public function setBigFileId(string $bigFileId): void
+    {
+        $this->bigFileId = $bigFileId;
+    }
+
+    /**
      * @return string
      */
     public function getBigFileUniqueId(): string
     {
         return $this->bigFileUniqueId;
+    }
+
+    /**
+     * @param string $bigFileUniqueId
+     */
+    public function setBigFileUniqueId(string $bigFileUniqueId): void
+    {
+        $this->bigFileUniqueId = $bigFileUniqueId;
     }
 
 }

@@ -7,7 +7,7 @@ namespace Zanzara\Update;
 /**
  *
  */
-class PhotoSize
+class PassportFile
 {
 
     /**
@@ -23,17 +23,12 @@ class PhotoSize
     /**
      * @var int
      */
-    private $width;
+    private $fileSize;
 
     /**
      * @var int
      */
-    private $height;
-
-    /**
-     * @var int|null
-     */
-    private $fileSize;
+    private $fileDate;
 
     /**
      * @return string
@@ -70,49 +65,33 @@ class PhotoSize
     /**
      * @return int
      */
-    public function getWidth(): int
-    {
-        return $this->width;
-    }
-
-    /**
-     * @param int $width
-     */
-    public function setWidth(int $width): void
-    {
-        $this->width = $width;
-    }
-
-    /**
-     * @return int
-     */
-    public function getHeight(): int
-    {
-        return $this->height;
-    }
-
-    /**
-     * @param int $height
-     */
-    public function setHeight(int $height): void
-    {
-        $this->height = $height;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getFileSize(): ?int
+    public function getFileSize(): int
     {
         return $this->fileSize;
     }
 
     /**
-     * @param int|null $fileSize
+     * @param int $fileSize
      */
-    public function setFileSize(?int $fileSize): void
+    public function setFileSize(int $fileSize): void
     {
         $this->fileSize = $fileSize;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFileDate(): int
+    {
+        return $this->fileDate;
+    }
+
+    /**
+     * @param int $fileDate
+     */
+    public function setFileDate(int $fileDate): void
+    {
+        $this->fileDate = $fileDate;
     }
 
 }

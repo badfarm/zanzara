@@ -56,39 +56,19 @@ class User
     private $supportsInlineQueries;
 
     /**
-     * @param array $data
-     */
-    public function __construct(array &$data)
-    {
-        $this->id = $data['id'];
-        $this->isBot = $data['is_bot'];
-        $this->firstName = $data['first_name'];
-        if (isset($data['last_name'])) {
-            $this->lastName = $data['last_name'];
-        }
-        if (isset($data['username'])) {
-            $this->username = $data['username'];
-        }
-        if (isset($data['language_code'])) {
-            $this->languageCode = $data['language_code'];
-        }
-        if (isset($data['can_join_groups'])) {
-            $this->canJoinGroups = $data['can_join_groups'];
-        }
-        if (isset($data['can_read_all_group_messages'])) {
-            $this->canReadAllGroupMessages = $data['can_read_all_group_messages'];
-        }
-        if (isset($data['supports_inline_queries'])) {
-            $this->supportsInlineQueries = $data['supports_inline_queries'];
-        }
-    }
-
-    /**
      * @return int
      */
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     /**
@@ -100,11 +80,27 @@ class User
     }
 
     /**
+     * @param bool $isBot
+     */
+    public function setIsBot(bool $isBot): void
+    {
+        $this->isBot = $isBot;
+    }
+
+    /**
      * @return string
      */
     public function getFirstName(): string
     {
         return $this->firstName;
+    }
+
+    /**
+     * @param string $firstName
+     */
+    public function setFirstName(string $firstName): void
+    {
+        $this->firstName = $firstName;
     }
 
     /**
@@ -116,11 +112,27 @@ class User
     }
 
     /**
+     * @param string|null $lastName
+     */
+    public function setLastName(?string $lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
      * @return string|null
      */
     public function getUsername(): ?string
     {
         return $this->username;
+    }
+
+    /**
+     * @param string|null $username
+     */
+    public function setUsername(?string $username): void
+    {
+        $this->username = $username;
     }
 
     /**
@@ -132,11 +144,27 @@ class User
     }
 
     /**
+     * @param string|null $languageCode
+     */
+    public function setLanguageCode(?string $languageCode): void
+    {
+        $this->languageCode = $languageCode;
+    }
+
+    /**
      * @return string|null
      */
     public function getCanJoinGroups(): ?string
     {
         return $this->canJoinGroups;
+    }
+
+    /**
+     * @param string|null $canJoinGroups
+     */
+    public function setCanJoinGroups(?string $canJoinGroups): void
+    {
+        $this->canJoinGroups = $canJoinGroups;
     }
 
     /**
@@ -148,11 +176,27 @@ class User
     }
 
     /**
+     * @param string|null $canReadAllGroupMessages
+     */
+    public function setCanReadAllGroupMessages(?string $canReadAllGroupMessages): void
+    {
+        $this->canReadAllGroupMessages = $canReadAllGroupMessages;
+    }
+
+    /**
      * @return string|null
      */
     public function getSupportsInlineQueries(): ?string
     {
         return $this->supportsInlineQueries;
+    }
+
+    /**
+     * @param string|null $supportsInlineQueries
+     */
+    public function setSupportsInlineQueries(?string $supportsInlineQueries): void
+    {
+        $this->supportsInlineQueries = $supportsInlineQueries;
     }
 
 }

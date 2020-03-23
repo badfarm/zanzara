@@ -7,7 +7,7 @@ namespace Zanzara\Update;
 /**
  *
  */
-class Video
+class VideoNote
 {
 
     /**
@@ -23,12 +23,7 @@ class Video
     /**
      * @var int
      */
-    private $width;
-
-    /**
-     * @var int
-     */
-    private $height;
+    private $length;
 
     /**
      * @var int
@@ -39,11 +34,6 @@ class Video
      * @var PhotoSize[]
      */
     private $thumb = [];
-
-    /**
-     * @var string|null
-     */
-    private $mimeType;
 
     /**
      * @var int|null
@@ -85,33 +75,17 @@ class Video
     /**
      * @return int
      */
-    public function getWidth(): int
+    public function getLength(): int
     {
-        return $this->width;
+        return $this->length;
     }
 
     /**
-     * @param int $width
+     * @param int $length
      */
-    public function setWidth(int $width): void
+    public function setLength(int $length): void
     {
-        $this->width = $width;
-    }
-
-    /**
-     * @return int
-     */
-    public function getHeight(): int
-    {
-        return $this->height;
-    }
-
-    /**
-     * @param int $height
-     */
-    public function setHeight(int $height): void
-    {
-        $this->height = $height;
+        $this->length = $length;
     }
 
     /**
@@ -144,22 +118,6 @@ class Video
     public function setThumb(array $thumb): void
     {
         $this->thumb = $thumb;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getMimeType(): ?string
-    {
-        return $this->mimeType;
-    }
-
-    /**
-     * @param string|null $mimeType
-     */
-    public function setMimeType(?string $mimeType): void
-    {
-        $this->mimeType = $mimeType;
     }
 
     /**

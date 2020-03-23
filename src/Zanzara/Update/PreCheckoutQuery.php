@@ -46,29 +46,19 @@ class PreCheckoutQuery
     private $orderInfo;
 
     /**
-     * @param array $data
-     */
-    public function __construct(array &$data)
-    {
-        $this->id = $data['id'];
-        $this->from = new User($data['from']);
-        $this->currency = $data['currency'];
-        $this->totalAmount = $data['total_amount'];
-        $this->invoicePayload = $data['invoice_payload'];
-        if (isset($data['shipping_option_id'])) {
-            $this->shippingOptionId = $data['shipping_option_id'];
-        }
-        if (isset($data['order_info'])) {
-            $this->orderInfo = new OrderInfo($data['order_info']);
-        }
-    }
-
-    /**
      * @return string
      */
     public function getId(): string
     {
         return $this->id;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setId(string $id): void
+    {
+        $this->id = $id;
     }
 
     /**
@@ -80,11 +70,27 @@ class PreCheckoutQuery
     }
 
     /**
+     * @param User $from
+     */
+    public function setFrom(User $from): void
+    {
+        $this->from = $from;
+    }
+
+    /**
      * @return string
      */
     public function getCurrency(): string
     {
         return $this->currency;
+    }
+
+    /**
+     * @param string $currency
+     */
+    public function setCurrency(string $currency): void
+    {
+        $this->currency = $currency;
     }
 
     /**
@@ -96,11 +102,27 @@ class PreCheckoutQuery
     }
 
     /**
+     * @param int $totalAmount
+     */
+    public function setTotalAmount(int $totalAmount): void
+    {
+        $this->totalAmount = $totalAmount;
+    }
+
+    /**
      * @return string
      */
     public function getInvoicePayload(): string
     {
         return $this->invoicePayload;
+    }
+
+    /**
+     * @param string $invoicePayload
+     */
+    public function setInvoicePayload(string $invoicePayload): void
+    {
+        $this->invoicePayload = $invoicePayload;
     }
 
     /**
@@ -112,11 +134,27 @@ class PreCheckoutQuery
     }
 
     /**
+     * @param string|null $shippingOptionId
+     */
+    public function setShippingOptionId(?string $shippingOptionId): void
+    {
+        $this->shippingOptionId = $shippingOptionId;
+    }
+
+    /**
      * @return OrderInfo|null
      */
     public function getOrderInfo(): ?OrderInfo
     {
         return $this->orderInfo;
+    }
+
+    /**
+     * @param OrderInfo|null $orderInfo
+     */
+    public function setOrderInfo(?OrderInfo $orderInfo): void
+    {
+        $this->orderInfo = $orderInfo;
     }
 
 }

@@ -7,14 +7,13 @@ namespace Zanzara\Update;
 /**
  * The update received from Telegram.
  *
+ * Poll
+ * Passport
+ * File
+ *
  */
 class Update
 {
-
-    /**
-     * @var array
-     */
-    private $rawData;
 
     /**
      * @var int
@@ -42,6 +41,16 @@ class Update
     private $editedChannelPost;
 
     /**
+     * @var InlineQuery|null
+     */
+    private $inlineQuery;
+
+    /**
+     * @var ChosenInlineResult|null
+     */
+    private $chosenInlineResult;
+
+    /**
      * @var CallbackQuery|null
      */
     private $callbackQuery;
@@ -57,40 +66,19 @@ class Update
     private $preCheckoutQuery;
 
     /**
+     * @var Poll|null
+     */
+    private $poll;
+
+    /**
+     * @var PollAnswer|null
+     */
+    private $pollAnswer;
+
+    /**
      * @var string
      */
     private $updateType;
-
-    /**
-     * @param array $data
-     */
-    public function __construct(array &$data)
-    {
-        $this->rawData = &$data;
-        $this->updateId = $data['update_id'];
-        if (isset($data['message'])) {
-            $this->message = new Message($data['message']);
-        }
-        if (isset($data['edited_message'])) {
-            $this->editedMessage = new Message($data['edited_message']);
-        }
-        if (isset($data['channel_post'])) {
-            $this->channelPost = new Message($data['channel_post']);
-        }
-        if (isset($data['edited_channel_post'])) {
-            $this->editedChannelPost = new Message($data['edited_channel_post']);
-        }
-        if (isset($data['callback_query'])) {
-            $this->callbackQuery = new CallbackQuery($data['callback_query']);
-        }
-        if (isset($data['shipping_query'])) {
-            $this->preCheckoutQuery = new ShippingQuery($data['shipping_query']);
-        }
-        if (isset($data['pre_checkout_query'])) {
-            $this->preCheckoutQuery = new PreCheckoutQuery($data['pre_checkout_query']);
-        }
-        $this->setUpdateType();
-    }
 
     /**
      * @return int
@@ -98,6 +86,14 @@ class Update
     public function getUpdateId(): int
     {
         return $this->updateId;
+    }
+
+    /**
+     * @param int $updateId
+     */
+    public function setUpdateId(int $updateId): void
+    {
+        $this->updateId = $updateId;
     }
 
     /**
@@ -109,11 +105,107 @@ class Update
     }
 
     /**
+     * @param Message|null $message
+     */
+    public function setMessage(?Message $message): void
+    {
+        $this->message = $message;
+    }
+
+    /**
+     * @return EditedMessage|null
+     */
+    public function getEditedMessage(): ?EditedMessage
+    {
+        return $this->editedMessage;
+    }
+
+    /**
+     * @param EditedMessage|null $editedMessage
+     */
+    public function setEditedMessage(?EditedMessage $editedMessage): void
+    {
+        $this->editedMessage = $editedMessage;
+    }
+
+    /**
+     * @return ChannelPost|null
+     */
+    public function getChannelPost(): ?ChannelPost
+    {
+        return $this->channelPost;
+    }
+
+    /**
+     * @param ChannelPost|null $channelPost
+     */
+    public function setChannelPost(?ChannelPost $channelPost): void
+    {
+        $this->channelPost = $channelPost;
+    }
+
+    /**
+     * @return EditedChannelPost|null
+     */
+    public function getEditedChannelPost(): ?EditedChannelPost
+    {
+        return $this->editedChannelPost;
+    }
+
+    /**
+     * @param EditedChannelPost|null $editedChannelPost
+     */
+    public function setEditedChannelPost(?EditedChannelPost $editedChannelPost): void
+    {
+        $this->editedChannelPost = $editedChannelPost;
+    }
+
+    /**
+     * @return InlineQuery|null
+     */
+    public function getInlineQuery(): ?InlineQuery
+    {
+        return $this->inlineQuery;
+    }
+
+    /**
+     * @param InlineQuery|null $inlineQuery
+     */
+    public function setInlineQuery(?InlineQuery $inlineQuery): void
+    {
+        $this->inlineQuery = $inlineQuery;
+    }
+
+    /**
+     * @return ChosenInlineResult|null
+     */
+    public function getChosenInlineResult(): ?ChosenInlineResult
+    {
+        return $this->chosenInlineResult;
+    }
+
+    /**
+     * @param ChosenInlineResult|null $chosenInlineResult
+     */
+    public function setChosenInlineResult(?ChosenInlineResult $chosenInlineResult): void
+    {
+        $this->chosenInlineResult = $chosenInlineResult;
+    }
+
+    /**
      * @return CallbackQuery|null
      */
     public function getCallbackQuery(): ?CallbackQuery
     {
         return $this->callbackQuery;
+    }
+
+    /**
+     * @param CallbackQuery|null $callbackQuery
+     */
+    public function setCallbackQuery(?CallbackQuery $callbackQuery): void
+    {
+        $this->callbackQuery = $callbackQuery;
     }
 
     /**
@@ -125,6 +217,14 @@ class Update
     }
 
     /**
+     * @param ShippingQuery|null $shippingQuery
+     */
+    public function setShippingQuery(?ShippingQuery $shippingQuery): void
+    {
+        $this->shippingQuery = $shippingQuery;
+    }
+
+    /**
      * @return PreCheckoutQuery|null
      */
     public function getPreCheckoutQuery(): ?PreCheckoutQuery
@@ -133,9 +233,57 @@ class Update
     }
 
     /**
+     * @param PreCheckoutQuery|null $preCheckoutQuery
+     */
+    public function setPreCheckoutQuery(?PreCheckoutQuery $preCheckoutQuery): void
+    {
+        $this->preCheckoutQuery = $preCheckoutQuery;
+    }
+
+    /**
+     * @return Poll|null
+     */
+    public function getPoll(): ?Poll
+    {
+        return $this->poll;
+    }
+
+    /**
+     * @param Poll|null $poll
+     */
+    public function setPoll(?Poll $poll): void
+    {
+        $this->poll = $poll;
+    }
+
+    /**
+     * @return PollAnswer|null
+     */
+    public function getPollAnswer(): ?PollAnswer
+    {
+        return $this->pollAnswer;
+    }
+
+    /**
+     * @param PollAnswer|null $pollAnswer
+     */
+    public function setPollAnswer(?PollAnswer $pollAnswer): void
+    {
+        $this->pollAnswer = $pollAnswer;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUpdateType(): string
+    {
+        return $this->updateType;
+    }
+
+    /**
      *
      */
-    private function setUpdateType()
+    public function detectUpdateType()
     {
         if ($this->message && $this->message->getSuccessfulPayment()) {
             $this->updateType = SuccessfulPayment::class;
@@ -154,43 +302,6 @@ class Update
         } else if ($this->preCheckoutQuery) {
             $this->updateType = PreCheckoutQuery::class;
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function getUpdateType(): string
-    {
-        return $this->updateType;
-    }
-
-    public function __toString()
-    {
-        return json_encode($this->rawData, JSON_PRETTY_PRINT);
-    }
-
-    /**
-     * @return EditedMessage|null
-     */
-    public function getEditedMessage(): ?Message
-    {
-        return $this->editedMessage;
-    }
-
-    /**
-     * @return ChannelPost|null
-     */
-    public function getChannelPost(): ?Message
-    {
-        return $this->channelPost;
-    }
-
-    /**
-     * @return EditedChannelPost|null
-     */
-    public function getEditedChannelPost(): ?Message
-    {
-        return $this->editedChannelPost;
     }
 
 }

@@ -41,30 +41,19 @@ class MessageEntity
     private $language;
 
     /**
-     * @param array $data
-     */
-    public function __construct(array &$data)
-    {
-        $this->type = $data['type'];
-        $this->offset = $data['offset'];
-        $this->length = $data['length'];
-        if (isset($data['url'])) {
-            $this->url = $data['url'];
-        }
-        if (isset($data['user'])) {
-            $this->user = new User($data['user']);
-        }
-        if (isset($data['language'])) {
-            $this->language = $data['language'];
-        }
-    }
-
-    /**
      * @return string
      */
     public function getType(): string
     {
         return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type): void
+    {
+        $this->type = $type;
     }
 
     /**
@@ -76,11 +65,27 @@ class MessageEntity
     }
 
     /**
+     * @param int $offset
+     */
+    public function setOffset(int $offset): void
+    {
+        $this->offset = $offset;
+    }
+
+    /**
      * @return int
      */
     public function getLength(): int
     {
         return $this->length;
+    }
+
+    /**
+     * @param int $length
+     */
+    public function setLength(int $length): void
+    {
+        $this->length = $length;
     }
 
     /**
@@ -92,6 +97,14 @@ class MessageEntity
     }
 
     /**
+     * @param string|null $url
+     */
+    public function setUrl(?string $url): void
+    {
+        $this->url = $url;
+    }
+
+    /**
      * @return User|null
      */
     public function getUser(): ?User
@@ -100,11 +113,27 @@ class MessageEntity
     }
 
     /**
+     * @param User|null $user
+     */
+    public function setUser(?User $user): void
+    {
+        $this->user = $user;
+    }
+
+    /**
      * @return string|null
      */
     public function getLanguage(): ?string
     {
         return $this->language;
+    }
+
+    /**
+     * @param string|null $language
+     */
+    public function setLanguage(?string $language): void
+    {
+        $this->language = $language;
     }
 
 }

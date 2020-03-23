@@ -31,30 +31,19 @@ class OrderInfo
     private $shippingAddress;
 
     /**
-     * @param array $data
-     */
-    public function __construct(array &$data)
-    {
-        if (isset($data['name'])) {
-            $this->name = $data['name'];
-        }
-        if (isset($data['phone_number'])) {
-            $this->phoneNumber = $data['phone_number'];
-        }
-        if (isset($data['email'])) {
-            $this->email = $data['email'];
-        }
-        if (isset($data['shipping_address'])) {
-            $this->name = new ShippingAddress($data['shipping_address']);
-        }
-    }
-
-    /**
      * @return string|null
      */
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+    /**
+     * @param string|null $name
+     */
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
     }
 
     /**
@@ -66,6 +55,14 @@ class OrderInfo
     }
 
     /**
+     * @param string|null $phoneNumber
+     */
+    public function setPhoneNumber(?string $phoneNumber): void
+    {
+        $this->phoneNumber = $phoneNumber;
+    }
+
+    /**
      * @return string|null
      */
     public function getEmail(): ?string
@@ -74,11 +71,27 @@ class OrderInfo
     }
 
     /**
+     * @param string|null $email
+     */
+    public function setEmail(?string $email): void
+    {
+        $this->email = $email;
+    }
+
+    /**
      * @return ShippingAddress|null
      */
     public function getShippingAddress(): ?ShippingAddress
     {
         return $this->shippingAddress;
+    }
+
+    /**
+     * @param ShippingAddress|null $shippingAddress
+     */
+    public function setShippingAddress(?ShippingAddress $shippingAddress): void
+    {
+        $this->shippingAddress = $shippingAddress;
     }
 
 }

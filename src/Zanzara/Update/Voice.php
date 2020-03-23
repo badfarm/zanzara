@@ -7,7 +7,7 @@ namespace Zanzara\Update;
 /**
  *
  */
-class Video
+class Voice
 {
 
     /**
@@ -23,22 +23,7 @@ class Video
     /**
      * @var int
      */
-    private $width;
-
-    /**
-     * @var int
-     */
-    private $height;
-
-    /**
-     * @var int
-     */
     private $duration;
-
-    /**
-     * @var PhotoSize[]
-     */
-    private $thumb = [];
 
     /**
      * @var string|null
@@ -85,38 +70,6 @@ class Video
     /**
      * @return int
      */
-    public function getWidth(): int
-    {
-        return $this->width;
-    }
-
-    /**
-     * @param int $width
-     */
-    public function setWidth(int $width): void
-    {
-        $this->width = $width;
-    }
-
-    /**
-     * @return int
-     */
-    public function getHeight(): int
-    {
-        return $this->height;
-    }
-
-    /**
-     * @param int $height
-     */
-    public function setHeight(int $height): void
-    {
-        $this->height = $height;
-    }
-
-    /**
-     * @return int
-     */
     public function getDuration(): int
     {
         return $this->duration;
@@ -128,22 +81,6 @@ class Video
     public function setDuration(int $duration): void
     {
         $this->duration = $duration;
-    }
-
-    /**
-     * @return PhotoSize[]
-     */
-    public function getThumb(): array
-    {
-        return $this->thumb;
-    }
-
-    /**
-     * @param PhotoSize[] $thumb
-     */
-    public function setThumb(array $thumb): void
-    {
-        $this->thumb = $thumb;
     }
 
     /**

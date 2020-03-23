@@ -31,22 +31,19 @@ class MaskPosition
     private $scale;
 
     /**
-     * @param array $data
-     */
-    public function __construct(array &$data)
-    {
-        $this->point = $data['point'];
-        $this->xShift = $data['x_shift'];
-        $this->yShift = $data['y_shift'];
-        $this->scale = $data['scale'];
-    }
-
-    /**
      * @return int
      */
     public function getPoint(): int
     {
         return $this->point;
+    }
+
+    /**
+     * @param int $point
+     */
+    public function setPoint(int $point): void
+    {
+        $this->point = $point;
     }
 
     /**
@@ -58,6 +55,14 @@ class MaskPosition
     }
 
     /**
+     * @param float $xShift
+     */
+    public function setXShift(float $xShift): void
+    {
+        $this->xShift = $xShift;
+    }
+
+    /**
      * @return float
      */
     public function getYShift(): float
@@ -66,11 +71,27 @@ class MaskPosition
     }
 
     /**
+     * @param float $yShift
+     */
+    public function setYShift(float $yShift): void
+    {
+        $this->yShift = $yShift;
+    }
+
+    /**
      * @return float
      */
     public function getScale(): float
     {
         return $this->scale;
+    }
+
+    /**
+     * @param float $scale
+     */
+    public function setScale(float $scale): void
+    {
+        $this->scale = $scale;
     }
 
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
+use JsonMapper;
+use Zanzara\Test\Operation\Contact;
 use Zanzara\Update\Update;
 
 /**
@@ -23,11 +25,18 @@ class UpdateHandler
     private $config;
 
     /**
-     * @param BotConfiguration $config
+     * @var JsonMapper
      */
-    public function __construct(BotConfiguration $config)
+    private $jsonMapper;
+
+    /**
+     * @param BotConfiguration $config
+     * @param JsonMapper $jsonMapper
+     */
+    public function __construct(BotConfiguration $config, JsonMapper $jsonMapper)
     {
         $this->config = $config;
+        $this->jsonMapper = $jsonMapper;
     }
 
     public function init(): void
@@ -37,8 +46,9 @@ class UpdateHandler
         switch ($updateMode) {
 
             case BotConfiguration::WEBHOOK_MODE:
-                $updateData = json_decode(file_get_contents($this->config->getUpdateStream()), true);
-                $this->update = new Update($updateData);
+                $updateData = json_decode(file_get_contents($this->config->getUpdateStream()));
+                $this->update = $this->jsonMapper->map($updateData, new Update());
+                $this->update->detectUpdateType();
                 break;
 
             case BotConfiguration::POLLING_MODE:

@@ -7,7 +7,7 @@ namespace Zanzara\Update;
 /**
  *
  */
-class ShippingQuery
+class InlineQuery
 {
 
     /**
@@ -21,14 +21,19 @@ class ShippingQuery
     private $from;
 
     /**
-     * @var string
+     * @var Location|null
      */
-    private $invoicePayload;
+    private $location;
 
     /**
-     * @var ShippingAddress
+     * @var string
      */
-    private $shippingAddress;
+    private $query;
+
+    /**
+     * @var string
+     */
+    private $offset;
 
     /**
      * @return string
@@ -63,35 +68,51 @@ class ShippingQuery
     }
 
     /**
+     * @return Location|null
+     */
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param Location|null $location
+     */
+    public function setLocation(?Location $location): void
+    {
+        $this->location = $location;
+    }
+
+    /**
      * @return string
      */
-    public function getInvoicePayload(): string
+    public function getQuery(): string
     {
-        return $this->invoicePayload;
+        return $this->query;
     }
 
     /**
-     * @param string $invoicePayload
+     * @param string $query
      */
-    public function setInvoicePayload(string $invoicePayload): void
+    public function setQuery(string $query): void
     {
-        $this->invoicePayload = $invoicePayload;
+        $this->query = $query;
     }
 
     /**
-     * @return ShippingAddress
+     * @return string
      */
-    public function getShippingAddress(): ShippingAddress
+    public function getOffset(): string
     {
-        return $this->shippingAddress;
+        return $this->offset;
     }
 
     /**
-     * @param ShippingAddress $shippingAddress
+     * @param string $offset
      */
-    public function setShippingAddress(ShippingAddress $shippingAddress): void
+    public function setOffset(string $offset): void
     {
-        $this->shippingAddress = $shippingAddress;
+        $this->offset = $offset;
     }
 
 }

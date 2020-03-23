@@ -36,7 +36,7 @@ class Sticker
     private $isAnimated;
 
     /**
-     * @var array
+     * @var PhotoSize[]
      */
     private $thumb = [];
 
@@ -61,41 +61,19 @@ class Sticker
     private $fileSize;
 
     /**
-     * @param array $data
-     */
-    public function __construct(array &$data)
-    {
-        $this->fileId = $data['file_id'];
-        $this->fileUniqueId = $data['file_unique_id'];
-        $this->width = $data['width'];
-        $this->height = $data['height'];
-        $this->isAnimated = $data['is_animated'];
-        if (isset($data['thumb'])) {
-            $thumb = $data['thumb'];
-            foreach ($thumb as $t) {
-                $this->thumb[] = new PhotoSize($t);
-            }
-        }
-        if (isset($data['emoji'])) {
-            $this->emoji = $data['emoji'];
-        }
-        if (isset($data['set_name'])) {
-            $this->setName = $data['set_name'];
-        }
-        if (isset($data['mask_position'])) {
-            $this->maskPosition = new MaskPosition($data['mask_position']);
-        }
-        if (isset($data['file_size'])) {
-            $this->fileSize = $data['file_size'];
-        }
-    }
-
-    /**
      * @return string
      */
     public function getFileId(): string
     {
         return $this->fileId;
+    }
+
+    /**
+     * @param string $fileId
+     */
+    public function setFileId(string $fileId): void
+    {
+        $this->fileId = $fileId;
     }
 
     /**
@@ -107,11 +85,27 @@ class Sticker
     }
 
     /**
+     * @param string $fileUniqueId
+     */
+    public function setFileUniqueId(string $fileUniqueId): void
+    {
+        $this->fileUniqueId = $fileUniqueId;
+    }
+
+    /**
      * @return int
      */
     public function getWidth(): int
     {
         return $this->width;
+    }
+
+    /**
+     * @param int $width
+     */
+    public function setWidth(int $width): void
+    {
+        $this->width = $width;
     }
 
     /**
@@ -123,6 +117,14 @@ class Sticker
     }
 
     /**
+     * @param int $height
+     */
+    public function setHeight(int $height): void
+    {
+        $this->height = $height;
+    }
+
+    /**
      * @return bool
      */
     public function isAnimated(): bool
@@ -131,11 +133,27 @@ class Sticker
     }
 
     /**
-     * @return array
+     * @param bool $isAnimated
+     */
+    public function setIsAnimated(bool $isAnimated): void
+    {
+        $this->isAnimated = $isAnimated;
+    }
+
+    /**
+     * @return PhotoSize[]
      */
     public function getThumb(): array
     {
         return $this->thumb;
+    }
+
+    /**
+     * @param PhotoSize[] $thumb
+     */
+    public function setThumb(array $thumb): void
+    {
+        $this->thumb = $thumb;
     }
 
     /**
@@ -147,11 +165,27 @@ class Sticker
     }
 
     /**
+     * @param string|null $emoji
+     */
+    public function setEmoji(?string $emoji): void
+    {
+        $this->emoji = $emoji;
+    }
+
+    /**
      * @return string|null
      */
     public function getSetName(): ?string
     {
         return $this->setName;
+    }
+
+    /**
+     * @param string|null $setName
+     */
+    public function setSetName(?string $setName): void
+    {
+        $this->setName = $setName;
     }
 
     /**
@@ -163,11 +197,27 @@ class Sticker
     }
 
     /**
+     * @param MaskPosition|null $maskPosition
+     */
+    public function setMaskPosition(?MaskPosition $maskPosition): void
+    {
+        $this->maskPosition = $maskPosition;
+    }
+
+    /**
      * @return int|null
      */
     public function getFileSize(): ?int
     {
         return $this->fileSize;
+    }
+
+    /**
+     * @param int|null $fileSize
+     */
+    public function setFileSize(?int $fileSize): void
+    {
+        $this->fileSize = $fileSize;
     }
 
 }

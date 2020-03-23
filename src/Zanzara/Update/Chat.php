@@ -81,56 +81,19 @@ class Chat
     private $canSetStickerSet;
 
     /**
-     * @param array $data
-     */
-    public function __construct(array &$data)
-    {
-        $this->id = $data['id'];
-        $this->type = $data['type'];
-        if (isset($data['title'])) {
-            $this->title = $data['title'];
-        }
-        if (isset($data['username'])) {
-            $this->username = $data['username'];
-        }
-        if (isset($data['first_name'])) {
-            $this->firstName = $data['first_name'];
-        }
-        if (isset($data['last_name'])) {
-            $this->lastName = $data['last_name'];
-        }
-        if (isset($data['photo'])) {
-            $this->photo = new ChatPhoto($data['photo']);
-        }
-        if (isset($data['description'])) {
-            $this->description = $data['description'];
-        }
-        if (isset($data['invite_link'])) {
-            $this->inviteLink = $data['invite_link'];
-        }
-        if (isset($data['pinned_message'])) {
-            $this->pinnedMessage = new Message($data['pinned_message']);
-        }
-        if (isset($data['permissions'])) {
-            $this->permissions = new ChatPermissions($data['permissions']);
-        }
-        if (isset($data['slow_mode_delay'])) {
-            $this->slowModeDelay = $data['slow_mode_delay'];
-        }
-        if (isset($data['sticker_set_name'])) {
-            $this->stickerSetName = $data['sticker_set_name'];
-        }
-        if (isset($data['can_set_sticker_set'])) {
-            $this->canSetStickerSet = $data['can_set_sticker_set'];
-        }
-    }
-
-    /**
      * @return int
      */
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     /**
@@ -142,11 +105,27 @@ class Chat
     }
 
     /**
+     * @param string $type
+     */
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
      * @return string|null
      */
     public function getTitle(): ?string
     {
         return $this->title;
+    }
+
+    /**
+     * @param string|null $title
+     */
+    public function setTitle(?string $title): void
+    {
+        $this->title = $title;
     }
 
     /**
@@ -158,11 +137,27 @@ class Chat
     }
 
     /**
+     * @param string|null $username
+     */
+    public function setUsername(?string $username): void
+    {
+        $this->username = $username;
+    }
+
+    /**
      * @return string|null
      */
     public function getFirstName(): ?string
     {
         return $this->firstName;
+    }
+
+    /**
+     * @param string|null $firstName
+     */
+    public function setFirstName(?string $firstName): void
+    {
+        $this->firstName = $firstName;
     }
 
     /**
@@ -174,11 +169,27 @@ class Chat
     }
 
     /**
+     * @param string|null $lastName
+     */
+    public function setLastName(?string $lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
      * @return ChatPhoto|null
      */
     public function getPhoto(): ?ChatPhoto
     {
         return $this->photo;
+    }
+
+    /**
+     * @param ChatPhoto|null $photo
+     */
+    public function setPhoto(?ChatPhoto $photo): void
+    {
+        $this->photo = $photo;
     }
 
     /**
@@ -190,11 +201,27 @@ class Chat
     }
 
     /**
+     * @param string|null $description
+     */
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
      * @return string|null
      */
     public function getInviteLink(): ?string
     {
         return $this->inviteLink;
+    }
+
+    /**
+     * @param string|null $inviteLink
+     */
+    public function setInviteLink(?string $inviteLink): void
+    {
+        $this->inviteLink = $inviteLink;
     }
 
     /**
@@ -206,11 +233,27 @@ class Chat
     }
 
     /**
+     * @param Message|null $pinnedMessage
+     */
+    public function setPinnedMessage(?Message $pinnedMessage): void
+    {
+        $this->pinnedMessage = $pinnedMessage;
+    }
+
+    /**
      * @return ChatPermissions|null
      */
     public function getPermissions(): ?ChatPermissions
     {
         return $this->permissions;
+    }
+
+    /**
+     * @param ChatPermissions|null $permissions
+     */
+    public function setPermissions(?ChatPermissions $permissions): void
+    {
+        $this->permissions = $permissions;
     }
 
     /**
@@ -222,6 +265,14 @@ class Chat
     }
 
     /**
+     * @param int|null $slowModeDelay
+     */
+    public function setSlowModeDelay(?int $slowModeDelay): void
+    {
+        $this->slowModeDelay = $slowModeDelay;
+    }
+
+    /**
      * @return string|null
      */
     public function getStickerSetName(): ?string
@@ -230,11 +281,27 @@ class Chat
     }
 
     /**
+     * @param string|null $stickerSetName
+     */
+    public function setStickerSetName(?string $stickerSetName): void
+    {
+        $this->stickerSetName = $stickerSetName;
+    }
+
+    /**
      * @return bool|null
      */
     public function getCanSetStickerSet(): ?bool
     {
         return $this->canSetStickerSet;
+    }
+
+    /**
+     * @param bool|null $canSetStickerSet
+     */
+    public function setCanSetStickerSet(?bool $canSetStickerSet): void
+    {
+        $this->canSetStickerSet = $canSetStickerSet;
     }
 
 }

@@ -51,36 +51,19 @@ class Audio
     private $thumb;
 
     /**
-     * @param array $data
-     */
-    public function __construct(array &$data)
-    {
-        $this->fileId = $data['file_id'];
-        $this->fileUniqueId = $data['file_unique_id'];
-        $this->duration = $data['duration'];
-        if (isset($data['performer'])) {
-            $this->performer = $data['performer'];
-        }
-        if (isset($data['title'])) {
-            $this->title = $data['title'];
-        }
-        if (isset($data['mime_type'])) {
-            $this->mimeType = $data['mime_type'];
-        }
-        if (isset($data['file_size'])) {
-            $this->fileSize = $data['file_size'];
-        }
-        if (isset($data['thumb'])) {
-            $this->thumb = new PhotoSize($data['thumb']);
-        }
-    }
-
-    /**
      * @return string
      */
     public function getFileId(): string
     {
         return $this->fileId;
+    }
+
+    /**
+     * @param string $fileId
+     */
+    public function setFileId(string $fileId): void
+    {
+        $this->fileId = $fileId;
     }
 
     /**
@@ -92,11 +75,27 @@ class Audio
     }
 
     /**
+     * @param string $fileUniqueId
+     */
+    public function setFileUniqueId(string $fileUniqueId): void
+    {
+        $this->fileUniqueId = $fileUniqueId;
+    }
+
+    /**
      * @return int
      */
     public function getDuration(): int
     {
         return $this->duration;
+    }
+
+    /**
+     * @param int $duration
+     */
+    public function setDuration(int $duration): void
+    {
+        $this->duration = $duration;
     }
 
     /**
@@ -108,11 +107,27 @@ class Audio
     }
 
     /**
+     * @param string|null $performer
+     */
+    public function setPerformer(?string $performer): void
+    {
+        $this->performer = $performer;
+    }
+
+    /**
      * @return string|null
      */
     public function getTitle(): ?string
     {
         return $this->title;
+    }
+
+    /**
+     * @param string|null $title
+     */
+    public function setTitle(?string $title): void
+    {
+        $this->title = $title;
     }
 
     /**
@@ -124,6 +139,14 @@ class Audio
     }
 
     /**
+     * @param string|null $mimeType
+     */
+    public function setMimeType(?string $mimeType): void
+    {
+        $this->mimeType = $mimeType;
+    }
+
+    /**
      * @return int|null
      */
     public function getFileSize(): ?int
@@ -132,11 +155,27 @@ class Audio
     }
 
     /**
+     * @param int|null $fileSize
+     */
+    public function setFileSize(?int $fileSize): void
+    {
+        $this->fileSize = $fileSize;
+    }
+
+    /**
      * @return PhotoSize|null
      */
     public function getThumb(): ?PhotoSize
     {
         return $this->thumb;
+    }
+
+    /**
+     * @param PhotoSize|null $thumb
+     */
+    public function setThumb(?PhotoSize $thumb): void
+    {
+        $this->thumb = $thumb;
     }
 
 }

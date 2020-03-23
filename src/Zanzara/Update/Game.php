@@ -21,7 +21,7 @@ class Game
     private $description;
 
     /**
-     * @var array
+     * @var PhotoSize[]
      */
     private $photo = [];
 
@@ -31,7 +31,7 @@ class Game
     private $text;
 
     /**
-     * @var array|null
+     * @var MessageEntity[]
      */
     private $textEntities = [];
 
@@ -41,38 +41,19 @@ class Game
     private $animation;
 
     /**
-     * @param array $data
-     */
-    public function __construct(array &$data)
-    {
-        $this->title = $data['title'];
-        $this->description = $data['description'];
-        if (isset($data['photo'])) {
-            $photo = $data['photo'];
-            foreach ($photo as $p) {
-                $this->photo[] = new PhotoSize($p);
-            }
-        }
-        if (isset($data['text'])) {
-            $this->text = $data['text'];
-        }
-        if (isset($data['text_entities'])) {
-            $entities = $data['text_entities'];
-            foreach ($entities as $entity) {
-                $this->textEntities[] = new MessageEntity($entity);
-            }
-        }
-        if (isset($data['animation'])) {
-            $this->animation = new Animation($data['animation']);
-        }
-    }
-
-    /**
      * @return string
      */
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
     }
 
     /**
@@ -84,11 +65,27 @@ class Game
     }
 
     /**
-     * @return array
+     * @param string $description
+     */
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return PhotoSize[]
      */
     public function getPhoto(): array
     {
         return $this->photo;
+    }
+
+    /**
+     * @param PhotoSize[] $photo
+     */
+    public function setPhoto(array $photo): void
+    {
+        $this->photo = $photo;
     }
 
     /**
@@ -100,11 +97,27 @@ class Game
     }
 
     /**
-     * @return array|null
+     * @param string|null $text
      */
-    public function getTextEntities(): ?array
+    public function setText(?string $text): void
+    {
+        $this->text = $text;
+    }
+
+    /**
+     * @return MessageEntity[]
+     */
+    public function getTextEntities(): array
     {
         return $this->textEntities;
+    }
+
+    /**
+     * @param MessageEntity[] $textEntities
+     */
+    public function setTextEntities(array $textEntities): void
+    {
+        $this->textEntities = $textEntities;
     }
 
     /**
@@ -113,6 +126,14 @@ class Game
     public function getAnimation(): ?Animation
     {
         return $this->animation;
+    }
+
+    /**
+     * @param Animation|null $animation
+     */
+    public function setAnimation(?Animation $animation): void
+    {
+        $this->animation = $animation;
     }
 
 }

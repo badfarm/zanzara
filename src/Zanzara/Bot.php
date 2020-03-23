@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
+use JsonMapper;
 use Zanzara\Operation\Operation;
 
 /**
@@ -24,13 +25,19 @@ class Bot extends OperationResolver
     private $updateHandler;
 
     /**
+     * @var JsonMapper
+     */
+    private $jsonMapper;
+
+    /**
      * @param string $token
      */
     public function __construct(string $token)
     {
         $this->config = new BotConfiguration();
         $this->config->setToken($token);
-        $this->updateHandler = new UpdateHandler($this->config);
+        $this->jsonMapper = new JsonMapper();
+        $this->updateHandler = new UpdateHandler($this->config, $this->jsonMapper);
     }
 
     /**
