@@ -4,13 +4,7 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
-use Zanzara\Operation\CallbackQueryOperation;
-use Zanzara\Operation\CommandOperation;
-use Zanzara\Operation\ConversationOperation;
 use Zanzara\Operation\Operation;
-use Zanzara\Operation\PreCheckoutQueryOperation;
-use Zanzara\Operation\SuccessfulPaymentOperation;
-use Zanzara\Operation\UpdateOperation;
 use Zanzara\Update\CallbackQuery;
 use Zanzara\Update\Message;
 use Zanzara\Update\PreCheckoutQuery;
@@ -27,7 +21,7 @@ abstract class OperationResolver extends OperationCollector
 
     /**
      * @param Update $update
-     * @return array
+     * @return Operation[]
      */
     protected function resolve(Update $update): array
     {
@@ -37,58 +31,66 @@ abstract class OperationResolver extends OperationCollector
 
             case Message::class:
                 $text = $update->getMessage()->getText();
-                $operation = $this->findAndPush($operations, CommandOperation::class, $text);
+                $operation = $this->findAndPush($operations, 'messages', $text);
                 if (!$operation) {
                     $userId = $update->getMessage()->getFrom()->getId();
                     $userConversation = 'dummyConversation'; // $redis->getConversation($userId)
-                    $this->findAndPush($operations, ConversationOperation::class, $userConversation);
+                    $this->findAndPush($operations, 'conversations', $userConversation);
                 }
+                $this->merge($operations, 'genericMessages');
                 break;
 
             case CallbackQuery::class:
                 $text = $update->getCallbackQuery()->getMessage()->getText();
-                $this->findAndPush($operations, CallbackQueryOperation::class, $text);
+                $this->findAndPush($operations, 'cbQueryTexts', $text);
+                $this->merge($operations, 'cbQueries');
                 break;
 
             case ShippingQuery::class:
-                $invoicePayload = $update->getShippingQuery()->getInvoicePayload();
-                $this->findAndPush($operations, ShippingQuery::class, $invoicePayload);
+                $this->merge($operations, 'shippingQueries');
                 break;
 
             case PreCheckoutQuery::class:
-                $invoicePayload = $update->getPreCheckoutQuery()->getInvoicePayload();
-                $this->findAndPush($operations, PreCheckoutQueryOperation::class, $invoicePayload);
+                $this->merge($operations, 'preCheckoutQueries');
                 break;
 
             case SuccessfulPayment::class:
-                $invoicePayload = $update->getMessage()->getSuccessfulPayment()->getInvoicePayload();
-                $this->findAndPush($operations, SuccessfulPaymentOperation::class, $invoicePayload);
+                $this->merge($operations, 'successfulPayments');
                 break;
 
         }
 
-        if (isset($this->operations[UpdateOperation::class])) {
-            $operations = array_merge($operations, $this->operations[UpdateOperation::class]);
-        }
+        $this->merge($operations, 'genericUpdates');
 
         return $operations;
     }
 
 
     /**
-     * @param array $operations
+     * @param Operation[] $operations
      * @param string $operationType
      * @param string $operationId
      * @return Operation|null
      */
     private function findAndPush(array &$operations, string $operationType, string $operationId): ?Operation
     {
-        $res = null;
-        if (isset($this->operations[$operationType][$operationId])) {
-            $res = $this->operations[$operationType][$operationId];
+        $res = $this->operations[$operationType][$operationId] ?? null;
+        if ($res) {
             $operations[] = $res;
         }
         return $res;
+    }
+
+    /**
+     * @param Operation[] $operations
+     * @param string $operationType
+     */
+    private function merge(array &$operations, string $operationType)
+    {
+        $toMerge = $this->operations[$operationType] ?? null;
+        if ($toMerge) {
+            $operations = array_merge($operations, $toMerge);
+        }
     }
 
 }

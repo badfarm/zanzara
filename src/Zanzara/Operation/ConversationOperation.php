@@ -17,6 +17,8 @@ class ConversationOperation extends Operation
      */
     public function handle(Context $ctx, $next)
     {
+        // call cache and get conversation step
+        // $ctx->set('step', $step);
         $callback = $this->callback;
         $callback($ctx);
     }

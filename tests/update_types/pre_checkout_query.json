@@ -1,21 +1,21 @@
 {
-    "update_id": 52250016,
-    "pre_checkout_query": {
-        "id": "666728702186752641",
-        "from": {
-            "id": 111111111,
-            "is_bot": false,
-            "first_name": "John",
-            "username": "john98",
-            "language_code": "it"
-        },
-        "currency": "EUR",
-        "total_amount": 2500,
-        "invoice_payload": "myPizza",
-        "order_info": {
-            "name": "John John",
-            "phone_number": "0000000000",
-            "email": "john@gmail.com"
-        }
+  "update_id": 52250016,
+  "pre_checkout_query": {
+    "id": "666728702186752641",
+    "from": {
+      "id": 111111111,
+      "is_bot": false,
+      "first_name": "John",
+      "username": "john98",
+      "language_code": "it"
+    },
+    "currency": "EUR",
+    "total_amount": 2500,
+    "invoice_payload": "myPizza",
+    "order_info": {
+      "name": "John John",
+      "phone_number": "0000000000",
+      "email": "john@gmail.com"
     }
+  }
 }

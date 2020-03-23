@@ -22,7 +22,7 @@ class CallbackQueryTest extends TestCase
         $bot = new Bot('test');
         $bot->config()->setUpdateStream(__DIR__ . '/../update_types/callback_query.json');
 
-        $bot->onCallbackQuery('From here you can manage your rules', function (Context $ctx) {
+        $bot->onCbQueryText('From here you can manage your rules', function (Context $ctx) {
             $update = $ctx->getUpdate();
             $callbackQuery = $update->getCallbackQuery();
             $message = $callbackQuery->getMessage();

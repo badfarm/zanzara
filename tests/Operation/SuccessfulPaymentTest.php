@@ -22,7 +22,7 @@ class SuccessfulPaymentTest extends TestCase
         $bot = new Bot('test');
         $bot->config()->setUpdateStream(__DIR__ . '/../update_types/successful_payment.json');
 
-        $bot->onSuccessfulPayment('myPizza', function (Context $ctx) {
+        $bot->onSuccessfulPayment(function (Context $ctx) {
             $update = $ctx->getUpdate();
             $message = $update->getMessage();
             $this->assertSame(52250017, $update->getUpdateId());

@@ -19,7 +19,7 @@ class PreCheckoutQueryTest extends TestCase
         $bot = new Bot('test');
         $bot->config()->setUpdateStream(__DIR__ . '/../update_types/pre_checkout_query.json');
 
-        $bot->onPreCheckoutQuery('myPizza', function (Context $ctx) {
+        $bot->onPreCheckoutQuery(function (Context $ctx) {
             $update = $ctx->getUpdate();
             $preCheckoutQuery = $update->getPreCheckoutQuery();
             $this->assertSame(52250016, $update->getUpdateId());

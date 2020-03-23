@@ -55,11 +55,7 @@ class Context
      */
     public function get(string $key)
     {
-        $res = null;
-        if (isset($this->data[$key])) {
-            $res = $this->data[$key];
-        }
-        return $res;
+        return $this->data[$key] ?? null;
     }
 
 }

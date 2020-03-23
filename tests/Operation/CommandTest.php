@@ -23,7 +23,7 @@ class CommandTest extends TestCase
         $bot = new Bot('test');
         $bot->config()->setUpdateStream(__DIR__ . '/../update_types/message.json');
 
-        $bot->onCommand('/start', function (Context $ctx) {
+        $bot->onCommand('start', function (Context $ctx) {
             $update = $ctx->getUpdate();
             $message = $update->getMessage();
             $this->assertSame(52250011, $update->getUpdateId());
