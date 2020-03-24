@@ -22,19 +22,19 @@ class PreCheckoutQueryTest extends TestCase
         $bot->onPreCheckoutQuery(function (Context $ctx) {
             $update = $ctx->getUpdate();
             $preCheckoutQuery = $update->getPreCheckoutQuery();
-            $this->assertSame(52250016, $update->getUpdateId());
-            $this->assertSame('666728702186752641', $preCheckoutQuery->getId());
-            $this->assertSame(111111111, $preCheckoutQuery->getFrom()->getId());
+            $this->assertSame(52259571, $update->getUpdateId());
+            $this->assertSame('666728700924156328', $preCheckoutQuery->getId());
+            $this->assertSame(222222222, $preCheckoutQuery->getFrom()->getId());
             $this->assertSame(false, $preCheckoutQuery->getFrom()->isBot());
-            $this->assertSame('John', $preCheckoutQuery->getFrom()->getFirstName());
-            $this->assertSame('john98', $preCheckoutQuery->getFrom()->getUsername());
+            $this->assertSame('Michael', $preCheckoutQuery->getFrom()->getFirstName());
+            $this->assertSame('mscott', $preCheckoutQuery->getFrom()->getUsername());
             $this->assertSame('it', $preCheckoutQuery->getFrom()->getLanguageCode());
             $this->assertSame('EUR', $preCheckoutQuery->getCurrency());
-            $this->assertSame(2500, $preCheckoutQuery->getTotalAmount());
-            $this->assertSame('myPizza', $preCheckoutQuery->getInvoicePayload());
-            $this->assertSame('John John', $preCheckoutQuery->getOrderInfo()->getName());
-            $this->assertSame('0000000000', $preCheckoutQuery->getOrderInfo()->getPhoneNumber());
-            $this->assertSame('john@gmail.com', $preCheckoutQuery->getOrderInfo()->getEmail());
+            $this->assertSame(1999, $preCheckoutQuery->getTotalAmount());
+            $this->assertSame('default', $preCheckoutQuery->getInvoicePayload());
+            $this->assertSame('Michael Scott', $preCheckoutQuery->getOrderInfo()->getName());
+            $this->assertSame('000000000000', $preCheckoutQuery->getOrderInfo()->getPhoneNumber());
+            $this->assertSame('michael.scott@gmail.com', $preCheckoutQuery->getOrderInfo()->getEmail());
         });
 
         $bot->run();

@@ -21,23 +21,23 @@ class CommandTest extends TestCase
     public function testCommand()
     {
         $bot = new Bot('test');
-        $bot->config()->setUpdateStream(__DIR__ . '/../update_types/message.json');
+        $bot->config()->setUpdateStream(__DIR__ . '/../update_types/command.json');
 
         $bot->onCommand('start', function (Context $ctx) {
             $update = $ctx->getUpdate();
             $message = $update->getMessage();
-            $this->assertSame(52250011, $update->getUpdateId());
-            $this->assertSame(10690, $message->getMessageId());
-            $this->assertSame(111111111, $message->getFrom()->getId());
+            $this->assertSame(52259544, $update->getUpdateId());
+            $this->assertSame(23756, $message->getMessageId());
+            $this->assertSame(222222222, $message->getFrom()->getId());
             $this->assertSame(false, $message->getFrom()->isBot());
-            $this->assertSame('John', $message->getFrom()->getFirstName());
-            $this->assertSame('john98', $message->getFrom()->getUsername());
+            $this->assertSame('Michael', $message->getFrom()->getFirstName());
+            $this->assertSame('mscott', $message->getFrom()->getUsername());
             $this->assertSame('it', $message->getFrom()->getLanguageCode());
-            $this->assertSame(111111111, $message->getChat()->getId());
-            $this->assertSame('John', $message->getChat()->getFirstName());
-            $this->assertSame('john98', $message->getChat()->getUsername());
+            $this->assertSame(222222222, $message->getChat()->getId());
+            $this->assertSame('Michael', $message->getChat()->getFirstName());
+            $this->assertSame('mscott', $message->getChat()->getUsername());
             $this->assertSame('private', $message->getChat()->getType());
-            $this->assertSame(1572089363, $message->getDate());
+            $this->assertSame(1584984664, $message->getDate());
             $this->assertSame('/start', $message->getText());
             $this->assertCount(1, $message->getEntities());
             /** @var MessageEntity $entity */
