@@ -21,7 +21,7 @@ class MiddlewareTest extends TestCase
     public function testMiddleware()
     {
         $bot = new Bot('test');
-        $bot->config()->setUpdateStream(__DIR__ . '/../update_types/message.json');
+        $bot->config()->setUpdateStream(__DIR__ . '/../update_types/command.json');
         $bot->middleware(new FirstMiddleware());
         $bot->middleware(new SecondMiddleware());
 

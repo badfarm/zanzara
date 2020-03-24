@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Zanzara\Update;
 
+use Zanzara\Update\Poll\Poll;
+use Zanzara\Update\Poll\PollAnswer;
+use Zanzara\Update\Shipping\PreCheckoutQuery;
+use Zanzara\Update\Shipping\ShippingQuery;
+use Zanzara\Update\Shipping\SuccessfulPayment;
+
 /**
  * The update received from Telegram.
  *

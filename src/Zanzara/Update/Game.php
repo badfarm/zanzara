@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Zanzara\Update;
 
+use Zanzara\Update\File\PhotoSize;
+
 /**
  *
  */

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Zanzara\Test\Middleware;
 
 use Zanzara\Context;
-use Zanzara\MiddlewareInterface;
+use Zanzara\Middleware\MiddlewareInterface;
 
 /**
  *

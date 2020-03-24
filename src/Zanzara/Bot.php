@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Zanzara;
 
 use JsonMapper;
-use Zanzara\Operation\Operation;
+use Zanzara\Action\Action;
+use Zanzara\Action\ActionResolver;
 
 /**
  * Entry point of the library, the client must create an instance of this class.
  *
  */
-class Bot extends OperationResolver
+class Bot extends ActionResolver
 {
 
     /**
@@ -55,11 +56,11 @@ class Bot extends OperationResolver
     {
         $update = $this->updateHandler->getUpdate();
         $context = new Context($update);
-        $operations = $this->resolve($update);
-        /** @var Operation $operation */
-        foreach ($operations as $operation) {
-            $this->feedMiddlewareStack($operation);
-            $middlewareTip = $operation->getTip();
+        $actions = $this->resolve($update);
+        /** @var Action $action */
+        foreach ($actions as $action) {
+            $this->feedMiddlewareStack($action);
+            $middlewareTip = $action->getTip();
             $middlewareTip($context);
         }
     }

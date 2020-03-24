@@ -4,6 +4,22 @@ declare(strict_types=1);
 
 namespace Zanzara\Update;
 
+use Zanzara\Update\File\Animation;
+use Zanzara\Update\File\Audio;
+use Zanzara\Update\File\Contact;
+use Zanzara\Update\File\Document;
+use Zanzara\Update\File\Location;
+use Zanzara\Update\File\PhotoSize;
+use Zanzara\Update\File\Sticker;
+use Zanzara\Update\File\Venue;
+use Zanzara\Update\File\Video;
+use Zanzara\Update\File\VideoNote;
+use Zanzara\Update\File\Voice;
+use Zanzara\Update\Passport\PassportData;
+use Zanzara\Update\Poll\Poll;
+use Zanzara\Update\Shipping\Invoice;
+use Zanzara\Update\Shipping\SuccessfulPayment;
+
 /**
  *
  */
