@@ -6,17 +6,24 @@ namespace Zanzara;
 
 use JsonMapper;
 use Zanzara\Action\Action;
+use Zanzara\Action\ActionCollector;
 use Zanzara\Action\ActionResolver;
 
 /**
- * Entry point of the library, the client must create an instance of this class.
+ * Clients interact with Zanzara by creating an instance of this class.
+ *
+ * The client has to declare the actions he wants to perform.
+ * Actions are declared through public methods defined in @see ActionCollector.
+ * After that he has to call @see Bot::run() that determines, accordingly to the Update type received from Telegram,
+ * the actions to execute.
+ * A @see Context object is passed through all middleware stack.
  *
  */
 class Bot extends ActionResolver
 {
 
     /**
-     * @var BotConfiguration
+     * @var Config
      */
     private $config;
 
@@ -32,21 +39,15 @@ class Bot extends ActionResolver
 
     /**
      * @param string $token
+     * @param Config|null $config
      */
-    public function __construct(string $token)
+    public function __construct(string $token, ?Config $config = null)
     {
-        $this->config = new BotConfiguration();
-        $this->config->setToken($token);
+        $config = $config ?? new Config();
+        $config->token($token);
+        $this->config = $config;
         $this->jsonMapper = new JsonMapper();
         $this->updateHandler = new UpdateHandler($this->config, $this->jsonMapper);
-    }
-
-    /**
-     * @return BotConfiguration
-     */
-    public function config(): BotConfiguration
-    {
-        return $this->config;
     }
 
     /**

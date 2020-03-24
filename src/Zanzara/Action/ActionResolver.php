@@ -6,6 +6,7 @@ namespace Zanzara\Action;
 
 use Zanzara\Update\CallbackQuery;
 use Zanzara\Update\Message;
+use Zanzara\Update\ReplyToMessage;
 use Zanzara\Update\Shipping\PreCheckoutQuery;
 use Zanzara\Update\Shipping\ShippingQuery;
 use Zanzara\Update\Shipping\SuccessfulPayment;
@@ -56,6 +57,10 @@ abstract class ActionResolver extends ActionCollector
 
             case SuccessfulPayment::class:
                 $this->merge($actions, 'successfulPayments');
+                break;
+
+            case ReplyToMessage::class:
+                $this->merge($actions, 'replyToMessages');
                 break;
 
         }

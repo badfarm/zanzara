@@ -7,7 +7,7 @@ namespace Zanzara;
 /**
  *
  */
-class BotConfiguration
+class Config
 {
 
     public const WEBHOOK_MODE = "WEBHOOK";
@@ -38,40 +38,33 @@ class BotConfiguration
     private $updateStream = 'php://input';
 
     /**
-     * @var array
-     */
-    private $redis = [];
-
-    /**
      * @param string $token
+     * @return Config
      */
-    public function setToken(string $token): void
+    public function token(string $token): self
     {
         $this->botToken = $token;
+        return $this;
     }
 
     /**
      * @param string $mode
+     * @return Config
      */
-    public function setUpdateMode(string $mode): void
+    public function updateMode(string $mode): self
     {
         $this->updateMode = $mode;
+        return $this;
     }
 
     /**
      * @param string $mode
+     * @return Config
      */
-    public function setParseMode(string $mode): void
+    public function parseMode(string $mode): self
     {
         $this->parseMode = $mode;
-    }
-
-    /**
-     * @param array $data
-     */
-    public function enableRedis(array $data): void
-    {
-        $this->redis = $data;
+        return $this;
     }
 
     /**
@@ -99,14 +92,6 @@ class BotConfiguration
     }
 
     /**
-     * @return array
-     */
-    public function getRedis(): array
-    {
-        return $this->redis;
-    }
-
-    /**
      * @return string
      */
     public function getUpdateStream(): string
@@ -116,10 +101,12 @@ class BotConfiguration
 
     /**
      * @param string $updateStream
+     * @return Config
      */
-    public function setUpdateStream(string $updateStream): void
+    public function updateStream(string $updateStream): self
     {
         $this->updateStream = $updateStream;
+        return $this;
     }
 
 }

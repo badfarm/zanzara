@@ -7,9 +7,6 @@ namespace Zanzara\Middleware;
 /**
  * Middleware is a LIFO (Last In First Out) stack.
  *
- * A middleware must implement @see MiddlewareInterface and can be defined both at Action and Bot level. The latter
- * means the middleware is executed for every action.
- *
  */
 abstract class MiddlewareCollector
 {

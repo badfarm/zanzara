@@ -8,7 +8,6 @@ use Zanzara\Context;
 
 /**
  * A node of the middleware stack.
- * When invoked it executes the middleware code.
  * The last node is the @see Action to be executed and does not have a next node.
  *
  */

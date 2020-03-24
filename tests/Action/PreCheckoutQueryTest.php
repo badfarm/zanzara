@@ -6,6 +6,7 @@ namespace Zanzara\Test\Action;
 
 use PHPUnit\Framework\TestCase;
 use Zanzara\Bot;
+use Zanzara\Config;
 use Zanzara\Context;
 
 /**
@@ -14,10 +15,14 @@ use Zanzara\Context;
 class PreCheckoutQueryTest extends TestCase
 {
 
+    /**
+     *
+     */
     public function testPreCheckoutQuery()
     {
-        $bot = new Bot('test');
-        $bot->config()->setUpdateStream(__DIR__ . '/../update_types/pre_checkout_query.json');
+        $config = new Config();
+        $config->updateStream(__DIR__ . '/../update_types/pre_checkout_query.json');
+        $bot = new Bot('test', $config);
 
         $bot->onPreCheckoutQuery(function (Context $ctx) {
             $update = $ctx->getUpdate();

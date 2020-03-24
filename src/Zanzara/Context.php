@@ -13,6 +13,8 @@ class Context
 {
 
     /**
+     * The update received from Telegram.
+     *
      * @var Update
      */
     private $update;
@@ -20,6 +22,8 @@ class Context
     //private $replier;
 
     /**
+     * Array used to pass data between middleware.
+     *
      * @var array
      */
     private $data = [];

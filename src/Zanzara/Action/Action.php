@@ -10,6 +10,9 @@ use Zanzara\Middleware\MiddlewareInterface;
 use Zanzara\Middleware\MiddlewareNode;
 
 /**
+ * Object returned to client when he declares an action.
+ * Each action has a middleware chain.
+ * On action instantiation the object itself is set as tip of the middleware stack.
  *
  */
 class Action extends MiddlewareCollector implements MiddlewareInterface

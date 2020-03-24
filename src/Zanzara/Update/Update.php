@@ -289,6 +289,8 @@ class Update
     {
         if ($this->message && $this->message->getSuccessfulPayment()) {
             $this->updateType = SuccessfulPayment::class;
+        } else if ($this->message && $this->message->getReplyToMessage()) {
+            $this->updateType = ReplyToMessage::class;
         } else if ($this->message) {
             $this->updateType = Message::class;
         } else if ($this->editedMessage) {

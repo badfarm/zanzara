@@ -8,7 +8,8 @@ use Zanzara\Middleware\MiddlewareCollector;
 use Zanzara\Middleware\MiddlewareInterface;
 
 /**
- * Collects all actions a user can do.
+ * Collects all actions a user wants to do.
+ * @see Action
  *
  */
 abstract class ActionCollector
@@ -17,8 +18,8 @@ abstract class ActionCollector
     /**
      * Associative array for actions.
      * Key is always the action type (messages, cbQueryTexts, cbQueries, genericMessages, shippingQueries, etc.)
-     * Values can be an ordered array of @see \Zanzara\Action\Action or another associative array where the key
-     * is the actionId and the value the actual @see \Zanzara\Action\Action.
+     * Values can be an ordered array of @see Action or another associative array where the key
+     * is the actionId and the value the actual @see Action.
      *
      * Eg.
      * [
@@ -76,6 +77,17 @@ abstract class ActionCollector
         $commandAction = new Action($callback);
         $this->actions['genericMessages'][] = $commandAction;
         return $commandAction;
+    }
+
+    /**
+     * @param callable $callback
+     * @return MiddlewareCollector
+     */
+    public function onReplyToMessage(callable $callback): MiddlewareCollector
+    {
+        $replyToMessageAction = new Action($callback);
+        $this->actions['replyToMessages'][] = $replyToMessageAction;
+        return $replyToMessageAction;
     }
 
     /**
@@ -166,7 +178,7 @@ abstract class ActionCollector
     }
 
     /**
-     * Add a middleware at Bot level.
+     * Add a middleware at bot level.
      *
      * @param MiddlewareInterface $middleware
      * @return $this

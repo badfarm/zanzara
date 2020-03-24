@@ -77,7 +77,7 @@ class Message
     private $forwardDate;
 
     /**
-     * @var Message|null
+     * @var ReplyToMessage|null
      */
     private $replyToMessage;
 
@@ -422,17 +422,17 @@ class Message
     }
 
     /**
-     * @return Message|null
+     * @return ReplyToMessage|null
      */
-    public function getReplyToMessage(): ?Message
+    public function getReplyToMessage(): ?ReplyToMessage
     {
         return $this->replyToMessage;
     }
 
     /**
-     * @param Message|null $replyToMessage
+     * @param ReplyToMessage|null $replyToMessage
      */
-    public function setReplyToMessage(?Message $replyToMessage): void
+    public function setReplyToMessage(?ReplyToMessage $replyToMessage): void
     {
         $this->replyToMessage = $replyToMessage;
     }

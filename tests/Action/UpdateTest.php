@@ -6,6 +6,7 @@ namespace Zanzara\Test\Action;
 
 use PHPUnit\Framework\TestCase;
 use Zanzara\Bot;
+use Zanzara\Config;
 use Zanzara\Context;
 
 /**
@@ -19,8 +20,9 @@ class UpdateTest extends TestCase
      */
     public function testUpdate()
     {
-        $bot = new Bot('test');
-        $bot->config()->setUpdateStream(__DIR__ . '/../update_types/command.json');
+        $config = new Config();
+        $config->updateStream(__DIR__ . '/../update_types/command.json');
+        $bot = new Bot('test', $config);
 
         $bot->onUpdate(function (Context $ctx) {
             $update = $ctx->getUpdate();

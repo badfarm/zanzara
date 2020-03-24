@@ -6,6 +6,7 @@ namespace Zanzara\Test\Middleware;
 
 use PHPUnit\Framework\TestCase;
 use Zanzara\Bot;
+use Zanzara\Config;
 use Zanzara\Context;
 
 /**
@@ -20,8 +21,9 @@ class MiddlewareTest extends TestCase
      */
     public function testMiddleware()
     {
-        $bot = new Bot('test');
-        $bot->config()->setUpdateStream(__DIR__ . '/../update_types/command.json');
+        $config = new Config();
+        $config->updateStream(__DIR__ . '/../update_types/command.json');
+        $bot = new Bot('test', $config);
         $bot->middleware(new FirstMiddleware());
         $bot->middleware(new SecondMiddleware());
 

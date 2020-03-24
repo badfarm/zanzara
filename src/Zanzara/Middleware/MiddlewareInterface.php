@@ -7,6 +7,7 @@ namespace Zanzara\Middleware;
 use Zanzara\Context;
 
 /**
+ * The interface client's middleware must implement.
  *
  */
 interface MiddlewareInterface

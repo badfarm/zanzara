@@ -8,6 +8,8 @@ use JsonMapper;
 use Zanzara\Update\Update;
 
 /**
+ * Receives the Update json from Telegram and decodes it into @see Update object.
+ * @see JsonMapper is used for deserialization.
  *
  */
 class UpdateHandler
@@ -19,7 +21,7 @@ class UpdateHandler
     private $update;
 
     /**
-     * @var BotConfiguration
+     * @var Config
      */
     private $config;
 
@@ -29,13 +31,14 @@ class UpdateHandler
     private $jsonMapper;
 
     /**
-     * @param BotConfiguration $config
+     * @param Config $config
      * @param JsonMapper $jsonMapper
      */
-    public function __construct(BotConfiguration $config, JsonMapper $jsonMapper)
+    public function __construct(Config $config, JsonMapper $jsonMapper)
     {
         $this->config = $config;
         $this->jsonMapper = $jsonMapper;
+        $this->init();
     }
 
     public function init(): void
@@ -44,13 +47,13 @@ class UpdateHandler
 
         switch ($updateMode) {
 
-            case BotConfiguration::WEBHOOK_MODE:
+            case Config::WEBHOOK_MODE:
                 $updateData = json_decode(file_get_contents($this->config->getUpdateStream()));
                 $this->update = $this->jsonMapper->map($updateData, new Update());
                 $this->update->detectUpdateType();
                 break;
 
-            case BotConfiguration::POLLING_MODE:
+            case Config::POLLING_MODE:
                 // not supported
                 break;
 
@@ -60,9 +63,6 @@ class UpdateHandler
 
     public function getUpdate(): Update
     {
-        if (!$this->update) {
-            $this->init();
-        }
         return $this->update;
     }
 
