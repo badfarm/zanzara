@@ -227,7 +227,7 @@ abstract class ActionCollector
      * @param callable $callback
      * @return MiddlewareCollector
      */
-    public function onEditChannelPost(callable $callback): MiddlewareCollector {
+    public function onEditedChannelPost(callable $callback): MiddlewareCollector {
         $action = new Action($callback);
         $this->actions[EditedChannelPost::class][] = $action;
         return $action;

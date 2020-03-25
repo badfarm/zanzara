@@ -41,13 +41,13 @@ class ChannelPostTest extends TestCase
     /**
      *
      */
-    public function testEditChannelPost()
+    public function testEditedChannelPost()
     {
         $config = new Config();
         $config->updateStream(__DIR__ . '/../update_types/edited_channel_post.json');
         $bot = new Bot('test', $config);
 
-        $bot->onEditChannelPost(function (Context $ctx) {
+        $bot->onEditedChannelPost(function (Context $ctx) {
             $update = $ctx->getUpdate();
             $editedChannelPost = $update->getEditedChannelPost();
             $this->assertSame(2, $editedChannelPost->getMessageId());
