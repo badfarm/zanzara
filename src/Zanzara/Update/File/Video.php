@@ -36,9 +36,9 @@ class Video
     private $duration;
 
     /**
-     * @var PhotoSize[]
+     * @var PhotoSize
      */
-    private $thumb = [];
+    private $thumb;
 
     /**
      * @var string|null
@@ -131,17 +131,17 @@ class Video
     }
 
     /**
-     * @return PhotoSize[]
+     * @return PhotoSize
      */
-    public function getThumb(): array
+    public function getThumb(): PhotoSize
     {
         return $this->thumb;
     }
 
     /**
-     * @param PhotoSize[] $thumb
+     * @param PhotoSize $thumb
      */
-    public function setThumb(array $thumb): void
+    public function setThumb(PhotoSize $thumb): void
     {
         $this->thumb = $thumb;
     }

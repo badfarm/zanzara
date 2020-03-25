@@ -1,0 +1,14 @@
+{
+    "update_id": 52259613,
+    "edited_channel_post": {
+        "message_id": 2,
+        "chat": {
+            "id": -4444444444444,
+            "title": "Cletto",
+            "type": "channel"
+        },
+        "date": 1585146043,
+        "edit_date": 1585146116,
+        "text": "Editing channel post"
+    }
+}

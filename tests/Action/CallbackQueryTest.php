@@ -43,6 +43,15 @@ class CallbackQueryTest extends TestCase
             $this->assertSame(1584984731, $message->getDate());
             $this->assertSame('Manage your data', $message->getText());
             $this->assertSame('read', $callbackQuery->getData());
+            $inlineKeyboard = $message->getReplyMarkup()->getInlineKeyboard();
+            $this->assertSame('Add', $inlineKeyboard[0][0]->getText());
+            $this->assertSame('add', $inlineKeyboard[0][0]->getCallbackData());
+            $this->assertSame('Modify', $inlineKeyboard[0][1]->getText());
+            $this->assertSame('modify', $inlineKeyboard[0][1]->getCallbackData());
+            $this->assertSame('Remove', $inlineKeyboard[1][0]->getText());
+            $this->assertSame('remove', $inlineKeyboard[1][0]->getCallbackData());
+            $this->assertSame('Read', $inlineKeyboard[1][1]->getText());
+            $this->assertSame('read', $inlineKeyboard[1][1]->getCallbackData());
         });
 
         $bot->run();

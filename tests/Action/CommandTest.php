@@ -42,7 +42,6 @@ class CommandTest extends TestCase
             $this->assertSame(1584984664, $message->getDate());
             $this->assertSame('/start', $message->getText());
             $this->assertCount(1, $message->getEntities());
-            /** @var MessageEntity $entity */
             $entity = $message->getEntities()[0];
             $this->assertInstanceOf(MessageEntity::class, $entity);
             $this->assertEquals(0, $entity->getOffset());

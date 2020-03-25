@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zanzara\Update;
 
-use Zanzara\Update\File\PhotoSize;
+use Zanzara\Update\File\Animation;
 
 /**
  *
@@ -23,7 +23,7 @@ class Game
     private $description;
 
     /**
-     * @var PhotoSize[]
+     * @var \Zanzara\Update\File\PhotoSize[]
      */
     private $photo = [];
 
@@ -75,7 +75,7 @@ class Game
     }
 
     /**
-     * @return PhotoSize[]
+     * @return \Zanzara\Update\File\PhotoSize[]
      */
     public function getPhoto(): array
     {
@@ -83,7 +83,7 @@ class Game
     }
 
     /**
-     * @param PhotoSize[] $photo
+     * @param \Zanzara\Update\File\PhotoSize[] $photo
      */
     public function setPhoto(array $photo): void
     {
