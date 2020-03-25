@@ -6,6 +6,7 @@ namespace Zanzara\Action;
 
 use Zanzara\Update\CallbackQuery;
 use Zanzara\Update\Message;
+use Zanzara\Update\Passport\PassportData;
 use Zanzara\Update\ReplyToMessage;
 use Zanzara\Update\Shipping\PreCheckoutQuery;
 use Zanzara\Update\Shipping\ShippingQuery;
@@ -26,46 +27,32 @@ abstract class ActionResolver extends ActionCollector
     protected function resolve(Update $update): array
     {
         $actions = [];
+        $updateType = $update->getUpdateType();
 
-        switch ($update->getUpdateType()) {
+        switch ($updateType) {
 
             case Message::class:
                 $text = $update->getMessage()->getText();
-                $action = $this->findAndPush($actions, 'messages', $text);
-                // do not manage the update as conversation if the text is already managed as command/text
-                if (!$action) {
-                    $userId = $update->getMessage()->getFrom()->getId();
-                    $userConversation = 'dummyConversation'; // $redis->getConversation($userId)
-                    $this->findAndPush($actions, 'conversations', $userConversation);
+                if ($text) {
+                    $action = $this->findAndPush($actions, 'messages', $text);
+                    // do not manage the update as conversation if the text is already managed as command/text
+                    if (!$action) {
+                        $userId = $update->getMessage()->getFrom()->getId();
+                        $userConversation = 'dummyConversation'; // $redis->getConversation($userId)
+                        $this->findAndPush($actions, 'conversations', $userConversation);
+                    }
                 }
-                $this->merge($actions, 'genericMessages');
                 break;
 
             case CallbackQuery::class:
                 $text = $update->getCallbackQuery()->getMessage()->getText();
                 $this->findAndPush($actions, 'cbQueryTexts', $text);
-                $this->merge($actions, 'cbQueries');
-                break;
-
-            case ShippingQuery::class:
-                $this->merge($actions, 'shippingQueries');
-                break;
-
-            case PreCheckoutQuery::class:
-                $this->merge($actions, 'preCheckoutQueries');
-                break;
-
-            case SuccessfulPayment::class:
-                $this->merge($actions, 'successfulPayments');
-                break;
-
-            case ReplyToMessage::class:
-                $this->merge($actions, 'replyToMessages');
                 break;
 
         }
 
-        $this->merge($actions, 'genericUpdates');
+        $this->merge($actions, $updateType);
+        $this->merge($actions, Update::class);
 
         return $actions;
     }

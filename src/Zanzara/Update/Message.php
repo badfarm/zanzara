@@ -9,7 +9,6 @@ use Zanzara\Update\File\Audio;
 use Zanzara\Update\File\Contact;
 use Zanzara\Update\File\Document;
 use Zanzara\Update\File\Location;
-use Zanzara\Update\File\PhotoSize;
 use Zanzara\Update\File\Sticker;
 use Zanzara\Update\File\Venue;
 use Zanzara\Update\File\Video;
@@ -132,7 +131,7 @@ class Message
     private $game;
 
     /**
-     * @var PhotoSize[]
+     * @var $photo \Zanzara\Update\File\PhotoSize[]
      */
     private $photo = [];
 
@@ -197,7 +196,7 @@ class Message
     private $newChatTitle;
 
     /**
-     * @var PhotoSize[]
+     * @var \Zanzara\Update\File\PhotoSize[]
      */
     private $newChatPhoto = [];
 
@@ -598,7 +597,7 @@ class Message
     }
 
     /**
-     * @return PhotoSize[]
+     * @return \Zanzara\Update\File\PhotoSize[]
      */
     public function getPhoto(): array
     {
@@ -606,7 +605,7 @@ class Message
     }
 
     /**
-     * @param PhotoSize[] $photo
+     * @param \Zanzara\Update\File\PhotoSize[] $photo
      */
     public function setPhoto(array $photo): void
     {
@@ -806,7 +805,7 @@ class Message
     }
 
     /**
-     * @return PhotoSize[]
+     * @return \Zanzara\Update\File\PhotoSize[]
      */
     public function getNewChatPhoto(): array
     {
@@ -814,7 +813,7 @@ class Message
     }
 
     /**
-     * @param PhotoSize[] $newChatPhoto
+     * @param \Zanzara\Update\File\PhotoSize[] $newChatPhoto
      */
     public function setNewChatPhoto(array $newChatPhoto): void
     {

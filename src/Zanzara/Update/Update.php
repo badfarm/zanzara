@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zanzara\Update;
 
+use Zanzara\Update\Passport\PassportData;
 use Zanzara\Update\Poll\Poll;
 use Zanzara\Update\Poll\PollAnswer;
 use Zanzara\Update\Shipping\PreCheckoutQuery;
@@ -291,6 +292,8 @@ class Update
             $this->updateType = SuccessfulPayment::class;
         } else if ($this->message && $this->message->getReplyToMessage()) {
             $this->updateType = ReplyToMessage::class;
+        } else if ($this->message && $this->message->getPassportData()) {
+            $this->updateType = PassportData::class;
         } else if ($this->message) {
             $this->updateType = Message::class;
         } else if ($this->editedMessage) {
@@ -305,6 +308,10 @@ class Update
             $this->updateType = ShippingQuery::class;
         } else if ($this->preCheckoutQuery) {
             $this->updateType = PreCheckoutQuery::class;
+        } else if ($this->inlineQuery) {
+            $this->updateType = InlineQuery::class;
+        } else if ($this->chosenInlineResult) {
+            $this->updateType = ChosenInlineResult::class;
         }
     }
 

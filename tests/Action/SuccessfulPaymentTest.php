@@ -27,18 +27,6 @@ class SuccessfulPaymentTest extends TestCase
         $bot->onSuccessfulPayment(function (Context $ctx) {
             $update = $ctx->getUpdate();
             $message = $update->getMessage();
-            $this->assertSame(52259572, $update->getUpdateId());
-            $this->assertSame(23790, $message->getMessageId());
-            $this->assertSame(222222222, $message->getFrom()->getId());
-            $this->assertSame(false, $message->getFrom()->isBot());
-            $this->assertSame('Michael', $message->getFrom()->getFirstName());
-            $this->assertSame('mscott', $message->getFrom()->getUsername());
-            $this->assertSame('it', $message->getFrom()->getLanguageCode());
-            $this->assertSame(222222222, $message->getChat()->getId());
-            $this->assertSame('Michael', $message->getChat()->getFirstName());
-            $this->assertSame('mscott', $message->getChat()->getUsername());
-            $this->assertSame('private', $message->getChat()->getType());
-            $this->assertSame(1584986653, $message->getDate());
             $successfulPayment = $message->getSuccessfulPayment();
             $this->assertSame('EUR', $successfulPayment->getCurrency());
             $this->assertSame(1999, $successfulPayment->getTotalAmount());
