@@ -15,7 +15,7 @@ Loop::run(function () {
 
     $pid = yield $context->start();
 
-    $bot_key = $_ENV['BOT_KEY'];;
+    $bot_key = $_ENV['BOT_KEY'];
     yield $context->send($bot_key);
     $requestData = yield $context->receive();
 
@@ -24,4 +24,5 @@ Loop::run(function () {
     $returnValue = yield $context->join();
 
     printf("Child processes exited with '%s'\n", $returnValue);
+
 });

@@ -13,7 +13,7 @@ return function (Channel $channel): Generator {
     $method = "getUpdates";
 
     $params = [
-        "offset" => 550495491,
+        "offset" => 550495495,
         "limit" => 100000,
         "timeout" => 10000
     ];
@@ -28,7 +28,9 @@ return function (Channel $channel): Generator {
 
     $response = yield $client->request($request);
 
-    yield $channel->send(yield $response->getBody()->buffer());
+    $channel->send(yield $response->getBody()->buffer());
 
-    return $url;
+    return "finito figlio";
+
+
 };
