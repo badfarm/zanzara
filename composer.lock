@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-  "content-hash": "42e2f40f1f7f26dbbfe0e23292856b5d",
+  "content-hash": "ac2e2ba5bb2d3ad396341a3f314f418f",
     "packages": [
         {
           "name": "amphp/amp",
@@ -2981,6 +2981,77 @@
             "time": "2016-10-03T07:35:21+00:00"
         },
         {
+          "name": "symfony/dotenv",
+          "version": "v5.0.5",
+          "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/dotenv.git",
+            "reference": "48c8fdda51e5b24d031ce8ec221caa186337e36f"
+          },
+          "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/dotenv/zipball/48c8fdda51e5b24d031ce8ec221caa186337e36f",
+            "reference": "48c8fdda51e5b24d031ce8ec221caa186337e36f",
+            "shasum": ""
+          },
+          "require": {
+            "php": "^7.2.5"
+          },
+          "require-dev": {
+            "symfony/process": "^4.4|^5.0"
+          },
+          "type": "library",
+          "extra": {
+            "branch-alias": {
+              "dev-master": "5.0-dev"
+            }
+          },
+          "autoload": {
+            "psr-4": {
+              "Symfony\\Component\\Dotenv\\": ""
+            },
+            "exclude-from-classmap": [
+              "/Tests/"
+            ]
+          },
+          "notification-url": "https://packagist.org/downloads/",
+          "license": [
+            "MIT"
+          ],
+          "authors": [
+            {
+              "name": "Fabien Potencier",
+              "email": "fabien@symfony.com"
+            },
+            {
+              "name": "Symfony Community",
+              "homepage": "https://symfony.com/contributors"
+            }
+          ],
+          "description": "Registers environment variables from a .env file",
+          "homepage": "https://symfony.com",
+          "keywords": [
+            "dotenv",
+            "env",
+            "environment"
+          ],
+          "funding": [
+            {
+              "url": "https://symfony.com/sponsor",
+              "type": "custom"
+            },
+            {
+              "url": "https://github.com/fabpot",
+              "type": "github"
+            },
+            {
+              "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+              "type": "tidelift"
+            }
+          ],
+          "time": "2020-02-29T10:07:09+00:00"
+        },
+      {
             "name": "symfony/polyfill-ctype",
             "version": "v1.14.0",
             "source": {

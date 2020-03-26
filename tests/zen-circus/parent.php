@@ -4,6 +4,10 @@ require "../../vendor/autoload.php";
 
 use Amp\Loop;
 use Amp\Parallel\Context;
+use Symfony\Component\Dotenv\Dotenv;
+
+$dotenv = new Dotenv();
+$dotenv->load("../../.env");
 
 Loop::run(function () {
 
@@ -11,9 +15,8 @@ Loop::run(function () {
 
     $pid = yield $context->start();
 
-    $bot_id = "";
-    yield $context->send($bot_id);
-
+    $bot_key = $_ENV['BOT_KEY'];;
+    yield $context->send($bot_key);
     $requestData = yield $context->receive();
 
     printf("Messages %s \n", $requestData);

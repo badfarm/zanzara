@@ -8,12 +8,12 @@ use Amp\Parallel\Sync\Channel;
 
 return function (Channel $channel): Generator {
 
-    $bot_id = yield $channel->receive(); //can receive data
+    $bot_key = yield $channel->receive(); //can receive data
 
     $method = "getUpdates";
 
     $params = [
-        "offset" => 550495489,
+        "offset" => 550495491,
         "limit" => 100000,
         "timeout" => 10000
     ];
@@ -22,7 +22,7 @@ return function (Channel $channel): Generator {
 
     $query = http_build_query($params);
 
-    $url = "https://api.telegram.org/bot" . $bot_id . "/" . $method . "?" . $query;
+    $url = "https://api.telegram.org/bot" . $bot_key . "/" . $method . "?" . $query;
 
     $request = new Request("$url", "POST");
 
