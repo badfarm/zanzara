@@ -19,7 +19,7 @@ $method = "getUpdates";
 $timeout = 50;
 
 $params = [
-    "offset" => 550495538,
+    "offset" => 550495539,
     "limit" => 1000,
     "timeout" => $timeout
 ];
@@ -41,10 +41,10 @@ function callback()
 
 function getNotifications($url, $browser)
 {
-    $browser->get($url)->then(function (ResponseInterface $response) {
+    $browser->get($url)->then(function (ResponseInterface $response) use($url, $browser) {
         // response received within 50 seconds. Telegram longpolling
         echo (string)$response->getBody();
-        callback();
+        getNotifications($url, $browser);
     });
 }
 
