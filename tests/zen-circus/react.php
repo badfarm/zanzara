@@ -19,7 +19,7 @@ $method = "getUpdates";
 $timeout = 50;
 
 $params = [
-    "offset" => 550495533,
+    "offset" => 550495538,
     "limit" => 1000,
     "timeout" => $timeout
 ];
@@ -34,9 +34,9 @@ $browser = $browser->withOptions(array(
     'timeout' => $timeout
 ));
 
-function callback($browser)
+function callback()
 {
-    getNotifications("https://api.telegram.org/bot1082667657:AAGCbRUHWntQcf3c_uf9hfNkLM98UuJWPJE/getUpdates?offset=550495530&limit=1000&timeout=50", $browser);
+    echo "fatto";
 }
 
 function getNotifications($url, $browser)
