@@ -21,7 +21,7 @@ class MessageTest extends TestCase
     public function testEditedMessage()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/edited_message.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/edited_message.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onEditedMessage(function (Context $ctx) {
@@ -52,7 +52,7 @@ class MessageTest extends TestCase
     public function testForwardFromMessage()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/forward_from_message.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/forward_from_message.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
@@ -78,7 +78,7 @@ class MessageTest extends TestCase
     public function testMessageEntities()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/message_entities.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/message_entities.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
@@ -105,7 +105,7 @@ class MessageTest extends TestCase
     public function testPoll()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/poll.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/poll.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
@@ -137,7 +137,7 @@ class MessageTest extends TestCase
     public function testReplyToMessage()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/reply_to_message.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/reply_to_message.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onReplyToMessage(function (Context $ctx) {

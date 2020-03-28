@@ -21,7 +21,7 @@ class ChannelPostTest extends TestCase
     public function testChannelPost()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/channel_post.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/channel_post.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onChannelPost(function (Context $ctx) {
@@ -44,7 +44,7 @@ class ChannelPostTest extends TestCase
     public function testEditedChannelPost()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/edited_channel_post.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/edited_channel_post.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onEditedChannelPost(function (Context $ctx) {

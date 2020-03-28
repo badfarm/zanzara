@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Zanzara\Test\JsonMapper\Element;
+namespace Zanzara\Test\JsonMapper;
 
-class Element
+/**
+ *
+ */
+class Dummy
 {
 
     /**

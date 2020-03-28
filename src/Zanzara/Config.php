@@ -41,7 +41,7 @@ class Config
      * @param string $token
      * @return Config
      */
-    public function token(string $token): self
+    public function setToken(string $token): self
     {
         $this->botToken = $token;
         return $this;
@@ -51,7 +51,7 @@ class Config
      * @param string $mode
      * @return Config
      */
-    public function updateMode(string $mode): self
+    public function setUpdateMode(string $mode): self
     {
         $this->updateMode = $mode;
         return $this;
@@ -61,7 +61,7 @@ class Config
      * @param string $mode
      * @return Config
      */
-    public function parseMode(string $mode): self
+    public function setParseMode(string $mode): self
     {
         $this->parseMode = $mode;
         return $this;
@@ -103,7 +103,7 @@ class Config
      * @param string $updateStream
      * @return Config
      */
-    public function updateStream(string $updateStream): self
+    public function setUpdateStream(string $updateStream): self
     {
         $this->updateStream = $updateStream;
         return $this;

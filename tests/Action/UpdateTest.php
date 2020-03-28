@@ -21,7 +21,7 @@ class UpdateTest extends TestCase
     public function testUpdate()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/command.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onUpdate(function (Context $ctx) {

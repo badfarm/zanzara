@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
-use JsonMapper;
-use Zanzara\Action\Action;
 use Zanzara\Action\ActionCollector;
 use Zanzara\Action\ActionResolver;
+use Zanzara\Telegram\Type\Update;
 
 /**
  * Clients interact with Zanzara by creating an instance of this class.
@@ -30,12 +29,7 @@ class Zanzara extends ActionResolver
     /**
      * @var ZanzaraMapper
      */
-    private $updateHandler;
-
-    /**
-     * @var JsonMapper
-     */
-    private $jsonMapper;
+    private $zanzaraMapper;
 
     /**
      * @param string $token
@@ -44,10 +38,9 @@ class Zanzara extends ActionResolver
     public function __construct(string $token, ?Config $config = null)
     {
         $config = $config ?? new Config();
-        $config->token($token);
+        $config->setToken($token);
         $this->config = $config;
-        $this->jsonMapper = new JsonMapper();
-        $this->updateHandler = new ZanzaraMapper($this->config, $this->jsonMapper);
+        $this->zanzaraMapper = new ZanzaraMapper();
     }
 
     /**
@@ -55,10 +48,31 @@ class Zanzara extends ActionResolver
      */
     public function run(): void
     {
-        $update = $this->updateHandler->getUpdate();
+
+        switch ($this->config->getUpdateMode()) {
+
+            case Config::WEBHOOK_MODE:
+                $json = file_get_contents($this->config->getUpdateStream());
+                /** @var Update $update */
+                $update = $this->zanzaraMapper->map($json, Update::class);
+                $update->detectUpdateType();
+                $this->exec($update);
+                break;
+
+            case Config::POLLING_MODE:
+                break;
+
+        }
+
+    }
+
+    /**
+     * @param Update $update
+     */
+    private function exec(Update $update)
+    {
         $context = new Context($update);
         $actions = $this->resolve($update);
-        /** @var Action $action */
         foreach ($actions as $action) {
             $this->feedMiddlewareStack($action);
             $middlewareTip = $action->getTip();

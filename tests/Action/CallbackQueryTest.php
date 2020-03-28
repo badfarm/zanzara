@@ -21,7 +21,7 @@ class CallbackQueryTest extends TestCase
     public function testCallbackQuery()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/callback_query.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/callback_query.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onCbQueryText('Manage your data', function (Context $ctx) {

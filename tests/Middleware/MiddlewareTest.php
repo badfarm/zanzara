@@ -22,7 +22,7 @@ class MiddlewareTest extends TestCase
     public function testMiddleware()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/command.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
         $bot = new Zanzara('test', $config);
         $bot->middleware(new FirstMiddleware());
         $bot->middleware(new SecondMiddleware());

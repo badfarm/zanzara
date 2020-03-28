@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zanzara\Test\JsonMapper;
+namespace Zanzara\Test\JsonMapper\Issue;
 
 use JsonMapper;
 use PHPUnit\Framework\TestCase;

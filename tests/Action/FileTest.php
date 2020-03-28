@@ -21,7 +21,7 @@ class FileTest extends TestCase
     public function testAnimation()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/animation.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/animation.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
@@ -53,7 +53,7 @@ class FileTest extends TestCase
     public function testContact()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/contact.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/contact.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
@@ -74,7 +74,7 @@ class FileTest extends TestCase
     public function testDocument()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/document.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/document.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
@@ -97,7 +97,7 @@ class FileTest extends TestCase
     public function testVoice()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/voice.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/voice.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
@@ -120,7 +120,7 @@ class FileTest extends TestCase
     public function testLocation()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/location.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/location.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
@@ -140,7 +140,7 @@ class FileTest extends TestCase
     public function testPhoto()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/photo.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/photo.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
@@ -176,7 +176,7 @@ class FileTest extends TestCase
     public function testSticker()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/sticker.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/sticker.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
@@ -208,7 +208,7 @@ class FileTest extends TestCase
     public function testVideo()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/video.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/video.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {

@@ -21,7 +21,7 @@ class InlineQueryTest extends TestCase
     public function testInlineQuery()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/inline_query.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/inline_query.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onInlineQuery(function (Context $ctx) {
@@ -46,7 +46,7 @@ class InlineQueryTest extends TestCase
     public function testChosenInlineResult()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/chosen_inline_result.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/chosen_inline_result.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onChosenInlineResult(function (Context $ctx) {

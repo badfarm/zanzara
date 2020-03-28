@@ -21,7 +21,7 @@ class PreCheckoutQueryTest extends TestCase
     public function testPreCheckoutQuery()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/pre_checkout_query.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/pre_checkout_query.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onPreCheckoutQuery(function (Context $ctx) {

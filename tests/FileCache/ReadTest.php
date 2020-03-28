@@ -20,7 +20,7 @@ class ReadTest extends TestCase
     public function testFileCache()
     {
         $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/command.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
         $bot = new Zanzara('test', $config);
 
         $bot->onCommand('start', function (Context $ctx) {
