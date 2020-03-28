@@ -30,7 +30,6 @@ class ZanzaraMapper
      * @param string $json
      * @param $class
      * @return mixed
-     * @throws \JsonMapper_Exception
      */
     public function map(string $json, $class)
     {
@@ -42,7 +41,6 @@ class ZanzaraMapper
      * @param string $json
      * @param $class
      * @return array
-     * @throws \JsonMapper_Exception
      */
     public function mapAll(string $json, $class): array
     {

@@ -38,6 +38,11 @@ class Config
     private $updateStream = 'php://input';
 
     /**
+     * @var string
+     */
+    private $apiTelegramUrl = 'https://api.telegram.org';
+
+    /**
      * @return string
      */
     public function getBotToken(): string
@@ -99,6 +104,22 @@ class Config
     public function setUpdateStream(string $updateStream): void
     {
         $this->updateStream = $updateStream;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiTelegramUrl(): string
+    {
+        return $this->apiTelegramUrl;
+    }
+
+    /**
+     * @param string $apiTelegramUrl
+     */
+    public function setApiTelegramUrl(string $apiTelegramUrl): void
+    {
+        $this->apiTelegramUrl = $apiTelegramUrl;
     }
 
 }

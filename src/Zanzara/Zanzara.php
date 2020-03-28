@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
+use Psr\Http\Message\ResponseInterface;
+use React\EventLoop\LoopInterface;
 use Zanzara\Action\ActionCollector;
 use Zanzara\Action\ActionResolver;
+use Zanzara\Telegram\Type\GetUpdates;
 use Zanzara\Telegram\Type\Update;
 
 /**
@@ -32,15 +35,28 @@ class Zanzara extends ActionResolver
     private $zanzaraMapper;
 
     /**
+     * @var Telegram
+     */
+    private $telegram;
+
+    /**
+     * @var LoopInterface
+     */
+    private $loop;
+
+    /**
      * @param string $token
+     * @param LoopInterface $loop
      * @param Config|null $config
      */
-    public function __construct(string $token, ?Config $config = null)
+    public function __construct(string $token, LoopInterface $loop, ?Config $config = null)
     {
         $config = $config ?? new Config();
         $config->setBotToken($token);
         $this->config = $config;
+        $this->loop = $loop;
         $this->zanzaraMapper = new ZanzaraMapper();
+        $this->telegram = new Telegram($loop, $config);
     }
 
     /**
@@ -60,6 +76,24 @@ class Zanzara extends ActionResolver
                 break;
 
             case Config::POLLING_MODE:
+                $telegram = $this->telegram;
+                $zanzaraMapper = $this->zanzaraMapper;
+                $polling = function () use (&$polling, $telegram, $zanzaraMapper) {
+                    $telegram->getUpdates()->then(function (ResponseInterface $response) use (&$polling, $telegram, $zanzaraMapper) {
+                        // response received within 50 seconds. Telegram longpolling
+                        $json = (string)$response->getBody();
+                        echo $json;
+                        /** @var GetUpdates $getUpdates */
+                        $getUpdates = $zanzaraMapper->map($json, GetUpdates::class);
+                        $updates = $getUpdates->getResult();
+                        foreach ($updates as $update) {
+                            $update->detectUpdateType();
+                            $this->exec($update);
+                        }
+                        $polling();
+                    });
+                };
+                $this->loop->futureTick($polling);
                 break;
 
         }
