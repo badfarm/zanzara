@@ -6,19 +6,19 @@ namespace Zanzara\Action;
 
 use Zanzara\Middleware\MiddlewareCollector;
 use Zanzara\Middleware\MiddlewareInterface;
-use Zanzara\Update\CallbackQuery;
-use Zanzara\Update\ChannelPost;
-use Zanzara\Update\ChosenInlineResult;
-use Zanzara\Update\EditedChannelPost;
-use Zanzara\Update\EditedMessage;
-use Zanzara\Update\InlineQuery;
-use Zanzara\Update\Message;
-use Zanzara\Update\Passport\PassportData;
-use Zanzara\Update\ReplyToMessage;
-use Zanzara\Update\Shipping\PreCheckoutQuery;
-use Zanzara\Update\Shipping\ShippingQuery;
-use Zanzara\Update\Shipping\SuccessfulPayment;
-use Zanzara\Update\Update;
+use Zanzara\Telegram\Type\CallbackQuery;
+use Zanzara\Telegram\Type\ChannelPost;
+use Zanzara\Telegram\Type\ChosenInlineResult;
+use Zanzara\Telegram\Type\EditedChannelPost;
+use Zanzara\Telegram\Type\EditedMessage;
+use Zanzara\Telegram\Type\InlineQuery;
+use Zanzara\Telegram\Type\Message;
+use Zanzara\Telegram\Type\Passport\PassportData;
+use Zanzara\Telegram\Type\ReplyToMessage;
+use Zanzara\Telegram\Type\Shipping\PreCheckoutQuery;
+use Zanzara\Telegram\Type\Shipping\ShippingQuery;
+use Zanzara\Telegram\Type\Shipping\SuccessfulPayment;
+use Zanzara\Telegram\Type\Update;
 
 /**
  * Collects all actions a user wants to do.
@@ -41,7 +41,7 @@ abstract class ActionCollector
      *          '/start' => Action(),
      *          'Simple text' => Action(),
      *      ],
-     *      'Zanzara\Update\CallbackQuery' => [
+     *      'Zanzara\Telegram\Type\CallbackQuery' => [
      *          Action(),
      *          Action(),
      *          Action()
@@ -187,7 +187,8 @@ abstract class ActionCollector
      * @param callable $callback
      * @return MiddlewareCollector
      */
-    public function onPassportData(callable $callback): MiddlewareCollector {
+    public function onPassportData(callable $callback): MiddlewareCollector
+    {
         $action = new Action($callback);
         $this->actions[PassportData::class][] = $action;
         return $action;
@@ -197,7 +198,8 @@ abstract class ActionCollector
      * @param callable $callback
      * @return MiddlewareCollector
      */
-    public function onInlineQuery(callable $callback): MiddlewareCollector {
+    public function onInlineQuery(callable $callback): MiddlewareCollector
+    {
         $action = new Action($callback);
         $this->actions[InlineQuery::class][] = $action;
         return $action;
@@ -207,7 +209,8 @@ abstract class ActionCollector
      * @param callable $callback
      * @return MiddlewareCollector
      */
-    public function onChosenInlineResult(callable $callback): MiddlewareCollector {
+    public function onChosenInlineResult(callable $callback): MiddlewareCollector
+    {
         $action = new Action($callback);
         $this->actions[ChosenInlineResult::class][] = $action;
         return $action;
@@ -217,7 +220,8 @@ abstract class ActionCollector
      * @param callable $callback
      * @return MiddlewareCollector
      */
-    public function onChannelPost(callable $callback): MiddlewareCollector {
+    public function onChannelPost(callable $callback): MiddlewareCollector
+    {
         $action = new Action($callback);
         $this->actions[ChannelPost::class][] = $action;
         return $action;
@@ -227,7 +231,8 @@ abstract class ActionCollector
      * @param callable $callback
      * @return MiddlewareCollector
      */
-    public function onEditedChannelPost(callable $callback): MiddlewareCollector {
+    public function onEditedChannelPost(callable $callback): MiddlewareCollector
+    {
         $action = new Action($callback);
         $this->actions[EditedChannelPost::class][] = $action;
         return $action;

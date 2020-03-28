@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
-use Zanzara\Update\Update;
+use Zanzara\Telegram\Type\Update;
 
 /**
  *

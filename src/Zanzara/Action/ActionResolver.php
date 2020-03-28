@@ -4,14 +4,9 @@ declare(strict_types=1);
 
 namespace Zanzara\Action;
 
-use Zanzara\Update\CallbackQuery;
-use Zanzara\Update\Message;
-use Zanzara\Update\Passport\PassportData;
-use Zanzara\Update\ReplyToMessage;
-use Zanzara\Update\Shipping\PreCheckoutQuery;
-use Zanzara\Update\Shipping\ShippingQuery;
-use Zanzara\Update\Shipping\SuccessfulPayment;
-use Zanzara\Update\Update;
+use Zanzara\Telegram\Type\CallbackQuery;
+use Zanzara\Telegram\Type\Message;
+use Zanzara\Telegram\Type\Update;
 
 /**
  * Resolves the actions collected in ActionCollector accordingly to Telegram Update type.

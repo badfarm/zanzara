@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Zanzara\Bot;
 use Zanzara\Config;
 use Zanzara\Context;
-use Zanzara\Update\MessageEntity;
+use Zanzara\Telegram\Type\MessageEntity;
 
 /**
  *

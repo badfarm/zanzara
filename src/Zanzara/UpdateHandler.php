@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Zanzara;
 
 use JsonMapper;
-use Zanzara\Update\Update;
+use Zanzara\Telegram\Type\Update;
 
 /**
  * Receives the Update json from Telegram and decodes it into @see Update object.
