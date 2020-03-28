@@ -30,7 +30,7 @@ class Config
     /**
      * @var string
      */
-    private $parseMode = self::PARSE_MODE_HTML;
+    private $parseMode = self::PARSE_MODE_MARKDOWN;
 
     /**
      * @var string
@@ -38,41 +38,19 @@ class Config
     private $updateStream = 'php://input';
 
     /**
-     * @param string $token
-     * @return Config
-     */
-    public function setToken(string $token): self
-    {
-        $this->botToken = $token;
-        return $this;
-    }
-
-    /**
-     * @param string $mode
-     * @return Config
-     */
-    public function setUpdateMode(string $mode): self
-    {
-        $this->updateMode = $mode;
-        return $this;
-    }
-
-    /**
-     * @param string $mode
-     * @return Config
-     */
-    public function setParseMode(string $mode): self
-    {
-        $this->parseMode = $mode;
-        return $this;
-    }
-
-    /**
      * @return string
      */
-    public function getToken(): string
+    public function getBotToken(): string
     {
         return $this->botToken;
+    }
+
+    /**
+     * @param string $botToken
+     */
+    public function setBotToken(string $botToken): void
+    {
+        $this->botToken = $botToken;
     }
 
     /**
@@ -84,11 +62,27 @@ class Config
     }
 
     /**
+     * @param string $updateMode
+     */
+    public function setUpdateMode(string $updateMode): void
+    {
+        $this->updateMode = $updateMode;
+    }
+
+    /**
      * @return string
      */
     public function getParseMode(): string
     {
         return $this->parseMode;
+    }
+
+    /**
+     * @param string $parseMode
+     */
+    public function setParseMode(string $parseMode): void
+    {
+        $this->parseMode = $parseMode;
     }
 
     /**
@@ -101,12 +95,10 @@ class Config
 
     /**
      * @param string $updateStream
-     * @return Config
      */
-    public function setUpdateStream(string $updateStream): self
+    public function setUpdateStream(string $updateStream): void
     {
         $this->updateStream = $updateStream;
-        return $this;
     }
 
 }

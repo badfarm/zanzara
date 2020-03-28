@@ -27,7 +27,6 @@ class ZanzaraMapper
     }
 
     /**
-     * @ T
      * @param string $json
      * @param $class
      * @return mixed

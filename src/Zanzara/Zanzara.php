@@ -38,7 +38,7 @@ class Zanzara extends ActionResolver
     public function __construct(string $token, ?Config $config = null)
     {
         $config = $config ?? new Config();
-        $config->setToken($token);
+        $config->setBotToken($token);
         $this->config = $config;
         $this->zanzaraMapper = new ZanzaraMapper();
     }
