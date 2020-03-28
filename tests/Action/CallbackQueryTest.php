@@ -57,28 +57,4 @@ class CallbackQueryTest extends TestCase
         $bot->run();
     }
 
-    /**
-     *
-     */
-    public function testChosenInlineResult()
-    {
-        $config = new Config();
-        $config->updateStream(__DIR__ . '/../update_types/chosen_inline_result.json');
-        $bot = new Bot('test', $config);
-
-        $bot->onChosenInlineResult(function (Context $ctx) {
-            $update = $ctx->getUpdate();
-            $chosenInlineResult = $update->getChosenInlineResult();
-            $this->assertSame('12', $chosenInlineResult->getResultId());
-            $this->assertSame('Test Lastname', $chosenInlineResult->getFrom()->getLastName());
-            $this->assertSame(1111111, $chosenInlineResult->getFrom()->getId());
-            $this->assertSame('Test Firstname', $chosenInlineResult->getFrom()->getFirstName());
-            $this->assertSame('Testusername', $chosenInlineResult->getFrom()->getUsername());
-            $this->assertSame('inline query', $chosenInlineResult->getQuery());
-            $this->assertSame('1234csdbsk4839', $chosenInlineResult->getInlineMessageId());
-        });
-
-        $bot->run();
-    }
-
 }
