@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Zanzara\Test\Action;
 
 use PHPUnit\Framework\TestCase;
-use Zanzara\Bot;
 use Zanzara\Config;
 use Zanzara\Context;
+use Zanzara\Zanzara;
 
 /**
  *
@@ -22,7 +22,7 @@ class MessageTest extends TestCase
     {
         $config = new Config();
         $config->updateStream(__DIR__ . '/../update_types/edited_message.json');
-        $bot = new Bot('test', $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onEditedMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -53,7 +53,7 @@ class MessageTest extends TestCase
     {
         $config = new Config();
         $config->updateStream(__DIR__ . '/../update_types/forward_from_message.json');
-        $bot = new Bot('test', $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -79,7 +79,7 @@ class MessageTest extends TestCase
     {
         $config = new Config();
         $config->updateStream(__DIR__ . '/../update_types/message_entities.json');
-        $bot = new Bot('test', $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -106,7 +106,7 @@ class MessageTest extends TestCase
     {
         $config = new Config();
         $config->updateStream(__DIR__ . '/../update_types/poll.json');
-        $bot = new Bot('test', $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -138,7 +138,7 @@ class MessageTest extends TestCase
     {
         $config = new Config();
         $config->updateStream(__DIR__ . '/../update_types/reply_to_message.json');
-        $bot = new Bot('test', $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onReplyToMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();

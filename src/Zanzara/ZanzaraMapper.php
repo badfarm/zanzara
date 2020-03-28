@@ -8,11 +8,10 @@ use JsonMapper;
 use Zanzara\Telegram\Type\Update;
 
 /**
- * Receives the Update json from Telegram and decodes it into @see Update object.
  * @see JsonMapper is used for deserialization.
  *
  */
-class UpdateHandler
+class ZanzaraMapper
 {
 
     /**

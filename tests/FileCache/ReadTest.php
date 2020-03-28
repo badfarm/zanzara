@@ -7,9 +7,9 @@ namespace Zanzara\Test\FileCache;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Zanzara\Bot;
 use Zanzara\Config;
 use Zanzara\Context;
+use Zanzara\Zanzara;
 
 
 /**
@@ -21,7 +21,7 @@ class ReadTest extends TestCase
     {
         $config = new Config();
         $config->updateStream(__DIR__ . '/../update_types/command.json');
-        $bot = new Bot('test', $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onCommand('start', function (Context $ctx) {
 

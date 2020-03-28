@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Zanzara\Test\Action;
 
 use PHPUnit\Framework\TestCase;
-use Zanzara\Bot;
 use Zanzara\Config;
 use Zanzara\Context;
+use Zanzara\Zanzara;
 
 /**
  *
@@ -22,7 +22,7 @@ class InlineQueryTest extends TestCase
     {
         $config = new Config();
         $config->updateStream(__DIR__ . '/../update_types/inline_query.json');
-        $bot = new Bot('test', $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onInlineQuery(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -47,7 +47,7 @@ class InlineQueryTest extends TestCase
     {
         $config = new Config();
         $config->updateStream(__DIR__ . '/../update_types/chosen_inline_result.json');
-        $bot = new Bot('test', $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onChosenInlineResult(function (Context $ctx) {
             $update = $ctx->getUpdate();

@@ -14,12 +14,12 @@ use Zanzara\Action\ActionResolver;
  *
  * The client has to declare the actions he wants to perform.
  * Actions are declared through public methods defined in @see ActionCollector.
- * After that he has to call @see Bot::run() that determines, accordingly to the Update type received from Telegram,
+ * After that he has to call @see Zanzara::run() that determines, accordingly to the Update type received from Telegram,
  * the actions to execute.
  * A @see Context object is passed through all middleware stack.
  *
  */
-class Bot extends ActionResolver
+class Zanzara extends ActionResolver
 {
 
     /**
@@ -28,7 +28,7 @@ class Bot extends ActionResolver
     private $config;
 
     /**
-     * @var UpdateHandler
+     * @var ZanzaraMapper
      */
     private $updateHandler;
 
@@ -47,7 +47,7 @@ class Bot extends ActionResolver
         $config->token($token);
         $this->config = $config;
         $this->jsonMapper = new JsonMapper();
-        $this->updateHandler = new UpdateHandler($this->config, $this->jsonMapper);
+        $this->updateHandler = new ZanzaraMapper($this->config, $this->jsonMapper);
     }
 
     /**

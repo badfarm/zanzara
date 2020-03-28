@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Zanzara\Test\Action;
 
 use PHPUnit\Framework\TestCase;
-use Zanzara\Bot;
 use Zanzara\Config;
 use Zanzara\Context;
+use Zanzara\Zanzara;
 
 /**
  *
@@ -22,7 +22,7 @@ class CallbackQueryTest extends TestCase
     {
         $config = new Config();
         $config->updateStream(__DIR__ . '/../update_types/callback_query.json');
-        $bot = new Bot('test', $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onCbQueryText('Manage your data', function (Context $ctx) {
             $update = $ctx->getUpdate();
