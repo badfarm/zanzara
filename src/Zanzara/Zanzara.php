@@ -76,28 +76,31 @@ class Zanzara extends ActionResolver
                 break;
 
             case Config::POLLING_MODE:
-                $telegram = $this->telegram;
-                $zanzaraMapper = $this->zanzaraMapper;
-                $polling = function () use (&$polling, $telegram, $zanzaraMapper) {
-                    $telegram->getUpdates()->then(function (ResponseInterface $response) use (&$polling, $telegram, $zanzaraMapper) {
-                        // response received within 50 seconds. Telegram longpolling
-                        $json = (string)$response->getBody();
-                        echo $json;
-                        /** @var GetUpdates $getUpdates */
-                        $getUpdates = $zanzaraMapper->map($json, GetUpdates::class);
-                        $updates = $getUpdates->getResult();
-                        foreach ($updates as $update) {
-                            $update->detectUpdateType();
-                            $this->exec($update);
-                        }
-                        $polling();
-                    });
-                };
-                $this->loop->futureTick($polling);
+                $this->loop->futureTick([$this, 'polling']);
                 break;
 
         }
 
+    }
+
+    /**
+     *
+     */
+    public function polling()
+    {
+        $this->telegram->getUpdates()->then(function (ResponseInterface $response) {
+            // response received within 50 seconds. Telegram longpolling
+            $json = (string)$response->getBody();
+            echo "$json\n";
+            /** @var GetUpdates $getUpdates */
+            $getUpdates = $this->zanzaraMapper->map($json, GetUpdates::class);
+            $updates = $getUpdates->getResult();
+            foreach ($updates as $update) {
+                $update->detectUpdateType();
+                $this->exec($update);
+            }
+            $this->polling();
+        });
     }
 
     /**

@@ -17,7 +17,7 @@ $config->setUpdateMode(Config::POLLING_MODE);
 $bot = new Zanzara($_ENV['BOT_KEY'], $loop, $config);
 
 $bot->onCommand('start', function (\Zanzara\Context $ctx) {
-    echo 'ok******';
+    echo "I'm processing the /start command\n";
 });
 
 $bot->run();
