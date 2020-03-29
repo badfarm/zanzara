@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
+use phpDocumentor\Reflection\Types\Integer;
 use React\EventLoop\LoopInterface;
 use React\Promise\PromiseInterface;
 
@@ -35,16 +36,17 @@ class Telegram
     }
 
     /**
+     * @param int|null $offset
      * @return PromiseInterface
      */
-    public function getUpdates(): PromiseInterface
+    public function getUpdates(?int $offset = 1): PromiseInterface
     {
         $method = "getUpdates";
         $timeout = 50;
 
         $params = [
-//            "offset" => 550495539,
-            "limit" => 1000,
+            "offset" => $offset,
+            "limit" => 100, //telegram default is 100 if unspecified
             "timeout" => $timeout
         ];
 

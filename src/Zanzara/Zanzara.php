@@ -84,22 +84,29 @@ class Zanzara extends ActionResolver
     }
 
     /**
-     *
+     * @param int|null $offset
      */
-    public function polling()
+    public function polling(?int $offset = 1)
     {
-        $this->telegram->getUpdates()->then(function (ResponseInterface $response) {
-            // response received within 50 seconds. Telegram longpolling
+        $this->telegram->getUpdates($offset)->then(function (ResponseInterface $response) use ($offset) {
+
             $json = (string)$response->getBody();
-            echo "$json\n";
+
             /** @var GetUpdates $getUpdates */
             $getUpdates = $this->zanzaraMapper->map($json, GetUpdates::class);
             $updates = $getUpdates->getResult();
-            foreach ($updates as $update) {
-                $update->detectUpdateType();
-                $this->exec($update);
+
+            if ($offset == 1) {
+                //first run I need to get the current updateId from telegram
+                $offset = end($updates)->getUpdateId();
+                $this->polling($offset + 1);
+            } else {
+                foreach ($updates as $update) {
+                    $update->detectUpdateType();
+                    $this->exec($update);
+                }
+                $this->polling($offset + 1);
             }
-            $this->polling();
         });
     }
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-  "content-hash": "5f639a9f17ce9fd27fba645c8d9ffb5e",
+  "content-hash": "5112d49dea2aa0ed97844be6f56d9d2d",
     "packages": [
         {
           "name": "amphp/amp",
@@ -861,6 +861,63 @@
           "reactphp"
         ],
         "time": "2020-02-26T12:05:32+00:00"
+      },
+      {
+        "name": "clue/mq-react",
+        "version": "v1.2.0",
+        "source": {
+          "type": "git",
+          "url": "https://github.com/clue/reactphp-mq.git",
+          "reference": "d04c4fa7ba607f649a83d946c23fc7b7c57f1125"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/clue/reactphp-mq/zipball/d04c4fa7ba607f649a83d946c23fc7b7c57f1125",
+          "reference": "d04c4fa7ba607f649a83d946c23fc7b7c57f1125",
+          "shasum": ""
+        },
+        "require": {
+          "php": ">=5.3",
+          "react/promise": "^2.2.1 || ^1.2.1"
+        },
+        "require-dev": {
+          "clue/block-react": "^1.0",
+          "clue/buzz-react": "^2.4",
+          "phpunit/phpunit": "^7.0 || ^6.4 || ^5.7 || ^4.8.35",
+          "react/event-loop": "^1.0 || ^0.5 || ^0.4 || ^0.3"
+        },
+        "type": "library",
+        "autoload": {
+          "psr-4": {
+            "Clue\\React\\Mq\\": "src/"
+          }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+          "MIT"
+        ],
+        "authors": [
+          {
+            "name": "Christian Lück",
+            "email": "christian@clue.engineering"
+          }
+        ],
+        "description": "Mini Queue, the lightweight in-memory message queue to concurrently do many (but not too many) things at once, built on top of ReactPHP",
+        "homepage": "https://github.com/clue/reactphp-mq",
+        "keywords": [
+          "Mini Queue",
+          "async",
+          "concurrency",
+          "job",
+          "message",
+          "message queue",
+          "queue",
+          "rate limit",
+          "reactphp",
+          "throttle",
+          "worker"
+        ],
+        "time": "2019-12-05T08:45:06+00:00"
       },
       {
         "name": "daverandom/libdns",
