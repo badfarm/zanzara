@@ -26,8 +26,7 @@
         "react/event-loop": "^1.1",
         "react/http": "^0.8.6",
         "react/react": "1.0",
-      "clue/buzz-react": "2.7",
-      "ext-http": "*"
+      "clue/buzz-react": "2.7"
     },
     "require-dev": {
       "phpunit/phpunit": "^8.5",
