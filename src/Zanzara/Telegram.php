@@ -48,7 +48,7 @@ class Telegram
         $query = http_build_query($params);
 
         $browser = $this->browser->withOptions(array(
-            'timeout' => $timeout
+            'timeout' => $timeout + 10
         ));
 
         return $browser->get("$method?$query");

@@ -106,7 +106,7 @@ class Zanzara extends ActionResolver
 
                     if ($lastUpdate != null) {
                         $offset = $lastUpdate->getUpdateId();
-                        $this->polling($offset + 1);
+                        $this->polling($offset);
                     } else {
                         $this->polling($offset);
                     }
