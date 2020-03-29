@@ -87,11 +87,11 @@ class Zanzara extends ActionResolver
      * @param int|null $offset
      * @param int|null $timeout
      */
-    public function polling(?int $offset = 1, ?int $timeout = 0)
+    public function polling(?int $offset = 1)
     {
-        $this->telegram->getUpdates($offset, $timeout)->then(
+        $this->telegram->getUpdates($offset)->then(
 
-            function (ResponseInterface $response) use ($offset, $timeout) {
+            function (ResponseInterface $response) use ($offset) {
 
                 $json = (string)$response->getBody();
 
@@ -101,14 +101,22 @@ class Zanzara extends ActionResolver
 
                 if ($offset == 1) {
                     //first run I need to get the current updateId from telegram
-                    $offset = end($updates)->getUpdateId();
-                    $this->polling($offset + 1, 50);
+
+                    $lastUpdate = end($updates);
+
+                    if ($lastUpdate != null) {
+                        $offset = $lastUpdate->getUpdateId();
+                        $this->polling($offset + 1);
+                    } else {
+                        $this->polling($offset);
+                    }
+
                 } else {
                     foreach ($updates as $update) {
                         $update->detectUpdateType();
                         $this->exec($update);
                     }
-                    $this->polling($offset + 1, 50);
+                    $this->polling($offset + 1);
                 }
             },
             function (Exception $error) {

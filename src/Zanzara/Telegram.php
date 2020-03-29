@@ -33,9 +33,11 @@ class Telegram
      * @param int $timeout
      * @return PromiseInterface
      */
-    public function getUpdates(?int $offset = 1, ?int $timeout = 0): PromiseInterface
+    public function getUpdates(?int $offset = 1): PromiseInterface
     {
         $method = "getUpdates";
+
+        $timeout = 50;
 
         $params = [
             "offset" => $offset,
@@ -46,7 +48,7 @@ class Telegram
         $query = http_build_query($params);
 
         $browser = $this->browser->withOptions(array(
-            'timeout' => $timeout + 1
+            'timeout' => $timeout
         ));
 
         return $browser->get("$method?$query");
