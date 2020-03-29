@@ -85,7 +85,6 @@ class Zanzara extends ActionResolver
 
     /**
      * @param int|null $offset
-     * @param int|null $timeout
      */
     public function polling(?int $offset = 1)
     {
