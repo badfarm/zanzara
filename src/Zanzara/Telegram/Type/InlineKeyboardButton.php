@@ -16,9 +16,14 @@ class InlineKeyboardButton
     private $text;
 
     /**
-     * @var LoginUrl|null
+     * @var string|null
      */
     private $url;
+
+    /**
+     * @var LoginUrl|null
+     */
+    private $loginUrl;
 
     /**
      * @var string|null
@@ -64,17 +69,17 @@ class InlineKeyboardButton
     /**
      * @return LoginUrl|null
      */
-    public function getUrl(): ?LoginUrl
+    public function getLoginUrl(): ?LoginUrl
     {
-        return $this->url;
+        return $this->loginUrl;
     }
 
     /**
-     * @param LoginUrl|null $url
+     * @param LoginUrl|null $loginUrl
      */
-    public function setUrl(?LoginUrl $url): void
+    public function setLoginUrl(?LoginUrl $loginUrl): void
     {
-        $this->url = $url;
+        $this->loginUrl = $loginUrl;
     }
 
     /**
@@ -155,6 +160,22 @@ class InlineKeyboardButton
     public function setPay(?bool $pay): void
     {
         $this->pay = $pay;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string|null $url
+     */
+    public function setUrl(?string $url): void
+    {
+        $this->url = $url;
     }
 
 }
