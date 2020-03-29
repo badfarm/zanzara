@@ -5,6 +5,12 @@ declare(strict_types=1);
 namespace Zanzara;
 
 /**
+ * Configuration for Zanzara. Expected to be used as follow:
+ *
+ *  $config = new \Zanzara\Config();
+ *  $config->setUpdateMode(self::WEBHOOK_MODE);
+ *  $config->setParseMode(self::PARSE_MODE_HTML);
+ *  $bot = new \Zanzara\Zanzara('token', $loop, $config);
  *
  */
 class Config

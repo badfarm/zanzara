@@ -19,7 +19,10 @@ class Context
      */
     private $update;
 
-    //private $replier;
+    /**
+     * @var Telegram
+     */
+    private $telegram;
 
     /**
      * Array used to pass data between middleware.
@@ -30,10 +33,12 @@ class Context
 
     /**
      * @param Update $update
+     * @param Telegram $telegram
      */
-    public function __construct(Update $update)
+    public function __construct(Update $update, Telegram $telegram)
     {
         $this->update = $update;
+        $this->telegram = $telegram;
     }
 
     /**
@@ -60,6 +65,14 @@ class Context
     public function get(string $key)
     {
         return $this->data[$key] ?? null;
+    }
+
+    /**
+     * @return Telegram
+     */
+    public function getTelegram(): Telegram
+    {
+        return $this->telegram;
     }
 
 }

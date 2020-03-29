@@ -115,7 +115,7 @@ class Zanzara extends ActionResolver
      */
     private function exec(Update $update)
     {
-        $context = new Context($update);
+        $context = new Context($update, $this->telegram);
         $actions = $this->resolve($update);
         foreach ($actions as $action) {
             $this->feedMiddlewareStack($action);
