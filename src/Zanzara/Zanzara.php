@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use React\EventLoop\LoopInterface;
 use Zanzara\Action\ActionCollector;
@@ -80,34 +81,39 @@ class Zanzara extends ActionResolver
                 break;
 
         }
-
     }
 
     /**
      * @param int|null $offset
+     * @param int|null $timeout
      */
-    public function polling(?int $offset = 1)
+    public function polling(?int $offset = 1, ?int $timeout = 0)
     {
-        $this->telegram->getUpdates($offset)->then(function (ResponseInterface $response) use ($offset) {
+        $this->telegram->getUpdates($offset, $timeout)->then(
 
-            $json = (string)$response->getBody();
+            function (ResponseInterface $response) use ($offset, $timeout) {
 
-            /** @var GetUpdates $getUpdates */
-            $getUpdates = $this->zanzaraMapper->map($json, GetUpdates::class);
-            $updates = $getUpdates->getResult();
+                $json = (string)$response->getBody();
 
-            if ($offset == 1) {
-                //first run I need to get the current updateId from telegram
-                $offset = end($updates)->getUpdateId();
-                $this->polling($offset + 1);
-            } else {
-                foreach ($updates as $update) {
-                    $update->detectUpdateType();
-                    $this->exec($update);
+                /** @var GetUpdates $getUpdates */
+                $getUpdates = $this->zanzaraMapper->map($json, GetUpdates::class);
+                $updates = $getUpdates->getResult();
+
+                if ($offset == 1) {
+                    //first run I need to get the current updateId from telegram
+                    $offset = end($updates)->getUpdateId();
+                    $this->polling($offset + 1, 50);
+                } else {
+                    foreach ($updates as $update) {
+                        $update->detectUpdateType();
+                        $this->exec($update);
+                    }
+                    $this->polling($offset + 1, 50);
                 }
-                $this->polling($offset + 1);
-            }
-        });
+            },
+            function (Exception $error) {
+                var_dump('There was an error', $error->getMessage());
+            });
     }
 
     /**
