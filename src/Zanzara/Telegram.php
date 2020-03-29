@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
-use phpDocumentor\Reflection\Types\Integer;
 use React\EventLoop\LoopInterface;
 use React\Promise\PromiseInterface;
 
@@ -21,18 +20,12 @@ class Telegram
     private $browser;
 
     /**
-     * @var string
-     */
-    private $baseUrl;
-
-    /**
      * @param LoopInterface $loop
      * @param Config $config
      */
     public function __construct(LoopInterface $loop, Config $config)
     {
-        $this->browser = new Browser($loop);
-        $this->baseUrl = "{$config->getApiTelegramUrl()}/bot{$config->getBotToken()}";
+        $this->browser = (new Browser($loop))->withBase("{$config->getApiTelegramUrl()}/bot{$config->getBotToken()}");
     }
 
     /**
@@ -52,13 +45,20 @@ class Telegram
 
         $query = http_build_query($params);
 
-        $url = "{$this->baseUrl}/$method?$query";
-
         $browser = $this->browser->withOptions(array(
             'timeout' => $timeout
         ));
 
-        return $browser->get($url);
+        return $browser->get("$method?$query");
     }
 
+
+    public function callApi(string $method, array $params): PromiseInterface
+    {
+        $headers = [
+            "Content-type" => "application/json"
+        ];
+
+        return $this->browser->post($method, $headers, json_encode($params));
+    }
 }
