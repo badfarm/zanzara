@@ -1,12 +1,12 @@
 <?php
 
 use Psr\Http\Message\ResponseInterface;
+use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use Symfony\Component\Dotenv\Dotenv;
 use Zanzara\Config;
 use Zanzara\Context;
 use Zanzara\Zanzara;
-use React\EventLoop\Factory;
 
 require "../../vendor/autoload.php";
 
@@ -27,7 +27,7 @@ $bot->onCommand('start', function (Context $ctx) {
         "text" => "ciao fra"
     ];
 
-    $ctx->getTelegram()->callApi("sendMessage", $params)->then(
+    $ctx->callApi("sendMessage", $params)->then(
         function (ResponseInterface $response) {
             var_dump('Response received', $response);
         },

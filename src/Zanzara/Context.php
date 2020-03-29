@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
+use React\Promise\PromiseInterface;
 use Zanzara\Telegram\Type\Update;
 
 /**
- *
+ * @method PromiseInterface callApi(string $method, array $params)
  */
 class Context
 {
@@ -68,11 +69,13 @@ class Context
     }
 
     /**
-     * @return Telegram
+     * @param $name
+     * @param $arguments
+     * @return mixed
      */
-    public function getTelegram(): Telegram
+    public function __call($name, $arguments)
     {
-        return $this->telegram;
+        return call_user_func_array([$this->telegram, $name], $arguments);
     }
 
 }
