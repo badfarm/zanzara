@@ -4,7 +4,8 @@
     "description": "Library to build Telegram bots",
     "keywords": [
         "telegram",
-        "bot"
+        "bot",
+        "reactphp"
     ],
     "license": "MIT",
     "authors": [

@@ -20,9 +20,11 @@ class InlineQueryTest extends TestCase
      */
     public function testInlineQuery()
     {
+        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/inline_query.json');
-        $bot = new Zanzara('test', $config);
+        $bot = new Zanzara('test', $loop, $config);
 
         $bot->onInlineQuery(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -38,6 +40,7 @@ class InlineQueryTest extends TestCase
         });
 
         $bot->run();
+        $loop->run();
     }
 
     /**
@@ -45,9 +48,11 @@ class InlineQueryTest extends TestCase
      */
     public function testChosenInlineResult()
     {
+        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/chosen_inline_result.json');
-        $bot = new Zanzara('test', $config);
+        $bot = new Zanzara('test', $loop, $config);
 
         $bot->onChosenInlineResult(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -62,6 +67,7 @@ class InlineQueryTest extends TestCase
         });
 
         $bot->run();
+        $loop->run();
     }
 
 }

@@ -20,9 +20,11 @@ class SuccessfulPaymentTest extends TestCase
      */
     public function testSuccessfulPayment()
     {
+        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/successful_payment.json');
-        $bot = new Zanzara('test', $config);
+        $bot = new Zanzara('test', $loop, $config);
 
         $bot->onSuccessfulPayment(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -39,6 +41,7 @@ class SuccessfulPaymentTest extends TestCase
         });
 
         $bot->run();
+        $loop->run();
     }
 
 }

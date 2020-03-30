@@ -20,9 +20,11 @@ class PreCheckoutQueryTest extends TestCase
      */
     public function testPreCheckoutQuery()
     {
+        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/pre_checkout_query.json');
-        $bot = new Zanzara('test', $config);
+        $bot = new Zanzara('test', $loop, $config);
 
         $bot->onPreCheckoutQuery(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -43,6 +45,7 @@ class PreCheckoutQueryTest extends TestCase
         });
 
         $bot->run();
+        $loop->run();
     }
 
 }

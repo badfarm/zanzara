@@ -21,9 +21,11 @@ class MiddlewareTest extends TestCase
      */
     public function testMiddleware()
     {
+        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
-        $bot = new Zanzara('test', $config);
+        $bot = new Zanzara('test', $loop, $config);
         $bot->middleware(new FirstMiddleware());
         $bot->middleware(new SecondMiddleware());
 
@@ -34,6 +36,7 @@ class MiddlewareTest extends TestCase
         })->middleware(new FourthMiddleware())->middleware(new ThirdMiddleware());
 
         $bot->run();
+        $loop->run();
     }
 
 }

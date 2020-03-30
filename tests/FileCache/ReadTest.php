@@ -19,9 +19,11 @@ class ReadTest extends TestCase
 {
     public function testFileCache()
     {
+        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
-        $bot = new Zanzara('test', $config);
+        $bot = new Zanzara('test', $loop, $config);
 
         $bot->onCommand('start', function (Context $ctx) {
 
@@ -35,7 +37,6 @@ class ReadTest extends TestCase
         })->middleware(new WriteMiddleware());
 
         $bot->run();
-
-
+        $loop->run();
     }
 }
