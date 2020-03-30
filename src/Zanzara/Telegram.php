@@ -48,7 +48,7 @@ class Telegram
         $query = http_build_query($params);
 
         $browser = $this->browser->withOptions(array(
-            'timeout' => $timeout + 10
+            "timeout" => $timeout + 10
         ));
 
         return $browser->get("$method?$query");
@@ -79,7 +79,7 @@ class Telegram
      */
     public function sendMessage(int $chat_id, string $text, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$text");
+        $required = compact("chat_id", "text");
         $params = array_merge($required, $opt);
         return $this->callApi("sendMessage", $params);
     }
@@ -95,7 +95,7 @@ class Telegram
      */
     public function forwardMessage(int $chat_id, int $from_chat_id, int $message_id, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$from_chat_id", "$message_id");
+        $required = compact("chat_id", "from_chat_id", "message_id");
         $params = array_merge($required, $opt);
         return $this->callApi("forwardMessage", $params);
     }
@@ -110,7 +110,7 @@ class Telegram
      */
     public function sendPhoto(int $chat_id, $photo, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$photo");
+        $required = compact("chat_id", "photo");
         $params = array_merge($required, $opt);
         return $this->callApi("sendPhoto", $params);
     }
@@ -127,7 +127,7 @@ class Telegram
      */
     public function sendAudio(int $chat_id, $audio, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$audio");
+        $required = compact("chat_id", "audio");
         $params = array_merge($required, $opt);
         return $this->callApi("sendAudio", $params);
     }
@@ -143,7 +143,7 @@ class Telegram
      */
     public function sendDocument(int $chat_id, $document, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$document");
+        $required = compact("chat_id", "document");
         $params = array_merge($required, $opt);
         return $this->callApi("sendDocument", $params);
     }
@@ -162,7 +162,7 @@ class Telegram
      */
     public function sendVideo(int $chat_id, $video, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$video");
+        $required = compact("chat_id", "video");
         $params = array_merge($required, $opt);
         return $this->callApi("sendVideo", $params);
     }
@@ -181,7 +181,7 @@ class Telegram
      */
     public function sendAnimation(int $chat_id, $animation, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$animation");
+        $required = compact("chat_id", "animation");
         $params = array_merge($required, $opt);
         return $this->callApi("sendAnimation", $params);
     }
@@ -201,7 +201,7 @@ class Telegram
      */
     public function sendVoice(int $chat_id, $voice, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$voice");
+        $required = compact("chat_id", "voice");
         $params = array_merge($required, $opt);
         return $this->callApi("sendVoice", $params);
     }
@@ -219,7 +219,7 @@ class Telegram
      */
     public function sendVideoNote(int $chat_id, $video_note, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$video_note");
+        $required = compact("chat_id", "video_note");
         $params = array_merge($required, $opt);
         return $this->callApi("sendVideoNote", $params);
     }
@@ -237,7 +237,7 @@ class Telegram
      */
     public function sendMediaGroup(int $chat_id, $media, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$media");
+        $required = compact("chat_id", "media");
         $params = array_merge($required, $opt);
         return $this->callApi("sendMediaGroup", $params);
     }
@@ -255,7 +255,7 @@ class Telegram
      */
     public function sendLocation(int $chat_id, $latitude, $longitude, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$latitude", "$longitude");
+        $required = compact("chat_id", "latitude", "longitude");
         $params = array_merge($required, $opt);
         return $this->callApi("sendLocation", $params);
     }
@@ -273,7 +273,7 @@ class Telegram
      */
     public function editMessageLiveLocation($latitude, $longitude, ?array $opt = [])
     {
-        $required = compact("$latitude", "$longitude");
+        $required = compact("latitude", "longitude");
         $params = array_merge($required, $opt);
         return $this->callApi("editMessageLiveLocation", $params);
     }
@@ -308,7 +308,7 @@ class Telegram
      */
     public function sendVenue(int $chat_id, $latitude, $longitude, string $title, string $address, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$latitude", "$longitude", "$title", "$address");
+        $required = compact("chat_id", "latitude", "longitude", "title", "address");
         $params = array_merge($required, $opt);
         return $this->callApi("sendVenue", $params);
     }
@@ -326,7 +326,7 @@ class Telegram
      */
     public function sendContact(int $chat_id, string $phone_number, string $first_name, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$phone_number", "$first_name");
+        $required = compact("chat_id", "phone_number", "first_name");
         $params = array_merge($required, $opt);
         return $this->callApi("sendContact", $params);
     }
@@ -344,7 +344,7 @@ class Telegram
      */
     public function sendPoll(int $chat_id, string $question, $options, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$question", "$options");
+        $required = compact("chat_id", "question", "options");
         $params = array_merge($required, $opt);
         return $this->callApi("sendPoll", $params);
     }
@@ -361,7 +361,7 @@ class Telegram
      */
     public function sendDice(int $chat_id, ?array $opt = [])
     {
-        $required = compact("$chat_id");
+        $required = compact("chat_id");
         $params = array_merge($required, $opt);
         return $this->callApi("sendDice", $params);
     }
@@ -380,7 +380,7 @@ class Telegram
      */
     public function sendChatAction(int $chat_id, string $action, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$action");
+        $required = compact("chat_id", "action");
         $params = array_merge($required, $opt);
         return $this->callApi("sendChatAction", $params);
     }
@@ -396,7 +396,7 @@ class Telegram
      */
     public function getUserProfilePhotos(int $user_id, ?array $opt = [])
     {
-        $required = compact("$user_id");
+        $required = compact("user_id");
         $params = array_merge($required, $opt);
         return $this->callApi("getUserProfilePhotos", $params);
     }
@@ -416,7 +416,7 @@ class Telegram
      */
     public function getFile(string $file_id, ?array $opt = [])
     {
-        $required = compact("$file_id");
+        $required = compact("file_id");
         $params = array_merge($required, $opt);
         return $this->callApi("getFile", $params);
     }
@@ -436,7 +436,7 @@ class Telegram
      */
     public function kickChatMember(int $chat_id, int $user_id, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$user_id");
+        $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
         return $this->callApi("kickChatMember", $params);
     }
@@ -455,7 +455,7 @@ class Telegram
      */
     public function unbanChatMember(int $chat_id, int $user_id, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$user_id");
+        $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
         return $this->callApi("unbanChatMember", $params);
     }
@@ -475,7 +475,7 @@ class Telegram
      */
     public function restrictChatMember(int $chat_id, int $user_id, $permissions, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$user_id", "$permissions");
+        $required = compact("chat_id", "user_id", "permissions");
         $params = array_merge($required, $opt);
         return $this->callApi("restrictChatMember", $params);
     }
@@ -494,7 +494,7 @@ class Telegram
      */
     public function promoteChatMember(int $chat_id, int $user_id, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$user_id");
+        $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
         return $this->callApi("promoteChatMember", $params);
     }
@@ -513,7 +513,7 @@ class Telegram
      */
     public function setChatAdministratorCustomTitle(int $chat_id, int $user_id, string $custom_title, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$user_id", "$custom_title");
+        $required = compact("chat_id", "user_id", "custom_title");
         $params = array_merge($required, $opt);
         return $this->callApi("setChatAdministratorCustomTitle", $params);
     }
@@ -532,7 +532,7 @@ class Telegram
      */
     public function setChatPermissions(int $chat_id, $permissions, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$permissions");
+        $required = compact("chat_id", "permissions");
         $params = array_merge($required, $opt);
         return $this->callApi("setChatPermissions", $params);
     }
@@ -550,7 +550,7 @@ class Telegram
      */
     public function exportChatInviteLink(int $chat_id, ?array $opt = [])
     {
-        $required = compact("$chat_id");
+        $required = compact("chat_id");
         $params = array_merge($required, $opt);
         return $this->callApi("exportChatInviteLink", $params);
     }
@@ -569,7 +569,7 @@ class Telegram
      */
     public function setChatPhoto(int $chat_id, $photo, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$photo");
+        $required = compact("chat_id", "photo");
         $params = array_merge($required, $opt);
         return $this->callApi("setChatPhoto", $params);
     }
@@ -587,7 +587,7 @@ class Telegram
      */
     public function deleteChatPhoto(int $chat_id, ?array $opt = [])
     {
-        $required = compact("$chat_id");
+        $required = compact("chat_id");
         $params = array_merge($required, $opt);
         return $this->callApi("deleteChatPhoto", $params);
     }
@@ -606,7 +606,7 @@ class Telegram
      */
     public function setChatTitle(int $chat_id, string $title, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$title");
+        $required = compact("chat_id", "title");
         $params = array_merge($required, $opt);
         return $this->callApi("setChatTitle", $params);
     }
@@ -624,7 +624,7 @@ class Telegram
      */
     public function setChatDescription(int $chat_id, ?array $opt = [])
     {
-        $required = compact("$chat_id");
+        $required = compact("chat_id");
         $params = array_merge($required, $opt);
         return $this->callApi("setChatDescription", $params);
     }
@@ -644,7 +644,7 @@ class Telegram
      */
     public function pinChatMessage(int $chat_id, int $message_id, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$message_id");
+        $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
         return $this->callApi("pinChatMessage", $params);
     }
@@ -663,7 +663,7 @@ class Telegram
      */
     public function unpinChatMessage(int $chat_id, ?array $opt = [])
     {
-        $required = compact("$chat_id");
+        $required = compact("chat_id");
         $params = array_merge($required, $opt);
         return $this->callApi("unpinChatMessage", $params);
     }
@@ -679,7 +679,7 @@ class Telegram
      */
     public function leaveChat(int $chat_id, ?array $opt = [])
     {
-        $required = compact("$chat_id");
+        $required = compact("chat_id");
         $params = array_merge($required, $opt);
         return $this->callApi("leaveChat", $params);
     }
@@ -697,7 +697,7 @@ class Telegram
      */
     public function getChat(int $chat_id, ?array $opt = [])
     {
-        $required = compact("$chat_id");
+        $required = compact("chat_id");
         $params = array_merge($required, $opt);
         return $this->callApi("getChat", $params);
     }
@@ -716,7 +716,7 @@ class Telegram
      */
     public function getChatAdministrators(int $chat_id, ?array $opt = [])
     {
-        $required = compact("$chat_id");
+        $required = compact("chat_id");
         $params = array_merge($required, $opt);
         return $this->callApi("getChatAdministrators", $params);
     }
@@ -732,7 +732,7 @@ class Telegram
      */
     public function getChatMembersCount(int $chat_id, ?array $opt = [])
     {
-        $required = compact("$chat_id");
+        $required = compact("chat_id");
         $params = array_merge($required, $opt);
         return $this->callApi("getChatMembersCount", $params);
     }
@@ -749,7 +749,7 @@ class Telegram
      */
     public function getChatMember(int $chat_id, int $user_id, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$user_id");
+        $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
         return $this->callApi("getChatMember", $params);
     }
@@ -769,7 +769,7 @@ class Telegram
      */
     public function setChatStickerSet(int $chat_id, string $sticker_set_name, ?array $opt = [])
     {
-        $required = compact("$chat_id", "$sticker_set_name");
+        $required = compact("chat_id", "sticker_set_name");
         $params = array_merge($required, $opt);
         return $this->callApi("setChatStickerSet", $params);
     }
@@ -788,7 +788,7 @@ class Telegram
      */
     public function deleteChatStickerSet(int $chat_id, ?array $opt = [])
     {
-        $required = compact("$chat_id");
+        $required = compact("chat_id");
         $params = array_merge($required, $opt);
         return $this->callApi("deleteChatStickerSet", $params);
     }
@@ -806,7 +806,7 @@ class Telegram
      */
     public function answerCallbackQuery(string $callback_query_id, ?array $opt = [])
     {
-        $required = compact("$callback_query_id");
+        $required = compact("callback_query_id");
         $params = array_merge($required, $opt);
         return $this->callApi("answerCallbackQuery", $params);
     }
@@ -822,7 +822,7 @@ class Telegram
      */
     public function setMyCommands($commands, ?array $opt = [])
     {
-        $required = compact("$commands");
+        $required = compact("commands");
         $params = array_merge($required, $opt);
         return $this->callApi("setMyCommands", $params);
     }
