@@ -1,5 +1,6 @@
 <?php
 
+use Psr\Http\Message\ResponseInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use Symfony\Component\Dotenv\Dotenv;
@@ -21,8 +22,18 @@ $bot = new Zanzara($_ENV['BOT_KEY'], $loop, $config);
 $bot->onCommand('start', function (Context $ctx) {
     echo "I'm processing the /start command\n";
 
+    $params = [
+        "chat_id" => $ctx->getUpdate()->getMessage()->getChat()->getId(),
+        "text" => "ciao fra"
+    ];
 
-    $ctx->getTelegram()->sendMessage($ctx->getUpdate()->getMessage()->getChat()->getId(), "ciao fra");
+    $ctx->callApi("sendMessage", $params)->then(
+        function (ResponseInterface $response) {
+            var_dump('Response received', $response);
+        },
+        function (Exception $error) {
+            var_dump('There was an error', $error->getMessage());
+        });
 });
 
 $bot->run();

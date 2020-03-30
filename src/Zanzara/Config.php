@@ -31,7 +31,7 @@ class Config
     /**
      * @var string
      */
-    private $updateMode = self::WEBHOOK_MODE;
+    private $updateMode = self::POLLING_MODE;
 
     /**
      * @var string

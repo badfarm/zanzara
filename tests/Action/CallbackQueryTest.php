@@ -20,15 +20,15 @@ class CallbackQueryTest extends TestCase
      */
     public function testCallbackQuery()
     {
+        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/callback_query.json');
-        $bot = new Zanzara('test', $config);
+        $bot = new Zanzara('test', $loop, $config);
 
         $bot->onCbQueryText('Manage your data', function (Context $ctx) {
-            $update = $ctx->getUpdate();
-            $callbackQuery = $update->getCallbackQuery();
+            $callbackQuery = $ctx->getCallbackQuery();
             $message = $callbackQuery->getMessage();
-            $this->assertSame(52259546, $update->getUpdateId());
             $this->assertSame('666728699048485871', $callbackQuery->getId());
             $this->assertSame(222222222, $callbackQuery->getFrom()->getId());
             $this->assertSame(false, $callbackQuery->getFrom()->isBot());
@@ -55,6 +55,7 @@ class CallbackQueryTest extends TestCase
         });
 
         $bot->run();
+        $loop->run();
     }
 
 }

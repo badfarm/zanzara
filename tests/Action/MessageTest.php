@@ -20,9 +20,11 @@ class MessageTest extends TestCase
      */
     public function testEditedMessage()
     {
+        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/edited_message.json');
-        $bot = new Zanzara('test', $config);
+        $bot = new Zanzara('test', $loop, $config);
 
         $bot->onEditedMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -44,6 +46,7 @@ class MessageTest extends TestCase
         });
 
         $bot->run();
+        $loop->run();
     }
 
     /**
@@ -51,9 +54,11 @@ class MessageTest extends TestCase
      */
     public function testForwardFromMessage()
     {
+        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/forward_from_message.json');
-        $bot = new Zanzara('test', $config);
+        $bot = new Zanzara('test', $loop, $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -70,6 +75,7 @@ class MessageTest extends TestCase
         });
 
         $bot->run();
+        $loop->run();
     }
 
     /**
@@ -77,9 +83,11 @@ class MessageTest extends TestCase
      */
     public function testMessageEntities()
     {
+        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/message_entities.json');
-        $bot = new Zanzara('test', $config);
+        $bot = new Zanzara('test', $loop, $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -97,6 +105,7 @@ class MessageTest extends TestCase
         });
 
         $bot->run();
+        $loop->run();
     }
 
     /**
@@ -104,9 +113,11 @@ class MessageTest extends TestCase
      */
     public function testPoll()
     {
+        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/poll.json');
-        $bot = new Zanzara('test', $config);
+        $bot = new Zanzara('test', $loop, $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -129,6 +140,7 @@ class MessageTest extends TestCase
         });
 
         $bot->run();
+        $loop->run();
     }
 
     /**
@@ -136,9 +148,11 @@ class MessageTest extends TestCase
      */
     public function testReplyToMessage()
     {
+        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/reply_to_message.json');
-        $bot = new Zanzara('test', $config);
+        $bot = new Zanzara('test', $loop, $config);
 
         $bot->onReplyToMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -159,6 +173,7 @@ class MessageTest extends TestCase
         });
 
         $bot->run();
+        $loop->run();
     }
 
 }

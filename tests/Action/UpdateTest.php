@@ -20,9 +20,11 @@ class UpdateTest extends TestCase
      */
     public function testUpdate()
     {
+        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
-        $bot = new Zanzara('test', $config);
+        $bot = new Zanzara('test', $loop, $config);
 
         $bot->onUpdate(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -30,6 +32,7 @@ class UpdateTest extends TestCase
         });
 
         $bot->run();
+        $loop->run();
     }
 
 
