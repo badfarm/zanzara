@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
+use Clue\React\Buzz\Browser;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use React\EventLoop\LoopInterface;
@@ -46,6 +47,11 @@ class Zanzara extends ActionResolver
     private $loop;
 
     /**
+     * @var Browser
+     */
+    private $browser;
+
+    /**
      * @param string $token
      * @param LoopInterface $loop
      * @param Config|null $config
@@ -57,7 +63,9 @@ class Zanzara extends ActionResolver
         $this->config = $config;
         $this->loop = $loop;
         $this->zanzaraMapper = new ZanzaraMapper();
-        $this->telegram = new Telegram($loop, $config);
+        $this->browser = (new Browser($loop))
+            ->withBase("{$config->getApiTelegramUrl()}/bot{$config->getBotToken()}");
+        $this->telegram = new Telegram($this->browser);
     }
 
     /**
@@ -128,7 +136,7 @@ class Zanzara extends ActionResolver
      */
     private function exec(Update $update)
     {
-        $context = new Context($update, $this->telegram);
+        $context = new Context($update, $this->browser);
         $actions = $this->resolve($update);
         foreach ($actions as $action) {
             $this->feedMiddlewareStack($action);
