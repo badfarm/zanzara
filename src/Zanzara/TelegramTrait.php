@@ -14,6 +14,11 @@ trait TelegramTrait
 {
 
     /**
+     * @return Browser
+     */
+    public abstract function getBrowser(): Browser;
+
+    /**
      * @param int|null $offset
      * @return PromiseInterface
      */
@@ -37,11 +42,6 @@ trait TelegramTrait
 
         return $browser->get("$method?$query");
     }
-
-    /**
-     * @return Browser
-     */
-    public abstract function getBrowser(): Browser;
 
     /**
      * Use this method to send text messages. On success, the sent Message is returned.
