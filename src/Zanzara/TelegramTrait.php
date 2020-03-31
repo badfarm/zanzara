@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
+use GuzzleHttp\Client;
 use React\Promise\PromiseInterface;
 
 /**
@@ -37,7 +38,7 @@ trait TelegramTrait
         $query = http_build_query($params);
 
         $browser = $this->getBrowser()->withOptions(array(
-            "timeout" => $timeout + 10
+            "timeout" => $timeout + 10 //timout browser necessary bigger than telegram timeout. They can't be equal
         ));
 
         return $browser->get("$method?$query");
@@ -45,7 +46,9 @@ trait TelegramTrait
 
     /**
      * Use this method to send text messages. On success, the sent Message is returned.
+     *
      * More on https://core.telegram.org/bots/api#sendmessage
+     *
      * @param int $chat_id
      * @param string $text
      * @param array|null $opt
@@ -58,12 +61,27 @@ trait TelegramTrait
         return $this->callApi("sendMessage", $params);
     }
 
+
+    public function sendNormalMessage(int $chat_id, string $text, $key, ?array $opt = [])
+    {
+        $required = compact("chat_id", "text");
+        $params = array_merge($required, $opt);
+        $url = "https://api.telegram.org/bot{$key}/sendMessage";
+
+        $client = new Client();
+
+        $r = $client->request('POST', $url, [
+            "json" => $params
+        ]);
+    }
+
+
     /**
      * @param string $method
      * @param array $params
      * @return PromiseInterface
      */
-    public function callApi(string $method, array $params): PromiseInterface
+    public function callApi(string $method, array $params)
     {
         $headers = [
             "Content-type" => "application/json"
@@ -74,7 +92,9 @@ trait TelegramTrait
 
     /**
      * Use this method to forward messages of any kind. On success, the sent Message is returned.
+     *
      * More on https://core.telegram.org/bots/api#forwardmessage
+     *
      * @param int $chat_id
      * @param int $from_chat_id
      * @param int $message_id
@@ -90,7 +110,9 @@ trait TelegramTrait
 
     /**
      * Use this method to send photos. On success, the sent Message is returned.
+     *
      * More on https://core.telegram.org/bots/api#sendphoto
+     *
      * @param int $chat_id
      * @param $photo
      * @param array|null $opt
@@ -107,7 +129,9 @@ trait TelegramTrait
      * Use this method to send audio files, if you want Telegram clients to display them in the music player.
      * Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned.
      * Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
+     *
      * More on https://core.telegram.org/bots/api#sendaudio
+     *
      * @param int $chat_id
      * @param $audio
      * @param array|null $opt
@@ -123,7 +147,9 @@ trait TelegramTrait
     /**
      * Use this method to send general files. On success, the sent Message is returned.
      * Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
+     *
      * More on https://core.telegram.org/bots/api#senddocument
+     *
      * @param int $chat_id
      * @param $document
      * @param array|null $opt

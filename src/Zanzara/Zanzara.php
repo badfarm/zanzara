@@ -122,8 +122,9 @@ class Zanzara extends ActionResolver
                     foreach ($updates as $update) {
                         $update->detectUpdateType();
                         $this->exec($update);
+                        $offset++;
                     }
-                    $this->polling($offset + 1);
+                    $this->polling($offset);
                 }
             },
             function (Exception $error) {
