@@ -84,6 +84,16 @@ class Update
     private $updateType;
 
     /**
+     * @var User|null
+     */
+    private $effectiveUser;
+
+    /**
+     * @var Chat|null
+     */
+    private $effectiveChat;
+
+    /**
      * @return int
      */
     public function getUpdateId(): int
@@ -290,29 +300,81 @@ class Update
     {
         if ($this->message && $this->message->getSuccessfulPayment()) {
             $this->updateType = SuccessfulPayment::class;
+            $this->effectiveUser = $this->message->getFrom();
+            $this->effectiveChat = $this->message->getChat();
         } else if ($this->message && $this->message->getReplyToMessage()) {
             $this->updateType = ReplyToMessage::class;
+            $this->effectiveUser = $this->message->getFrom();
+            $this->effectiveChat = $this->message->getChat();
         } else if ($this->message && $this->message->getPassportData()) {
             $this->updateType = PassportData::class;
+            $this->effectiveUser = $this->message->getFrom();
+            $this->effectiveChat = $this->message->getChat();
         } else if ($this->message) {
             $this->updateType = Message::class;
+            $this->effectiveUser = $this->message->getFrom();
+            $this->effectiveChat = $this->message->getChat();
         } else if ($this->editedMessage) {
             $this->updateType = EditedMessage::class;
+            $this->effectiveUser = $this->editedMessage->getFrom();
+            $this->effectiveChat = $this->editedMessage->getChat();
         } else if ($this->channelPost) {
             $this->updateType = ChannelPost::class;
+            $this->effectiveUser = $this->channelPost->getFrom();
+            $this->effectiveChat = $this->channelPost->getChat();
         } else if ($this->editedChannelPost) {
             $this->updateType = EditedChannelPost::class;
+            $this->effectiveUser = $this->editedChannelPost->getFrom();
+            $this->effectiveChat = $this->editedChannelPost->getChat();
         } else if ($this->callbackQuery) {
             $this->updateType = CallbackQuery::class;
+            $this->effectiveUser = $this->callbackQuery->getFrom();
+            $this->effectiveChat = $this->callbackQuery->getMessage()->getChat() ?? null;
         } else if ($this->shippingQuery) {
             $this->updateType = ShippingQuery::class;
+            $this->effectiveUser = $this->shippingQuery->getFrom();
         } else if ($this->preCheckoutQuery) {
             $this->updateType = PreCheckoutQuery::class;
+            $this->effectiveUser = $this->preCheckoutQuery->getFrom();
         } else if ($this->inlineQuery) {
             $this->updateType = InlineQuery::class;
+            $this->effectiveUser = $this->inlineQuery->getFrom();
         } else if ($this->chosenInlineResult) {
             $this->updateType = ChosenInlineResult::class;
+            $this->effectiveUser = $this->chosenInlineResult->getFrom();
         }
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getEffectiveUser(): ?User
+    {
+        return $this->effectiveUser;
+    }
+
+    /**
+     * @param User|null $effectiveUser
+     */
+    public function setEffectiveUser(?User $effectiveUser): void
+    {
+        $this->effectiveUser = $effectiveUser;
+    }
+
+    /**
+     * @return Chat|null
+     */
+    public function getEffectiveChat(): ?Chat
+    {
+        return $this->effectiveChat;
+    }
+
+    /**
+     * @param Chat|null $effectiveChat
+     */
+    public function setEffectiveChat(?Chat $effectiveChat): void
+    {
+        $this->effectiveChat = $effectiveChat;
     }
 
 }

@@ -7,6 +7,7 @@ namespace Zanzara;
 use Clue\React\Buzz\Browser;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\ChannelPost;
+use Zanzara\Telegram\Type\Chat;
 use Zanzara\Telegram\Type\ChosenInlineResult;
 use Zanzara\Telegram\Type\EditedChannelPost;
 use Zanzara\Telegram\Type\EditedMessage;
@@ -17,6 +18,7 @@ use Zanzara\Telegram\Type\Poll\PollAnswer;
 use Zanzara\Telegram\Type\Shipping\PreCheckoutQuery;
 use Zanzara\Telegram\Type\Shipping\ShippingQuery;
 use Zanzara\Telegram\Type\Update;
+use Zanzara\Telegram\Type\User;
 
 /**
  * @see Update shortcut methods
@@ -32,6 +34,8 @@ use Zanzara\Telegram\Type\Update;
  * @method PreCheckoutQuery|null getPreCheckoutQuery()
  * @method Poll|null getPoll()
  * @method PollAnswer|null getPollAnswer()
+ * @method User|null getEffectiveUser()
+ * @method Chat|null getEffectiveChat()
  *
  */
 class Context
@@ -100,7 +104,7 @@ class Context
      */
     public function __call($name, $arguments)
     {
-        return call_user_func_array([$this->update, $name], $arguments);
+        return $this->update->$name($arguments);
     }
 
     /**
