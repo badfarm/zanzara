@@ -62,11 +62,11 @@ trait TelegramTrait
     }
 
 
-    public function sendNormalMessage(int $chat_id, string $text, ?array $opt = [])
+    public function sendNormalMessage(int $chat_id, string $text, $key, ?array $opt = [])
     {
         $required = compact("chat_id", "text");
         $params = array_merge($required, $opt);
-        $url = "https://api.telegram.org/bot1082667657:AAFe6_NKpLNb1NuZ4xysN40kZmGoeWfxk44/sendMessage";
+        $url = "https://api.telegram.org/bot{$key}/sendMessage";
 
         $client = new Client();
 

@@ -16,19 +16,20 @@ $loop = Factory::create();
 $config = new Config();
 $config->setUpdateMode(Config::POLLING_MODE);
 $bot = new Zanzara($_ENV['BOT_KEY'], $loop, $config);
+$key = $_ENV['BOT_KEY'];
 
-$bot->onCommand('start', function (Context $ctx) {
+$bot->onCommand('start', function (Context $ctx) use ($key) {
     echo "I'm processing the /start command \n";
 
     $chatId = $ctx->getUpdate()->getMessage()->getChat()->getId();
 
     $ctx->sendMessage($chatId, "async");
-    $ctx->sendNormalMessage($chatId, "sync1");
-    $ctx->sendNormalMessage($chatId, "sync2");
-    $ctx->sendNormalMessage($chatId, "sync3");
-    $ctx->sendNormalMessage($chatId, "sync4");
-    $ctx->sendNormalMessage($chatId, "sync5");
-    $ctx->sendNormalMessage($chatId, "sync6");
+    $ctx->sendNormalMessage($chatId, "sync1", $key);
+    $ctx->sendNormalMessage($chatId, "sync2", $key);
+    $ctx->sendNormalMessage($chatId, "sync3", $key);
+    $ctx->sendNormalMessage($chatId, "sync4", $key);
+    $ctx->sendNormalMessage($chatId, "sync5", $key);
+    $ctx->sendNormalMessage($chatId, "sync6", $key);
 
 
 });
