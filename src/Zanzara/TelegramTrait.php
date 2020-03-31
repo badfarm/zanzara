@@ -54,7 +54,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendMessage(int $chat_id, string $text, ?array $opt = [])
+    public function sendAsyncMessage(int $chat_id, string $text, ?array $opt = [])
     {
         $required = compact("chat_id", "text");
         $params = array_merge($required, $opt);
@@ -62,7 +62,7 @@ trait TelegramTrait
     }
 
 
-    public function sendNormalMessage(int $chat_id, string $text, $key, ?array $opt = [])
+    public function sendSyncMessage(int $chat_id, string $text, $key, ?array $opt = [])
     {
         $required = compact("chat_id", "text");
         $params = array_merge($required, $opt);

@@ -23,13 +23,20 @@ $bot->onCommand('start', function (Context $ctx) use ($key) {
 
     $chatId = $ctx->getUpdate()->getMessage()->getChat()->getId();
 
-    $ctx->sendMessage($chatId, "async");
-    $ctx->sendNormalMessage($chatId, "sync1", $key);
-    $ctx->sendNormalMessage($chatId, "sync2", $key);
-    $ctx->sendNormalMessage($chatId, "sync3", $key);
-    $ctx->sendNormalMessage($chatId, "sync4", $key);
-    $ctx->sendNormalMessage($chatId, "sync5", $key);
-    $ctx->sendNormalMessage($chatId, "sync6", $key);
+
+    $ctx->sendAsyncMessage($chatId, "async1");
+    $ctx->sendAsyncMessage($chatId, "async2");
+    $ctx->sendAsyncMessage($chatId, "async3");
+    $ctx->sendAsyncMessage($chatId, "async4");
+    $ctx->sendAsyncMessage($chatId, "async5");
+    $ctx->sendAsyncMessage($chatId, "async6");
+
+//    $ctx->sendSyncMessage($chatId, "sync1",$key);
+//    $ctx->sendSyncMessage($chatId, "sync2",$key);
+//    $ctx->sendSyncMessage($chatId, "sync3",$key);
+//    $ctx->sendSyncMessage($chatId, "sync4",$key);
+//    $ctx->sendSyncMessage($chatId, "sync5",$key);
+//    $ctx->sendSyncMessage($chatId, "sync6",$key);
 
 
 });
