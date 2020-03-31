@@ -1,7 +1,6 @@
 <?php
 
 use React\EventLoop\Factory;
-use React\EventLoop\LoopInterface;
 use Symfony\Component\Dotenv\Dotenv;
 use Zanzara\Config;
 use Zanzara\Context;
@@ -19,24 +18,26 @@ $config->setUpdateMode(Config::POLLING_MODE);
 $bot = new Zanzara($_ENV['BOT_KEY'], $loop, $config);
 
 $bot->onCommand('start', function (Context $ctx) {
-    echo "I'm processing the /start command\n";
+    echo "I'm processing the /start command \n";
 
     $chatId = $ctx->getUpdate()->getMessage()->getChat()->getId();
-    $text = "ciao fra";
 
-    $ctx->sendMessage($chatId, $text);
+    $ctx->sendMessage($chatId, "async");
+    $ctx->sendNormalMessage($chatId, "sync1");
+    $ctx->sendNormalMessage($chatId, "sync2");
+    $ctx->sendNormalMessage($chatId, "sync3");
+    $ctx->sendNormalMessage($chatId, "sync4");
+    $ctx->sendNormalMessage($chatId, "sync5");
+    $ctx->sendNormalMessage($chatId, "sync6");
+
+
 });
 
+
+echo "The bot is listening ... \n";
+
 $bot->run();
-
-function timer($start, LoopInterface $loop)
-{
-    //Timer only used to count seconds
-    $loop->addPeriodicTimer(1.0, function ($timer) use (&$start, $loop) {
-        echo "tick " . $start++ . "\n";
-    });
-}
-
-timer(0, $loop);
-
 $loop->run();
+
+
+

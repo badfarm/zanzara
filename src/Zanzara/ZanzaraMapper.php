@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zanzara;
 
 use JsonMapper;
+use JsonMapper_Exception;
 
 /**
  * @see JsonMapper is used for deserialization.
@@ -30,6 +31,7 @@ class ZanzaraMapper
      * @param string $json
      * @param $class
      * @return mixed
+     * @throws JsonMapper_Exception
      */
     public function map(string $json, $class)
     {
@@ -41,6 +43,7 @@ class ZanzaraMapper
      * @param string $json
      * @param $class
      * @return array
+     * @throws JsonMapper_Exception
      */
     public function mapAll(string $json, $class): array
     {
