@@ -5,6 +5,12 @@ declare(strict_types=1);
 namespace Zanzara;
 
 /**
+ * Configuration for Zanzara. Expected to be used as follow:
+ *
+ *  $config = new \Zanzara\Config();
+ *  $config->setUpdateMode(self::WEBHOOK_MODE);
+ *  $config->setParseMode(self::PARSE_MODE_HTML);
+ *  $bot = new \Zanzara\Zanzara('token', $loop, $config);
  *
  */
 class Config
@@ -25,7 +31,7 @@ class Config
     /**
      * @var string
      */
-    private $updateMode = self::WEBHOOK_MODE;
+    private $updateMode = self::POLLING_MODE;
 
     /**
      * @var string
@@ -36,6 +42,11 @@ class Config
      * @var string
      */
     private $updateStream = 'php://input';
+
+    /**
+     * @var string
+     */
+    private $apiTelegramUrl = 'https://api.telegram.org';
 
     /**
      * @return string
@@ -99,6 +110,22 @@ class Config
     public function setUpdateStream(string $updateStream): void
     {
         $this->updateStream = $updateStream;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiTelegramUrl(): string
+    {
+        return $this->apiTelegramUrl;
+    }
+
+    /**
+     * @param string $apiTelegramUrl
+     */
+    public function setApiTelegramUrl(string $apiTelegramUrl): void
+    {
+        $this->apiTelegramUrl = $apiTelegramUrl;
     }
 
 }

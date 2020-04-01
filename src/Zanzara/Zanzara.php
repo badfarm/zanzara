@@ -4,8 +4,15 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
+use Clue\React\Buzz\Browser;
+use Exception;
+use JsonMapper_Exception;
+use Psr\Http\Message\ResponseInterface;
+use React\EventLoop\Factory;
+use React\EventLoop\LoopInterface;
 use Zanzara\Action\ActionCollector;
 use Zanzara\Action\ActionResolver;
+use Zanzara\Telegram\Type\GetUpdates;
 use Zanzara\Telegram\Type\Update;
 
 /**
@@ -32,19 +39,40 @@ class Zanzara extends ActionResolver
     private $zanzaraMapper;
 
     /**
+     * @var Telegram
+     */
+    private $telegram;
+
+    /**
+     * @var LoopInterface
+     */
+    private $loop;
+
+    /**
+     * @var Browser
+     */
+    private $browser;
+
+    /**
      * @param string $token
+     * @param LoopInterface $loop
      * @param Config|null $config
      */
-    public function __construct(string $token, ?Config $config = null)
+    public function __construct(string $token, ?Config $config = null, ?LoopInterface $loop = null)
     {
         $config = $config ?? new Config();
         $config->setBotToken($token);
         $this->config = $config;
+        $this->loop = $loop ?? Factory::create();
         $this->zanzaraMapper = new ZanzaraMapper();
+        $this->browser = (new Browser($this->loop))
+            ->withBase("{$config->getApiTelegramUrl()}/bot{$config->getBotToken()}");
+        $this->telegram = new Telegram($this->browser);
     }
 
     /**
      *
+     * @throws JsonMapper_Exception
      */
     public function run(): void
     {
@@ -60,10 +88,52 @@ class Zanzara extends ActionResolver
                 break;
 
             case Config::POLLING_MODE:
+                $this->loop->futureTick([$this, 'polling']);
+                $this->loop->run();
                 break;
 
         }
+    }
 
+    /**
+     * @param int|null $offset
+     */
+    public function polling(?int $offset = 1)
+    {
+        $this->telegram->getUpdates($offset)->then(
+
+            function (ResponseInterface $response) use ($offset) {
+
+                $json = (string)$response->getBody();
+
+                /** @var GetUpdates $getUpdates */
+                $getUpdates = $this->zanzaraMapper->map($json, GetUpdates::class);
+                $updates = $getUpdates->getResult();
+
+                if ($offset == 1) {
+                    //first run I need to get the current updateId from telegram
+
+                    $lastUpdate = end($updates);
+
+                    if ($lastUpdate != null) {
+                        $offset = $lastUpdate->getUpdateId();
+                        $this->polling($offset);
+                    } else {
+                        $this->polling($offset);
+                    }
+
+                } else {
+                    foreach ($updates as $update) {
+                        $update->detectUpdateType();
+                        $this->exec($update);
+                        $offset++;
+                    }
+                    $this->polling($offset);
+                }
+            },
+            function (Exception $error) {
+                var_dump('There was an error', $error->getMessage());
+            });
     }
 
     /**
@@ -71,13 +141,19 @@ class Zanzara extends ActionResolver
      */
     private function exec(Update $update)
     {
-        $context = new Context($update);
+        $context = new Context($update, $this->browser);
         $actions = $this->resolve($update);
         foreach ($actions as $action) {
             $this->feedMiddlewareStack($action);
             $middlewareTip = $action->getTip();
             $middlewareTip($context);
         }
+    }
+
+
+    public function getLoop(): LoopInterface
+    {
+        return $this->loop;
     }
 
 }

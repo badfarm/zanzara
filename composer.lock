@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-  "content-hash": "5f639a9f17ce9fd27fba645c8d9ffb5e",
+  "content-hash": "151c0fa8a7b2e718772dfb9f2d03e60b",
     "packages": [
         {
           "name": "amphp/amp",
@@ -946,6 +946,195 @@
         "time": "2017-07-23T21:35:13+00:00"
       },
       {
+        "name": "guzzlehttp/guzzle",
+        "version": "6.5.2",
+        "source": {
+          "type": "git",
+          "url": "https://github.com/guzzle/guzzle.git",
+          "reference": "43ece0e75098b7ecd8d13918293029e555a50f82"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/guzzle/guzzle/zipball/43ece0e75098b7ecd8d13918293029e555a50f82",
+          "reference": "43ece0e75098b7ecd8d13918293029e555a50f82",
+          "shasum": ""
+        },
+        "require": {
+          "ext-json": "*",
+          "guzzlehttp/promises": "^1.0",
+          "guzzlehttp/psr7": "^1.6.1",
+          "php": ">=5.5"
+        },
+        "require-dev": {
+          "ext-curl": "*",
+          "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.4 || ^7.0",
+          "psr/log": "^1.1"
+        },
+        "suggest": {
+          "ext-intl": "Required for Internationalized Domain Name (IDN) support",
+          "psr/log": "Required for using the Log middleware"
+        },
+        "type": "library",
+        "extra": {
+          "branch-alias": {
+            "dev-master": "6.5-dev"
+          }
+        },
+        "autoload": {
+          "psr-4": {
+            "GuzzleHttp\\": "src/"
+          },
+          "files": [
+            "src/functions_include.php"
+          ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+          "MIT"
+        ],
+        "authors": [
+          {
+            "name": "Michael Dowling",
+            "email": "mtdowling@gmail.com",
+            "homepage": "https://github.com/mtdowling"
+          }
+        ],
+        "description": "Guzzle is a PHP HTTP client library",
+        "homepage": "http://guzzlephp.org/",
+        "keywords": [
+          "client",
+          "curl",
+          "framework",
+          "http",
+          "http client",
+          "rest",
+          "web service"
+        ],
+        "time": "2019-12-23T11:57:10+00:00"
+      },
+      {
+        "name": "guzzlehttp/promises",
+        "version": "v1.3.1",
+        "source": {
+          "type": "git",
+          "url": "https://github.com/guzzle/promises.git",
+          "reference": "a59da6cf61d80060647ff4d3eb2c03a2bc694646"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/guzzle/promises/zipball/a59da6cf61d80060647ff4d3eb2c03a2bc694646",
+          "reference": "a59da6cf61d80060647ff4d3eb2c03a2bc694646",
+          "shasum": ""
+        },
+        "require": {
+          "php": ">=5.5.0"
+        },
+        "require-dev": {
+          "phpunit/phpunit": "^4.0"
+        },
+        "type": "library",
+        "extra": {
+          "branch-alias": {
+            "dev-master": "1.4-dev"
+          }
+        },
+        "autoload": {
+          "psr-4": {
+            "GuzzleHttp\\Promise\\": "src/"
+          },
+          "files": [
+            "src/functions_include.php"
+          ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+          "MIT"
+        ],
+        "authors": [
+          {
+            "name": "Michael Dowling",
+            "email": "mtdowling@gmail.com",
+            "homepage": "https://github.com/mtdowling"
+          }
+        ],
+        "description": "Guzzle promises library",
+        "keywords": [
+          "promise"
+        ],
+        "time": "2016-12-20T10:07:11+00:00"
+      },
+      {
+        "name": "guzzlehttp/psr7",
+        "version": "1.6.1",
+        "source": {
+          "type": "git",
+          "url": "https://github.com/guzzle/psr7.git",
+          "reference": "239400de7a173fe9901b9ac7c06497751f00727a"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/guzzle/psr7/zipball/239400de7a173fe9901b9ac7c06497751f00727a",
+          "reference": "239400de7a173fe9901b9ac7c06497751f00727a",
+          "shasum": ""
+        },
+        "require": {
+          "php": ">=5.4.0",
+          "psr/http-message": "~1.0",
+          "ralouphie/getallheaders": "^2.0.5 || ^3.0.0"
+        },
+        "provide": {
+          "psr/http-message-implementation": "1.0"
+        },
+        "require-dev": {
+          "ext-zlib": "*",
+          "phpunit/phpunit": "~4.8.36 || ^5.7.27 || ^6.5.8"
+        },
+        "suggest": {
+          "zendframework/zend-httphandlerrunner": "Emit PSR-7 responses"
+        },
+        "type": "library",
+        "extra": {
+          "branch-alias": {
+            "dev-master": "1.6-dev"
+          }
+        },
+        "autoload": {
+          "psr-4": {
+            "GuzzleHttp\\Psr7\\": "src/"
+          },
+          "files": [
+            "src/functions_include.php"
+          ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+          "MIT"
+        ],
+        "authors": [
+          {
+            "name": "Michael Dowling",
+            "email": "mtdowling@gmail.com",
+            "homepage": "https://github.com/mtdowling"
+          },
+          {
+            "name": "Tobias Schultze",
+            "homepage": "https://github.com/Tobion"
+          }
+        ],
+        "description": "PSR-7 message implementation that also provides common utility methods",
+        "keywords": [
+          "http",
+          "message",
+          "psr-7",
+          "request",
+          "response",
+          "stream",
+          "uri",
+          "url"
+        ],
+        "time": "2019-07-01T23:21:34+00:00"
+      },
+      {
         "name": "kelunik/certificate",
         "version": "v1.1.2",
         "source": {
@@ -1443,44 +1632,84 @@
             "time": "2020-03-23T09:12:05+00:00"
         },
         {
-          "name": "react/cache",
-          "version": "v1.0.0",
+          "name": "ralouphie/getallheaders",
+          "version": "3.0.3",
           "source": {
             "type": "git",
-            "url": "https://github.com/reactphp/cache.git",
-            "reference": "aa10d63a1b40a36a486bdf527f28bac607ee6466"
+            "url": "https://github.com/ralouphie/getallheaders.git",
+            "reference": "120b605dfeb996808c31b6477290a714d356e822"
           },
           "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/reactphp/cache/zipball/aa10d63a1b40a36a486bdf527f28bac607ee6466",
-            "reference": "aa10d63a1b40a36a486bdf527f28bac607ee6466",
+            "url": "https://api.github.com/repos/ralouphie/getallheaders/zipball/120b605dfeb996808c31b6477290a714d356e822",
+            "reference": "120b605dfeb996808c31b6477290a714d356e822",
             "shasum": ""
           },
           "require": {
-            "php": ">=5.3.0",
-            "react/promise": "~2.0|~1.1"
+            "php": ">=5.6"
           },
           "require-dev": {
-            "phpunit/phpunit": "^6.4 || ^5.7 || ^4.8.35"
+            "php-coveralls/php-coveralls": "^2.1",
+            "phpunit/phpunit": "^5 || ^6.5"
           },
           "type": "library",
           "autoload": {
-            "psr-4": {
-              "React\\Cache\\": "src/"
-            }
+            "files": [
+              "src/getallheaders.php"
+            ]
           },
           "notification-url": "https://packagist.org/downloads/",
           "license": [
             "MIT"
           ],
-          "description": "Async, Promise-based cache interface for ReactPHP",
-          "keywords": [
-            "cache",
-            "caching",
-            "promise",
-            "reactphp"
+          "authors": [
+            {
+              "name": "Ralph Khattar",
+              "email": "ralph.khattar@gmail.com"
+            }
           ],
-          "time": "2019-07-11T13:45:28+00:00"
+          "description": "A polyfill for getallheaders.",
+          "time": "2019-03-08T08:55:37+00:00"
+        },
+      {
+        "name": "react/cache",
+        "version": "v1.0.0",
+        "source": {
+          "type": "git",
+          "url": "https://github.com/reactphp/cache.git",
+          "reference": "aa10d63a1b40a36a486bdf527f28bac607ee6466"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/reactphp/cache/zipball/aa10d63a1b40a36a486bdf527f28bac607ee6466",
+          "reference": "aa10d63a1b40a36a486bdf527f28bac607ee6466",
+          "shasum": ""
+        },
+        "require": {
+          "php": ">=5.3.0",
+          "react/promise": "~2.0|~1.1"
+        },
+        "require-dev": {
+          "phpunit/phpunit": "^6.4 || ^5.7 || ^4.8.35"
+        },
+        "type": "library",
+        "autoload": {
+          "psr-4": {
+            "React\\Cache\\": "src/"
+          }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+          "MIT"
+        ],
+        "description": "Async, Promise-based cache interface for ReactPHP",
+        "keywords": [
+          "cache",
+          "caching",
+          "promise",
+          "reactphp"
+        ],
+        "time": "2019-07-11T13:45:28+00:00"
         },
       {
         "name": "react/dns",
@@ -2011,16 +2240,16 @@
       },
       {
             "name": "symfony/cache",
-            "version": "v5.0.5",
+        "version": "v5.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "c6255e419e8592dab7de6e29b014ae9e8926989a"
+              "reference": "7c229da093cb0c630e5d16b99fd253e20f979ac2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/c6255e419e8592dab7de6e29b014ae9e8926989a",
-                "reference": "c6255e419e8592dab7de6e29b014ae9e8926989a",
+              "url": "https://api.github.com/repos/symfony/cache/zipball/7c229da093cb0c630e5d16b99fd253e20f979ac2",
+              "reference": "7c229da093cb0c630e5d16b99fd253e20f979ac2",
                 "shasum": ""
             },
             "require": {
@@ -2086,7 +2315,21 @@
                 "caching",
                 "psr6"
             ],
-            "time": "2020-02-24T15:05:31+00:00"
+        "funding": [
+          {
+            "url": "https://symfony.com/sponsor",
+            "type": "custom"
+          },
+          {
+            "url": "https://github.com/fabpot",
+            "type": "github"
+          },
+          {
+            "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+            "type": "tidelift"
+          }
+        ],
+        "time": "2020-03-27T16:56:45+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -2206,16 +2449,16 @@
         },
         {
             "name": "symfony/var-exporter",
-            "version": "v5.0.5",
+          "version": "v5.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "30779a25c736b4290449eaedefe4196c1d060378"
+              "reference": "ffd29a70370e466343e33154b5df197a07a13afa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/30779a25c736b4290449eaedefe4196c1d060378",
-                "reference": "30779a25c736b4290449eaedefe4196c1d060378",
+              "url": "https://api.github.com/repos/symfony/var-exporter/zipball/ffd29a70370e466343e33154b5df197a07a13afa",
+              "reference": "ffd29a70370e466343e33154b5df197a07a13afa",
                 "shasum": ""
             },
             "require": {
@@ -2276,7 +2519,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-02-04T09:47:34+00:00"
+          "time": "2020-03-27T16:56:45+00:00"
         }
     ],
     "packages-dev": [
@@ -2954,16 +3197,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "8.5.2",
+          "version": "8.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "018b6ac3c8ab20916db85fa91bf6465acb64d1e0"
+              "reference": "67750516bc02f300e2742fed2f50177f8f37bedf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/018b6ac3c8ab20916db85fa91bf6465acb64d1e0",
-                "reference": "018b6ac3c8ab20916db85fa91bf6465acb64d1e0",
+              "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/67750516bc02f300e2742fed2f50177f8f37bedf",
+              "reference": "67750516bc02f300e2742fed2f50177f8f37bedf",
                 "shasum": ""
             },
             "require": {
@@ -3033,7 +3276,17 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2020-01-08T08:49:49+00:00"
+          "funding": [
+            {
+              "url": "https://phpunit.de/donate.html",
+              "type": "custom"
+            },
+            {
+              "url": "https://github.com/sebastianbergmann",
+              "type": "github"
+            }
+          ],
+          "time": "2020-03-31T08:52:04+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -3652,16 +3905,16 @@
         },
         {
           "name": "symfony/dotenv",
-          "version": "v5.0.5",
+          "version": "v5.0.7",
           "source": {
             "type": "git",
             "url": "https://github.com/symfony/dotenv.git",
-            "reference": "48c8fdda51e5b24d031ce8ec221caa186337e36f"
+            "reference": "28658ee990ea643c8111bac242d6ee5f3a15ef72"
           },
           "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/dotenv/zipball/48c8fdda51e5b24d031ce8ec221caa186337e36f",
-            "reference": "48c8fdda51e5b24d031ce8ec221caa186337e36f",
+            "url": "https://api.github.com/repos/symfony/dotenv/zipball/28658ee990ea643c8111bac242d6ee5f3a15ef72",
+            "reference": "28658ee990ea643c8111bac242d6ee5f3a15ef72",
             "shasum": ""
           },
           "require": {
@@ -3719,7 +3972,7 @@
               "type": "tidelift"
             }
           ],
-          "time": "2020-02-29T10:07:09+00:00"
+          "time": "2020-03-27T16:56:45+00:00"
         },
       {
             "name": "symfony/polyfill-ctype",
