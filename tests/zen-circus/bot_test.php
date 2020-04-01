@@ -18,10 +18,7 @@ $key = $_ENV['BOT_KEY'];
 
 $bot->onCommand("start", function (Context $ctx) {
     echo "I'm processing the /start command \n";
-
-    $chatId = $ctx->getUpdate()->getMessage()->getChat()->getId();
-
-    $ctx->sendMessage($chatId, "Ciao destriero qual'è il tuo beneamato nome?");
+    $ctx->reply("Ciao condottiero");
 
 });
 
@@ -29,9 +26,8 @@ $bot->onCommand("start", function (Context $ctx) {
 $bot->onCommand("reply", function (Context $ctx) {
     echo "I'm processing the /reply command \n";
 
-    $chatId = $ctx->getUpdate()->getMessage()->getChat()->getId();
     $message = $ctx->getUpdate()->getMessage()->getText();
-    $ctx->sendMessage($chatId, $message);
+    $ctx->reply($message);
 
 });
 

@@ -6,6 +6,7 @@ namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
 use React\Promise\PromiseInterface;
+use Zanzara\Telegram\Type\Update;
 
 /**
  *
@@ -17,6 +18,12 @@ trait TelegramTrait
      * @return Browser
      */
     public abstract function getBrowser(): Browser;
+
+    /**
+     * @return Update
+     */
+    public abstract function getUpdate(): Update;
+
 
     /**
      * @param int|null $offset
@@ -60,6 +67,15 @@ trait TelegramTrait
         return $this->callApi("sendMessage", $params);
     }
 
+
+    /**
+     * @param string $message
+     * @return PromiseInterface
+     */
+    public function reply(string $message)
+    {
+        return $this->sendMessage($this->getUpdate()->getEffectiveChat()->getId(), $message);
+    }
 
     /**
      * @param string $method
