@@ -6,7 +6,9 @@ namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
 use Exception;
+use JsonMapper_Exception;
 use Psr\Http\Message\ResponseInterface;
+use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use Zanzara\Action\ActionCollector;
 use Zanzara\Action\ActionResolver;
@@ -56,20 +58,21 @@ class Zanzara extends ActionResolver
      * @param LoopInterface $loop
      * @param Config|null $config
      */
-    public function __construct(string $token, LoopInterface $loop, ?Config $config = null)
+    public function __construct(string $token, ?Config $config = null, ?LoopInterface $loop = null)
     {
         $config = $config ?? new Config();
         $config->setBotToken($token);
         $this->config = $config;
-        $this->loop = $loop;
+        $this->loop = $loop ?? Factory::create();
         $this->zanzaraMapper = new ZanzaraMapper();
-        $this->browser = (new Browser($loop))
+        $this->browser = (new Browser($this->loop))
             ->withBase("{$config->getApiTelegramUrl()}/bot{$config->getBotToken()}");
         $this->telegram = new Telegram($this->browser);
     }
 
     /**
      *
+     * @throws JsonMapper_Exception
      */
     public function run(): void
     {
@@ -86,6 +89,7 @@ class Zanzara extends ActionResolver
 
             case Config::POLLING_MODE:
                 $this->loop->futureTick([$this, 'polling']);
+                $this->loop->run();
                 break;
 
         }
@@ -144,6 +148,12 @@ class Zanzara extends ActionResolver
             $middlewareTip = $action->getTip();
             $middlewareTip($context);
         }
+    }
+
+
+    public function getLoop(): LoopInterface
+    {
+        return $this->loop;
     }
 
 }

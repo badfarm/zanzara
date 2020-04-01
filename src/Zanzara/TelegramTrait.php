@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
-use GuzzleHttp\Client;
 use React\Promise\PromiseInterface;
 
 /**
@@ -54,25 +53,11 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendAsyncMessage(int $chat_id, string $text, ?array $opt = [])
+    public function sendMessage(int $chat_id, string $text, ?array $opt = [])
     {
         $required = compact("chat_id", "text");
         $params = array_merge($required, $opt);
         return $this->callApi("sendMessage", $params);
-    }
-
-
-    public function sendSyncMessage(int $chat_id, string $text, $key, ?array $opt = [])
-    {
-        $required = compact("chat_id", "text");
-        $params = array_merge($required, $opt);
-        $url = "https://api.telegram.org/bot{$key}/sendMessage";
-
-        $client = new Client();
-
-        $r = $client->request('POST', $url, [
-            "json" => $params
-        ]);
     }
 
 
