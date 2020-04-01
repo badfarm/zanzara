@@ -20,11 +20,10 @@ class CallbackQueryTest extends TestCase
      */
     public function testCallbackQuery()
     {
-        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/callback_query.json');
-        $bot = new Zanzara('test', $loop, $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onCbQueryText('Manage your data', function (Context $ctx) {
             $callbackQuery = $ctx->getCallbackQuery();
@@ -55,7 +54,6 @@ class CallbackQueryTest extends TestCase
         });
 
         $bot->run();
-        $loop->run();
     }
 
 }

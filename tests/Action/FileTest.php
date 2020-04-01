@@ -20,11 +20,10 @@ class FileTest extends TestCase
      */
     public function testAnimation()
     {
-        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/animation.json');
-        $bot = new Zanzara('test', $loop, $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -47,7 +46,6 @@ class FileTest extends TestCase
         });
 
         $bot->run();
-        $loop->run();
     }
 
     /**
@@ -55,11 +53,10 @@ class FileTest extends TestCase
      */
     public function testContact()
     {
-        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/contact.json');
-        $bot = new Zanzara('test', $loop, $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -71,7 +68,6 @@ class FileTest extends TestCase
         });
 
         $bot->run();
-        $loop->run();
     }
 
     /**
@@ -79,11 +75,10 @@ class FileTest extends TestCase
      */
     public function testDocument()
     {
-        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/document.json');
-        $bot = new Zanzara('test', $loop, $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -97,7 +92,6 @@ class FileTest extends TestCase
         });
 
         $bot->run();
-        $loop->run();
     }
 
     /**
@@ -105,11 +99,10 @@ class FileTest extends TestCase
      */
     public function testVoice()
     {
-        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/voice.json');
-        $bot = new Zanzara('test', $loop, $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -123,7 +116,6 @@ class FileTest extends TestCase
         });
 
         $bot->run();
-        $loop->run();
     }
 
     /**
@@ -131,11 +123,10 @@ class FileTest extends TestCase
      */
     public function testLocation()
     {
-        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/location.json');
-        $bot = new Zanzara('test', $loop, $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -146,7 +137,6 @@ class FileTest extends TestCase
         });
 
         $bot->run();
-        $loop->run();
     }
 
     /**
@@ -154,11 +144,10 @@ class FileTest extends TestCase
      */
     public function testPhoto()
     {
-        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/photo.json');
-        $bot = new Zanzara('test', $loop, $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -185,7 +174,6 @@ class FileTest extends TestCase
         });
 
         $bot->run();
-        $loop->run();
     }
 
     /**
@@ -193,11 +181,10 @@ class FileTest extends TestCase
      */
     public function testSticker()
     {
-        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/sticker.json');
-        $bot = new Zanzara('test', $loop, $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -220,7 +207,6 @@ class FileTest extends TestCase
         });
 
         $bot->run();
-        $loop->run();
     }
 
     /**
@@ -228,11 +214,10 @@ class FileTest extends TestCase
      */
     public function testVideo()
     {
-        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/video.json');
-        $bot = new Zanzara('test', $loop, $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -254,7 +239,6 @@ class FileTest extends TestCase
         });
 
         $bot->run();
-        $loop->run();
     }
 
 }

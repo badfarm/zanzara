@@ -20,11 +20,10 @@ class ChannelPostTest extends TestCase
      */
     public function testChannelPost()
     {
-        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/channel_post.json');
-        $bot = new Zanzara('test', $loop, $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onChannelPost(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -38,7 +37,6 @@ class ChannelPostTest extends TestCase
         });
 
         $bot->run();
-        $loop->run();
     }
 
     /**
@@ -46,11 +44,10 @@ class ChannelPostTest extends TestCase
      */
     public function testEditedChannelPost()
     {
-        $loop = \React\EventLoop\Factory::create();
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/edited_channel_post.json');
-        $bot = new Zanzara('test', $loop, $config);
+        $bot = new Zanzara('test', $config);
 
         $bot->onEditedChannelPost(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -65,7 +62,6 @@ class ChannelPostTest extends TestCase
         });
 
         $bot->run();
-        $loop->run();
     }
 
 }
