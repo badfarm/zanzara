@@ -7,12 +7,11 @@ namespace Zanzara;
 use Clue\React\Buzz\Browser;
 use Exception;
 use JsonMapper_Exception;
-use Psr\Http\Message\ResponseInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use Zanzara\Action\ActionCollector;
 use Zanzara\Action\ActionResolver;
-use Zanzara\Telegram\Type\GetUpdates;
+use Zanzara\Telegram\Type\Response\GetUpdates;
 use Zanzara\Telegram\Type\Update;
 
 /**
@@ -67,7 +66,7 @@ class Zanzara extends ActionResolver
         $this->zanzaraMapper = new ZanzaraMapper();
         $this->browser = (new Browser($this->loop))
             ->withBase("{$config->getApiTelegramUrl()}/bot{$config->getBotToken()}");
-        $this->telegram = new Telegram($this->browser);
+        $this->telegram = new Telegram($this->browser, $this->zanzaraMapper);
     }
 
     /**
@@ -101,14 +100,8 @@ class Zanzara extends ActionResolver
     public function polling(?int $offset = 1)
     {
         $this->telegram->getUpdates($offset)->then(
-
-            function (ResponseInterface $response) use ($offset) {
-
-                $json = (string)$response->getBody();
-
-                /** @var GetUpdates $getUpdates */
-                $getUpdates = $this->zanzaraMapper->map($json, GetUpdates::class);
-                $updates = $getUpdates->getResult();
+            function (GetUpdates $response) use ($offset) {
+                $updates = $response->getResult();
 
                 if ($offset == 1) {
                     //first run I need to get the current updateId from telegram
@@ -141,7 +134,7 @@ class Zanzara extends ActionResolver
      */
     private function exec(Update $update)
     {
-        $context = new Context($update, $this->browser);
+        $context = new Context($update, $this->browser, $this->zanzaraMapper);
         $actions = $this->resolve($update);
         foreach ($actions as $action) {
             $this->feedMiddlewareStack($action);

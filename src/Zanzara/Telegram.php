@@ -20,12 +20,19 @@ class Telegram
     private $browser;
 
     /**
+     * @var ZanzaraMapper
+     */
+    private $zanzaraMapper;
+
+    /**
      * Telegram constructor.
      * @param Browser $browser
+     * @param ZanzaraMapper $zanzaraMapper
      */
-    public function __construct(Browser $browser)
+    public function __construct(Browser $browser, ZanzaraMapper $zanzaraMapper)
     {
         $this->browser = $browser;
+        $this->zanzaraMapper = $zanzaraMapper;
     }
 
     /**
@@ -43,4 +50,13 @@ class Telegram
     {
         return $this->getUpdate();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getZanzaraMapper(): ZanzaraMapper
+    {
+        return $this->zanzaraMapper;
+    }
+
 }

@@ -55,6 +55,11 @@ class Context
     private $browser;
 
     /**
+     * @var ZanzaraMapper
+     */
+    private $zanzaraMapper;
+
+    /**
      * Array used to pass data between middleware.
      *
      * @var array
@@ -64,11 +69,13 @@ class Context
     /**
      * @param Update $update
      * @param Browser $browser
+     * @param ZanzaraMapper $zanzaraMapper
      */
-    public function __construct(Update $update, Browser $browser)
+    public function __construct(Update $update, Browser $browser, ZanzaraMapper $zanzaraMapper)
     {
         $this->update = $update;
         $this->browser = $browser;
+        $this->zanzaraMapper = $zanzaraMapper;
     }
 
     /**
@@ -113,6 +120,14 @@ class Context
     public function getBrowser(): Browser
     {
         return $this->browser;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getZanzaraMapper(): ZanzaraMapper
+    {
+        return $this->zanzaraMapper;
     }
 
 }

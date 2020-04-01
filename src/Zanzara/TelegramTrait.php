@@ -6,6 +6,8 @@ namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
 use React\Promise\PromiseInterface;
+use Zanzara\Telegram\Type\Response\GetUpdates;
+use Zanzara\Telegram\Type\Response\MessageResponse;
 use Zanzara\Telegram\Type\Update;
 
 /**
@@ -24,6 +26,10 @@ trait TelegramTrait
      */
     public abstract function getUpdate(): Update;
 
+    /**
+     * @return ZanzaraMapper
+     */
+    public abstract function getZanzaraMapper(): ZanzaraMapper;
 
     /**
      * @param int|null $offset
@@ -47,7 +53,7 @@ trait TelegramTrait
             "timeout" => $timeout + 10 //timout browser necessary bigger than telegram timeout. They can't be equal
         ));
 
-        return $browser->get("$method?$query");
+        return new ZanzaraPromise($this->getZanzaraMapper(), $browser->get("$method?$query"), GetUpdates::class);
     }
 
     /**
@@ -64,7 +70,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "text");
         $params = array_merge($required, $opt);
-        return $this->callApi("sendMessage", $params);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendMessage", $params), MessageResponse::class);
     }
 
 
