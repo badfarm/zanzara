@@ -143,7 +143,9 @@ class Zanzara extends ActionResolver
         }
     }
 
-
+    /**
+     * @return LoopInterface
+     */
     public function getLoop(): LoopInterface
     {
         return $this->loop;
