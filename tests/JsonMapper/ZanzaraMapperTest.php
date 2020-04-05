@@ -24,7 +24,7 @@ class ZanzaraMapperTest extends TestCase
 
         $json = file_get_contents(__DIR__ . '/many.json');
         /** @var Dummy[] $dummies */
-        $dummies = $mapper->mapAll($json, Dummy::class);
+        $dummies = $mapper->map($json, Dummy::class);
         $this->assertSame('Michael', $dummies[0]->getField());
         $this->assertSame('Scott', $dummies[1]->getField());
     }

@@ -53,7 +53,8 @@ class ZanzaraPromise implements PromiseInterface
         return $this->promise->then(
             function (ResponseInterface $response) use ($onFulfilled, $onRejected) {
                 $json = (string)$response->getBody();
-                $onFulfilled($this->zanzaraMapper->map($json, $this->class));
+                $object = json_decode($json);
+                $onFulfilled($this->zanzaraMapper->mapObject($object->result, $this->class));
             },
             $onRejected,
             $onProgress

@@ -6,6 +6,7 @@ namespace Zanzara\Test\Telegram;
 
 use React\EventLoop\Factory;
 use Zanzara\Telegram;
+use Zanzara\Telegram\Type\Message;
 
 /**
  *
@@ -24,9 +25,8 @@ class TelegramTest extends BaseTelegramTest
         $chatId = (int)$_ENV['CHAT_ID'];
 
         $telegram->sendMessage($chatId, 'Hello')->then(
-            function (Telegram\Type\Response\MessageResponse $response) {
-                $this->assertTrue($response->isOk());
-                $this->assertSame('Hello', $response->getResult()->getText());
+            function (Message $response) {
+                $this->assertSame('Hello', $response->getText());
             }
         );
 

@@ -36,19 +36,22 @@ class ZanzaraMapper
     public function map(string $json, $class)
     {
         $decoded = json_decode($json);
-        return $this->jsonMapper->map($decoded, new $class);
+        return is_array($decoded) ?
+            $this->jsonMapper->mapArray($decoded, [], $class) :
+            $this->jsonMapper->map($decoded, new $class);
     }
 
     /**
-     * @param string $json
+     * @param $object
      * @param $class
-     * @return array
+     * @return mixed
      * @throws JsonMapper_Exception
      */
-    public function mapAll(string $json, $class): array
+    public function mapObject($object, $class)
     {
-        $decoded = json_decode($json);
-        return $this->jsonMapper->mapArray($decoded, [], $class);
+        return is_array($object) ?
+            $this->jsonMapper->mapArray($object, [], $class) :
+            $this->jsonMapper->map($object, new $class);
     }
 
 }

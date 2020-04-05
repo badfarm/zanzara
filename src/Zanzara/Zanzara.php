@@ -11,7 +11,6 @@ use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use Zanzara\Action\ActionCollector;
 use Zanzara\Action\ActionResolver;
-use Zanzara\Telegram\Type\Response\GetUpdates;
 use Zanzara\Telegram\Type\Update;
 
 /**
@@ -100,8 +99,7 @@ class Zanzara extends ActionResolver
     public function polling(?int $offset = 1)
     {
         $this->telegram->getUpdates($offset)->then(
-            function (GetUpdates $response) use ($offset) {
-                $updates = $response->getResult();
+            function (array $updates) use ($offset) {
 
                 if ($offset == 1) {
                     //first run I need to get the current updateId from telegram
