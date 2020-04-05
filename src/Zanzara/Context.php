@@ -117,7 +117,7 @@ class Context
     /**
      * @inheritDoc
      */
-    public function getBrowser(): Browser
+    protected function getBrowser(): Browser
     {
         return $this->browser;
     }
@@ -125,7 +125,7 @@ class Context
     /**
      * @inheritDoc
      */
-    public function getZanzaraMapper(): ZanzaraMapper
+    protected function getZanzaraMapper(): ZanzaraMapper
     {
         return $this->zanzaraMapper;
     }

@@ -38,7 +38,7 @@ class Telegram
     /**
      * @inheritDoc
      */
-    public function getBrowser(): Browser
+    protected function getBrowser(): Browser
     {
         return $this->browser;
     }
@@ -46,7 +46,7 @@ class Telegram
     /**
      * @return Update
      */
-    public function getUpdate(): Update
+    protected function getUpdate(): Update
     {
         return $this->getUpdate();
     }
@@ -54,7 +54,7 @@ class Telegram
     /**
      * @inheritDoc
      */
-    public function getZanzaraMapper(): ZanzaraMapper
+    protected function getZanzaraMapper(): ZanzaraMapper
     {
         return $this->zanzaraMapper;
     }

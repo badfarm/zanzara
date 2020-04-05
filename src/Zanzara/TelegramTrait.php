@@ -18,17 +18,17 @@ trait TelegramTrait
     /**
      * @return Browser
      */
-    public abstract function getBrowser(): Browser;
+    protected abstract function getBrowser(): Browser;
 
     /**
      * @return Update
      */
-    public abstract function getUpdate(): Update;
+    protected abstract function getUpdate(): Update;
 
     /**
      * @return ZanzaraMapper
      */
-    public abstract function getZanzaraMapper(): ZanzaraMapper;
+    protected abstract function getZanzaraMapper(): ZanzaraMapper;
 
     /**
      * @param int|null $offset

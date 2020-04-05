@@ -4,16 +4,30 @@ declare(strict_types=1);
 
 namespace Zanzara\Test\Telegram;
 
+use Clue\React\Buzz\Browser;
+use PHPUnit\Framework\TestCase;
 use React\EventLoop\Factory;
+use React\EventLoop\LoopInterface;
+use Zanzara\Config;
 use Zanzara\Telegram;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Response\ErrorResponse;
+use Zanzara\ZanzaraMapper;
 
 /**
  *
  */
-class TelegramTest extends BaseTelegramTest
+class TelegramTest extends TestCase
 {
+
+    private function init(LoopInterface $loop)
+    {
+        $config = new Config();
+        $config->setBotToken($_ENV['BOT_KEY']);
+        $zanzaraMapper = new ZanzaraMapper();
+        $browser = (new Browser($loop))->withBase("{$config->getApiTelegramUrl()}/bot{$config->getBotToken()}");
+        return [$browser, $zanzaraMapper];
+    }
 
     /**
      *
