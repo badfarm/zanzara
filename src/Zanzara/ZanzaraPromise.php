@@ -2,8 +2,10 @@
 
 namespace Zanzara;
 
+use Clue\React\Buzz\Message\ResponseException;
 use Psr\Http\Message\ResponseInterface;
 use React\Promise\PromiseInterface;
+use Zanzara\Telegram\Type\Response\ErrorResponse;
 
 /**
  * Wrapper for React Promise.
@@ -51,12 +53,15 @@ class ZanzaraPromise implements PromiseInterface
     public function then(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
     {
         return $this->promise->then(
-            function (ResponseInterface $response) use ($onFulfilled, $onRejected) {
+            function (ResponseInterface $response) use ($onFulfilled) {
                 $json = (string)$response->getBody();
                 $object = json_decode($json);
                 $onFulfilled($this->zanzaraMapper->mapObject($object->result, $this->class));
             },
-            $onRejected,
+            function (ResponseException $exception) use ($onRejected) {
+                $json = (string)$exception->getResponse()->getBody();
+                $onRejected($this->zanzaraMapper->map($json, ErrorResponse::class));
+            },
             $onProgress
         );
     }
