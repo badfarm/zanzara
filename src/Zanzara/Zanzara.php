@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
-use Exception;
 use JsonMapper_Exception;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use Zanzara\Action\ActionCollector;
 use Zanzara\Action\ActionResolver;
+use Zanzara\Telegram\Type\Response\ErrorResponse;
 use Zanzara\Telegram\Type\Update;
 
 /**
@@ -122,8 +122,8 @@ class Zanzara extends ActionResolver
                     $this->polling($offset);
                 }
             },
-            function (Exception $error) {
-                var_dump('There was an error', $error->getMessage());
+            function (ErrorResponse $error) {
+                echo "There was an error: $error";
             });
     }
 

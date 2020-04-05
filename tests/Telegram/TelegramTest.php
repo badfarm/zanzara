@@ -63,6 +63,10 @@ class TelegramTest extends TestCase
             },
             function (ErrorResponse $response) {
                 $this->assertSame('Bad Request: chat not found', $response->getDescription());
+                $this->assertSame(
+                    '{"error_code":400,"description":"Bad Request: chat not found"}',
+                    $response->__toString()
+                );
             }
         );
 

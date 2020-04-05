@@ -7,7 +7,7 @@ namespace Zanzara\Telegram\Type\Response;
 /**
  *
  */
-class ErrorResponse
+class ErrorResponse implements \JsonSerializable
 {
 
     /**
@@ -50,6 +50,22 @@ class ErrorResponse
     public function setDescription(?string $description): void
     {
         $this->description = $description;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'error_code' => $this->errorCode,
+            'description' => $this->description
+        ];
+    }
+
+    public function __toString()
+    {
+        return json_encode($this);
     }
 
 }
