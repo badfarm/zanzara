@@ -3,6 +3,7 @@
 use Symfony\Component\Dotenv\Dotenv;
 use Zanzara\Config;
 use Zanzara\Context;
+use Zanzara\Telegram\Type\Message;
 use Zanzara\Zanzara;
 
 require "../../vendor/autoload.php";
@@ -18,16 +19,22 @@ $key = $_ENV['BOT_KEY'];
 
 $bot->onCommand("start", function (Context $ctx) {
     echo "I'm processing the /start command \n";
-    $ctx->reply("Ciao condottiero");
-
-});
 
 
-$bot->onCommand("reply", function (Context $ctx) {
-    echo "I'm processing the /reply command \n";
+    $ctx->reply("Ciao condottiero")->then(function (Message $response) use ($ctx) {
+        $message_id = $response->getMessageId();
+        $chat_id = $ctx->getUpdate()->getEffectiveChat()->getId();
+        $ctx->editMessageText("ciao condottiero changed", compact("chat_id", "message_id"));
+        $ctx->deleteMessage($chat_id, $message_id)->then(function (\Zanzara\Telegram\Type\Response $response) {
+            var_dump($response);
+        });
 
-    $message = $ctx->getUpdate()->getMessage()->getText();
-    $ctx->reply($message);
+        $ctx->reply("ciao")->then(function (Message $message) {
+            var_dump($message);
+        });
+
+    });
+
 
 });
 

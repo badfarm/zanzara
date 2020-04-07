@@ -5,6 +5,7 @@ namespace Zanzara;
 use Clue\React\Buzz\Message\ResponseException;
 use Psr\Http\Message\ResponseInterface;
 use React\Promise\PromiseInterface;
+use Zanzara\Telegram\Type\Response;
 use Zanzara\Telegram\Type\Response\ErrorResponse;
 
 /**
@@ -56,7 +57,12 @@ class ZanzaraPromise implements PromiseInterface
             function (ResponseInterface $response) use ($onFulfilled) {
                 $json = (string)$response->getBody();
                 $object = json_decode($json);
+
+                if ($object->result === true) {
+                    $onFulfilled(new Response());
+                }
                 $onFulfilled($this->zanzaraMapper->mapObject($object->result, $this->class));
+
             },
             function (ResponseException $exception) use ($onRejected) {
                 $json = (string)$exception->getResponse()->getBody();

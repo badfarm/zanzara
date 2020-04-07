@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
+use phpDocumentor\Reflection\Types\Integer;
 use React\Promise\PromiseInterface;
 use Zanzara\Telegram\Type\Message;
+use Zanzara\Telegram\Type\Response;
 use Zanzara\Telegram\Type\Update;
 
 /**
@@ -82,6 +84,26 @@ trait TelegramTrait
         return $this->sendMessage($this->getUpdate()->getEffectiveChat()->getId(), $message);
     }
 
+
+    /**
+     * Use this method to specify a url and receive incoming updates via an outgoing webhook. Whenever there is an update
+     * for the bot, we will send an HTTPS POST request to the specified url, containing a JSON-serialized Update. In case
+     * of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#setwebhook
+     *
+     * @param string $url
+     * @param array|null $opt
+     * @return PromiseInterface
+     */
+    public function setWebhook(string $url, ?array $opt = []): PromiseInterface
+    {
+        $required = compact("url");
+        $params = array_merge($required, $opt);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setWebhook", $params), Response::class);
+    }
+
+
     /**
      * Use this method to forward messages of any kind. On success, the sent Message is returned.
      *
@@ -97,7 +119,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "from_chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("forwardMessage", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("forwardMessage", $params), Message::class);
     }
 
     /**
@@ -114,13 +136,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "photo");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendPhoto", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendPhoto", $params), Message::class);
     }
 
     /**
-     * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must
-     * in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50
-     * in size, this limit may be changed in the future.
+     * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio
+     * must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files
+     * of up to 50 MB in size, this limit may be changed in the future.
      *
      * More on https://core.telegram.org/bots/api#sendaudio
      *
@@ -133,12 +155,12 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "audio");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendAudio", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendAudio", $params), Message::class);
     }
 
     /**
      * Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any
-     * of up to 50 MB in size, this limit may be changed in the future.
+     * type of up to 50 MB in size, this limit may be changed in the future.
      *
      * More on https://core.telegram.org/bots/api#senddocument
      *
@@ -151,13 +173,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "document");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendDocument", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendDocument", $params), Message::class);
     }
 
     /**
      * Use this method to send video files, Telegram clients support mp4 videos (other formats may be sent as Document). On
-     * the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in
-     * future.
+     * success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may
+     * be changed in the future.
      *
      * More on https://core.telegram.org/bots/api#sendvideo
      *
@@ -170,12 +192,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "video");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVideo", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVideo", $params), Message::class);
     }
 
     /**
-     * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is
-     * Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
+     * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message
+     * is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the
+     * future.
      *
      * More on https://core.telegram.org/bots/api#sendanimation
      *
@@ -188,14 +211,14 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "animation");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendAnimation", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendAnimation", $params), Message::class);
     }
 
     /**
-     * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For
-     * to work, your audio must be in an .OGG file encoded with OPUS (other formats may be sent as Audio or Document). On
-     * the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed
-     * the future.
+     * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message.
+     * For this to work, your audio must be in an .OGG file encoded with OPUS (other formats may be sent as Audio or
+     * Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in
+     * size, this limit may be changed in the future.
      *
      * More on https://core.telegram.org/bots/api#sendvoice
      *
@@ -208,12 +231,12 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "voice");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVoice", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVoice", $params), Message::class);
     }
 
     /**
      * As of v.4.0, Telegram clients support rounded square mp4 videos of up to 1 minute long. Use this method to send video
-     * On success, the sent Message is returned.
+     * messages. On success, the sent Message is returned.
      *
      * More on https://core.telegram.org/bots/api#sendvideonote
      *
@@ -226,7 +249,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "video_note");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVideoNote", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVideoNote", $params), Message::class);
     }
 
     /**
@@ -243,7 +266,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "media");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendMediaGroup", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendMediaGroup", $params), Message::class);
     }
 
     /**
@@ -261,13 +284,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "latitude", "longitude");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendLocation", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendLocation", $params), Message::class);
     }
 
     /**
      * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is
-     * disabled by a call to stopMessageLiveLocation. On success, if the edited message was sent by the bot, the edited
-     * is returned, otherwise True is returned.
+     * explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message was sent by the bot,
+     * the edited Message is returned, otherwise True is returned.
      *
      * More on https://core.telegram.org/bots/api#editmessagelivelocation
      *
@@ -280,21 +303,21 @@ trait TelegramTrait
     {
         $required = compact("latitude", "longitude");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageLiveLocation", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageLiveLocation", $params), Message::class);
     }
 
     /**
      * Use this method to stop updating a live location message before live_period expires. On success, if the message was
-     * by the bot, the sent Message is returned, otherwise True is returned.
+     * sent by the bot, the sent Message is returned, otherwise True is returned.
      *
      * More on https://core.telegram.org/bots/api#stopmessagelivelocation
      *
-     * @param array $opt
+     * @param array|null $opt
      * @return PromiseInterface
      */
-    public function stopMessageLiveLocation(array $opt = []): PromiseInterface
+    public function stopMessageLiveLocation(?array $opt = []): PromiseInterface
     {
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("stopMessageLiveLocation", $opt), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("stopMessageLiveLocation", $opt), Message::class);
     }
 
     /**
@@ -314,7 +337,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "latitude", "longitude", "title", "address");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVenue", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVenue", $params), Message::class);
     }
 
     /**
@@ -332,7 +355,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "phone_number", "first_name");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendContact", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendContact", $params), Message::class);
     }
 
     /**
@@ -350,12 +373,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "question", "options");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendPoll", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendPoll", $params), Message::class);
     }
 
     /**
      * Use this method to send a dice, which will have a random value from 1 to 6. On success, the sent Message is returned.
-     * we're aware of the “proper” singular of die. But it's awkward, and we decided to help it change. One dice at a time!)
+     * (Yes, we're aware of the "proper" singular of die. But it's awkward, and we decided to help it change. One dice at
+     * a time!)
      *
      * More on https://core.telegram.org/bots/api#senddice
      *
@@ -367,12 +391,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendDice", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendDice", $params), Message::class);
     }
 
     /**
      * Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5
-     * or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
+     * seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on
+     * success.
      *
      * More on https://core.telegram.org/bots/api#sendchataction
      *
@@ -385,7 +410,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "action");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendChatAction", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendChatAction", $params), Response::class);
     }
 
     /**
@@ -401,14 +426,15 @@ trait TelegramTrait
     {
         $required = compact("user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getUserProfilePhotos", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getUserProfilePhotos", $params), UserProfilePhotos::class);
     }
 
     /**
-     * Use this method to get basic info about a file and prepare it for downloading. For the moment, bots can download files
-     * up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link
-     * where &lt;file_path&gt; is taken from the response. It is guaranteed that the link will be valid for at least 1 hour.
-     * the link expires, a new one can be requested by calling getFile again.
+     * Use this method to get basic info about a file and prepare it for downloading. For the moment, bots can download
+     * files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link
+     * https://api.telegram.org/file/bot&lt;token&gt;/&lt;file_path&gt;, where &lt;file_path&gt; is taken from the
+     * response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can
+     * be requested by calling getFile again.
      *
      * More on https://core.telegram.org/bots/api#getfile
      *
@@ -420,13 +446,14 @@ trait TelegramTrait
     {
         $required = compact("file_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getFile", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getFile", $params), File::class);
     }
 
     /**
      * Use this method to kick a user from a group, a supergroup or a channel. In the case of supergroups and channels, the
-     * will not be able to return to the group on their own using invite links, etc., unless unbanned first. The bot must be
-     * administrator in the chat for this to work and must have the appropriate admin rights. Returns True on success.
+     * user will not be able to return to the group on their own using invite links, etc., unless unbanned first. The bot
+     * must be an administrator in the chat for this to work and must have the appropriate admin rights. Returns True on
+     * success.
      *
      * More on https://core.telegram.org/bots/api#kickchatmember
      *
@@ -439,13 +466,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("kickChatMember", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("kickChatMember", $params), Response::class);
     }
 
     /**
-     * Use this method to unban a previously kicked user in a supergroup or channel. The user will not return to the group or
-     * automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. Returns True
-     * success.
+     * Use this method to unban a previously kicked user in a supergroup or channel. The user will not return to the group
+     * or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to
+     * work. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#unbanchatmember
      *
@@ -458,13 +485,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("unbanChatMember", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("unbanChatMember", $params), Response::class);
     }
 
     /**
-     * Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work
-     * must have the appropriate admin rights. Pass True for all permissions to lift restrictions from a user. Returns True on
-     *
+     * Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to
+     * work and must have the appropriate admin rights. Pass True for all permissions to lift restrictions from a user.
+     * Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#restrictchatmember
      *
@@ -478,13 +505,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id", "permissions");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("restrictChatMember", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("restrictChatMember", $params), Response::class);
     }
 
     /**
-     * Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the chat
-     * this to work and must have the appropriate admin rights. Pass False for all boolean parameters to demote a user.
-     * True on success.
+     * Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the
+     * chat for this to work and must have the appropriate admin rights. Pass False for all boolean parameters to demote
+     * a user. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#promotechatmember
      *
@@ -497,7 +524,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("promoteChatMember", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("promoteChatMember", $params), Response::class);
     }
 
     /**
@@ -515,12 +542,12 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id", "custom_title");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatAdministratorCustomTitle", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatAdministratorCustomTitle", $params), Response::class);
     }
 
     /**
      * Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a
-     * for this to work and must have the can_restrict_members admin rights. Returns True on success.
+     * supergroup for this to work and must have the can_restrict_members admin rights. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#setchatpermissions
      *
@@ -533,13 +560,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "permissions");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatPermissions", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatPermissions", $params), Response::class);
     }
 
     /**
-     * Use this method to generate a new invite link for a chat; any previously generated link is revoked. The bot must be an
-     * in the chat for this to work and must have the appropriate admin rights. Returns the new invite link as String on
-     *
+     * Use this method to generate a new invite link for a chat; any previously generated link is revoked. The bot must be
+     * an administrator in the chat for this to work and must have the appropriate admin rights. Returns the new invite
+     * link as String on success.
      *
      * More on https://core.telegram.org/bots/api#exportchatinvitelink
      *
@@ -551,12 +578,12 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("exportChatInviteLink", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("exportChatInviteLink", $params), String::class);
     }
 
     /**
-     * Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an
-     * in the chat for this to work and must have the appropriate admin rights. Returns True on success.
+     * Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be
+     * an administrator in the chat for this to work and must have the appropriate admin rights. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#setchatphoto
      *
@@ -569,12 +596,12 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "photo");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatPhoto", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatPhoto", $params), Response::class);
     }
 
     /**
-     * Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in
-     * chat for this to work and must have the appropriate admin rights. Returns True on success.
+     * Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator
+     * in the chat for this to work and must have the appropriate admin rights. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#deletechatphoto
      *
@@ -586,12 +613,12 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteChatPhoto", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteChatPhoto", $params), Response::class);
     }
 
     /**
      * Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an
-     * in the chat for this to work and must have the appropriate admin rights. Returns True on success.
+     * administrator in the chat for this to work and must have the appropriate admin rights. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#setchattitle
      *
@@ -604,12 +631,12 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "title");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatTitle", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatTitle", $params), Response::class);
     }
 
     /**
      * Use this method to change the description of a group, a supergroup or a channel. The bot must be an administrator in
-     * chat for this to work and must have the appropriate admin rights. Returns True on success.
+     * the chat for this to work and must have the appropriate admin rights. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#setchatdescription
      *
@@ -621,13 +648,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatDescription", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatDescription", $params), Response::class);
     }
 
     /**
      * Use this method to pin a message in a group, a supergroup, or a channel. The bot must be an administrator in the chat
-     * this to work and must have the ‘can_pin_messages’ admin right in the supergroup or ‘can_edit_messages’ admin right in
-     * channel. Returns True on success.
+     * for this to work and must have the 'can_pin_messages' admin right in the supergroup or 'can_edit_messages' admin
+     * right in the channel. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#pinchatmessage
      *
@@ -640,13 +667,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("pinChatMessage", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("pinChatMessage", $params), Response::class);
     }
 
     /**
-     * Use this method to unpin a message in a group, a supergroup, or a channel. The bot must be an administrator in the chat
-     * this to work and must have the ‘can_pin_messages’ admin right in the supergroup or ‘can_edit_messages’ admin right in
-     * channel. Returns True on success.
+     * Use this method to unpin a message in a group, a supergroup, or a channel. The bot must be an administrator in the
+     * chat for this to work and must have the 'can_pin_messages' admin right in the supergroup or 'can_edit_messages'
+     * admin right in the channel. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#unpinchatmessage
      *
@@ -658,7 +685,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("unpinChatMessage", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("unpinChatMessage", $params), Response::class);
     }
 
     /**
@@ -674,12 +701,12 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("leaveChat", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("leaveChat", $params), Response::class);
     }
 
     /**
      * Use this method to get up to date information about the chat (current name of the user for one-on-one conversations,
-     * username of a user, group or channel, etc.). Returns a Chat object on success.
+     * current username of a user, group or channel, etc.). Returns a Chat object on success.
      *
      * More on https://core.telegram.org/bots/api#getchat
      *
@@ -691,13 +718,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChat", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChat", $params), Chat::class);
     }
 
     /**
      * Use this method to get a list of administrators in a chat. On success, returns an Array of ChatMember objects that
-     * information about all chat administrators except other bots. If the chat is a group or a supergroup and no
-     * were appointed, only the creator will be returned.
+     * contains information about all chat administrators except other bots. If the chat is a group or a supergroup and
+     * no administrators were appointed, only the creator will be returned.
      *
      * More on https://core.telegram.org/bots/api#getchatadministrators
      *
@@ -709,7 +736,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChatAdministrators", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChatAdministrators", $params), ChatMember::class);
     }
 
     /**
@@ -725,7 +752,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChatMembersCount", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChatMembersCount", $params), Integer::class);
     }
 
     /**
@@ -742,13 +769,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChatMember", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChatMember", $params), ChatMember::class);
     }
 
     /**
-     * Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this
-     * work and must have the appropriate admin rights. Use the field can_set_sticker_set optionally returned in getChat
-     * to check if the bot can use this method. Returns True on success.
+     * Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for
+     * this to work and must have the appropriate admin rights. Use the field can_set_sticker_set optionally returned in
+     * getChat requests to check if the bot can use this method. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#setchatstickerset
      *
@@ -761,13 +788,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "sticker_set_name");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatStickerSet", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatStickerSet", $params), Response::class);
     }
 
     /**
-     * Use this method to delete a group sticker set from a supergroup. The bot must be an administrator in the chat for this
-     * work and must have the appropriate admin rights. Use the field can_set_sticker_set optionally returned in getChat
-     * to check if the bot can use this method. Returns True on success.
+     * Use this method to delete a group sticker set from a supergroup. The bot must be an administrator in the chat for
+     * this to work and must have the appropriate admin rights. Use the field can_set_sticker_set optionally returned in
+     * getChat requests to check if the bot can use this method. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#deletechatstickerset
      *
@@ -779,12 +806,12 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteChatStickerSet", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteChatStickerSet", $params), Response::class);
     }
 
     /**
      * Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the
-     * as a notification at the top of the chat screen or as an alert. On success, True is returned.
+     * user as a notification at the top of the chat screen or as an alert. On success, True is returned.
      *
      * More on https://core.telegram.org/bots/api#answercallbackquery
      *
@@ -796,7 +823,7 @@ trait TelegramTrait
     {
         $required = compact("callback_query_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerCallbackQuery", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerCallbackQuery", $params), Response::class);
     }
 
     /**
@@ -812,12 +839,12 @@ trait TelegramTrait
     {
         $required = compact("commands");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setMyCommands", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setMyCommands", $params), Response::class);
     }
 
     /**
-     * Use this method to edit text and game messages. On success, if edited message is sent by the bot, the edited Message is
-     * otherwise True is returned.
+     * Use this method to edit text and game messages. On success, if edited message is sent by the bot, the edited Message
+     * is returned, otherwise True is returned.
      *
      * More on https://core.telegram.org/bots/api#editmessagetext
      *
@@ -829,28 +856,31 @@ trait TelegramTrait
     {
         $required = compact("text");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageText", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageText", $params), Message::class);
     }
 
     /**
      * Use this method to edit captions of messages. On success, if edited message is sent by the bot, the edited Message is
-     * otherwise True is returned.
+     * returned, otherwise True is returned.
      *
      * More on https://core.telegram.org/bots/api#editmessagecaption
      *
-     * @param array $opt
+     * @param array|null $opt
      * @return PromiseInterface
      */
-    public function editMessageCaption(array $opt = []): PromiseInterface
+    public function editMessageCaption(?array $opt = []): PromiseInterface
     {
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageCaption", $opt), MessageResponse::class);
+        $required = compact();
+        $params = array_merge($required, $opt);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageCaption", $params), Message::class);
     }
 
     /**
      * Use this method to edit animation, audio, document, photo, or video messages. If a message is a part of a message
-     * then it can be edited only to a photo or a video. Otherwise, message type can be changed arbitrarily. When inline
-     * is edited, new file can't be uploaded. Use previously uploaded file via its file_id or specify a URL. On success, if
-     * edited message was sent by the bot, the edited Message is returned, otherwise True is returned.
+     * album, then it can be edited only to a photo or a video. Otherwise, message type can be changed arbitrarily. When
+     * inline message is edited, new file can't be uploaded. Use previously uploaded file via its file_id or specify a
+     * URL. On success, if the edited message was sent by the bot, the edited Message is returned, otherwise True is
+     * returned.
      *
      * More on https://core.telegram.org/bots/api#editmessagemedia
      *
@@ -862,26 +892,28 @@ trait TelegramTrait
     {
         $required = compact("media");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageMedia", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageMedia", $params), Message::class);
     }
 
     /**
-     * Use this method to edit only the reply markup of messages. On success, if edited message is sent by the bot, the edited
-     * is returned, otherwise True is returned.
+     * Use this method to edit only the reply markup of messages. On success, if edited message is sent by the bot, the
+     * edited Message is returned, otherwise True is returned.
      *
      * More on https://core.telegram.org/bots/api#editmessagereplymarkup
      *
-     * @param array $opt
+     * @param array|null $opt
      * @return PromiseInterface
      */
-    public function editMessageReplyMarkup(array $opt = []): PromiseInterface
+    public function editMessageReplyMarkup(?array $opt = []): PromiseInterface
     {
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageReplyMarkup", $opt), MessageResponse::class);
+        $required = compact();
+        $params = array_merge($required, $opt);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageReplyMarkup", $params), Message::class);
     }
 
     /**
      * Use this method to stop a poll which was sent by the bot. On success, the stopped Poll with the final results is
-     *
+     * returned.
      *
      * More on https://core.telegram.org/bots/api#stoppoll
      *
@@ -894,16 +926,17 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("stopPoll", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("stopPoll", $params), Poll::class);
     }
 
     /**
-     * Use this method to delete a message, including service messages, with the following limitations:- A message can only be
-     * if it was sent less than 48 hours ago.- A dice message in a private chat can only be deleted if it was sent more than
-     * hours ago.- Bots can delete outgoing messages in private chats, groups, and supergroups.- Bots can delete incoming
-     * in private chats.- Bots granted can_post_messages permissions can delete outgoing messages in channels.- If the bot is
-     * administrator of a group, it can delete any message there.- If the bot has can_delete_messages permission in a
-     * or a channel, it can delete any message there.Returns True on success.
+     * Use this method to delete a message, including service messages, with the following limitations:- A message can only
+     * be deleted if it was sent less than 48 hours ago.- A dice message in a private chat can only be deleted if it was
+     * sent more than 24 hours ago.- Bots can delete outgoing messages in private chats, groups, and supergroups.- Bots
+     * can delete incoming messages in private chats.- Bots granted can_post_messages permissions can delete outgoing
+     * messages in channels.- If the bot is an administrator of a group, it can delete any message there.- If the bot has
+     * can_delete_messages permission in a supergroup or a channel, it can delete any message there.Returns True on
+     * success.
      *
      * More on https://core.telegram.org/bots/api#deletemessage
      *
@@ -916,7 +949,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteMessage", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteMessage", $params), Response::class);
     }
 
     /**
@@ -933,7 +966,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "sticker");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendSticker", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendSticker", $params), Message::class);
     }
 
     /**
@@ -949,12 +982,12 @@ trait TelegramTrait
     {
         $required = compact("name");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getStickerSet", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getStickerSet", $params), StickerSet::class);
     }
 
     /**
      * Use this method to upload a .PNG file with a sticker for later use in createNewStickerSet and addStickerToSet methods
-     * be used multiple times). Returns the uploaded File on success.
+     * (can be used multiple times). Returns the uploaded File on success.
      *
      * More on https://core.telegram.org/bots/api#uploadstickerfile
      *
@@ -967,12 +1000,12 @@ trait TelegramTrait
     {
         $required = compact("user_id", "png_sticker");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("uploadStickerFile", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("uploadStickerFile", $params), File::class);
     }
 
     /**
-     * Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus created.
-     * must use exactly one of the fields png_sticker or tgs_sticker. Returns True on success.
+     * Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus
+     * created. You must use exactly one of the fields png_sticker or tgs_sticker. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#createnewstickerset
      *
@@ -987,13 +1020,13 @@ trait TelegramTrait
     {
         $required = compact("user_id", "name", "title", "emojis");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("createNewStickerSet", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("createNewStickerSet", $params), Response::class);
     }
 
     /**
-     * Use this method to add a new sticker to a set created by the bot. You must use exactly one of the fields png_sticker or
-     * Animated stickers can be added to animated sticker sets and only to them. Animated sticker sets can have up to 50
-     * Static sticker sets can have up to 120 stickers. Returns True on success.
+     * Use this method to add a new sticker to a set created by the bot. You must use exactly one of the fields png_sticker
+     * or tgs_sticker. Animated stickers can be added to animated sticker sets and only to them. Animated sticker sets
+     * can have up to 50 stickers. Static sticker sets can have up to 120 stickers. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#addstickertoset
      *
@@ -1008,7 +1041,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "name", "png_sticker", "emojis");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("addStickerToSet", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("addStickerToSet", $params), Response::class);
     }
 
     /**
@@ -1025,7 +1058,7 @@ trait TelegramTrait
     {
         $required = compact("sticker", "position");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setStickerPositionInSet", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setStickerPositionInSet", $params), Response::class);
     }
 
     /**
@@ -1041,12 +1074,12 @@ trait TelegramTrait
     {
         $required = compact("sticker");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteStickerFromSet", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteStickerFromSet", $params), Response::class);
     }
 
     /**
      * Use this method to set the thumbnail of a sticker set. Animated thumbnails can be set for animated sticker sets only.
-     * True on success.
+     * Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#setstickersetthumb
      *
@@ -1059,12 +1092,12 @@ trait TelegramTrait
     {
         $required = compact("name", "user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setStickerSetThumb", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setStickerSetThumb", $params), Response::class);
     }
 
     /**
-     * Use this method to send answers to an inline query. On success, True is returned.No more than 50 results per query are
-     *
+     * Use this method to send answers to an inline query. On success, True is returned.No more than 50 results per query
+     * are allowed.
      *
      * More on https://core.telegram.org/bots/api#answerinlinequery
      *
@@ -1077,7 +1110,7 @@ trait TelegramTrait
     {
         $required = compact("inline_query_id", "results");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerInlineQuery", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerInlineQuery", $params), Response::class);
     }
 
     /**
@@ -1100,13 +1133,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "title", "description", "payload", "provider_token", "start_parameter", "currency", "prices");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendInvoice", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendInvoice", $params), Message::class);
     }
 
     /**
-     * If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will send
-     * Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is
-     *
+     * If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will
+     * send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success,
+     * True is returned.
      *
      * More on https://core.telegram.org/bots/api#answershippingquery
      *
@@ -1119,13 +1152,14 @@ trait TelegramTrait
     {
         $required = compact("shipping_query_id", "ok");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerShippingQuery", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerShippingQuery", $params), Response::class);
     }
 
     /**
-     * Once the user has confirmed their payment and shipping details, the Bot API sends the final confirmation in the form of
-     * Update with the field pre_checkout_query. Use this method to respond to such pre-checkout queries. On success, True is
-     * Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query was sent.
+     * Once the user has confirmed their payment and shipping details, the Bot API sends the final confirmation in the form
+     * of an Update with the field pre_checkout_query. Use this method to respond to such pre-checkout queries. On
+     * success, True is returned. Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query
+     * was sent.
      *
      * More on https://core.telegram.org/bots/api#answerprecheckoutquery
      *
@@ -1138,13 +1172,13 @@ trait TelegramTrait
     {
         $required = compact("pre_checkout_query_id", "ok");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerPreCheckoutQuery", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerPreCheckoutQuery", $params), Response::class);
     }
 
     /**
-     * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to
-     * their Passport to you until the errors are fixed (the contents of the field for which you returned the error must
-     * Returns True on success.
+     * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able
+     * to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned
+     * the error must change). Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#setpassportdataerrors
      *
@@ -1157,7 +1191,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "errors");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setPassportDataErrors", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setPassportDataErrors", $params), Response::class);
     }
 
     /**
@@ -1174,13 +1208,13 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "game_short_name");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendGame", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendGame", $params), Message::class);
     }
 
     /**
      * Use this method to set the score of the specified user in a game. On success, if the message was sent by the bot,
-     * the edited Message, otherwise returns True. Returns an error, if the new score is not greater than the user's current
-     * in the chat and force is False.
+     * returns the edited Message, otherwise returns True. Returns an error, if the new score is not greater than the
+     * user's current score in the chat and force is False.
      *
      * More on https://core.telegram.org/bots/api#setgamescore
      *
@@ -1193,12 +1227,12 @@ trait TelegramTrait
     {
         $required = compact("user_id", "score");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setGameScore", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setGameScore", $params), Message::class);
     }
 
     /**
      * Use this method to get data for high score tables. Will return the score of the specified user and several of his
-     * in a game. On success, returns an Array of GameHighScore objects.
+     * neighbors in a game. On success, returns an Array of GameHighScore objects.
      *
      * More on https://core.telegram.org/bots/api#getgamehighscores
      *
@@ -1210,7 +1244,7 @@ trait TelegramTrait
     {
         $required = compact("user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getGameHighScores", $params), MessageResponse::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getGameHighScores", $params), GameHighScore::class);
     }
 
 

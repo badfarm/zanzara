@@ -22,7 +22,7 @@ use Zanzara\Telegram\Type\Shipping\SuccessfulPayment;
 /**
  *
  */
-class Message
+class Message extends Response
 {
 
     /**
