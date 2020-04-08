@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Zanzara\Telegram\Type;
+namespace Zanzara\Telegram\Type\Keyboard;
+
+use Zanzara\Telegram\Type\CallbackGame;
+use Zanzara\Telegram\Type\Miscellaneous\LoginUrl;
 
 /**
  * This object represents one button of an inline keyboard. You must use exactly one of the optional fields.

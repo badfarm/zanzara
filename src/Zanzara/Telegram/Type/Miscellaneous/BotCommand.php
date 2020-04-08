@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Miscellaneous;
 
-use Zanzara\Telegram\Type\SuccessfulResponse;
+use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 
 /**
  * This object represents a bot command.

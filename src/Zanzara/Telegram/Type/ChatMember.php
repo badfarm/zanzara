@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
 
+use Zanzara\Telegram\Type\Response\SuccessfulResponse;
+
 /**
  * This object contains information about one member of a chat.
  *

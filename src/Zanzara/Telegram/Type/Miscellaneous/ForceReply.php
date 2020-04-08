@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Zanzara\Telegram\Type;
+namespace Zanzara\Telegram\Type\Miscellaneous;
+
+use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 
 /**
  * Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the

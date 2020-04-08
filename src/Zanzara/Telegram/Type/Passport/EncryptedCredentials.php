@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Passport;
 
-use Zanzara\Telegram\Type\SuccessfulResponse;
+use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 
 /**
  * Contains data required for decrypting and authenticating EncryptedPassportElement. See the Telegram Passport

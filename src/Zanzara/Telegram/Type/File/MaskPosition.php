@@ -5,43 +5,55 @@ declare(strict_types=1);
 namespace Zanzara\Telegram\Type\File;
 
 /**
+ * This object describes the position on faces where a mask should be placed by default.
  *
+ * More on https://core.telegram.org/bots/api#maskposition
  */
 class MaskPosition
 {
 
     /**
-     * @var int
+     * The part of the face relative to which the mask should be placed. One of "forehead", "eyes", "mouth", or "chin".
+     *
+     * @var string
      */
     private $point;
 
     /**
-     * @var float
+     * Shift by X-axis measured in widths of the mask scaled to the face size, from left to right. For example, choosing
+     * -1.0 will place mask just to the left of the default mask position.
+     *
+     * @var float number
      */
-    private $xShift;
+    private $x_shift;
 
     /**
-     * @var float
+     * Shift by Y-axis measured in heights of the mask scaled to the face size, from top to bottom. For example, 1.0 will
+     * place the mask just below the default mask position.
+     *
+     * @var float number
      */
-    private $yShift;
+    private $y_shift;
 
     /**
-     * @var float
+     * Mask scaling coefficient. For example, 2.0 means double size.
+     *
+     * @var float number
      */
     private $scale;
 
     /**
-     * @return int
+     * @return string
      */
-    public function getPoint(): int
+    public function getPoint(): string
     {
         return $this->point;
     }
 
     /**
-     * @param int $point
+     * @param string $point
      */
-    public function setPoint(int $point): void
+    public function setPoint(string $point): void
     {
         $this->point = $point;
     }
@@ -51,15 +63,15 @@ class MaskPosition
      */
     public function getXShift(): float
     {
-        return $this->xShift;
+        return $this->x_shift;
     }
 
     /**
-     * @param float $xShift
+     * @param float $x_shift
      */
-    public function setXShift(float $xShift): void
+    public function setXShift(float $x_shift): void
     {
-        $this->xShift = $xShift;
+        $this->x_shift = $x_shift;
     }
 
     /**
@@ -67,15 +79,15 @@ class MaskPosition
      */
     public function getYShift(): float
     {
-        return $this->yShift;
+        return $this->y_shift;
     }
 
     /**
-     * @param float $yShift
+     * @param float $y_shift
      */
-    public function setYShift(float $yShift): void
+    public function setYShift(float $y_shift): void
     {
-        $this->yShift = $yShift;
+        $this->y_shift = $y_shift;
     }
 
     /**

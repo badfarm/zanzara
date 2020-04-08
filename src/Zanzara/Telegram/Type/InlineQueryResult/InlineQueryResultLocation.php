@@ -33,14 +33,14 @@ class InlineQueryResultLocation extends InlineQueryResult
     /**
      * Location latitude in degrees
      *
-     * @var Float number
+     * @var float number
      */
     private $latitude;
 
     /**
      * Location longitude in degrees
      *
-     * @var Float number
+     * @var float number
      */
     private $longitude;
 
@@ -126,33 +126,33 @@ class InlineQueryResultLocation extends InlineQueryResult
     }
 
     /**
-     * @return Float
+     * @return float
      */
-    public function getLatitude(): Float
+    public function getLatitude(): float
     {
         return $this->latitude;
     }
 
     /**
-     * @param Float $latitude
+     * @param float $latitude
      */
-    public function setLatitude(Float $latitude): void
+    public function setLatitude(float $latitude): void
     {
         $this->latitude = $latitude;
     }
 
     /**
-     * @return Float
+     * @return float
      */
-    public function getLongitude(): Float
+    public function getLongitude(): float
     {
         return $this->longitude;
     }
 
     /**
-     * @param Float $longitude
+     * @param float $longitude
      */
-    public function setLongitude(Float $longitude): void
+    public function setLongitude(float $longitude): void
     {
         $this->longitude = $longitude;
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zanzara\Telegram\Type;
+namespace Zanzara\Telegram\Type\Keyboard;
 
 /**
  * This object represents an inline keyboard that appears right next to the message it belongs to.
