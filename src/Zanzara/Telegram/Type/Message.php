@@ -16,6 +16,7 @@ use Zanzara\Telegram\Type\File\Video;
 use Zanzara\Telegram\Type\File\VideoNote;
 use Zanzara\Telegram\Type\File\Voice;
 use Zanzara\Telegram\Type\Game\Game;
+use Zanzara\Telegram\Type\Keyboard\InlineKeyboardMarkup;
 use Zanzara\Telegram\Type\Passport\PassportData;
 use Zanzara\Telegram\Type\Poll\Poll;
 use Zanzara\Telegram\Type\Response\SuccessfulResponse;
