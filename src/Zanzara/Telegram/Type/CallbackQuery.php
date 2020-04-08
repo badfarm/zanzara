@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
@@ -178,6 +179,5 @@ class CallbackQuery extends SuccessfulResponse
     {
         $this->game_short_name = $game_short_name;
     }
-
 
 }

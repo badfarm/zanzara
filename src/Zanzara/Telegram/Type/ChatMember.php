@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
@@ -452,6 +453,5 @@ class ChatMember extends SuccessfulResponse
     {
         $this->can_add_web_page_previews = $can_add_web_page_previews;
     }
-
 
 }

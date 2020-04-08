@@ -73,5 +73,4 @@ class TelegramTest extends TestCase
         $loop->run();
     }
 
-
 }

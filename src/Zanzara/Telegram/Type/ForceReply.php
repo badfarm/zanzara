@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
@@ -60,6 +61,5 @@ class ForceReply extends SuccessfulResponse
     {
         $this->selective = $selective;
     }
-
 
 }

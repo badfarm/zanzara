@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
@@ -196,6 +197,5 @@ class ChatPermissions extends SuccessfulResponse
     {
         $this->can_pin_messages = $can_pin_messages;
     }
-
 
 }

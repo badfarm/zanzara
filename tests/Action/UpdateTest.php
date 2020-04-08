@@ -33,5 +33,4 @@ class UpdateTest extends TestCase
         $bot->run();
     }
 
-
 }

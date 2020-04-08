@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\File;
-
 
 /**
  * This object represents a file ready to be downloaded. The file can be downloaded via the link

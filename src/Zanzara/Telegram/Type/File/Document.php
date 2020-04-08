@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\File;
-
 
 /**
  * This object represents a general file (as opposed to photos, voice messages and audio files).

@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\TypeInlineQueryResult;
-
 
 namespace Zanzara\Telegram\Type\InlineQueryResult;
 

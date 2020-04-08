@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Keyboard;
-
 
 /**
  * This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this

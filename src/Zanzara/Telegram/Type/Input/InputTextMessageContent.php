@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Input;
@@ -79,6 +80,5 @@ class InputTextMessageContent extends InputMessageContent
     {
         $this->disable_web_page_preview = $disable_web_page_preview;
     }
-
 
 }

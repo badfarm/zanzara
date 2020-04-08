@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Input;
@@ -34,6 +35,5 @@ class InputFile
     {
         $this->path = $path;
     }
-
 
 }

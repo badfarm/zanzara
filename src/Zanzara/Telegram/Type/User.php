@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
-
 
 /**
  * This object represents a Telegram user or bot.

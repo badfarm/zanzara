@@ -12,7 +12,6 @@ require "../../vendor/autoload.php";
 $dotenv = new Dotenv();
 $dotenv->load("../../.env");
 
-
 $config = new Config();
 $config->setUpdateMode(Config::POLLING_MODE);
 $bot = new Zanzara($_ENV['BOT_KEY'], $config);
@@ -20,7 +19,6 @@ $key = $_ENV['BOT_KEY'];
 
 $bot->onCommand("start", function (Context $ctx) {
     echo "I'm processing the /start command \n";
-
 
     $ctx->reply("Ciao condottiero")->then(function (Message $response) use ($ctx) {
         $message_id = $response->getMessageId();
@@ -40,9 +38,7 @@ $bot->onCommand("start", function (Context $ctx) {
 
     });
 
-
 });
-
 
 echo "The bot is listening ... \n";
 

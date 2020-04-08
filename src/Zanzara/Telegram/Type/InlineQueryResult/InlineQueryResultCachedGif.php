@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\InlineQueryResult;
@@ -200,6 +201,5 @@ class InlineQueryResultCachedGif extends InlineQueryResult
     {
         $this->input_message_content = $input_message_content;
     }
-
 
 }

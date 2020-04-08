@@ -1,7 +1,8 @@
 <?php
-declare(strict_types=1);
-namespace Zanzara\Telegram\Type\Shipping;
 
+declare(strict_types=1);
+
+namespace Zanzara\Telegram\Type\Shipping;
 
 /**
  * This object contains basic information about an invoice.
@@ -127,7 +128,5 @@ class Invoice
     {
         $this->total_amount = $total_amount;
     }
-
-
 
 }

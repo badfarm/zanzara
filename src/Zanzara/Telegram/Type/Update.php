@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Zanzara\Telegram\Type;
 
 use Zanzara\Telegram\Type\Passport\PassportData;
@@ -106,7 +108,6 @@ class Update extends SuccessfulResponse
      * @var PollAnswer|null
      */
     private $poll_answer;
-
 
     /**
      * @var string

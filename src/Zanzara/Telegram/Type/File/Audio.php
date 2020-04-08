@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\File;
-
 
 /**
  * This object represents an audio file to be treated as music by the Telegram clients.
@@ -196,6 +196,5 @@ class Audio
     {
         $this->thumb = $thumb;
     }
-
 
 }

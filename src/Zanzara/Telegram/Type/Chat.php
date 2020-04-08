@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
-
 
 /**
  * This object represents a chat.
@@ -337,6 +337,5 @@ class Chat
     {
         $this->can_set_sticker_set = $can_set_sticker_set;
     }
-
 
 }

@@ -52,7 +52,6 @@ abstract class ActionResolver extends ActionCollector
         return $actions;
     }
 
-
     /**
      * @param Action[] $actions
      * @param string $actionType

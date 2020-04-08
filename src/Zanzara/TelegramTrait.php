@@ -81,7 +81,6 @@ trait TelegramTrait
         return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendMessage", $params), Message::class);
     }
 
-
     /**
      * @param string $message
      * @return PromiseInterface
@@ -90,7 +89,6 @@ trait TelegramTrait
     {
         return $this->sendMessage($this->getUpdate()->getEffectiveChat()->getId(), $message);
     }
-
 
     /**
      * Use this method to specify a url and receive incoming updates via an outgoing webhook. Whenever there is an update
@@ -109,7 +107,6 @@ trait TelegramTrait
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setWebhook", $params), SuccessfulResponse::class);
     }
-
 
     /**
      * Use this method to forward messages of any kind. On success, the sent Message is returned.
@@ -1249,7 +1246,6 @@ trait TelegramTrait
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getGameHighScores", $params), GameHighScore::class);
     }
-
 
     /**
      * @param string $method

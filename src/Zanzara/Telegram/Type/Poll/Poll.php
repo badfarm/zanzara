@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Zanzara\Telegram\Type\Poll;
 
 use Zanzara\Telegram\Type\Response\SuccessfulResponse;
@@ -219,6 +221,5 @@ class Poll extends SuccessfulResponse
     {
         $this->correct_option_id = $correct_option_id;
     }
-
 
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Input;
@@ -78,6 +79,5 @@ class InputLocationMessageContent extends InputMessageContent
     {
         $this->live_period = $live_period;
     }
-
 
 }

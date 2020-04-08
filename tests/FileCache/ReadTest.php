@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Zanzara\Test\FileCache;
 
-
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Zanzara\Config;
 use Zanzara\Context;
 use Zanzara\Zanzara;
-
 
 /**
  * Read array in che filesystem cache written by WriteMiddleware
@@ -31,7 +29,6 @@ class ReadTest extends TestCase
             $array = $object->get();
 
             $this->assertEquals(array("Peter" => "35", "Ben" => "37", "Joe" => "43"), $array);
-
 
         })->middleware(new WriteMiddleware());
 

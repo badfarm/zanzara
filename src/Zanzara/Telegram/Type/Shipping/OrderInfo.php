@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Shipping;
-
 
 /**
  * This object represents information about an order.

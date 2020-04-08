@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Zanzara\Telegram\Type\Passport;
-
 
 abstract class PassportElementError
 {
@@ -26,17 +24,14 @@ abstract class PassportElementError
      */
     public abstract function setSource(string $source): void;
 
-
     /**
      * @return string
      */
     public abstract function getType(): string;
 
-
     /**
      * @param string $type
      */
     public abstract function setType(string $type): void;
-
 
 }

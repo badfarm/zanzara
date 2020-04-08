@@ -6,7 +6,8 @@ use Psr\Http\Message\ResponseInterface;
 use React\Promise\PromiseInterface;
 use Zanzara\ZanzaraMapper;
 
-class ZanzaraPromise implements PromiseInterface {
+class ZanzaraPromise implements PromiseInterface
+{
 
     /**
      * @var PromiseInterface

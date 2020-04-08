@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Miscellaneous;
@@ -58,6 +59,5 @@ class BotCommand extends SuccessfulResponse
     {
         $this->description = $description;
     }
-
 
 }
