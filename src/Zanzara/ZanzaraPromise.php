@@ -58,7 +58,7 @@ class ZanzaraPromise implements PromiseInterface
                 $json = (string)$response->getBody();
                 $object = json_decode($json);
 
-                if ($object->result === true) {
+                if ($object->result === true || is_string($object->result)) {
                     $onFulfilled(new SuccessfulResponse());
                 }
                 $onFulfilled($this->zanzaraMapper->mapObject($object->result, $this->class));

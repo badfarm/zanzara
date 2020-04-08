@@ -585,7 +585,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("exportChatInviteLink", $params), String::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("exportChatInviteLink", $params), SuccessfulResponse::class);
     }
 
     /**

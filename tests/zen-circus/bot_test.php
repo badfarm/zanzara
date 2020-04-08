@@ -34,6 +34,10 @@ $bot->onCommand("start", function (Context $ctx) {
             var_dump($message);
         });
 
+        $ctx->exportChatInviteLink($chat_id)->then(function (SuccessfulResponse $response) {
+            var_dump($response);
+        });
+
     });
 
 
