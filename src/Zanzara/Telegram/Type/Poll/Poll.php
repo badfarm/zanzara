@@ -1,59 +1,80 @@
 <?php
-
 declare(strict_types=1);
-
 namespace Zanzara\Telegram\Type\Poll;
 
+use Zanzara\Telegram\Type\Response\SuccessfulResponse;
+
 /**
+ * This object contains information about a poll.
  *
+ * More on https://core.telegram.org/bots/api#poll
  */
-class Poll
+class Poll extends SuccessfulResponse
 {
 
     /**
+     * Unique poll identifier
+     *
      * @var string
      */
     private $id;
 
     /**
+     * Poll question, 1-255 characters
+     *
      * @var string
      */
     private $question;
 
     /**
+     * List of poll options
+     *
      * @var PollOption[]
      */
-    private $options = [];
+    private $options;
 
     /**
+     * Total number of users that voted in the poll
+     *
      * @var int
      */
-    private $totalVoterCount;
+    private $total_voter_count;
 
     /**
+     * True, if the poll is closed
+     *
      * @var bool
      */
-    private $isClosed;
+    private $is_closed;
 
     /**
+     * True, if the poll is anonymous
+     *
      * @var bool
      */
-    private $isAnonymous;
+    private $is_anonymous;
 
     /**
+     * Poll type, currently can be "regular" or "quiz"
+     *
      * @var string
      */
     private $type;
 
     /**
+     * True, if the poll allows multiple answers
+     *
      * @var bool
      */
-    private $allowsMultipleAnswers;
+    private $allows_multiple_answers;
 
     /**
+     * Optional. 0-based identifier of the correct answer option. Available only for polls in the quiz mode, which are
+     * closed, or was sent (not forwarded) by the bot or to the private chat with the bot.
+     *
      * @var int|null
      */
-    private $correctOptionId;
+    private $correct_option_id;
 
     /**
      * @return string
@@ -108,15 +129,15 @@ class Poll
      */
     public function getTotalVoterCount(): int
     {
-        return $this->totalVoterCount;
+        return $this->total_voter_count;
     }
 
     /**
-     * @param int $totalVoterCount
+     * @param int $total_voter_count
      */
-    public function setTotalVoterCount(int $totalVoterCount): void
+    public function setTotalVoterCount(int $total_voter_count): void
     {
-        $this->totalVoterCount = $totalVoterCount;
+        $this->total_voter_count = $total_voter_count;
     }
 
     /**
@@ -124,15 +145,15 @@ class Poll
      */
     public function isClosed(): bool
     {
-        return $this->isClosed;
+        return $this->is_closed;
     }
 
     /**
-     * @param bool $isClosed
+     * @param bool $is_closed
      */
-    public function setIsClosed(bool $isClosed): void
+    public function setIsClosed(bool $is_closed): void
     {
-        $this->isClosed = $isClosed;
+        $this->is_closed = $is_closed;
     }
 
     /**
@@ -140,15 +161,15 @@ class Poll
      */
     public function isAnonymous(): bool
     {
-        return $this->isAnonymous;
+        return $this->is_anonymous;
     }
 
     /**
-     * @param bool $isAnonymous
+     * @param bool $is_anonymous
      */
-    public function setIsAnonymous(bool $isAnonymous): void
+    public function setIsAnonymous(bool $is_anonymous): void
     {
-        $this->isAnonymous = $isAnonymous;
+        $this->is_anonymous = $is_anonymous;
     }
 
     /**
@@ -172,15 +193,15 @@ class Poll
      */
     public function isAllowsMultipleAnswers(): bool
     {
-        return $this->allowsMultipleAnswers;
+        return $this->allows_multiple_answers;
     }
 
     /**
-     * @param bool $allowsMultipleAnswers
+     * @param bool $allows_multiple_answers
      */
-    public function setAllowsMultipleAnswers(bool $allowsMultipleAnswers): void
+    public function setAllowsMultipleAnswers(bool $allows_multiple_answers): void
     {
-        $this->allowsMultipleAnswers = $allowsMultipleAnswers;
+        $this->allows_multiple_answers = $allows_multiple_answers;
     }
 
     /**
@@ -188,15 +209,16 @@ class Poll
      */
     public function getCorrectOptionId(): ?int
     {
-        return $this->correctOptionId;
+        return $this->correct_option_id;
     }
 
     /**
-     * @param int|null $correctOptionId
+     * @param int|null $correct_option_id
      */
-    public function setCorrectOptionId(?int $correctOptionId): void
+    public function setCorrectOptionId(?int $correct_option_id): void
     {
-        $this->correctOptionId = $correctOptionId;
+        $this->correct_option_id = $correct_option_id;
     }
+
 
 }

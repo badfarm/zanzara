@@ -1,84 +1,118 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
 
+
 /**
+ * This object represents a chat.
  *
+ * More on https://core.telegram.org/bots/api#chat
  */
 class Chat
 {
 
     /**
+     * Unique identifier for this chat. This number may be greater than 32 bits and some programming languages may have
+     * difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or
+     * double-precision float type are safe for storing this identifier.
+     *
      * @var int
      */
     private $id;
 
     /**
+     * Type of chat, can be either "private", "group", "supergroup" or "channel"
+     *
      * @var string
      */
     private $type;
 
     /**
+     * Optional. Title, for supergroups, channels and group chats
+     *
      * @var string|null
      */
     private $title;
 
     /**
+     * Optional. Username, for private chats, supergroups and channels if available
+     *
      * @var string|null
      */
     private $username;
 
     /**
+     * Optional. First name of the other party in a private chat
+     *
      * @var string|null
      */
-    private $firstName;
+    private $first_name;
 
     /**
+     * Optional. Last name of the other party in a private chat
+     *
      * @var string|null
      */
-    private $lastName;
+    private $last_name;
 
     /**
+     * Optional. Chat photo. Returned only in getChat.
+     *
      * @var ChatPhoto|null
      */
     private $photo;
 
     /**
+     * Optional. Description, for groups, supergroups and channel chats. Returned only in getChat.
+     *
      * @var string|null
      */
     private $description;
 
     /**
+     * Optional. Chat invite link, for groups, supergroups and channel chats. Each administrator in a chat generates their
+     * own invite links, so the bot must first generate the link using exportChatInviteLink. Returned only in getChat.
+     *
      * @var string|null
      */
-    private $inviteLink;
+    private $invite_link;
 
     /**
+     * Optional. Pinned message, for groups, supergroups and channels. Returned only in getChat.
+     *
      * @var Message|null
      */
-    private $pinnedMessage;
+    private $pinned_message;
 
     /**
+     * Optional. Default chat member permissions, for groups and supergroups. Returned only in getChat.
+     *
      * @var ChatPermissions|null
      */
     private $permissions;
 
     /**
+     * Optional. For supergroups, the minimum allowed delay between consecutive messages sent by each unpriviledged user.
+     * Returned only in getChat.
+     *
      * @var int|null
      */
-    private $slowModeDelay;
+    private $slow_mode_delay;
 
     /**
+     * Optional. For supergroups, name of group sticker set. Returned only in getChat.
+     *
      * @var string|null
      */
-    private $stickerSetName;
+    private $sticker_set_name;
 
     /**
+     * Optional. True, if the bot can change the group sticker set. Returned only in getChat.
+     *
      * @var bool|null
      */
-    private $canSetStickerSet;
+    private $can_set_sticker_set;
 
     /**
      * @return int
@@ -149,15 +183,15 @@ class Chat
      */
     public function getFirstName(): ?string
     {
-        return $this->firstName;
+        return $this->first_name;
     }
 
     /**
-     * @param string|null $firstName
+     * @param string|null $first_name
      */
-    public function setFirstName(?string $firstName): void
+    public function setFirstName(?string $first_name): void
     {
-        $this->firstName = $firstName;
+        $this->first_name = $first_name;
     }
 
     /**
@@ -165,15 +199,15 @@ class Chat
      */
     public function getLastName(): ?string
     {
-        return $this->lastName;
+        return $this->last_name;
     }
 
     /**
-     * @param string|null $lastName
+     * @param string|null $last_name
      */
-    public function setLastName(?string $lastName): void
+    public function setLastName(?string $last_name): void
     {
-        $this->lastName = $lastName;
+        $this->last_name = $last_name;
     }
 
     /**
@@ -213,15 +247,15 @@ class Chat
      */
     public function getInviteLink(): ?string
     {
-        return $this->inviteLink;
+        return $this->invite_link;
     }
 
     /**
-     * @param string|null $inviteLink
+     * @param string|null $invite_link
      */
-    public function setInviteLink(?string $inviteLink): void
+    public function setInviteLink(?string $invite_link): void
     {
-        $this->inviteLink = $inviteLink;
+        $this->invite_link = $invite_link;
     }
 
     /**
@@ -229,15 +263,15 @@ class Chat
      */
     public function getPinnedMessage(): ?Message
     {
-        return $this->pinnedMessage;
+        return $this->pinned_message;
     }
 
     /**
-     * @param Message|null $pinnedMessage
+     * @param Message|null $pinned_message
      */
-    public function setPinnedMessage(?Message $pinnedMessage): void
+    public function setPinnedMessage(?Message $pinned_message): void
     {
-        $this->pinnedMessage = $pinnedMessage;
+        $this->pinned_message = $pinned_message;
     }
 
     /**
@@ -261,15 +295,15 @@ class Chat
      */
     public function getSlowModeDelay(): ?int
     {
-        return $this->slowModeDelay;
+        return $this->slow_mode_delay;
     }
 
     /**
-     * @param int|null $slowModeDelay
+     * @param int|null $slow_mode_delay
      */
-    public function setSlowModeDelay(?int $slowModeDelay): void
+    public function setSlowModeDelay(?int $slow_mode_delay): void
     {
-        $this->slowModeDelay = $slowModeDelay;
+        $this->slow_mode_delay = $slow_mode_delay;
     }
 
     /**
@@ -277,15 +311,15 @@ class Chat
      */
     public function getStickerSetName(): ?string
     {
-        return $this->stickerSetName;
+        return $this->sticker_set_name;
     }
 
     /**
-     * @param string|null $stickerSetName
+     * @param string|null $sticker_set_name
      */
-    public function setStickerSetName(?string $stickerSetName): void
+    public function setStickerSetName(?string $sticker_set_name): void
     {
-        $this->stickerSetName = $stickerSetName;
+        $this->sticker_set_name = $sticker_set_name;
     }
 
     /**
@@ -293,15 +327,16 @@ class Chat
      */
     public function getCanSetStickerSet(): ?bool
     {
-        return $this->canSetStickerSet;
+        return $this->can_set_sticker_set;
     }
 
     /**
-     * @param bool|null $canSetStickerSet
+     * @param bool|null $can_set_sticker_set
      */
-    public function setCanSetStickerSet(?bool $canSetStickerSet): void
+    public function setCanSetStickerSet(?bool $can_set_sticker_set): void
     {
-        $this->canSetStickerSet = $canSetStickerSet;
+        $this->can_set_sticker_set = $can_set_sticker_set;
     }
+
 
 }

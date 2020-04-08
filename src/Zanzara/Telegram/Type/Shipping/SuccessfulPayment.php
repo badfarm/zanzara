@@ -1,49 +1,66 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Shipping;
 
 /**
+ * This object contains basic information about a successful payment.
  *
+ * More on https://core.telegram.org/bots/api#successfulpayment
  */
 class SuccessfulPayment
 {
 
     /**
+     * Three-letter ISO 4217 currency code
+     *
      * @var string
      */
     private $currency;
 
     /**
+     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45
+     * pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point
+     * for each currency (2 for the majority of currencies).
+     *
      * @var int
      */
-    private $totalAmount;
+    private $total_amount;
 
     /**
+     * Bot specified invoice payload
+     *
      * @var string
      */
-    private $invoicePayload;
+    private $invoice_payload;
 
     /**
+     * Optional. Identifier of the shipping option chosen by the user
+     *
      * @var string|null
      */
-    private $shippingOptionId;
+    private $shipping_option_id;
 
     /**
+     * Optional. Order info provided by the user
+     *
      * @var OrderInfo|null
      */
-    private $orderInfo;
+    private $order_info;
 
     /**
+     * Telegram payment identifier
+     *
      * @var string
      */
-    private $telegramPaymentChargeId;
+    private $telegram_payment_charge_id;
 
     /**
+     * Provider payment identifier
+     *
      * @var string
      */
-    private $providerPaymentChargeId;
+    private $provider_payment_charge_id;
 
     /**
      * @return string
@@ -66,15 +83,15 @@ class SuccessfulPayment
      */
     public function getTotalAmount(): int
     {
-        return $this->totalAmount;
+        return $this->total_amount;
     }
 
     /**
-     * @param int $totalAmount
+     * @param int $total_amount
      */
-    public function setTotalAmount(int $totalAmount): void
+    public function setTotalAmount(int $total_amount): void
     {
-        $this->totalAmount = $totalAmount;
+        $this->total_amount = $total_amount;
     }
 
     /**
@@ -82,15 +99,15 @@ class SuccessfulPayment
      */
     public function getInvoicePayload(): string
     {
-        return $this->invoicePayload;
+        return $this->invoice_payload;
     }
 
     /**
-     * @param string $invoicePayload
+     * @param string $invoice_payload
      */
-    public function setInvoicePayload(string $invoicePayload): void
+    public function setInvoicePayload(string $invoice_payload): void
     {
-        $this->invoicePayload = $invoicePayload;
+        $this->invoice_payload = $invoice_payload;
     }
 
     /**
@@ -98,15 +115,15 @@ class SuccessfulPayment
      */
     public function getShippingOptionId(): ?string
     {
-        return $this->shippingOptionId;
+        return $this->shipping_option_id;
     }
 
     /**
-     * @param string|null $shippingOptionId
+     * @param string|null $shipping_option_id
      */
-    public function setShippingOptionId(?string $shippingOptionId): void
+    public function setShippingOptionId(?string $shipping_option_id): void
     {
-        $this->shippingOptionId = $shippingOptionId;
+        $this->shipping_option_id = $shipping_option_id;
     }
 
     /**
@@ -114,15 +131,15 @@ class SuccessfulPayment
      */
     public function getOrderInfo(): ?OrderInfo
     {
-        return $this->orderInfo;
+        return $this->order_info;
     }
 
     /**
-     * @param OrderInfo|null $orderInfo
+     * @param OrderInfo|null $order_info
      */
-    public function setOrderInfo(?OrderInfo $orderInfo): void
+    public function setOrderInfo(?OrderInfo $order_info): void
     {
-        $this->orderInfo = $orderInfo;
+        $this->order_info = $order_info;
     }
 
     /**
@@ -130,15 +147,15 @@ class SuccessfulPayment
      */
     public function getTelegramPaymentChargeId(): string
     {
-        return $this->telegramPaymentChargeId;
+        return $this->telegram_payment_charge_id;
     }
 
     /**
-     * @param string $telegramPaymentChargeId
+     * @param string $telegram_payment_charge_id
      */
-    public function setTelegramPaymentChargeId(string $telegramPaymentChargeId): void
+    public function setTelegramPaymentChargeId(string $telegram_payment_charge_id): void
     {
-        $this->telegramPaymentChargeId = $telegramPaymentChargeId;
+        $this->telegram_payment_charge_id = $telegram_payment_charge_id;
     }
 
     /**
@@ -146,15 +163,15 @@ class SuccessfulPayment
      */
     public function getProviderPaymentChargeId(): string
     {
-        return $this->providerPaymentChargeId;
+        return $this->provider_payment_charge_id;
     }
 
     /**
-     * @param string $providerPaymentChargeId
+     * @param string $provider_payment_charge_id
      */
-    public function setProviderPaymentChargeId(string $providerPaymentChargeId): void
+    public function setProviderPaymentChargeId(string $provider_payment_charge_id): void
     {
-        $this->providerPaymentChargeId = $providerPaymentChargeId;
+        $this->provider_payment_charge_id = $provider_payment_charge_id;
     }
 
 }

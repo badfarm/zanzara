@@ -1,36 +1,47 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\File;
 
 /**
+ * This object represents a phone contact.
  *
+ * More on https://core.telegram.org/bots/api#contact
  */
 class Contact
 {
 
     /**
+     * Contact's phone number
+     *
      * @var string
      */
-    private $phoneNumber;
+    private $phone_number;
 
     /**
+     * Contact's first name
+     *
      * @var string
      */
-    private $firstName;
+    private $first_name;
 
     /**
+     * Optional. Contact's last name
+     *
      * @var string|null
      */
-    private $lastName;
+    private $last_name;
 
     /**
+     * Optional. Contact's user identifier in Telegram
+     *
      * @var int|null
      */
-    private $userId;
+    private $user_id;
 
     /**
+     * Optional. Additional data about the contact in the form of a vCard
+     *
      * @var string|null
      */
     private $vcard;
@@ -40,15 +51,15 @@ class Contact
      */
     public function getPhoneNumber(): string
     {
-        return $this->phoneNumber;
+        return $this->phone_number;
     }
 
     /**
-     * @param string $phoneNumber
+     * @param string $phone_number
      */
-    public function setPhoneNumber(string $phoneNumber): void
+    public function setPhoneNumber(string $phone_number): void
     {
-        $this->phoneNumber = $phoneNumber;
+        $this->phone_number = $phone_number;
     }
 
     /**
@@ -56,15 +67,15 @@ class Contact
      */
     public function getFirstName(): string
     {
-        return $this->firstName;
+        return $this->first_name;
     }
 
     /**
-     * @param string $firstName
+     * @param string $first_name
      */
-    public function setFirstName(string $firstName): void
+    public function setFirstName(string $first_name): void
     {
-        $this->firstName = $firstName;
+        $this->first_name = $first_name;
     }
 
     /**
@@ -72,15 +83,15 @@ class Contact
      */
     public function getLastName(): ?string
     {
-        return $this->lastName;
+        return $this->last_name;
     }
 
     /**
-     * @param string|null $lastName
+     * @param string|null $last_name
      */
-    public function setLastName(?string $lastName): void
+    public function setLastName(?string $last_name): void
     {
-        $this->lastName = $lastName;
+        $this->last_name = $last_name;
     }
 
     /**
@@ -88,15 +99,15 @@ class Contact
      */
     public function getUserId(): ?int
     {
-        return $this->userId;
+        return $this->user_id;
     }
 
     /**
-     * @param int|null $userId
+     * @param int|null $user_id
      */
-    public function setUserId(?int $userId): void
+    public function setUserId(?int $user_id): void
     {
-        $this->userId = $userId;
+        $this->user_id = $user_id;
     }
 
     /**

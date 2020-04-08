@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
@@ -7,32 +6,45 @@ namespace Zanzara\Telegram\Type;
 use Zanzara\Telegram\Type\File\Location;
 
 /**
+ * Represents a result of an inline query that was chosen by the user and sent to their chat partner.
  *
+ * More on https://core.telegram.org/bots/api#choseninlineresult
  */
 class ChosenInlineResult
 {
 
     /**
+     * The unique identifier for the result that was chosen
+     *
      * @var string
      */
-    private $resultId;
+    private $result_id;
 
     /**
+     * The user that chose the result
+     *
      * @var User
      */
     private $from;
 
     /**
+     * Optional. Sender location, only for bots that require user location
+     *
      * @var Location|null
      */
     private $location;
 
     /**
+     * Optional. Identifier of the sent inline message. Available only if there is an inline keyboard attached to the
+     * message. Will be also received in callback queries and can be used to edit the message.
+     *
      * @var string|null
      */
-    private $inlineMessageId;
+    private $inline_message_id;
 
     /**
+     * The query that was used to obtain the result
+     *
      * @var string
      */
     private $query;
@@ -42,15 +54,15 @@ class ChosenInlineResult
      */
     public function getResultId(): string
     {
-        return $this->resultId;
+        return $this->result_id;
     }
 
     /**
-     * @param string $resultId
+     * @param string $result_id
      */
-    public function setResultId(string $resultId): void
+    public function setResultId(string $result_id): void
     {
-        $this->resultId = $resultId;
+        $this->result_id = $result_id;
     }
 
     /**
@@ -90,15 +102,15 @@ class ChosenInlineResult
      */
     public function getInlineMessageId(): ?string
     {
-        return $this->inlineMessageId;
+        return $this->inline_message_id;
     }
 
     /**
-     * @param string|null $inlineMessageId
+     * @param string|null $inline_message_id
      */
-    public function setInlineMessageId(?string $inlineMessageId): void
+    public function setInlineMessageId(?string $inline_message_id): void
     {
-        $this->inlineMessageId = $inlineMessageId;
+        $this->inline_message_id = $inline_message_id;
     }
 
     /**

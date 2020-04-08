@@ -1,59 +1,79 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
 
+
 /**
+ * This object represents a Telegram user or bot.
  *
+ * More on https://core.telegram.org/bots/api#user
  */
 class User
 {
 
     /**
+     * Unique identifier for this user or bot
+     *
      * @var int
      */
     private $id;
 
     /**
+     * True, if this user is a bot
+     *
      * @var bool
      */
-    private $isBot;
+    private $is_bot;
 
     /**
+     * User's or bot's first name
+     *
      * @var string
      */
-    private $firstName;
+    private $first_name;
 
     /**
+     * Optional. User's or bot's last name
+     *
      * @var string|null
      */
-    private $lastName;
+    private $last_name;
 
     /**
+     * Optional. User's or bot's username
+     *
      * @var string|null
      */
     private $username;
 
     /**
+     * Optional. IETF language tag of the user's language
+     *
      * @var string|null
      */
-    private $languageCode;
+    private $language_code;
 
     /**
-     * @var string|null
+     * Optional. True, if the bot can be invited to groups. Returned only in getMe.
+     *
+     * @var bool|null
      */
-    private $canJoinGroups;
+    private $can_join_groups;
 
     /**
-     * @var string|null
+     * Optional. True, if privacy mode is disabled for the bot. Returned only in getMe.
+     *
+     * @var bool|null
      */
-    private $canReadAllGroupMessages;
+    private $can_read_all_group_messages;
 
     /**
-     * @var string|null
+     * Optional. True, if the bot supports inline queries. Returned only in getMe.
+     *
+     * @var bool|null
      */
-    private $supportsInlineQueries;
+    private $supports_inline_queries;
 
     /**
      * @return int
@@ -76,15 +96,15 @@ class User
      */
     public function isBot(): bool
     {
-        return $this->isBot;
+        return $this->is_bot;
     }
 
     /**
-     * @param bool $isBot
+     * @param bool $is_bot
      */
-    public function setIsBot(bool $isBot): void
+    public function setIsBot(bool $is_bot): void
     {
-        $this->isBot = $isBot;
+        $this->is_bot = $is_bot;
     }
 
     /**
@@ -92,15 +112,15 @@ class User
      */
     public function getFirstName(): string
     {
-        return $this->firstName;
+        return $this->first_name;
     }
 
     /**
-     * @param string $firstName
+     * @param string $first_name
      */
-    public function setFirstName(string $firstName): void
+    public function setFirstName(string $first_name): void
     {
-        $this->firstName = $firstName;
+        $this->first_name = $first_name;
     }
 
     /**
@@ -108,15 +128,15 @@ class User
      */
     public function getLastName(): ?string
     {
-        return $this->lastName;
+        return $this->last_name;
     }
 
     /**
-     * @param string|null $lastName
+     * @param string|null $last_name
      */
-    public function setLastName(?string $lastName): void
+    public function setLastName(?string $last_name): void
     {
-        $this->lastName = $lastName;
+        $this->last_name = $last_name;
     }
 
     /**
@@ -140,63 +160,63 @@ class User
      */
     public function getLanguageCode(): ?string
     {
-        return $this->languageCode;
+        return $this->language_code;
     }
 
     /**
-     * @param string|null $languageCode
+     * @param string|null $language_code
      */
-    public function setLanguageCode(?string $languageCode): void
+    public function setLanguageCode(?string $language_code): void
     {
-        $this->languageCode = $languageCode;
+        $this->language_code = $language_code;
     }
 
     /**
-     * @return string|null
+     * @return bool|null
      */
-    public function getCanJoinGroups(): ?string
+    public function getCanJoinGroups(): ?bool
     {
-        return $this->canJoinGroups;
+        return $this->can_join_groups;
     }
 
     /**
-     * @param string|null $canJoinGroups
+     * @param bool|null $can_join_groups
      */
-    public function setCanJoinGroups(?string $canJoinGroups): void
+    public function setCanJoinGroups(?bool $can_join_groups): void
     {
-        $this->canJoinGroups = $canJoinGroups;
+        $this->can_join_groups = $can_join_groups;
     }
 
     /**
-     * @return string|null
+     * @return bool|null
      */
-    public function getCanReadAllGroupMessages(): ?string
+    public function getCanReadAllGroupMessages(): ?bool
     {
-        return $this->canReadAllGroupMessages;
+        return $this->can_read_all_group_messages;
     }
 
     /**
-     * @param string|null $canReadAllGroupMessages
+     * @param bool|null $can_read_all_group_messages
      */
-    public function setCanReadAllGroupMessages(?string $canReadAllGroupMessages): void
+    public function setCanReadAllGroupMessages(?bool $can_read_all_group_messages): void
     {
-        $this->canReadAllGroupMessages = $canReadAllGroupMessages;
+        $this->can_read_all_group_messages = $can_read_all_group_messages;
     }
 
     /**
-     * @return string|null
+     * @return bool|null
      */
-    public function getSupportsInlineQueries(): ?string
+    public function getSupportsInlineQueries(): ?bool
     {
-        return $this->supportsInlineQueries;
+        return $this->supports_inline_queries;
     }
 
     /**
-     * @param string|null $supportsInlineQueries
+     * @param bool|null $supports_inline_queries
      */
-    public function setSupportsInlineQueries(?string $supportsInlineQueries): void
+    public function setSupportsInlineQueries(?bool $supports_inline_queries): void
     {
-        $this->supportsInlineQueries = $supportsInlineQueries;
+        $this->supports_inline_queries = $supports_inline_queries;
     }
 
 }

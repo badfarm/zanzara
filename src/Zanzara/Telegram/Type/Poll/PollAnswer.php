@@ -1,23 +1,29 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Poll;
 
+use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 use Zanzara\Telegram\Type\User;
 
 /**
+ * This object represents an answer of a user in a non-anonymous poll.
  *
+ * More on https://core.telegram.org/bots/api#pollanswer
  */
-class PollAnswer
+class PollAnswer extends SuccessfulResponse
 {
 
     /**
+     * Unique poll identifier
+     *
      * @var string
      */
-    private $pollId;
+    private $poll_id;
 
     /**
+     * The user, who changed the answer to the poll
+     *
      * @var User
      */
     private $user;
@@ -25,22 +31,22 @@ class PollAnswer
     /**
      * @var int[]
      */
-    private $optionIds;
+    private $option_ids;
 
     /**
      * @return string
      */
     public function getPollId(): string
     {
-        return $this->pollId;
+        return $this->poll_id;
     }
 
     /**
-     * @param string $pollId
+     * @param string $poll_id
      */
-    public function setPollId(string $pollId): void
+    public function setPollId(string $poll_id): void
     {
-        $this->pollId = $pollId;
+        $this->poll_id = $poll_id;
     }
 
     /**
@@ -64,15 +70,15 @@ class PollAnswer
      */
     public function getOptionIds(): array
     {
-        return $this->optionIds;
+        return $this->option_ids;
     }
 
     /**
-     * @param int[] $optionIds
+     * @param int[] $option_ids
      */
-    public function setOptionIds(array $optionIds): void
+    public function setOptionIds(array $option_ids): void
     {
-        $this->optionIds = $optionIds;
+        $this->option_ids = $option_ids;
     }
 
 }

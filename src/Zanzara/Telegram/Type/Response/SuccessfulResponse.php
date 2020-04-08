@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Zanzara\Telegram\Type;
+namespace Zanzara\Telegram\Type\Response;
 
 
-class Response
+class SuccessfulResponse
 {
     /**
      * @var bool
@@ -19,11 +19,5 @@ class Response
         return $this->ok;
     }
 
-    /**
-     * @param bool $ok
-     */
-    public function setOk(bool $ok): void
-    {
-        $this->ok = $ok;
-    }
+
 }

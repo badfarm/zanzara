@@ -1,54 +1,66 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\File;
 
 /**
+ * This object represents one size of a photo or a file / sticker thumbnail.
  *
+ * More on https://core.telegram.org/bots/api#photosize
  */
 class PhotoSize
 {
 
     /**
+     * Identifier for this file, which can be used to download or reuse the file
+     *
      * @var string
      */
-    private $fileId;
+    private $file_id;
 
     /**
+     * Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to
+     * download or reuse the file.
+     *
      * @var string
      */
-    private $fileUniqueId;
+    private $file_unique_id;
 
     /**
+     * Photo width
+     *
      * @var int
      */
     private $width;
 
     /**
+     * Photo height
+     *
      * @var int
      */
     private $height;
 
     /**
+     * Optional. File size
+     *
      * @var int|null
      */
-    private $fileSize;
+    private $file_size;
 
     /**
      * @return string
      */
     public function getFileId(): string
     {
-        return $this->fileId;
+        return $this->file_id;
     }
 
     /**
-     * @param string $fileId
+     * @param string $file_id
      */
-    public function setFileId(string $fileId): void
+    public function setFileId(string $file_id): void
     {
-        $this->fileId = $fileId;
+        $this->file_id = $file_id;
     }
 
     /**
@@ -56,15 +68,15 @@ class PhotoSize
      */
     public function getFileUniqueId(): string
     {
-        return $this->fileUniqueId;
+        return $this->file_unique_id;
     }
 
     /**
-     * @param string $fileUniqueId
+     * @param string $file_unique_id
      */
-    public function setFileUniqueId(string $fileUniqueId): void
+    public function setFileUniqueId(string $file_unique_id): void
     {
-        $this->fileUniqueId = $fileUniqueId;
+        $this->file_unique_id = $file_unique_id;
     }
 
     /**
@@ -104,15 +116,15 @@ class PhotoSize
      */
     public function getFileSize(): ?int
     {
-        return $this->fileSize;
+        return $this->file_size;
     }
 
     /**
-     * @param int|null $fileSize
+     * @param int|null $file_size
      */
-    public function setFileSize(?int $fileSize): void
+    public function setFileSize(?int $file_size): void
     {
-        $this->fileSize = $fileSize;
+        $this->file_size = $file_size;
     }
 
 }

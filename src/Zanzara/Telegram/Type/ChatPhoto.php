@@ -1,49 +1,62 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
 
 /**
+ * This object represents a chat photo.
  *
+ * More on https://core.telegram.org/bots/api#chatphoto
  */
 class ChatPhoto
 {
 
     /**
+     * File identifier of small (160x160) chat photo. This file_id can be used only for photo download and only for as long
+     * as the photo is not changed.
+     *
      * @var string
      */
-    private $smallFileId;
+    private $small_file_id;
 
     /**
+     * Unique file identifier of small (160x160) chat photo, which is supposed to be the same over time and for different
+     * bots. Can't be used to download or reuse the file.
+     *
      * @var string
      */
-    private $smallFileUniqueId;
+    private $small_file_unique_id;
 
     /**
+     * File identifier of big (640x640) chat photo. This file_id can be used only for photo download and only for as long as
+     * the photo is not changed.
+     *
      * @var string
      */
-    private $bigFileId;
+    private $big_file_id;
 
     /**
+     * Unique file identifier of big (640x640) chat photo, which is supposed to be the same over time and for different
+     * bots. Can't be used to download or reuse the file.
+     *
      * @var string
      */
-    private $bigFileUniqueId;
+    private $big_file_unique_id;
 
     /**
      * @return string
      */
     public function getSmallFileId(): string
     {
-        return $this->smallFileId;
+        return $this->small_file_id;
     }
 
     /**
-     * @param string $smallFileId
+     * @param string $small_file_id
      */
-    public function setSmallFileId(string $smallFileId): void
+    public function setSmallFileId(string $small_file_id): void
     {
-        $this->smallFileId = $smallFileId;
+        $this->small_file_id = $small_file_id;
     }
 
     /**
@@ -51,15 +64,15 @@ class ChatPhoto
      */
     public function getSmallFileUniqueId(): string
     {
-        return $this->smallFileUniqueId;
+        return $this->small_file_unique_id;
     }
 
     /**
-     * @param string $smallFileUniqueId
+     * @param string $small_file_unique_id
      */
-    public function setSmallFileUniqueId(string $smallFileUniqueId): void
+    public function setSmallFileUniqueId(string $small_file_unique_id): void
     {
-        $this->smallFileUniqueId = $smallFileUniqueId;
+        $this->small_file_unique_id = $small_file_unique_id;
     }
 
     /**
@@ -67,15 +80,15 @@ class ChatPhoto
      */
     public function getBigFileId(): string
     {
-        return $this->bigFileId;
+        return $this->big_file_id;
     }
 
     /**
-     * @param string $bigFileId
+     * @param string $big_file_id
      */
-    public function setBigFileId(string $bigFileId): void
+    public function setBigFileId(string $big_file_id): void
     {
-        $this->bigFileId = $bigFileId;
+        $this->big_file_id = $big_file_id;
     }
 
     /**
@@ -83,15 +96,16 @@ class ChatPhoto
      */
     public function getBigFileUniqueId(): string
     {
-        return $this->bigFileUniqueId;
+        return $this->big_file_unique_id;
     }
 
     /**
-     * @param string $bigFileUniqueId
+     * @param string $big_file_unique_id
      */
-    public function setBigFileUniqueId(string $bigFileUniqueId): void
+    public function setBigFileUniqueId(string $big_file_unique_id): void
     {
-        $this->bigFileUniqueId = $bigFileUniqueId;
+        $this->big_file_unique_id = $big_file_unique_id;
     }
+
 
 }

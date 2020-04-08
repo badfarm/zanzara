@@ -1,79 +1,101 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\File;
 
 /**
+ * This object represents a sticker.
  *
+ * More on https://core.telegram.org/bots/api#sticker
  */
 class Sticker
 {
 
     /**
+     * Identifier for this file, which can be used to download or reuse the file
+     *
      * @var string
      */
-    private $fileId;
+    private $file_id;
 
     /**
+     * Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to
+     * download or reuse the file.
+     *
      * @var string
      */
-    private $fileUniqueId;
+    private $file_unique_id;
 
     /**
+     * Sticker width
+     *
      * @var int
      */
     private $width;
 
     /**
+     * Sticker height
+     *
      * @var int
      */
     private $height;
 
     /**
+     * True, if the sticker is animated
+     *
      * @var bool
      */
-    private $isAnimated;
+    private $is_animated;
 
     /**
-     * @var PhotoSize
+     * Optional. Sticker thumbnail in the .WEBP or .JPG format
+     *
+     * @var PhotoSize|null
      */
     private $thumb;
 
     /**
+     * Optional. Emoji associated with the sticker
+     *
      * @var string|null
      */
     private $emoji;
 
     /**
+     * Optional. Name of the sticker set to which the sticker belongs
+     *
      * @var string|null
      */
-    private $setName;
+    private $set_name;
 
     /**
+     * Optional. For mask stickers, the position where the mask should be placed
+     *
      * @var MaskPosition|null
      */
-    private $maskPosition;
+    private $mask_position;
 
     /**
+     * Optional. File size
+     *
      * @var int|null
      */
-    private $fileSize;
+    private $file_size;
 
     /**
      * @return string
      */
     public function getFileId(): string
     {
-        return $this->fileId;
+        return $this->file_id;
     }
 
     /**
-     * @param string $fileId
+     * @param string $file_id
      */
-    public function setFileId(string $fileId): void
+    public function setFileId(string $file_id): void
     {
-        $this->fileId = $fileId;
+        $this->file_id = $file_id;
     }
 
     /**
@@ -81,15 +103,15 @@ class Sticker
      */
     public function getFileUniqueId(): string
     {
-        return $this->fileUniqueId;
+        return $this->file_unique_id;
     }
 
     /**
-     * @param string $fileUniqueId
+     * @param string $file_unique_id
      */
-    public function setFileUniqueId(string $fileUniqueId): void
+    public function setFileUniqueId(string $file_unique_id): void
     {
-        $this->fileUniqueId = $fileUniqueId;
+        $this->file_unique_id = $file_unique_id;
     }
 
     /**
@@ -129,29 +151,29 @@ class Sticker
      */
     public function isAnimated(): bool
     {
-        return $this->isAnimated;
+        return $this->is_animated;
     }
 
     /**
-     * @param bool $isAnimated
+     * @param bool $is_animated
      */
-    public function setIsAnimated(bool $isAnimated): void
+    public function setIsAnimated(bool $is_animated): void
     {
-        $this->isAnimated = $isAnimated;
+        $this->is_animated = $is_animated;
     }
 
     /**
-     * @return PhotoSize
+     * @return PhotoSize|null
      */
-    public function getThumb(): PhotoSize
+    public function getThumb(): ?PhotoSize
     {
         return $this->thumb;
     }
 
     /**
-     * @param PhotoSize $thumb
+     * @param PhotoSize|null $thumb
      */
-    public function setThumb(PhotoSize $thumb): void
+    public function setThumb(?PhotoSize $thumb): void
     {
         $this->thumb = $thumb;
     }
@@ -177,15 +199,15 @@ class Sticker
      */
     public function getSetName(): ?string
     {
-        return $this->setName;
+        return $this->set_name;
     }
 
     /**
-     * @param string|null $setName
+     * @param string|null $set_name
      */
-    public function setSetName(?string $setName): void
+    public function setSetName(?string $set_name): void
     {
-        $this->setName = $setName;
+        $this->set_name = $set_name;
     }
 
     /**
@@ -193,15 +215,15 @@ class Sticker
      */
     public function getMaskPosition(): ?MaskPosition
     {
-        return $this->maskPosition;
+        return $this->mask_position;
     }
 
     /**
-     * @param MaskPosition|null $maskPosition
+     * @param MaskPosition|null $mask_position
      */
-    public function setMaskPosition(?MaskPosition $maskPosition): void
+    public function setMaskPosition(?MaskPosition $mask_position): void
     {
-        $this->maskPosition = $maskPosition;
+        $this->mask_position = $mask_position;
     }
 
     /**
@@ -209,15 +231,15 @@ class Sticker
      */
     public function getFileSize(): ?int
     {
-        return $this->fileSize;
+        return $this->file_size;
     }
 
     /**
-     * @param int|null $fileSize
+     * @param int|null $file_size
      */
-    public function setFileSize(?int $fileSize): void
+    public function setFileSize(?int $file_size): void
     {
-        $this->fileSize = $fileSize;
+        $this->file_size = $file_size;
     }
 
 }

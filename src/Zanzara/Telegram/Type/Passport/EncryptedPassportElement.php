@@ -1,61 +1,97 @@
 <?php
-
 declare(strict_types=1);
-
 namespace Zanzara\Telegram\Type\Passport;
 
+use Zanzara\Telegram\Type\SuccessfulResponse;
+
 /**
+ * Contains information about documents or other Telegram Passport elements shared with the bot by the user.
  *
+ * More on https://core.telegram.org/bots/api#encryptedpassportelement
  */
-class EncryptedPassportElement
+class EncryptedPassportElement extends SuccessfulResponse
 {
 
     /**
+     * Element type. One of "personal_details", "passport", "driver_license", "identity_card", "internal_passport",
+     * "address", "utility_bill", "bank_statement", "rental_agreement", "passport_registration",
+     * "temporary_registration", "phone_number", "email".
+     *
      * @var string
      */
     private $type;
 
     /**
+     * Optional. Base64-encoded encrypted Telegram Passport element data provided by the user, available for
+     * "personal_details", "passport", "driver_license", "identity_card", "internal_passport" and "address" types. Can be
+     * decrypted and verified using the accompanying EncryptedCredentials.
+     *
      * @var string|null
      */
     private $data;
 
     /**
+     * Optional. User's verified phone number, available only for "phone_number" type
+     *
      * @var string|null
      */
-    private $phoneNumber;
+    private $phone_number;
 
     /**
+     * Optional. User's verified email address, available only for "email" type
+     *
      * @var string|null
      */
     private $email;
 
     /**
-     * @var PassportFile[]
+     * Optional. Array of encrypted files with documents provided by the user, available for "utility_bill",
+     * "bank_statement", "rental_agreement", "passport_registration" and "temporary_registration" types. Files can be
+     * decrypted and verified using the accompanying EncryptedCredentials.
+     *
+     * @var PassportFile[]|null
      */
-    private $files = [];
+    private $files;
 
     /**
+     * Optional. Encrypted file with the front side of the document, provided by the user. Available for "passport",
+     * "driver_license", "identity_card" and "internal_passport". The file can be decrypted and verified using the
+     * accompanying EncryptedCredentials.
+     *
      * @var PassportFile|null
      */
-    private $frontSide;
+    private $front_side;
 
     /**
+     * Optional. Encrypted file with the reverse side of the document, provided by the user. Available for "driver_license"
+     * and "identity_card". The file can be decrypted and verified using the accompanying EncryptedCredentials.
+     *
      * @var PassportFile|null
      */
-    private $reverseSide;
+    private $reverse_side;
 
     /**
+     * Optional. Encrypted file with the selfie of the user holding a document, provided by the user; available for
+     * "passport", "driver_license", "identity_card" and "internal_passport". The file can be decrypted and verified
+     * using the accompanying EncryptedCredentials.
+     *
      * @var PassportFile|null
      */
     private $selfie;
 
     /**
-     * @var PassportFile[]
+     * Optional. Array of encrypted files with translated versions of documents provided by the user. Available if requested
+     * for "passport", "driver_license", "identity_card", "internal_passport", "utility_bill", "bank_statement",
+     * "rental_agreement", "passport_registration" and "temporary_registration" types. Files can be decrypted and
+     * verified using the accompanying EncryptedCredentials.
+     *
+     * @var PassportFile[]|null
      */
-    private $translation = [];
+    private $translation;
 
     /**
+     * Base64-encoded element hash for using in PassportElementErrorUnspecified
+     *
      * @var string
      */
     private $hash;
@@ -97,15 +133,15 @@ class EncryptedPassportElement
      */
     public function getPhoneNumber(): ?string
     {
-        return $this->phoneNumber;
+        return $this->phone_number;
     }
 
     /**
-     * @param string|null $phoneNumber
+     * @param string|null $phone_number
      */
-    public function setPhoneNumber(?string $phoneNumber): void
+    public function setPhoneNumber(?string $phone_number): void
     {
-        $this->phoneNumber = $phoneNumber;
+        $this->phone_number = $phone_number;
     }
 
     /**
@@ -125,17 +161,17 @@ class EncryptedPassportElement
     }
 
     /**
-     * @return PassportFile[]
+     * @return PassportFile[]|null
      */
-    public function getFiles(): array
+    public function getFiles(): ?array
     {
         return $this->files;
     }
 
     /**
-     * @param PassportFile[] $files
+     * @param PassportFile[]|null $files
      */
-    public function setFiles(array $files): void
+    public function setFiles(?array $files): void
     {
         $this->files = $files;
     }
@@ -145,15 +181,15 @@ class EncryptedPassportElement
      */
     public function getFrontSide(): ?PassportFile
     {
-        return $this->frontSide;
+        return $this->front_side;
     }
 
     /**
-     * @param PassportFile|null $frontSide
+     * @param PassportFile|null $front_side
      */
-    public function setFrontSide(?PassportFile $frontSide): void
+    public function setFrontSide(?PassportFile $front_side): void
     {
-        $this->frontSide = $frontSide;
+        $this->front_side = $front_side;
     }
 
     /**
@@ -161,15 +197,15 @@ class EncryptedPassportElement
      */
     public function getReverseSide(): ?PassportFile
     {
-        return $this->reverseSide;
+        return $this->reverse_side;
     }
 
     /**
-     * @param PassportFile|null $reverseSide
+     * @param PassportFile|null $reverse_side
      */
-    public function setReverseSide(?PassportFile $reverseSide): void
+    public function setReverseSide(?PassportFile $reverse_side): void
     {
-        $this->reverseSide = $reverseSide;
+        $this->reverse_side = $reverse_side;
     }
 
     /**
@@ -189,17 +225,17 @@ class EncryptedPassportElement
     }
 
     /**
-     * @return PassportFile[]
+     * @return PassportFile[]|null
      */
-    public function getTranslation(): array
+    public function getTranslation(): ?array
     {
         return $this->translation;
     }
 
     /**
-     * @param PassportFile[] $translation
+     * @param PassportFile[]|null $translation
      */
-    public function setTranslation(array $translation): void
+    public function setTranslation(?array $translation): void
     {
         $this->translation = $translation;
     }

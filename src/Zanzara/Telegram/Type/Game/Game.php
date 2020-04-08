@@ -1,43 +1,61 @@
 <?php
-
 declare(strict_types=1);
 
-namespace Zanzara\Telegram\Type;
+namespace Zanzara\Telegram\Type\Game;
 
 use Zanzara\Telegram\Type\File\Animation;
+use Zanzara\Telegram\Type\File\PhotoSize;
+use Zanzara\Telegram\Type\MessageEntity;
+use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 
 /**
+ * This object represents a game. Use BotFather to create and edit games, their short names will act as unique identifiers.
  *
+ * More on https://core.telegram.org/bots/api#game
  */
-class Game
+class Game extends SuccessfulResponse
 {
 
     /**
+     * Title of the game
+     *
      * @var string
      */
     private $title;
 
     /**
+     * Description of the game
+     *
      * @var string
      */
     private $description;
 
     /**
-     * @var \Zanzara\Telegram\Type\File\PhotoSize[]
+     * Photo that will be displayed in the game message in chats.
+     *
+     * @var PhotoSize[]
      */
-    private $photo = [];
+    private $photo;
 
     /**
+     * Optional. Brief description of the game or high scores included in the game message. Can be automatically edited to
+     * include current high scores for the game when the bot calls setGameScore, or manually edited using
+     * editMessageText. 0-4096 characters.
+     *
      * @var string|null
      */
     private $text;
 
     /**
-     * @var MessageEntity[]
+     * Optional. Special entities that appear in text, such as usernames, URLs, bot commands, etc.
+     *
+     * @var MessageEntity[]|null
      */
-    private $textEntities = [];
+    private $text_entities;
 
     /**
+     * Optional. Animation that will be displayed in the game message in chats. Upload via BotFather
+     *
      * @var Animation|null
      */
     private $animation;
@@ -75,7 +93,7 @@ class Game
     }
 
     /**
-     * @return \Zanzara\Telegram\Type\File\PhotoSize[]
+     * @return PhotoSize[]
      */
     public function getPhoto(): array
     {
@@ -83,7 +101,7 @@ class Game
     }
 
     /**
-     * @param \Zanzara\Telegram\Type\File\PhotoSize[] $photo
+     * @param PhotoSize[] $photo
      */
     public function setPhoto(array $photo): void
     {
@@ -107,19 +125,19 @@ class Game
     }
 
     /**
-     * @return MessageEntity[]
+     * @return MessageEntity[]|null
      */
-    public function getTextEntities(): array
+    public function getTextEntities(): ?array
     {
-        return $this->textEntities;
+        return $this->text_entities;
     }
 
     /**
-     * @param MessageEntity[] $textEntities
+     * @param MessageEntity[]|null $text_entities
      */
-    public function setTextEntities(array $textEntities): void
+    public function setTextEntities(?array $text_entities): void
     {
-        $this->textEntities = $textEntities;
+        $this->text_entities = $text_entities;
     }
 
     /**

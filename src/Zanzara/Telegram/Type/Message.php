@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
@@ -9,271 +8,392 @@ use Zanzara\Telegram\Type\File\Audio;
 use Zanzara\Telegram\Type\File\Contact;
 use Zanzara\Telegram\Type\File\Document;
 use Zanzara\Telegram\Type\File\Location;
+use Zanzara\Telegram\Type\File\PhotoSize;
 use Zanzara\Telegram\Type\File\Sticker;
 use Zanzara\Telegram\Type\File\Venue;
 use Zanzara\Telegram\Type\File\Video;
 use Zanzara\Telegram\Type\File\VideoNote;
 use Zanzara\Telegram\Type\File\Voice;
+use Zanzara\Telegram\Type\Game\Game;
 use Zanzara\Telegram\Type\Passport\PassportData;
 use Zanzara\Telegram\Type\Poll\Poll;
+use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 use Zanzara\Telegram\Type\Shipping\Invoice;
 use Zanzara\Telegram\Type\Shipping\SuccessfulPayment;
 
 /**
+ * This object represents a message.
  *
+ * More on https://core.telegram.org/bots/api#message
  */
-class Message extends Response
+class Message extends SuccessfulResponse
 {
 
     /**
+     * Unique message identifier inside this chat
+     *
      * @var int
      */
-    private $messageId;
+    private $message_id;
 
     /**
+     * Optional. Sender, empty for messages sent to channels
+     *
      * @var User|null
      */
     private $from;
 
     /**
+     * Date the message was sent in Unix time
+     *
      * @var int
      */
     private $date;
 
     /**
+     * Conversation the message belongs to
+     *
      * @var Chat
      */
     private $chat;
 
     /**
+     * Optional. For forwarded messages, sender of the original message
+     *
      * @var User|null
      */
-    private $forwardFrom;
+    private $forward_from;
 
     /**
+     * Optional. For messages forwarded from channels, information about the original channel
+     *
      * @var Chat|null
      */
-    private $forwardFromChat;
+    private $forward_from_chat;
 
     /**
+     * Optional. For messages forwarded from channels, identifier of the original message in the channel
+     *
      * @var int|null
      */
-    private $forwardFromMessageId;
+    private $forward_from_message_id;
 
     /**
+     * Optional. For messages forwarded from channels, signature of the post author if present
+     *
      * @var string|null
      */
-    private $forwardSignature;
+    private $forward_signature;
 
     /**
+     * Optional. Sender's name for messages forwarded from users who disallow adding a link to their account in forwarded
+     * messages
+     *
      * @var string|null
      */
-    private $forwardSenderName;
+    private $forward_sender_name;
 
     /**
+     * Optional. For forwarded messages, date the original message was sent in Unix time
+     *
      * @var int|null
      */
-    private $forwardDate;
+    private $forward_date;
 
     /**
-     * @var ReplyToMessage|null
+     * Optional. For replies, the original message. Note that the Message object in this field will not contain further
+     * reply_to_message fields even if it itself is a reply.
+     *
+     * @var Message|null
      */
-    private $replyToMessage;
+    private $reply_to_message;
 
     /**
+     * Optional. Date the message was last edited in Unix time
+     *
      * @var int|null
      */
-    private $editDate;
+    private $edit_date;
 
     /**
+     * Optional. The unique identifier of a media message group this message belongs to
+     *
      * @var string|null
      */
-    private $mediaGroupId;
+    private $media_group_id;
 
     /**
+     * Optional. Signature of the post author for messages in channels
+     *
      * @var string|null
      */
-    private $authorSignature;
+    private $author_signature;
 
     /**
+     * Optional. For text messages, the actual UTF-8 text of the message, 0-4096 characters
+     *
      * @var string|null
      */
     private $text;
 
     /**
-     * @var MessageEntity[]
+     * Optional. For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
+     *
+     * @var MessageEntity[]|null
      */
-    private $entities = [];
+    private $entities;
 
     /**
-     * @var MessageEntity[]
+     * Optional. For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the
+     * caption
+     *
+     * @var MessageEntity[]|null
      */
-    private $captionEntities = [];
+    private $caption_entities;
 
     /**
+     * Optional. Message is an audio file, information about the file
+     *
      * @var Audio|null
      */
     private $audio;
 
     /**
+     * Optional. Message is a general file, information about the file
+     *
      * @var Document|null
      */
     private $document;
 
     /**
+     * Optional. Message is an animation, information about the animation. For backward compatibility, when this field is
+     * set, the document field will also be set
+     *
      * @var Animation|null
      */
     private $animation;
 
     /**
+     * Optional. Message is a game, information about the game. More about games >>
+     *
      * @var Game|null
      */
     private $game;
 
     /**
-     * @var $photo \Zanzara\Telegram\Type\File\PhotoSize[]
+     * Optional. Message is a photo, available sizes of the photo
+     *
+     * @var PhotoSize[]|null
      */
-    private $photo = [];
+    private $photo;
 
     /**
+     * Optional. Message is a sticker, information about the sticker
+     *
      * @var Sticker|null
      */
     private $sticker;
 
     /**
+     * Optional. Message is a video, information about the video
+     *
      * @var Video|null
      */
     private $video;
 
     /**
+     * Optional. Message is a voice message, information about the file
+     *
      * @var Voice|null
      */
     private $voice;
 
     /**
+     * Optional. Message is a video note, information about the video message
+     *
      * @var VideoNote|null
      */
-    private $videoNote;
+    private $video_note;
 
     /**
+     * Optional. Caption for the animation, audio, document, photo, video or voice, 0-1024 characters
+     *
      * @var string|null
      */
     private $caption;
 
     /**
+     * Optional. Message is a shared contact, information about the contact
+     *
      * @var Contact|null
      */
     private $contact;
 
     /**
+     * Optional. Message is a shared location, information about the location
+     *
      * @var Location|null
      */
     private $location;
 
     /**
+     * Optional. Message is a venue, information about the venue
+     *
      * @var Venue|null
      */
     private $venue;
 
     /**
+     * Optional. Message is a native poll, information about the poll
+     *
      * @var Poll|null
      */
     private $poll;
 
     /**
-     * @var User[]
+     * Optional. Message is a dice with random value from 1 to 6
+     *
+     * @var Dice|null
      */
-    private $newChatMembers = [];
+    private $dice;
 
     /**
+     * Optional. New members that were added to the group or supergroup and information about them (the bot itself may be
+     * one of these members)
+     *
+     * @var User[]|null
+     */
+    private $new_chat_members;
+
+    /**
+     * Optional. A member was removed from the group, information about them (this member may be the bot itself)
+     *
      * @var User|null
      */
-    private $leftChatMember;
+    private $left_chat_member;
 
     /**
+     * Optional. A chat title was changed to this value
+     *
      * @var string|null
      */
-    private $newChatTitle;
+    private $new_chat_title;
 
     /**
-     * @var \Zanzara\Telegram\Type\File\PhotoSize[]
+     * Optional. A chat photo was change to this value
+     *
+     * @var PhotoSize[]|null
      */
-    private $newChatPhoto = [];
+    private $new_chat_photo;
 
     /**
+     * Optional. Service message: the chat photo was deleted
+     *
      * @var bool|null
      */
-    private $deleteChatPhoto;
+    private $delete_chat_photo;
 
     /**
+     * Optional. Service message: the group has been created
+     *
      * @var bool|null
      */
-    private $groupChatCreated;
+    private $group_chat_created;
 
     /**
+     * Optional. Service message: the supergroup has been created. This field can't be received in a message coming through
+     * updates, because bot can't be a member of a supergroup when it is created. It can only be found in
+     * reply_to_message if someone replies to a very first message in a directly created supergroup.
+     *
      * @var bool|null
      */
-    private $supergroupChatCreated;
+    private $supergroup_chat_created;
 
     /**
+     * Optional. Service message: the channel has been created. This field can't be received in a message coming through
+     * updates, because bot can't be a member of a channel when it is created. It can only be found in reply_to_message
+     * if someone replies to a very first message in a channel.
+     *
      * @var bool|null
      */
-    private $channelChatCreated;
+    private $channel_chat_created;
 
     /**
+     * Optional. The group has been migrated to a supergroup with the specified identifier. This number may be greater than
+     * 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller
+     * than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier.
+     *
      * @var int|null
      */
-    private $migrateToChatId;
+    private $migrate_to_chat_id;
 
     /**
+     * Optional. The supergroup has been migrated from a group with the specified identifier. This number may be greater
+     * than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is
+     * smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this
+     * identifier.
+     *
      * @var int|null
      */
-    private $migrateFromChatId;
+    private $migrate_from_chat_id;
 
     /**
+     * Optional. Specified message was pinned. Note that the Message object in this field will not contain further
+     * reply_to_message fields even if it is itself a reply.
+     *
      * @var Message|null
      */
-    private $pinnedMessage;
+    private $pinned_message;
 
     /**
+     * Optional. Message is an invoice for a payment, information about the invoice. More about payments >>
+     *
      * @var Invoice|null
      */
     private $invoice;
 
     /**
+     * Optional. Message is a service message about a successful payment, information about the payment. More about payments >>
+     *
      * @var SuccessfulPayment|null
      */
-    private $successfulPayment;
+    private $successful_payment;
 
     /**
+     * Optional. The domain name of the website on which the user has logged in. More about Telegram Login >>
+     *
      * @var string|null
      */
-    private $connectedWebsite;
+    private $connected_website;
 
     /**
+     * Optional. Telegram Passport data
+     *
      * @var PassportData|null
      */
-    private $passportData;
+    private $passport_data;
 
     /**
+     * Optional. Inline keyboard attached to the message. login_url buttons are represented as ordinary url buttons.
+     *
      * @var InlineKeyboardMarkup|null
      */
-    private $replyMarkup;
+    private $reply_markup;
 
     /**
      * @return int
      */
     public function getMessageId(): int
     {
-        return $this->messageId;
+        return $this->message_id;
     }
 
     /**
-     * @param int $messageId
+     * @param int $message_id
      */
-    public function setMessageId(int $messageId): void
+    public function setMessageId(int $message_id): void
     {
-        $this->messageId = $messageId;
+        $this->message_id = $message_id;
     }
 
     /**
@@ -329,15 +449,15 @@ class Message extends Response
      */
     public function getForwardFrom(): ?User
     {
-        return $this->forwardFrom;
+        return $this->forward_from;
     }
 
     /**
-     * @param User|null $forwardFrom
+     * @param User|null $forward_from
      */
-    public function setForwardFrom(?User $forwardFrom): void
+    public function setForwardFrom(?User $forward_from): void
     {
-        $this->forwardFrom = $forwardFrom;
+        $this->forward_from = $forward_from;
     }
 
     /**
@@ -345,15 +465,15 @@ class Message extends Response
      */
     public function getForwardFromChat(): ?Chat
     {
-        return $this->forwardFromChat;
+        return $this->forward_from_chat;
     }
 
     /**
-     * @param Chat|null $forwardFromChat
+     * @param Chat|null $forward_from_chat
      */
-    public function setForwardFromChat(?Chat $forwardFromChat): void
+    public function setForwardFromChat(?Chat $forward_from_chat): void
     {
-        $this->forwardFromChat = $forwardFromChat;
+        $this->forward_from_chat = $forward_from_chat;
     }
 
     /**
@@ -361,15 +481,15 @@ class Message extends Response
      */
     public function getForwardFromMessageId(): ?int
     {
-        return $this->forwardFromMessageId;
+        return $this->forward_from_message_id;
     }
 
     /**
-     * @param int|null $forwardFromMessageId
+     * @param int|null $forward_from_message_id
      */
-    public function setForwardFromMessageId(?int $forwardFromMessageId): void
+    public function setForwardFromMessageId(?int $forward_from_message_id): void
     {
-        $this->forwardFromMessageId = $forwardFromMessageId;
+        $this->forward_from_message_id = $forward_from_message_id;
     }
 
     /**
@@ -377,15 +497,15 @@ class Message extends Response
      */
     public function getForwardSignature(): ?string
     {
-        return $this->forwardSignature;
+        return $this->forward_signature;
     }
 
     /**
-     * @param string|null $forwardSignature
+     * @param string|null $forward_signature
      */
-    public function setForwardSignature(?string $forwardSignature): void
+    public function setForwardSignature(?string $forward_signature): void
     {
-        $this->forwardSignature = $forwardSignature;
+        $this->forward_signature = $forward_signature;
     }
 
     /**
@@ -393,15 +513,15 @@ class Message extends Response
      */
     public function getForwardSenderName(): ?string
     {
-        return $this->forwardSenderName;
+        return $this->forward_sender_name;
     }
 
     /**
-     * @param string|null $forwardSenderName
+     * @param string|null $forward_sender_name
      */
-    public function setForwardSenderName(?string $forwardSenderName): void
+    public function setForwardSenderName(?string $forward_sender_name): void
     {
-        $this->forwardSenderName = $forwardSenderName;
+        $this->forward_sender_name = $forward_sender_name;
     }
 
     /**
@@ -409,31 +529,31 @@ class Message extends Response
      */
     public function getForwardDate(): ?int
     {
-        return $this->forwardDate;
+        return $this->forward_date;
     }
 
     /**
-     * @param int|null $forwardDate
+     * @param int|null $forward_date
      */
-    public function setForwardDate(?int $forwardDate): void
+    public function setForwardDate(?int $forward_date): void
     {
-        $this->forwardDate = $forwardDate;
+        $this->forward_date = $forward_date;
     }
 
     /**
-     * @return ReplyToMessage|null
+     * @return Message|null
      */
-    public function getReplyToMessage(): ?ReplyToMessage
+    public function getReplyToMessage(): ?Message
     {
-        return $this->replyToMessage;
+        return $this->reply_to_message;
     }
 
     /**
-     * @param ReplyToMessage|null $replyToMessage
+     * @param Message|null $reply_to_message
      */
-    public function setReplyToMessage(?ReplyToMessage $replyToMessage): void
+    public function setReplyToMessage(?Message $reply_to_message): void
     {
-        $this->replyToMessage = $replyToMessage;
+        $this->reply_to_message = $reply_to_message;
     }
 
     /**
@@ -441,15 +561,15 @@ class Message extends Response
      */
     public function getEditDate(): ?int
     {
-        return $this->editDate;
+        return $this->edit_date;
     }
 
     /**
-     * @param int|null $editDate
+     * @param int|null $edit_date
      */
-    public function setEditDate(?int $editDate): void
+    public function setEditDate(?int $edit_date): void
     {
-        $this->editDate = $editDate;
+        $this->edit_date = $edit_date;
     }
 
     /**
@@ -457,15 +577,15 @@ class Message extends Response
      */
     public function getMediaGroupId(): ?string
     {
-        return $this->mediaGroupId;
+        return $this->media_group_id;
     }
 
     /**
-     * @param string|null $mediaGroupId
+     * @param string|null $media_group_id
      */
-    public function setMediaGroupId(?string $mediaGroupId): void
+    public function setMediaGroupId(?string $media_group_id): void
     {
-        $this->mediaGroupId = $mediaGroupId;
+        $this->media_group_id = $media_group_id;
     }
 
     /**
@@ -473,15 +593,15 @@ class Message extends Response
      */
     public function getAuthorSignature(): ?string
     {
-        return $this->authorSignature;
+        return $this->author_signature;
     }
 
     /**
-     * @param string|null $authorSignature
+     * @param string|null $author_signature
      */
-    public function setAuthorSignature(?string $authorSignature): void
+    public function setAuthorSignature(?string $author_signature): void
     {
-        $this->authorSignature = $authorSignature;
+        $this->author_signature = $author_signature;
     }
 
     /**
@@ -501,35 +621,35 @@ class Message extends Response
     }
 
     /**
-     * @return MessageEntity[]
+     * @return MessageEntity[]|null
      */
-    public function getEntities(): array
+    public function getEntities(): ?array
     {
         return $this->entities;
     }
 
     /**
-     * @param MessageEntity[] $entities
+     * @param MessageEntity[]|null $entities
      */
-    public function setEntities(array $entities): void
+    public function setEntities(?array $entities): void
     {
         $this->entities = $entities;
     }
 
     /**
-     * @return MessageEntity[]
+     * @return MessageEntity[]|null
      */
-    public function getCaptionEntities(): array
+    public function getCaptionEntities(): ?array
     {
-        return $this->captionEntities;
+        return $this->caption_entities;
     }
 
     /**
-     * @param MessageEntity[] $captionEntities
+     * @param MessageEntity[]|null $caption_entities
      */
-    public function setCaptionEntities(array $captionEntities): void
+    public function setCaptionEntities(?array $caption_entities): void
     {
-        $this->captionEntities = $captionEntities;
+        $this->caption_entities = $caption_entities;
     }
 
     /**
@@ -597,17 +717,17 @@ class Message extends Response
     }
 
     /**
-     * @return \Zanzara\Telegram\Type\File\PhotoSize[]
+     * @return PhotoSize[]|null
      */
-    public function getPhoto(): array
+    public function getPhoto(): ?array
     {
         return $this->photo;
     }
 
     /**
-     * @param \Zanzara\Telegram\Type\File\PhotoSize[] $photo
+     * @param PhotoSize[]|null $photo
      */
-    public function setPhoto(array $photo): void
+    public function setPhoto(?array $photo): void
     {
         $this->photo = $photo;
     }
@@ -665,15 +785,15 @@ class Message extends Response
      */
     public function getVideoNote(): ?VideoNote
     {
-        return $this->videoNote;
+        return $this->video_note;
     }
 
     /**
-     * @param VideoNote|null $videoNote
+     * @param VideoNote|null $video_note
      */
-    public function setVideoNote(?VideoNote $videoNote): void
+    public function setVideoNote(?VideoNote $video_note): void
     {
-        $this->videoNote = $videoNote;
+        $this->video_note = $video_note;
     }
 
     /**
@@ -757,19 +877,35 @@ class Message extends Response
     }
 
     /**
-     * @return User[]
+     * @return Dice|null
      */
-    public function getNewChatMembers(): array
+    public function getDice(): ?Dice
     {
-        return $this->newChatMembers;
+        return $this->dice;
     }
 
     /**
-     * @param User[] $newChatMembers
+     * @param Dice|null $dice
      */
-    public function setNewChatMembers(array $newChatMembers): void
+    public function setDice(?Dice $dice): void
     {
-        $this->newChatMembers = $newChatMembers;
+        $this->dice = $dice;
+    }
+
+    /**
+     * @return User[]|null
+     */
+    public function getNewChatMembers(): ?array
+    {
+        return $this->new_chat_members;
+    }
+
+    /**
+     * @param User[]|null $new_chat_members
+     */
+    public function setNewChatMembers(?array $new_chat_members): void
+    {
+        $this->new_chat_members = $new_chat_members;
     }
 
     /**
@@ -777,15 +913,15 @@ class Message extends Response
      */
     public function getLeftChatMember(): ?User
     {
-        return $this->leftChatMember;
+        return $this->left_chat_member;
     }
 
     /**
-     * @param User|null $leftChatMember
+     * @param User|null $left_chat_member
      */
-    public function setLeftChatMember(?User $leftChatMember): void
+    public function setLeftChatMember(?User $left_chat_member): void
     {
-        $this->leftChatMember = $leftChatMember;
+        $this->left_chat_member = $left_chat_member;
     }
 
     /**
@@ -793,31 +929,31 @@ class Message extends Response
      */
     public function getNewChatTitle(): ?string
     {
-        return $this->newChatTitle;
+        return $this->new_chat_title;
     }
 
     /**
-     * @param string|null $newChatTitle
+     * @param string|null $new_chat_title
      */
-    public function setNewChatTitle(?string $newChatTitle): void
+    public function setNewChatTitle(?string $new_chat_title): void
     {
-        $this->newChatTitle = $newChatTitle;
+        $this->new_chat_title = $new_chat_title;
     }
 
     /**
-     * @return \Zanzara\Telegram\Type\File\PhotoSize[]
+     * @return PhotoSize[]|null
      */
-    public function getNewChatPhoto(): array
+    public function getNewChatPhoto(): ?array
     {
-        return $this->newChatPhoto;
+        return $this->new_chat_photo;
     }
 
     /**
-     * @param \Zanzara\Telegram\Type\File\PhotoSize[] $newChatPhoto
+     * @param PhotoSize[]|null $new_chat_photo
      */
-    public function setNewChatPhoto(array $newChatPhoto): void
+    public function setNewChatPhoto(?array $new_chat_photo): void
     {
-        $this->newChatPhoto = $newChatPhoto;
+        $this->new_chat_photo = $new_chat_photo;
     }
 
     /**
@@ -825,15 +961,15 @@ class Message extends Response
      */
     public function getDeleteChatPhoto(): ?bool
     {
-        return $this->deleteChatPhoto;
+        return $this->delete_chat_photo;
     }
 
     /**
-     * @param bool|null $deleteChatPhoto
+     * @param bool|null $delete_chat_photo
      */
-    public function setDeleteChatPhoto(?bool $deleteChatPhoto): void
+    public function setDeleteChatPhoto(?bool $delete_chat_photo): void
     {
-        $this->deleteChatPhoto = $deleteChatPhoto;
+        $this->delete_chat_photo = $delete_chat_photo;
     }
 
     /**
@@ -841,15 +977,15 @@ class Message extends Response
      */
     public function getGroupChatCreated(): ?bool
     {
-        return $this->groupChatCreated;
+        return $this->group_chat_created;
     }
 
     /**
-     * @param bool|null $groupChatCreated
+     * @param bool|null $group_chat_created
      */
-    public function setGroupChatCreated(?bool $groupChatCreated): void
+    public function setGroupChatCreated(?bool $group_chat_created): void
     {
-        $this->groupChatCreated = $groupChatCreated;
+        $this->group_chat_created = $group_chat_created;
     }
 
     /**
@@ -857,15 +993,15 @@ class Message extends Response
      */
     public function getSupergroupChatCreated(): ?bool
     {
-        return $this->supergroupChatCreated;
+        return $this->supergroup_chat_created;
     }
 
     /**
-     * @param bool|null $supergroupChatCreated
+     * @param bool|null $supergroup_chat_created
      */
-    public function setSupergroupChatCreated(?bool $supergroupChatCreated): void
+    public function setSupergroupChatCreated(?bool $supergroup_chat_created): void
     {
-        $this->supergroupChatCreated = $supergroupChatCreated;
+        $this->supergroup_chat_created = $supergroup_chat_created;
     }
 
     /**
@@ -873,15 +1009,15 @@ class Message extends Response
      */
     public function getChannelChatCreated(): ?bool
     {
-        return $this->channelChatCreated;
+        return $this->channel_chat_created;
     }
 
     /**
-     * @param bool|null $channelChatCreated
+     * @param bool|null $channel_chat_created
      */
-    public function setChannelChatCreated(?bool $channelChatCreated): void
+    public function setChannelChatCreated(?bool $channel_chat_created): void
     {
-        $this->channelChatCreated = $channelChatCreated;
+        $this->channel_chat_created = $channel_chat_created;
     }
 
     /**
@@ -889,15 +1025,15 @@ class Message extends Response
      */
     public function getMigrateToChatId(): ?int
     {
-        return $this->migrateToChatId;
+        return $this->migrate_to_chat_id;
     }
 
     /**
-     * @param int|null $migrateToChatId
+     * @param int|null $migrate_to_chat_id
      */
-    public function setMigrateToChatId(?int $migrateToChatId): void
+    public function setMigrateToChatId(?int $migrate_to_chat_id): void
     {
-        $this->migrateToChatId = $migrateToChatId;
+        $this->migrate_to_chat_id = $migrate_to_chat_id;
     }
 
     /**
@@ -905,15 +1041,15 @@ class Message extends Response
      */
     public function getMigrateFromChatId(): ?int
     {
-        return $this->migrateFromChatId;
+        return $this->migrate_from_chat_id;
     }
 
     /**
-     * @param int|null $migrateFromChatId
+     * @param int|null $migrate_from_chat_id
      */
-    public function setMigrateFromChatId(?int $migrateFromChatId): void
+    public function setMigrateFromChatId(?int $migrate_from_chat_id): void
     {
-        $this->migrateFromChatId = $migrateFromChatId;
+        $this->migrate_from_chat_id = $migrate_from_chat_id;
     }
 
     /**
@@ -921,15 +1057,15 @@ class Message extends Response
      */
     public function getPinnedMessage(): ?Message
     {
-        return $this->pinnedMessage;
+        return $this->pinned_message;
     }
 
     /**
-     * @param Message|null $pinnedMessage
+     * @param Message|null $pinned_message
      */
-    public function setPinnedMessage(?Message $pinnedMessage): void
+    public function setPinnedMessage(?Message $pinned_message): void
     {
-        $this->pinnedMessage = $pinnedMessage;
+        $this->pinned_message = $pinned_message;
     }
 
     /**
@@ -953,15 +1089,15 @@ class Message extends Response
      */
     public function getSuccessfulPayment(): ?SuccessfulPayment
     {
-        return $this->successfulPayment;
+        return $this->successful_payment;
     }
 
     /**
-     * @param SuccessfulPayment|null $successfulPayment
+     * @param SuccessfulPayment|null $successful_payment
      */
-    public function setSuccessfulPayment(?SuccessfulPayment $successfulPayment): void
+    public function setSuccessfulPayment(?SuccessfulPayment $successful_payment): void
     {
-        $this->successfulPayment = $successfulPayment;
+        $this->successful_payment = $successful_payment;
     }
 
     /**
@@ -969,15 +1105,15 @@ class Message extends Response
      */
     public function getConnectedWebsite(): ?string
     {
-        return $this->connectedWebsite;
+        return $this->connected_website;
     }
 
     /**
-     * @param string|null $connectedWebsite
+     * @param string|null $connected_website
      */
-    public function setConnectedWebsite(?string $connectedWebsite): void
+    public function setConnectedWebsite(?string $connected_website): void
     {
-        $this->connectedWebsite = $connectedWebsite;
+        $this->connected_website = $connected_website;
     }
 
     /**
@@ -985,15 +1121,15 @@ class Message extends Response
      */
     public function getPassportData(): ?PassportData
     {
-        return $this->passportData;
+        return $this->passport_data;
     }
 
     /**
-     * @param PassportData|null $passportData
+     * @param PassportData|null $passport_data
      */
-    public function setPassportData(?PassportData $passportData): void
+    public function setPassportData(?PassportData $passport_data): void
     {
-        $this->passportData = $passportData;
+        $this->passport_data = $passport_data;
     }
 
     /**
@@ -1001,15 +1137,15 @@ class Message extends Response
      */
     public function getReplyMarkup(): ?InlineKeyboardMarkup
     {
-        return $this->replyMarkup;
+        return $this->reply_markup;
     }
 
     /**
-     * @param InlineKeyboardMarkup|null $replyMarkup
+     * @param InlineKeyboardMarkup|null $reply_markup
      */
-    public function setReplyMarkup(?InlineKeyboardMarkup $replyMarkup): void
+    public function setReplyMarkup(?InlineKeyboardMarkup $reply_markup): void
     {
-        $this->replyMarkup = $replyMarkup;
+        $this->reply_markup = $reply_markup;
     }
 
 }

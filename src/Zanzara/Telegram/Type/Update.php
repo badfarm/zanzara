@@ -1,82 +1,112 @@
 <?php
-
 declare(strict_types=1);
-
 namespace Zanzara\Telegram\Type;
 
 use Zanzara\Telegram\Type\Passport\PassportData;
 use Zanzara\Telegram\Type\Poll\Poll;
 use Zanzara\Telegram\Type\Poll\PollAnswer;
+use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 use Zanzara\Telegram\Type\Shipping\PreCheckoutQuery;
 use Zanzara\Telegram\Type\Shipping\ShippingQuery;
 use Zanzara\Telegram\Type\Shipping\SuccessfulPayment;
 
 /**
- * The update received from Telegram.
+ * This object represents an incoming update.At most one of the optional parameters can be present in any given update.
  *
+ * More on https://core.telegram.org/bots/api#update
  */
-class Update
+class Update extends SuccessfulResponse
 {
 
     /**
+     * The update's unique identifier. Update identifiers start from a certain positive number and increase sequentially.
+     * This ID becomes especially handy if you're using Webhooks, since it allows you to ignore repeated updates or to
+     * restore the correct update sequence, should they get out of order. If there are no new updates for at least a
+     * week, then identifier of the next update will be chosen randomly instead of sequentially.
+     *
      * @var int
      */
-    private $updateId;
+    private $update_id;
 
     /**
+     * Optional. New incoming message of any kind -- text, photo, sticker, etc.
+     *
      * @var Message|null
      */
     private $message;
 
     /**
+     * Optional. New version of a message that is known to the bot and was edited
+     *
      * @var EditedMessage|null
      */
-    private $editedMessage;
+    private $edited_message;
 
     /**
+     * Optional. New incoming channel post of any kind -- text, photo, sticker, etc.
+     *
      * @var ChannelPost|null
      */
-    private $channelPost;
+    private $channel_post;
 
     /**
+     * Optional. New version of a channel post that is known to the bot and was edited
+     *
      * @var EditedChannelPost|null
      */
-    private $editedChannelPost;
+    private $edited_channel_post;
 
     /**
+     * Optional. New incoming inline query
+     *
      * @var InlineQuery|null
      */
-    private $inlineQuery;
+    private $inline_query;
 
     /**
+     * Optional. The result of an inline query that was chosen by a user and sent to their chat partner. Please see our
+     * documentation on the feedback collecting for details on how to enable these updates for your bot.
+     *
      * @var ChosenInlineResult|null
      */
-    private $chosenInlineResult;
+    private $chosen_inline_result;
 
     /**
+     * Optional. New incoming callback query
+     *
      * @var CallbackQuery|null
      */
-    private $callbackQuery;
+    private $callback_query;
 
     /**
+     * Optional. New incoming shipping query. Only for invoices with flexible price
+     *
      * @var ShippingQuery|null
      */
-    private $shippingQuery;
+    private $shipping_query;
 
     /**
+     * Optional. New incoming pre-checkout query. Contains full information about checkout
+     *
      * @var PreCheckoutQuery|null
      */
-    private $preCheckoutQuery;
+    private $pre_checkout_query;
 
     /**
+     * Optional. New poll state. Bots receive only updates about stopped polls and polls, which are sent by the bot
+     *
      * @var Poll|null
      */
     private $poll;
 
     /**
+     * Optional. A user changed their answer in a non-anonymous poll. Bots receive new votes only in polls that were sent by
+     * the bot itself.
+     *
      * @var PollAnswer|null
      */
-    private $pollAnswer;
+    private $poll_answer;
+
 
     /**
      * @var string
@@ -98,15 +128,15 @@ class Update
      */
     public function getUpdateId(): int
     {
-        return $this->updateId;
+        return $this->update_id;
     }
 
     /**
-     * @param int $updateId
+     * @param int $update_id
      */
-    public function setUpdateId(int $updateId): void
+    public function setUpdateId(int $update_id): void
     {
-        $this->updateId = $updateId;
+        $this->update_id = $update_id;
     }
 
     /**
@@ -130,15 +160,15 @@ class Update
      */
     public function getEditedMessage(): ?EditedMessage
     {
-        return $this->editedMessage;
+        return $this->edited_message;
     }
 
     /**
-     * @param EditedMessage|null $editedMessage
+     * @param EditedMessage|null $edited_message
      */
-    public function setEditedMessage(?EditedMessage $editedMessage): void
+    public function setEditedMessage(?EditedMessage $edited_message): void
     {
-        $this->editedMessage = $editedMessage;
+        $this->edited_message = $edited_message;
     }
 
     /**
@@ -146,15 +176,15 @@ class Update
      */
     public function getChannelPost(): ?ChannelPost
     {
-        return $this->channelPost;
+        return $this->channel_post;
     }
 
     /**
-     * @param ChannelPost|null $channelPost
+     * @param ChannelPost|null $channel_post
      */
-    public function setChannelPost(?ChannelPost $channelPost): void
+    public function setChannelPost(?ChannelPost $channel_post): void
     {
-        $this->channelPost = $channelPost;
+        $this->channel_post = $channel_post;
     }
 
     /**
@@ -162,15 +192,15 @@ class Update
      */
     public function getEditedChannelPost(): ?EditedChannelPost
     {
-        return $this->editedChannelPost;
+        return $this->edited_channel_post;
     }
 
     /**
-     * @param EditedChannelPost|null $editedChannelPost
+     * @param EditedChannelPost|null $edited_channel_post
      */
-    public function setEditedChannelPost(?EditedChannelPost $editedChannelPost): void
+    public function setEditedChannelPost(?EditedChannelPost $edited_channel_post): void
     {
-        $this->editedChannelPost = $editedChannelPost;
+        $this->edited_channel_post = $edited_channel_post;
     }
 
     /**
@@ -178,15 +208,15 @@ class Update
      */
     public function getInlineQuery(): ?InlineQuery
     {
-        return $this->inlineQuery;
+        return $this->inline_query;
     }
 
     /**
-     * @param InlineQuery|null $inlineQuery
+     * @param InlineQuery|null $inline_query
      */
-    public function setInlineQuery(?InlineQuery $inlineQuery): void
+    public function setInlineQuery(?InlineQuery $inline_query): void
     {
-        $this->inlineQuery = $inlineQuery;
+        $this->inline_query = $inline_query;
     }
 
     /**
@@ -194,15 +224,15 @@ class Update
      */
     public function getChosenInlineResult(): ?ChosenInlineResult
     {
-        return $this->chosenInlineResult;
+        return $this->chosen_inline_result;
     }
 
     /**
-     * @param ChosenInlineResult|null $chosenInlineResult
+     * @param ChosenInlineResult|null $chosen_inline_result
      */
-    public function setChosenInlineResult(?ChosenInlineResult $chosenInlineResult): void
+    public function setChosenInlineResult(?ChosenInlineResult $chosen_inline_result): void
     {
-        $this->chosenInlineResult = $chosenInlineResult;
+        $this->chosen_inline_result = $chosen_inline_result;
     }
 
     /**
@@ -210,15 +240,15 @@ class Update
      */
     public function getCallbackQuery(): ?CallbackQuery
     {
-        return $this->callbackQuery;
+        return $this->callback_query;
     }
 
     /**
-     * @param CallbackQuery|null $callbackQuery
+     * @param CallbackQuery|null $callback_query
      */
-    public function setCallbackQuery(?CallbackQuery $callbackQuery): void
+    public function setCallbackQuery(?CallbackQuery $callback_query): void
     {
-        $this->callbackQuery = $callbackQuery;
+        $this->callback_query = $callback_query;
     }
 
     /**
@@ -226,15 +256,15 @@ class Update
      */
     public function getShippingQuery(): ?ShippingQuery
     {
-        return $this->shippingQuery;
+        return $this->shipping_query;
     }
 
     /**
-     * @param ShippingQuery|null $shippingQuery
+     * @param ShippingQuery|null $shipping_query
      */
-    public function setShippingQuery(?ShippingQuery $shippingQuery): void
+    public function setShippingQuery(?ShippingQuery $shipping_query): void
     {
-        $this->shippingQuery = $shippingQuery;
+        $this->shipping_query = $shipping_query;
     }
 
     /**
@@ -242,15 +272,15 @@ class Update
      */
     public function getPreCheckoutQuery(): ?PreCheckoutQuery
     {
-        return $this->preCheckoutQuery;
+        return $this->pre_checkout_query;
     }
 
     /**
-     * @param PreCheckoutQuery|null $preCheckoutQuery
+     * @param PreCheckoutQuery|null $pre_checkout_query
      */
-    public function setPreCheckoutQuery(?PreCheckoutQuery $preCheckoutQuery): void
+    public function setPreCheckoutQuery(?PreCheckoutQuery $pre_checkout_query): void
     {
-        $this->preCheckoutQuery = $preCheckoutQuery;
+        $this->pre_checkout_query = $pre_checkout_query;
     }
 
     /**
@@ -274,15 +304,15 @@ class Update
      */
     public function getPollAnswer(): ?PollAnswer
     {
-        return $this->pollAnswer;
+        return $this->poll_answer;
     }
 
     /**
-     * @param PollAnswer|null $pollAnswer
+     * @param PollAnswer|null $poll_answer
      */
-    public function setPollAnswer(?PollAnswer $pollAnswer): void
+    public function setPollAnswer(?PollAnswer $poll_answer): void
     {
-        $this->pollAnswer = $pollAnswer;
+        $this->poll_answer = $poll_answer;
     }
 
     /**
@@ -314,34 +344,34 @@ class Update
             $this->updateType = Message::class;
             $this->effectiveUser = $this->message->getFrom();
             $this->effectiveChat = $this->message->getChat();
-        } else if ($this->editedMessage) {
+        } else if ($this->edited_message) {
             $this->updateType = EditedMessage::class;
-            $this->effectiveUser = $this->editedMessage->getFrom();
-            $this->effectiveChat = $this->editedMessage->getChat();
-        } else if ($this->channelPost) {
+            $this->effectiveUser = $this->edited_message->getFrom();
+            $this->effectiveChat = $this->edited_message->getChat();
+        } else if ($this->channel_post) {
             $this->updateType = ChannelPost::class;
-            $this->effectiveUser = $this->channelPost->getFrom();
-            $this->effectiveChat = $this->channelPost->getChat();
-        } else if ($this->editedChannelPost) {
+            $this->effectiveUser = $this->channel_post->getFrom();
+            $this->effectiveChat = $this->channel_post->getChat();
+        } else if ($this->edited_channel_post) {
             $this->updateType = EditedChannelPost::class;
-            $this->effectiveUser = $this->editedChannelPost->getFrom();
-            $this->effectiveChat = $this->editedChannelPost->getChat();
-        } else if ($this->callbackQuery) {
+            $this->effectiveUser = $this->edited_channel_post->getFrom();
+            $this->effectiveChat = $this->edited_channel_post->getChat();
+        } else if ($this->callback_query) {
             $this->updateType = CallbackQuery::class;
-            $this->effectiveUser = $this->callbackQuery->getFrom();
-            $this->effectiveChat = $this->callbackQuery->getMessage()->getChat() ?? null;
-        } else if ($this->shippingQuery) {
+            $this->effectiveUser = $this->callback_query->getFrom();
+            $this->effectiveChat = $this->callback_query->getMessage()->getChat() ?? null;
+        } else if ($this->shipping_query) {
             $this->updateType = ShippingQuery::class;
-            $this->effectiveUser = $this->shippingQuery->getFrom();
-        } else if ($this->preCheckoutQuery) {
+            $this->effectiveUser = $this->shipping_query->getFrom();
+        } else if ($this->pre_checkout_query) {
             $this->updateType = PreCheckoutQuery::class;
-            $this->effectiveUser = $this->preCheckoutQuery->getFrom();
-        } else if ($this->inlineQuery) {
+            $this->effectiveUser = $this->pre_checkout_query->getFrom();
+        } else if ($this->inline_query) {
             $this->updateType = InlineQuery::class;
-            $this->effectiveUser = $this->inlineQuery->getFrom();
-        } else if ($this->chosenInlineResult) {
+            $this->effectiveUser = $this->inline_query->getFrom();
+        } else if ($this->chosen_inline_result) {
             $this->updateType = ChosenInlineResult::class;
-            $this->effectiveUser = $this->chosenInlineResult->getFrom();
+            $this->effectiveUser = $this->chosen_inline_result->getFrom();
         }
     }
 

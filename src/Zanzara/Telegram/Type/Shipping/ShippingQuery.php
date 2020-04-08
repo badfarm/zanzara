@@ -1,36 +1,44 @@
 <?php
-
 declare(strict_types=1);
-
 namespace Zanzara\Telegram\Type\Shipping;
 
 use Zanzara\Telegram\Type\User;
 
 /**
+ * This object contains information about an incoming shipping query.
  *
+ * More on https://core.telegram.org/bots/api#shippingquery
  */
 class ShippingQuery
 {
 
     /**
+     * Unique query identifier
+     *
      * @var string
      */
     private $id;
 
     /**
+     * User who sent the query
+     *
      * @var User
      */
     private $from;
 
     /**
+     * Bot specified invoice payload
+     *
      * @var string
      */
-    private $invoicePayload;
+    private $invoice_payload;
 
     /**
+     * User specified shipping address
+     *
      * @var ShippingAddress
      */
-    private $shippingAddress;
+    private $shipping_address;
 
     /**
      * @return string
@@ -69,15 +77,15 @@ class ShippingQuery
      */
     public function getInvoicePayload(): string
     {
-        return $this->invoicePayload;
+        return $this->invoice_payload;
     }
 
     /**
-     * @param string $invoicePayload
+     * @param string $invoice_payload
      */
-    public function setInvoicePayload(string $invoicePayload): void
+    public function setInvoicePayload(string $invoice_payload): void
     {
-        $this->invoicePayload = $invoicePayload;
+        $this->invoice_payload = $invoice_payload;
     }
 
     /**
@@ -85,15 +93,15 @@ class ShippingQuery
      */
     public function getShippingAddress(): ShippingAddress
     {
-        return $this->shippingAddress;
+        return $this->shipping_address;
     }
 
     /**
-     * @param ShippingAddress $shippingAddress
+     * @param ShippingAddress $shipping_address
      */
-    public function setShippingAddress(ShippingAddress $shippingAddress): void
+    public function setShippingAddress(ShippingAddress $shipping_address): void
     {
-        $this->shippingAddress = $shippingAddress;
+        $this->shipping_address = $shipping_address;
     }
 
 }

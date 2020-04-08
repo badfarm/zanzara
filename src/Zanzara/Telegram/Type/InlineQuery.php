@@ -1,38 +1,51 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
 
 use Zanzara\Telegram\Type\File\Location;
+use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 
 /**
+ * This object represents an incoming inline query. When the user sends an empty query, your bot could return some
+ * default or trending results.
  *
+ * More on https://core.telegram.org/bots/api#inlinequery
  */
-class InlineQuery
+class InlineQuery extends SuccessfulResponse
 {
 
     /**
+     * Unique identifier for this query
+     *
      * @var string
      */
     private $id;
 
     /**
+     * Sender
+     *
      * @var User
      */
     private $from;
 
     /**
+     * Optional. Sender location, only for bots that request user location
+     *
      * @var Location|null
      */
     private $location;
 
     /**
+     * Text of the query (up to 256 characters)
+     *
      * @var string
      */
     private $query;
 
     /**
+     * Offset of the results to be returned, can be controlled by the bot
+     *
      * @var string
      */
     private $offset;

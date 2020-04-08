@@ -1,59 +1,72 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Shipping;
 
 /**
+ * This object represents a shipping address.
  *
+ * More on https://core.telegram.org/bots/api#shippingaddress
  */
 class ShippingAddress
 {
 
     /**
+     * ISO 3166-1 alpha-2 country code
+     *
      * @var string
      */
-    private $countryCode;
+    private $country_code;
 
     /**
+     * State, if applicable
+     *
      * @var string
      */
     private $state;
 
     /**
+     * City
+     *
      * @var string
      */
     private $city;
 
     /**
+     * First line for the address
+     *
      * @var string
      */
-    private $streetLine1;
+    private $street_line1;
 
     /**
+     * Second line for the address
+     *
      * @var string
      */
-    private $streetLine2;
+    private $street_line2;
 
     /**
+     * Address post code
+     *
      * @var string
      */
-    private $postCode;
+    private $post_code;
 
     /**
      * @return string
      */
     public function getCountryCode(): string
     {
-        return $this->countryCode;
+        return $this->country_code;
     }
 
     /**
-     * @param string $countryCode
+     * @param string $country_code
      */
-    public function setCountryCode(string $countryCode): void
+    public function setCountryCode(string $country_code): void
     {
-        $this->countryCode = $countryCode;
+        $this->country_code = $country_code;
     }
 
     /**
@@ -93,15 +106,15 @@ class ShippingAddress
      */
     public function getStreetLine1(): string
     {
-        return $this->streetLine1;
+        return $this->street_line1;
     }
 
     /**
-     * @param string $streetLine1
+     * @param string $street_line1
      */
-    public function setStreetLine1(string $streetLine1): void
+    public function setStreetLine1(string $street_line1): void
     {
-        $this->streetLine1 = $streetLine1;
+        $this->street_line1 = $street_line1;
     }
 
     /**
@@ -109,15 +122,15 @@ class ShippingAddress
      */
     public function getStreetLine2(): string
     {
-        return $this->streetLine2;
+        return $this->street_line2;
     }
 
     /**
-     * @param string $streetLine2
+     * @param string $street_line2
      */
-    public function setStreetLine2(string $streetLine2): void
+    public function setStreetLine2(string $street_line2): void
     {
-        $this->streetLine2 = $streetLine2;
+        $this->street_line2 = $street_line2;
     }
 
     /**
@@ -125,15 +138,15 @@ class ShippingAddress
      */
     public function getPostCode(): string
     {
-        return $this->postCode;
+        return $this->post_code;
     }
 
     /**
-     * @param string $postCode
+     * @param string $post_code
      */
-    public function setPostCode(string $postCode): void
+    public function setPostCode(string $post_code): void
     {
-        $this->postCode = $postCode;
+        $this->post_code = $post_code;
     }
 
 }

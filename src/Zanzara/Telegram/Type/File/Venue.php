@@ -1,39 +1,52 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\File;
 
+
 /**
+ * This object represents a venue.
  *
+ * More on https://core.telegram.org/bots/api#venue
  */
 class Venue
 {
 
     /**
+     * Venue location
+     *
      * @var Location
      */
     private $location;
 
     /**
+     * Name of the venue
+     *
      * @var string
      */
     private $title;
 
     /**
+     * Address of the venue
+     *
      * @var string
      */
     private $address;
 
     /**
+     * Optional. Foursquare identifier of the venue
+     *
      * @var string|null
      */
-    private $foursquareId;
+    private $foursquare_id;
 
     /**
+     * Optional. Foursquare type of the venue. (For example, "arts_entertainment/default", "arts_entertainment/aquarium" or
+     * "food/icecream".)
+     *
      * @var string|null
      */
-    private $foursquareType;
+    private $foursquare_type;
 
     /**
      * @return Location
@@ -88,15 +101,15 @@ class Venue
      */
     public function getFoursquareId(): ?string
     {
-        return $this->foursquareId;
+        return $this->foursquare_id;
     }
 
     /**
-     * @param string|null $foursquareId
+     * @param string|null $foursquare_id
      */
-    public function setFoursquareId(?string $foursquareId): void
+    public function setFoursquareId(?string $foursquare_id): void
     {
-        $this->foursquareId = $foursquareId;
+        $this->foursquare_id = $foursquare_id;
     }
 
     /**
@@ -104,15 +117,15 @@ class Venue
      */
     public function getFoursquareType(): ?string
     {
-        return $this->foursquareType;
+        return $this->foursquare_type;
     }
 
     /**
-     * @param string|null $foursquareType
+     * @param string|null $foursquare_type
      */
-    public function setFoursquareType(?string $foursquareType): void
+    public function setFoursquareType(?string $foursquare_type): void
     {
-        $this->foursquareType = $foursquareType;
+        $this->foursquare_type = $foursquare_type;
     }
 
 }

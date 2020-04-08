@@ -1,49 +1,60 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Passport;
 
 /**
+ * This object represents a file uploaded to Telegram Passport. Currently all Telegram Passport files are in JPEG format
+ * when decrypted and don't exceed 10MB.
  *
+ * More on https://core.telegram.org/bots/api#passportfile
  */
 class PassportFile
 {
 
     /**
+     * Identifier for this file, which can be used to download or reuse the file
+     *
      * @var string
      */
-    private $fileId;
+    private $file_id;
 
     /**
+     * Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to
+     * download or reuse the file.
+     *
      * @var string
      */
-    private $fileUniqueId;
+    private $file_unique_id;
 
     /**
+     * File size
+     *
      * @var int
      */
-    private $fileSize;
+    private $file_size;
 
     /**
+     * Unix time when the file was uploaded
+     *
      * @var int
      */
-    private $fileDate;
+    private $file_date;
 
     /**
      * @return string
      */
     public function getFileId(): string
     {
-        return $this->fileId;
+        return $this->file_id;
     }
 
     /**
-     * @param string $fileId
+     * @param string $file_id
      */
-    public function setFileId(string $fileId): void
+    public function setFileId(string $file_id): void
     {
-        $this->fileId = $fileId;
+        $this->file_id = $file_id;
     }
 
     /**
@@ -51,15 +62,15 @@ class PassportFile
      */
     public function getFileUniqueId(): string
     {
-        return $this->fileUniqueId;
+        return $this->file_unique_id;
     }
 
     /**
-     * @param string $fileUniqueId
+     * @param string $file_unique_id
      */
-    public function setFileUniqueId(string $fileUniqueId): void
+    public function setFileUniqueId(string $file_unique_id): void
     {
-        $this->fileUniqueId = $fileUniqueId;
+        $this->file_unique_id = $file_unique_id;
     }
 
     /**
@@ -67,15 +78,15 @@ class PassportFile
      */
     public function getFileSize(): int
     {
-        return $this->fileSize;
+        return $this->file_size;
     }
 
     /**
-     * @param int $fileSize
+     * @param int $file_size
      */
-    public function setFileSize(int $fileSize): void
+    public function setFileSize(int $file_size): void
     {
-        $this->fileSize = $fileSize;
+        $this->file_size = $file_size;
     }
 
     /**
@@ -83,15 +94,15 @@ class PassportFile
      */
     public function getFileDate(): int
     {
-        return $this->fileDate;
+        return $this->file_date;
     }
 
     /**
-     * @param int $fileDate
+     * @param int $file_date
      */
-    public function setFileDate(int $fileDate): void
+    public function setFileDate(int $file_date): void
     {
-        $this->fileDate = $fileDate;
+        $this->file_date = $file_date;
     }
 
 }

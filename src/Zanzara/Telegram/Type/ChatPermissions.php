@@ -1,69 +1,88 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
 
 /**
+ * Describes actions that a non-administrator user is allowed to take in a chat.
  *
+ * More on https://core.telegram.org/bots/api#chatpermissions
  */
-class ChatPermissions
+class ChatPermissions extends SuccessfulResponse
 {
 
     /**
+     * Optional. True, if the user is allowed to send text messages, contacts, locations and venues
+     *
      * @var bool|null
      */
-    private $canSendMessages;
+    private $can_send_messages;
 
     /**
+     * Optional. True, if the user is allowed to send audios, documents, photos, videos, video notes and voice notes,
+     * implies can_send_messages
+     *
      * @var bool|null
      */
-    private $canSendMediaMessages;
+    private $can_send_media_messages;
 
     /**
+     * Optional. True, if the user is allowed to send polls, implies can_send_messages
+     *
      * @var bool|null
      */
-    private $canSendPolls;
+    private $can_send_polls;
 
     /**
+     * Optional. True, if the user is allowed to send animations, games, stickers and use inline bots, implies
+     * can_send_media_messages
+     *
      * @var bool|null
      */
-    private $canSendOtherMessages;
+    private $can_send_other_messages;
 
     /**
+     * Optional. True, if the user is allowed to add web page previews to their messages, implies can_send_media_messages
+     *
      * @var bool|null
      */
-    private $canAddWebPagePreviews;
+    private $can_add_web_page_previews;
 
     /**
+     * Optional. True, if the user is allowed to change the chat title, photo and other settings. Ignored in public supergroups
+     *
      * @var bool|null
      */
-    private $canChangeInfo;
+    private $can_change_info;
 
     /**
+     * Optional. True, if the user is allowed to invite new users to the chat
+     *
      * @var bool|null
      */
-    private $canInviteUsers;
+    private $can_invite_users;
 
     /**
+     * Optional. True, if the user is allowed to pin messages. Ignored in public supergroups
+     *
      * @var bool|null
      */
-    private $canPinMessages;
+    private $can_pin_messages;
 
     /**
      * @return bool|null
      */
     public function getCanSendMessages(): ?bool
     {
-        return $this->canSendMessages;
+        return $this->can_send_messages;
     }
 
     /**
-     * @param bool|null $canSendMessages
+     * @param bool|null $can_send_messages
      */
-    public function setCanSendMessages(?bool $canSendMessages): void
+    public function setCanSendMessages(?bool $can_send_messages): void
     {
-        $this->canSendMessages = $canSendMessages;
+        $this->can_send_messages = $can_send_messages;
     }
 
     /**
@@ -71,15 +90,15 @@ class ChatPermissions
      */
     public function getCanSendMediaMessages(): ?bool
     {
-        return $this->canSendMediaMessages;
+        return $this->can_send_media_messages;
     }
 
     /**
-     * @param bool|null $canSendMediaMessages
+     * @param bool|null $can_send_media_messages
      */
-    public function setCanSendMediaMessages(?bool $canSendMediaMessages): void
+    public function setCanSendMediaMessages(?bool $can_send_media_messages): void
     {
-        $this->canSendMediaMessages = $canSendMediaMessages;
+        $this->can_send_media_messages = $can_send_media_messages;
     }
 
     /**
@@ -87,15 +106,15 @@ class ChatPermissions
      */
     public function getCanSendPolls(): ?bool
     {
-        return $this->canSendPolls;
+        return $this->can_send_polls;
     }
 
     /**
-     * @param bool|null $canSendPolls
+     * @param bool|null $can_send_polls
      */
-    public function setCanSendPolls(?bool $canSendPolls): void
+    public function setCanSendPolls(?bool $can_send_polls): void
     {
-        $this->canSendPolls = $canSendPolls;
+        $this->can_send_polls = $can_send_polls;
     }
 
     /**
@@ -103,15 +122,15 @@ class ChatPermissions
      */
     public function getCanSendOtherMessages(): ?bool
     {
-        return $this->canSendOtherMessages;
+        return $this->can_send_other_messages;
     }
 
     /**
-     * @param bool|null $canSendOtherMessages
+     * @param bool|null $can_send_other_messages
      */
-    public function setCanSendOtherMessages(?bool $canSendOtherMessages): void
+    public function setCanSendOtherMessages(?bool $can_send_other_messages): void
     {
-        $this->canSendOtherMessages = $canSendOtherMessages;
+        $this->can_send_other_messages = $can_send_other_messages;
     }
 
     /**
@@ -119,15 +138,15 @@ class ChatPermissions
      */
     public function getCanAddWebPagePreviews(): ?bool
     {
-        return $this->canAddWebPagePreviews;
+        return $this->can_add_web_page_previews;
     }
 
     /**
-     * @param bool|null $canAddWebPagePreviews
+     * @param bool|null $can_add_web_page_previews
      */
-    public function setCanAddWebPagePreviews(?bool $canAddWebPagePreviews): void
+    public function setCanAddWebPagePreviews(?bool $can_add_web_page_previews): void
     {
-        $this->canAddWebPagePreviews = $canAddWebPagePreviews;
+        $this->can_add_web_page_previews = $can_add_web_page_previews;
     }
 
     /**
@@ -135,15 +154,15 @@ class ChatPermissions
      */
     public function getCanChangeInfo(): ?bool
     {
-        return $this->canChangeInfo;
+        return $this->can_change_info;
     }
 
     /**
-     * @param bool|null $canChangeInfo
+     * @param bool|null $can_change_info
      */
-    public function setCanChangeInfo(?bool $canChangeInfo): void
+    public function setCanChangeInfo(?bool $can_change_info): void
     {
-        $this->canChangeInfo = $canChangeInfo;
+        $this->can_change_info = $can_change_info;
     }
 
     /**
@@ -151,15 +170,15 @@ class ChatPermissions
      */
     public function getCanInviteUsers(): ?bool
     {
-        return $this->canInviteUsers;
+        return $this->can_invite_users;
     }
 
     /**
-     * @param bool|null $canInviteUsers
+     * @param bool|null $can_invite_users
      */
-    public function setCanInviteUsers(?bool $canInviteUsers): void
+    public function setCanInviteUsers(?bool $can_invite_users): void
     {
-        $this->canInviteUsers = $canInviteUsers;
+        $this->can_invite_users = $can_invite_users;
     }
 
     /**
@@ -167,15 +186,16 @@ class ChatPermissions
      */
     public function getCanPinMessages(): ?bool
     {
-        return $this->canPinMessages;
+        return $this->can_pin_messages;
     }
 
     /**
-     * @param bool|null $canPinMessages
+     * @param bool|null $can_pin_messages
      */
-    public function setCanPinMessages(?bool $canPinMessages): void
+    public function setCanPinMessages(?bool $can_pin_messages): void
     {
-        $this->canPinMessages = $canPinMessages;
+        $this->can_pin_messages = $can_pin_messages;
     }
+
 
 }

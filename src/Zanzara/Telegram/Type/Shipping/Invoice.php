@@ -1,39 +1,52 @@
 <?php
-
 declare(strict_types=1);
-
 namespace Zanzara\Telegram\Type\Shipping;
 
+
 /**
+ * This object contains basic information about an invoice.
  *
+ * More on https://core.telegram.org/bots/api#invoice
  */
 class Invoice
 {
 
     /**
+     * Product name
+     *
      * @var string
      */
     private $title;
 
     /**
+     * Product description
+     *
      * @var string
      */
     private $description;
 
     /**
+     * Unique bot deep-linking parameter that can be used to generate this invoice
+     *
      * @var string
      */
-    private $startParameter;
+    private $start_parameter;
 
     /**
+     * Three-letter ISO 4217 currency code
+     *
      * @var string
      */
     private $currency;
 
     /**
+     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45
+     * pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point
+     * for each currency (2 for the majority of currencies).
+     *
      * @var int
      */
-    private $totalAmount;
+    private $total_amount;
 
     /**
      * @return string
@@ -72,15 +85,15 @@ class Invoice
      */
     public function getStartParameter(): string
     {
-        return $this->startParameter;
+        return $this->start_parameter;
     }
 
     /**
-     * @param string $startParameter
+     * @param string $start_parameter
      */
-    public function setStartParameter(string $startParameter): void
+    public function setStartParameter(string $start_parameter): void
     {
-        $this->startParameter = $startParameter;
+        $this->start_parameter = $start_parameter;
     }
 
     /**
@@ -104,15 +117,17 @@ class Invoice
      */
     public function getTotalAmount(): int
     {
-        return $this->totalAmount;
+        return $this->total_amount;
     }
 
     /**
-     * @param int $totalAmount
+     * @param int $total_amount
      */
-    public function setTotalAmount(int $totalAmount): void
+    public function setTotalAmount(int $total_amount): void
     {
-        $this->totalAmount = $totalAmount;
+        $this->total_amount = $total_amount;
     }
+
+
 
 }

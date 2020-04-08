@@ -1,59 +1,74 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\File;
 
+
 /**
+ * This object represents a general file (as opposed to photos, voice messages and audio files).
  *
+ * More on https://core.telegram.org/bots/api#document
  */
 class Document
 {
 
     /**
+     * Identifier for this file, which can be used to download or reuse the file
+     *
      * @var string
      */
-    private $fileId;
+    private $file_id;
 
     /**
+     * Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to
+     * download or reuse the file.
+     *
      * @var string
      */
-    private $fileUniqueId;
+    private $file_unique_id;
 
     /**
+     * Optional. Document thumbnail as defined by sender
+     *
      * @var PhotoSize|null
      */
     private $thumb;
 
     /**
+     * Optional. Original filename as defined by sender
+     *
      * @var string|null
      */
-    private $fileName;
+    private $file_name;
 
     /**
+     * Optional. MIME type of the file as defined by sender
+     *
      * @var string|null
      */
-    private $mimeType;
+    private $mime_type;
 
     /**
+     * Optional. File size
+     *
      * @var int|null
      */
-    private $fileSize;
+    private $file_size;
 
     /**
      * @return string
      */
     public function getFileId(): string
     {
-        return $this->fileId;
+        return $this->file_id;
     }
 
     /**
-     * @param string $fileId
+     * @param string $file_id
      */
-    public function setFileId(string $fileId): void
+    public function setFileId(string $file_id): void
     {
-        $this->fileId = $fileId;
+        $this->file_id = $file_id;
     }
 
     /**
@@ -61,15 +76,15 @@ class Document
      */
     public function getFileUniqueId(): string
     {
-        return $this->fileUniqueId;
+        return $this->file_unique_id;
     }
 
     /**
-     * @param string $fileUniqueId
+     * @param string $file_unique_id
      */
-    public function setFileUniqueId(string $fileUniqueId): void
+    public function setFileUniqueId(string $file_unique_id): void
     {
-        $this->fileUniqueId = $fileUniqueId;
+        $this->file_unique_id = $file_unique_id;
     }
 
     /**
@@ -93,15 +108,15 @@ class Document
      */
     public function getFileName(): ?string
     {
-        return $this->fileName;
+        return $this->file_name;
     }
 
     /**
-     * @param string|null $fileName
+     * @param string|null $file_name
      */
-    public function setFileName(?string $fileName): void
+    public function setFileName(?string $file_name): void
     {
-        $this->fileName = $fileName;
+        $this->file_name = $file_name;
     }
 
     /**
@@ -109,15 +124,15 @@ class Document
      */
     public function getMimeType(): ?string
     {
-        return $this->mimeType;
+        return $this->mime_type;
     }
 
     /**
-     * @param string|null $mimeType
+     * @param string|null $mime_type
      */
-    public function setMimeType(?string $mimeType): void
+    public function setMimeType(?string $mime_type): void
     {
-        $this->mimeType = $mimeType;
+        $this->mime_type = $mime_type;
     }
 
     /**
@@ -125,15 +140,15 @@ class Document
      */
     public function getFileSize(): ?int
     {
-        return $this->fileSize;
+        return $this->file_size;
     }
 
     /**
-     * @param int|null $fileSize
+     * @param int|null $file_size
      */
-    public function setFileSize(?int $fileSize): void
+    public function setFileSize(?int $file_size): void
     {
-        $this->fileSize = $fileSize;
+        $this->file_size = $file_size;
     }
 
 }

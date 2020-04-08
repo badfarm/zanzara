@@ -1,34 +1,44 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Shipping;
 
+
 /**
+ * This object represents information about an order.
  *
+ * More on https://core.telegram.org/bots/api#orderinfo
  */
 class OrderInfo
 {
 
     /**
+     * Optional. User name
+     *
      * @var string|null
      */
     private $name;
 
     /**
+     * Optional. User's phone number
+     *
      * @var string|null
      */
-    private $phoneNumber;
+    private $phone_number;
 
     /**
+     * Optional. User email
+     *
      * @var string|null
      */
     private $email;
 
     /**
+     * Optional. User shipping address
+     *
      * @var ShippingAddress|null
      */
-    private $shippingAddress;
+    private $shipping_address;
 
     /**
      * @return string|null
@@ -51,15 +61,15 @@ class OrderInfo
      */
     public function getPhoneNumber(): ?string
     {
-        return $this->phoneNumber;
+        return $this->phone_number;
     }
 
     /**
-     * @param string|null $phoneNumber
+     * @param string|null $phone_number
      */
-    public function setPhoneNumber(?string $phoneNumber): void
+    public function setPhoneNumber(?string $phone_number): void
     {
-        $this->phoneNumber = $phoneNumber;
+        $this->phone_number = $phone_number;
     }
 
     /**
@@ -83,15 +93,15 @@ class OrderInfo
      */
     public function getShippingAddress(): ?ShippingAddress
     {
-        return $this->shippingAddress;
+        return $this->shipping_address;
     }
 
     /**
-     * @param ShippingAddress|null $shippingAddress
+     * @param ShippingAddress|null $shipping_address
      */
-    public function setShippingAddress(?ShippingAddress $shippingAddress): void
+    public function setShippingAddress(?ShippingAddress $shipping_address): void
     {
-        $this->shippingAddress = $shippingAddress;
+        $this->shipping_address = $shipping_address;
     }
 
 }

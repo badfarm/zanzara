@@ -1,24 +1,31 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Poll;
 
+use Zanzara\Telegram\Type\Response\SuccessfulResponse;
+
 /**
+ * This object contains information about one answer option in a poll.
  *
+ * More on https://core.telegram.org/bots/api#polloption
  */
-class PollOption
+class PollOption extends SuccessfulResponse
 {
 
     /**
+     * Option text, 1-100 characters
+     *
      * @var string
      */
     private $text;
 
     /**
+     * Number of users that voted for this option
+     *
      * @var int
      */
-    private $voterCount;
+    private $voter_count;
 
     /**
      * @return string
@@ -41,15 +48,15 @@ class PollOption
      */
     public function getVoterCount(): int
     {
-        return $this->voterCount;
+        return $this->voter_count;
     }
 
     /**
-     * @param int $voterCount
+     * @param int $voter_count
      */
-    public function setVoterCount(int $voterCount): void
+    public function setVoterCount(int $voter_count): void
     {
-        $this->voterCount = $voterCount;
+        $this->voter_count = $voter_count;
     }
 
 }

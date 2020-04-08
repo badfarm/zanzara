@@ -1,26 +1,37 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Passport;
 
+use Zanzara\Telegram\Type\SuccessfulResponse;
+
 /**
+ * Contains data required for decrypting and authenticating EncryptedPassportElement. See the Telegram Passport
+ * Documentation for a complete description of the data decryption and authentication processes.
  *
+ * More on https://core.telegram.org/bots/api#encryptedcredentials
  */
-class EncryptedCredentials
+class EncryptedCredentials extends SuccessfulResponse
 {
 
     /**
+     * Base64-encoded encrypted JSON-serialized data with unique user's payload, data hashes and secrets required for
+     * EncryptedPassportElement decryption and authentication
+     *
      * @var string
      */
     private $data;
 
     /**
+     * Base64-encoded data hash for data authentication
+     *
      * @var string
      */
     private $hash;
 
     /**
+     * Base64-encoded secret, encrypted with the bot's public RSA key, required for data decryption
+     *
      * @var string
      */
     private $secret;
