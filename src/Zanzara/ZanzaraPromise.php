@@ -7,7 +7,6 @@ use Psr\Http\Message\ResponseInterface;
 use React\Promise\PromiseInterface;
 use Zanzara\Telegram\Type\Response\ErrorResponse;
 
-
 /**
  * Wrapper for React Promise.
  *
@@ -61,8 +60,9 @@ class ZanzaraPromise implements PromiseInterface
 
                 if (is_scalar($object->result) && $this->class === "Scalar") {
                     $onFulfilled($object->result);
+                } else {
+                    $onFulfilled($this->zanzaraMapper->mapObject($object->result, $this->class));
                 }
-                $onFulfilled($this->zanzaraMapper->mapObject($object->result, $this->class));
 
             },
             function (ResponseException $exception) use ($onRejected) {
