@@ -6,7 +6,7 @@ use Clue\React\Buzz\Message\ResponseException;
 use Psr\Http\Message\ResponseInterface;
 use React\Promise\PromiseInterface;
 use Zanzara\Telegram\Type\Response\ErrorResponse;
-use Zanzara\Telegram\Type\Response\SuccessfulResponse;
+
 
 /**
  * Wrapper for React Promise.
@@ -41,7 +41,7 @@ class ZanzaraPromise implements PromiseInterface
      * @param PromiseInterface $promise
      * @param string $class
      */
-    public function __construct(ZanzaraMapper $zanzaraMapper, PromiseInterface $promise, string $class)
+    public function __construct(ZanzaraMapper $zanzaraMapper, PromiseInterface $promise, ?string $class = "Scalar")
     {
         $this->zanzaraMapper = $zanzaraMapper;
         $this->promise = $promise;
@@ -55,11 +55,12 @@ class ZanzaraPromise implements PromiseInterface
     {
         return $this->promise->then(
             function (ResponseInterface $response) use ($onFulfilled) {
+
                 $json = (string)$response->getBody();
                 $object = json_decode($json);
 
-                if ($object->result === true || is_string($object->result)) {
-                    $onFulfilled(new SuccessfulResponse());
+                if (is_scalar($object->result) && $this->class === "Scalar") {
+                    $onFulfilled($object->result);
                 }
                 $onFulfilled($this->zanzaraMapper->mapObject($object->result, $this->class));
 

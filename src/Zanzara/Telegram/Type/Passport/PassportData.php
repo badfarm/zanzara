@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Passport;
 
-use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 
 /**
  * Contains information about Telegram Passport data shared with the bot by the user.
  *
  * More on https://core.telegram.org/bots/api#passportdata
  */
-class PassportData extends SuccessfulResponse
+class PassportData
 {
 
     /**

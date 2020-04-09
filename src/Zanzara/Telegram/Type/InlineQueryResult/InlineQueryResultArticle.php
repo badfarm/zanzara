@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\InlineQueryResult;
 
-use Zanzara\Telegram\Type\InlineKeyboardMarkup;
 use Zanzara\Telegram\Type\Input\InputMessageContent;
+use Zanzara\Telegram\Type\Keyboard\InlineKeyboardMarkup;
 
 /**
  * Represents a link to an article or web page.
@@ -115,21 +115,6 @@ class InlineQueryResultArticle extends InlineQueryResult
         $this->id = $id;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param string $title
-     */
-    public function setTitle(string $title): void
-    {
-        $this->title = $title;
-    }
 
     /**
      * @return InputMessageContent

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\File;
 
-use Zanzara\Telegram\Type\Response\SuccessfulResponse;
+
 
 /**
  * This object represents a point on the map.
  *
  * More on https://core.telegram.org/bots/api#location
  */
-class Location extends SuccessfulResponse
+class Location
 {
 
     /**

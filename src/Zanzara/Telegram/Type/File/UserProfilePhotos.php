@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\File;
 
-use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 
 /**
  * This object represent a user's profile pictures.
  *
  * More on https://core.telegram.org/bots/api#userprofilephotos
  */
-class UserProfilePhotos extends SuccessfulResponse
+class UserProfilePhotos
 {
 
     /**

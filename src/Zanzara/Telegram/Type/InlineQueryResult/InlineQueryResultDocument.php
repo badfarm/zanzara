@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\InlineQueryResult;
 
-use Zanzara\Telegram\Type\InlineKeyboardMarkup;
 use Zanzara\Telegram\Type\Input\InputMessageContent;
+use Zanzara\Telegram\Type\Keyboard\InlineKeyboardMarkup;
 
 /**
  * Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively,
@@ -109,37 +109,7 @@ class InlineQueryResultDocument extends InlineQueryResult
      */
     private $thumb_height;
 
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
 
-    /**
-     * @param string $type
-     */
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $id
-     */
-    public function setId(string $id): void
-    {
-        $this->id = $id;
-    }
 
     /**
      * @return string

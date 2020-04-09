@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Webhook;
 
-use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 
 /**
  * Contains information about the current status of a webhook.
  *
  * More on https://core.telegram.org/bots/api#webhookinfo
  */
-class WebhookInfo extends SuccessfulResponse
+class WebhookInfo
 {
 
     /**

@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Poll;
 
-use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 
 /**
  * This object contains information about one answer option in a poll.
  *
  * More on https://core.telegram.org/bots/api#polloption
  */
-class PollOption extends SuccessfulResponse
+class PollOption
 {
 
     /**

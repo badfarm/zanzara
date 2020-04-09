@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
 
-use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 
 /**
  * This object represents an incoming callback query from a callback button in an inline keyboard. If the button that
@@ -14,7 +13,7 @@ use Zanzara\Telegram\Type\Response\SuccessfulResponse;
  *
  * More on https://core.telegram.org/bots/api#callbackquery
  */
-class CallbackQuery extends SuccessfulResponse
+class CallbackQuery
 {
 
     /**

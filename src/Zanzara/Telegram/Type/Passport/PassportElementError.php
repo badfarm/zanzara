@@ -17,21 +17,33 @@ abstract class PassportElementError
     /**
      * @return string
      */
-    public abstract function getSource(): string;
+    public function getSource(): string
+    {
+        return $this->source;
+    }
 
     /**
      * @param string $source
      */
-    public abstract function setSource(string $source): void;
+    public function setSource(string $source): void
+    {
+        $this->source = $source;
+    }
 
     /**
      * @return string
      */
-    public abstract function getType(): string;
+    public function getType(): string
+    {
+        return $this->type;
+    }
 
     /**
      * @param string $type
      */
-    public abstract function setType(string $type): void;
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
 
 }

@@ -162,17 +162,17 @@ class PreCheckoutQuery
     }
 
     /**
-     * @return \Zanzara\Telegram\Type\Shipping\OrderInfo|null
+     * @return OrderInfo|null
      */
-    public function getOrderInfo(): ?\Zanzara\Telegram\Type\Shipping\OrderInfo
+    public function getOrderInfo(): ?OrderInfo
     {
         return $this->order_info;
     }
 
     /**
-     * @param \Zanzara\Telegram\Type\Shipping\OrderInfo|null $order_info
+     * @param OrderInfo|null $order_info
      */
-    public function setOrderInfo(?\Zanzara\Telegram\Type\Shipping\OrderInfo $order_info): void
+    public function setOrderInfo(?OrderInfo $order_info): void
     {
         $this->order_info = $order_info;
     }

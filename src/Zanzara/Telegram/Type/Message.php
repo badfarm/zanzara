@@ -9,7 +9,6 @@ use Zanzara\Telegram\Type\File\Audio;
 use Zanzara\Telegram\Type\File\Contact;
 use Zanzara\Telegram\Type\File\Document;
 use Zanzara\Telegram\Type\File\Location;
-use Zanzara\Telegram\Type\File\PhotoSize;
 use Zanzara\Telegram\Type\File\Sticker;
 use Zanzara\Telegram\Type\File\Venue;
 use Zanzara\Telegram\Type\File\Video;
@@ -19,7 +18,6 @@ use Zanzara\Telegram\Type\Game\Game;
 use Zanzara\Telegram\Type\Keyboard\InlineKeyboardMarkup;
 use Zanzara\Telegram\Type\Passport\PassportData;
 use Zanzara\Telegram\Type\Poll\Poll;
-use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 use Zanzara\Telegram\Type\Shipping\Invoice;
 use Zanzara\Telegram\Type\Shipping\SuccessfulPayment;
 
@@ -28,7 +26,7 @@ use Zanzara\Telegram\Type\Shipping\SuccessfulPayment;
  *
  * More on https://core.telegram.org/bots/api#message
  */
-class Message extends SuccessfulResponse
+class Message
 {
 
     /**
@@ -185,7 +183,7 @@ class Message extends SuccessfulResponse
     /**
      * Optional. Message is a photo, available sizes of the photo
      *
-     * @var PhotoSize[]|null
+     * @var File\PhotoSize[]|null
      */
     private $photo;
 
@@ -284,7 +282,7 @@ class Message extends SuccessfulResponse
     /**
      * Optional. A chat photo was change to this value
      *
-     * @var PhotoSize[]|null
+     * @var File\PhotoSize[]|null
      */
     private $new_chat_photo;
 
@@ -719,7 +717,7 @@ class Message extends SuccessfulResponse
     }
 
     /**
-     * @return PhotoSize[]|null
+     * @return File\PhotoSize[]|null
      */
     public function getPhoto(): ?array
     {
@@ -727,7 +725,7 @@ class Message extends SuccessfulResponse
     }
 
     /**
-     * @param PhotoSize[]|null $photo
+     * @param File\PhotoSize[]|null $photo
      */
     public function setPhoto(?array $photo): void
     {
@@ -943,7 +941,7 @@ class Message extends SuccessfulResponse
     }
 
     /**
-     * @return PhotoSize[]|null
+     * @return File\PhotoSize[]|null
      */
     public function getNewChatPhoto(): ?array
     {
@@ -951,7 +949,7 @@ class Message extends SuccessfulResponse
     }
 
     /**
-     * @param PhotoSize[]|null $new_chat_photo
+     * @param File\PhotoSize[]|null $new_chat_photo
      */
     public function setNewChatPhoto(?array $new_chat_photo): void
     {

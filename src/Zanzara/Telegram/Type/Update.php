@@ -7,7 +7,6 @@ namespace Zanzara\Telegram\Type;
 use Zanzara\Telegram\Type\Passport\PassportData;
 use Zanzara\Telegram\Type\Poll\Poll;
 use Zanzara\Telegram\Type\Poll\PollAnswer;
-use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 use Zanzara\Telegram\Type\Shipping\PreCheckoutQuery;
 use Zanzara\Telegram\Type\Shipping\ShippingQuery;
 use Zanzara\Telegram\Type\Shipping\SuccessfulPayment;
@@ -17,7 +16,7 @@ use Zanzara\Telegram\Type\Shipping\SuccessfulPayment;
  *
  * More on https://core.telegram.org/bots/api#update
  */
-class Update extends SuccessfulResponse
+class Update
 {
 
     /**

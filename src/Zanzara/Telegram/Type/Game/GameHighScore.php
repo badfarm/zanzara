@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Game;
 
-use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 use Zanzara\Telegram\Type\User;
 
 /**
@@ -12,7 +11,7 @@ use Zanzara\Telegram\Type\User;
  *
  * More on https://core.telegram.org/bots/api#gamehighscore
  */
-class GameHighScore extends SuccessfulResponse
+class GameHighScore
 {
 
     /**

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
 
-use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 
 /**
  * This object represents a dice with random value from 1 to 6. (Yes, we're aware of the "proper" singular of die. But
@@ -12,7 +11,7 @@ use Zanzara\Telegram\Type\Response\SuccessfulResponse;
  *
  * More on https://core.telegram.org/bots/api#dice
  */
-class Dice extends SuccessfulResponse
+class Dice
 {
 
     /**

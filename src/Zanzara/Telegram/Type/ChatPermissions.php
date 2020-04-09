@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
 
-use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 
 /**
  * Describes actions that a non-administrator user is allowed to take in a chat.
  *
  * More on https://core.telegram.org/bots/api#chatpermissions
  */
-class ChatPermissions extends SuccessfulResponse
+class ChatPermissions
 {
 
     /**

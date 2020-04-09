@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Zanzara\Telegram\Type;
 
 use Zanzara\Telegram\Type\File\Location;
-use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 
 /**
  * This object represents an incoming inline query. When the user sends an empty query, your bot could return some
@@ -13,7 +12,7 @@ use Zanzara\Telegram\Type\Response\SuccessfulResponse;
  *
  * More on https://core.telegram.org/bots/api#inlinequery
  */
-class InlineQuery extends SuccessfulResponse
+class InlineQuery
 {
 
     /**

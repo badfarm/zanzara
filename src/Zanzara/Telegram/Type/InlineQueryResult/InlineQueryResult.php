@@ -21,20 +21,34 @@ abstract class InlineQueryResult
     /**
      * @return string
      */
-    public abstract function getType(): string;
+    public function getType(): string
+    {
+        return $this->type;
+    }
 
     /**
      * @param string $type
      */
-    public abstract function setType(string $type): void;
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
 
     /**
      * @return string
      */
-    public abstract function getId(): string;
+    public function getId(): string
+    {
+        return $this->id;
+    }
 
     /**
      * @param string $id
      */
-    public abstract function setId(string $id): void;
+    public function setId(string $id): void
+    {
+        $this->id = $id;
+    }
+
+
 }

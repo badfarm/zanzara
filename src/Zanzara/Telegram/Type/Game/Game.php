@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace Zanzara\Telegram\Type\Game;
 
 use Zanzara\Telegram\Type\File\Animation;
-use Zanzara\Telegram\Type\File\PhotoSize;
-use Zanzara\Telegram\Type\MessageEntity;
-use Zanzara\Telegram\Type\Response\SuccessfulResponse;
 
 /**
  * This object represents a game. Use BotFather to create and edit games, their short names will act as unique identifiers.
  *
  * More on https://core.telegram.org/bots/api#game
  */
-class Game extends SuccessfulResponse
+class Game
 {
 
     /**
@@ -34,7 +31,7 @@ class Game extends SuccessfulResponse
     /**
      * Photo that will be displayed in the game message in chats.
      *
-     * @var PhotoSize[]
+     * @var \Zanzara\Telegram\Type\File\PhotoSize[]
      */
     private $photo;
 
@@ -50,7 +47,7 @@ class Game extends SuccessfulResponse
     /**
      * Optional. Special entities that appear in text, such as usernames, URLs, bot commands, etc.
      *
-     * @var MessageEntity[]|null
+     * @var \Zanzara\Telegram\Type\MessageEntity[]|null
      */
     private $text_entities;
 
@@ -94,7 +91,7 @@ class Game extends SuccessfulResponse
     }
 
     /**
-     * @return PhotoSize[]
+     * @return \Zanzara\Telegram\Type\File\PhotoSize[]
      */
     public function getPhoto(): array
     {
@@ -102,7 +99,7 @@ class Game extends SuccessfulResponse
     }
 
     /**
-     * @param PhotoSize[] $photo
+     * @param \Zanzara\Telegram\Type\File\PhotoSize[] $photo
      */
     public function setPhoto(array $photo): void
     {
@@ -126,7 +123,7 @@ class Game extends SuccessfulResponse
     }
 
     /**
-     * @return MessageEntity[]|null
+     * @return \Zanzara\Telegram\Type\MessageEntity[]|null
      */
     public function getTextEntities(): ?array
     {
@@ -134,7 +131,7 @@ class Game extends SuccessfulResponse
     }
 
     /**
-     * @param MessageEntity[]|null $text_entities
+     * @param \Zanzara\Telegram\Type\MessageEntity[]|null $text_entities
      */
     public function setTextEntities(?array $text_entities): void
     {
