@@ -17,20 +17,6 @@ class InlineQueryResultLocation extends InlineQueryResult
 {
 
     /**
-     * Type of the result, must be location
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     * Unique identifier for this result, 1-64 Bytes
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
      * Location latitude in degrees
      *
      * @var float number
@@ -92,8 +78,6 @@ class InlineQueryResultLocation extends InlineQueryResult
      * @var int|null
      */
     private $thumb_height;
-
-
 
     /**
      * @return float

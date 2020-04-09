@@ -50,5 +50,4 @@ abstract class InlineQueryResult
         $this->id = $id;
     }
 
-
 }

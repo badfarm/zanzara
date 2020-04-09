@@ -18,20 +18,6 @@ class InlineQueryResultCachedVoice extends InlineQueryResult
 {
 
     /**
-     * Type of the result, must be voice
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     * Unique identifier for this result, 1-64 bytes
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
      * A valid file identifier for the voice message
      *
      * @var string
@@ -73,8 +59,6 @@ class InlineQueryResultCachedVoice extends InlineQueryResult
      * @var InputMessageContent|null
      */
     private $input_message_content;
-
-
 
     /**
      * @return string

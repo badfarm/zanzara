@@ -18,20 +18,6 @@ class InlineQueryResultGif extends InlineQueryResult
 {
 
     /**
-     * Type of the result, must be gif
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     * Unique identifier for this result, 1-64 bytes
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
      * A valid URL for the GIF file. File size must not exceed 1MB
      *
      * @var string
@@ -101,8 +87,6 @@ class InlineQueryResultGif extends InlineQueryResult
      * @var InputMessageContent|null
      */
     private $input_message_content;
-
-
 
     /**
      * @return string

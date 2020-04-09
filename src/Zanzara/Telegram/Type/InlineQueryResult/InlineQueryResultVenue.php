@@ -17,20 +17,6 @@ class InlineQueryResultVenue extends InlineQueryResult
 {
 
     /**
-     * Type of the result, must be venue
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     * Unique identifier for this result, 1-64 Bytes
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
      * Latitude of the venue location in degrees
      *
      * @var float
@@ -107,8 +93,6 @@ class InlineQueryResultVenue extends InlineQueryResult
      * @var int|null
      */
     private $thumb_height;
-
-
 
     /**
      * @return float

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
 
-
 /**
  * Describes actions that a non-administrator user is allowed to take in a chat.
  *

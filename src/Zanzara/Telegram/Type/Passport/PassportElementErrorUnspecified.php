@@ -40,7 +40,6 @@ class PassportElementErrorUnspecified extends PassportElementError
      */
     private $message;
 
-
     /**
      * @return string
      */

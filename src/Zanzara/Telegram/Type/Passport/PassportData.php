@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Passport;
 
-
 /**
  * Contains information about Telegram Passport data shared with the bot by the user.
  *

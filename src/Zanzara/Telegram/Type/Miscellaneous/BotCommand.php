@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Miscellaneous;
 
-
 /**
  * This object represents a bot command.
  *

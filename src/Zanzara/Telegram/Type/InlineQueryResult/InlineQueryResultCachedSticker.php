@@ -18,20 +18,6 @@ class InlineQueryResultCachedSticker extends InlineQueryResult
 {
 
     /**
-     * Type of the result, must be sticker
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     * Unique identifier for this result, 1-64 bytes
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
      * A valid file identifier of the sticker
      *
      * @var string
@@ -51,7 +37,6 @@ class InlineQueryResultCachedSticker extends InlineQueryResult
      * @var InputMessageContent|null
      */
     private $input_message_content;
-
 
     /**
      * @return string

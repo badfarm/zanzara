@@ -41,7 +41,6 @@ class PassportElementErrorFile extends PassportElementError
      */
     private $message;
 
-
     /**
      * @return string
      */

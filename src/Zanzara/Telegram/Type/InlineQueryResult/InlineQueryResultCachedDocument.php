@@ -18,20 +18,6 @@ class InlineQueryResultCachedDocument extends InlineQueryResult
 {
 
     /**
-     * Type of the result, must be document
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     * Unique identifier for this result, 1-64 bytes
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
      * Title for the result
      *
      * @var string
@@ -80,15 +66,6 @@ class InlineQueryResultCachedDocument extends InlineQueryResult
      * @var InputMessageContent|null
      */
     private $input_message_content;
-
-
-    /**
-     * @param string $id
-     */
-    public function setId(string $id): void
-    {
-        $this->id = $id;
-    }
 
     /**
      * @return string

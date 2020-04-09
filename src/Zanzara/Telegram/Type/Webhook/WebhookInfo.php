@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Webhook;
 
-
 /**
  * Contains information about the current status of a webhook.
  *

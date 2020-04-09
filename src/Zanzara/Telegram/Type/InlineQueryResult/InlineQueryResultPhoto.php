@@ -17,20 +17,6 @@ class InlineQueryResultPhoto extends InlineQueryResult
 {
 
     /**
-     * Type of the result, must be photo
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     * Unique identifier for this result, 1-64 bytes
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
      * A valid URL of the photo. Photo must be in jpeg format. Photo size must not exceed 5MB
      *
      * @var string
@@ -100,8 +86,6 @@ class InlineQueryResultPhoto extends InlineQueryResult
      * @var InputMessageContent|null
      */
     private $input_message_content;
-
-
 
     /**
      * @return string

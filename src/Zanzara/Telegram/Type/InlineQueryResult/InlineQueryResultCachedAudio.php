@@ -20,20 +20,6 @@ class InlineQueryResultCachedAudio extends InlineQueryResult
 {
 
     /**
-     * Type of the result, must be audio
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     * Unique identifier for this result, 1-64 bytes
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
      * A valid file identifier for the audio file
      *
      * @var string
@@ -68,15 +54,6 @@ class InlineQueryResultCachedAudio extends InlineQueryResult
      * @var InputMessageContent|null
      */
     private $input_message_content;
-
-
-    /**
-     * @param string $id
-     */
-    public function setId(string $id): void
-    {
-        $this->id = $id;
-    }
 
     /**
      * @return string

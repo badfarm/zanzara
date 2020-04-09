@@ -41,7 +41,6 @@ class PassportElementErrorReverseSide extends PassportElementError
      */
     private $message;
 
-
     /**
      * @return string
      */

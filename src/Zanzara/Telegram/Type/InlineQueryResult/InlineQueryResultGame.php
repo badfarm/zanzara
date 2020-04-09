@@ -15,20 +15,6 @@ class InlineQueryResultGame extends InlineQueryResult
 {
 
     /**
-     * Type of the result, must be game
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     * Unique identifier for this result, 1-64 bytes
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
      * Short name of the game
      *
      * @var string
@@ -41,8 +27,6 @@ class InlineQueryResultGame extends InlineQueryResult
      * @var InlineKeyboardMarkup|null
      */
     private $reply_markup;
-
-
 
     /**
      * @return string

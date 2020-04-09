@@ -16,105 +16,67 @@ class InlineQueryResultArticle extends InlineQueryResult
 {
 
     /**
-     * Type of the result, must be article
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     * Unique identifier for this result, 1-64 Bytes
-     *
-     * @var string
-     */
-    private $id;
-    /**
      * Title of the result
      *
      * @var string
      */
     private $title;
+
     /**
      * Content of the message to be sent
      *
      * @var InputMessageContent
      */
     private $input_message_content;
+
     /**
      * Optional. Inline keyboard attached to the message
      *
      * @var InlineKeyboardMarkup|null
      */
     private $reply_markup;
+
     /**
      * Optional. URL of the result
      *
      * @var string|null
      */
     private $url;
+
     /**
      * Optional. Pass True, if you don't want the URL to be shown in the message
      *
      * @var bool|null
      */
     private $hide_url;
+
     /**
      * Optional. Short description of the result
      *
      * @var string|null
      */
     private $description;
+
     /**
      * Optional. Url of the thumbnail for the result
      *
      * @var string|null
      */
     private $thumb_url;
+
     /**
      * Optional. Thumbnail width
      *
      * @var int|null
      */
     private $thumb_width;
+
     /**
      * Optional. Thumbnail height
      *
      * @var int|null
      */
     private $thumb_height;
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     */
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $id
-     */
-    public function setId(string $id): void
-    {
-        $this->id = $id;
-    }
-
 
     /**
      * @return InputMessageContent
@@ -242,6 +204,22 @@ class InlineQueryResultArticle extends InlineQueryResult
     public function setThumbHeight(?int $thumb_height): void
     {
         $this->thumb_height = $thumb_height;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
     }
 
 }

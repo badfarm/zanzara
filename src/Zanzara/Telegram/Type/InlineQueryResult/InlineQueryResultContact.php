@@ -17,20 +17,6 @@ class InlineQueryResultContact extends InlineQueryResult
 {
 
     /**
-     * Type of the result, must be contact
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     * Unique identifier for this result, 1-64 Bytes
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
      * Contact's phone number
      *
      * @var string
@@ -92,8 +78,6 @@ class InlineQueryResultContact extends InlineQueryResult
      * @var int|null
      */
     private $thumb_height;
-
-
 
     /**
      * @return string

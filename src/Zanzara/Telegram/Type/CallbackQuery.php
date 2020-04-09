@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type;
 
-
 /**
  * This object represents an incoming callback query from a callback button in an inline keyboard. If the button that
  * originated the query was attached to a message sent by the bot, the field message will be present. If the button

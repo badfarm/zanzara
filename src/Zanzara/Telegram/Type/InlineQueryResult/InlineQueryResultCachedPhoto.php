@@ -18,20 +18,6 @@ class InlineQueryResultCachedPhoto extends InlineQueryResult
 {
 
     /**
-     * Type of the result, must be photo
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     * Unique identifier for this result, 1-64 bytes
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
      * A valid file identifier of the photo
      *
      * @var string

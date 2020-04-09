@@ -18,20 +18,6 @@ class InlineQueryResultCachedGif extends InlineQueryResult
 {
 
     /**
-     * Type of the result, must be gif
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     * Unique identifier for this result, 1-64 bytes
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
      * A valid file identifier for the GIF file
      *
      * @var string
@@ -73,7 +59,6 @@ class InlineQueryResultCachedGif extends InlineQueryResult
      * @var InputMessageContent|null
      */
     private $input_message_content;
-
 
     /**
      * @return string

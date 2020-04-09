@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Poll;
 
-
 /**
  * This object contains information about a poll.
  *

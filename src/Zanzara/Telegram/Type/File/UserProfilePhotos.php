@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\File;
 
-
 /**
  * This object represent a user's profile pictures.
  *

@@ -18,20 +18,6 @@ class InlineQueryResultVoice extends InlineQueryResult
 {
 
     /**
-     * Type of the result, must be voice
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     * Unique identifier for this result, 1-64 bytes
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
      * A valid URL for the voice recording
      *
      * @var string
@@ -80,8 +66,6 @@ class InlineQueryResultVoice extends InlineQueryResult
      * @var InputMessageContent|null
      */
     private $input_message_content;
-
-
 
     /**
      * @return string

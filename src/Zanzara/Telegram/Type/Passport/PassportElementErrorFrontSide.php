@@ -42,7 +42,6 @@ class PassportElementErrorFrontSide extends PassportElementError
      */
     private $message;
 
-
     /**
      * @return string
      */

@@ -43,7 +43,6 @@ class PassportElementErrorTranslationFile extends PassportElementError
      */
     private $message;
 
-
     /**
      * @return string
      */

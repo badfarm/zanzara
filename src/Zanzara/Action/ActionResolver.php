@@ -44,7 +44,6 @@ abstract class ActionResolver extends ActionCollector
                 $this->findAndPush($actions, 'cbQueryTexts', $text);
                 break;
 
-
         }
 
         $this->merge($actions, $updateType);

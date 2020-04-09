@@ -42,7 +42,6 @@ class PassportElementErrorSelfie extends PassportElementError
      */
     private $message;
 
-
     /**
      * @return string
      */

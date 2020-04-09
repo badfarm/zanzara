@@ -18,20 +18,6 @@ class InlineQueryResultDocument extends InlineQueryResult
 {
 
     /**
-     * Type of the result, must be document
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     * Unique identifier for this result, 1-64 bytes
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
      * Title for the result
      *
      * @var string
@@ -108,8 +94,6 @@ class InlineQueryResultDocument extends InlineQueryResult
      * @var int|null
      */
     private $thumb_height;
-
-
 
     /**
      * @return string
