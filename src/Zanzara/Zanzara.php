@@ -6,6 +6,7 @@ namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
 use JsonMapper_Exception;
+use Psr\Log\LoggerInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use Zanzara\Action\ActionCollector;
@@ -52,16 +53,26 @@ class Zanzara extends ActionResolver
     private $browser;
 
     /**
-     * @param string $token
-     * @param LoopInterface $loop
-     * @param Config|null $config
+     * @var LoggerInterface|null
      */
-    public function __construct(string $token, ?Config $config = null, ?LoopInterface $loop = null)
+    private $logger;
+
+    /**
+     * @param string $token
+     * @param Config|null $config
+     * @param LoggerInterface $logger
+     * @param LoopInterface $loop
+     */
+    public function __construct(string $token,
+                                ?Config $config = null,
+                                ?LoggerInterface $logger = null,
+                                ?LoopInterface $loop = null)
     {
         $config = $config ?? new Config();
         $config->setBotToken($token);
         $this->config = $config;
         $this->loop = $loop ?? Factory::create();
+        $this->logger = $logger;
         $this->zanzaraMapper = new ZanzaraMapper();
         $this->browser = (new Browser($this->loop))
             ->withBase("{$config->getApiTelegramUrl()}/bot{$config->getBotToken()}");
@@ -118,7 +129,9 @@ class Zanzara extends ActionResolver
                         try {
                             $this->exec($update);
                         } catch (\Exception $e) {
-                            echo "Failed to process Telegram Update $update, reason: {$e->getMessage()}\n";
+                            $message = "Failed to process Telegram Update $update, reason: {$e->getMessage()}\n";
+                            echo $message;
+                            $this->logError($message);
                         }
                         $offset++;
                     }
@@ -126,7 +139,9 @@ class Zanzara extends ActionResolver
                 }
             },
             function (ErrorResponse $error) use ($offset) {
-                echo "Failed to fetch updates from Telegram: $error\n";
+                $message = "Failed to fetch updates from Telegram: $error\n";
+                echo $message;
+                $this->logError($message);
                 // recall polling with a configurable delay?
                 $this->polling($offset);
             });
@@ -152,6 +167,16 @@ class Zanzara extends ActionResolver
     public function getLoop(): LoopInterface
     {
         return $this->loop;
+    }
+
+    /**
+     * @param string $message
+     */
+    private function logError(string $message)
+    {
+        if ($this->logger) {
+            $this->logger->error($message);
+        }
     }
 
 }
