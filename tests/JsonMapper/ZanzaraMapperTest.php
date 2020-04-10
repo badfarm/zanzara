@@ -21,10 +21,18 @@ class ZanzaraMapperTest extends TestCase
         /** @var Dummy $dummy */
         $dummy = $mapper->map($json, Dummy::class);
         $this->assertSame('Scott', $dummy->getField());
+        $object = json_decode($json);
+        /** @var Dummy $dummy */
+        $dummy = $mapper->mapObject($object, Dummy::class);
+        $this->assertSame('Scott', $dummy->getField());
 
         $json = file_get_contents(__DIR__ . '/many.json');
         /** @var Dummy[] $dummies */
         $dummies = $mapper->map($json, Dummy::class);
+        $this->assertSame('Michael', $dummies[0]->getField());
+        $this->assertSame('Scott', $dummies[1]->getField());
+        $objects = json_decode($json);
+        $dummies = $mapper->mapObject($objects, Dummy::class);
         $this->assertSame('Michael', $dummies[0]->getField());
         $this->assertSame('Scott', $dummies[1]->getField());
     }

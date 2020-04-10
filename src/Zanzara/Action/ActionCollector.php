@@ -167,7 +167,7 @@ abstract class ActionCollector
      */
     public function onConversation(string $conversationId, callable $callback): MiddlewareCollector
     {
-        $action = new ConversationAction($callback, $conversationId);
+        $action = new Action($callback, $conversationId);
         $this->actions['conversations'][$conversationId] = $action;
         return $action;
     }

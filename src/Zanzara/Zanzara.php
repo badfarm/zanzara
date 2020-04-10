@@ -128,7 +128,7 @@ class Zanzara extends ActionResolver
                         $update->detectUpdateType();
                         try {
                             $this->exec($update);
-                        } catch (\Exception $e) {
+                        } catch (\Throwable $e) {
                             $message = "Failed to process Telegram Update $update, reason: {$e->getMessage()}\n";
                             echo $message;
                             $this->logError($message);
@@ -177,6 +177,14 @@ class Zanzara extends ActionResolver
         if ($this->logger) {
             $this->logger->error($message);
         }
+    }
+
+    /**
+     * @return Telegram
+     */
+    public function getTelegram(): Telegram
+    {
+        return $this->telegram;
     }
 
 }
