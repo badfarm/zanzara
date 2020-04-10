@@ -9,7 +9,7 @@ namespace Zanzara\Telegram\Type;
  *
  * More on https://core.telegram.org/bots/api#user
  */
-class User
+class User implements \JsonSerializable
 {
 
     /**
@@ -217,6 +217,25 @@ class User
     public function setSupportsInlineQueries(?bool $supports_inline_queries): void
     {
         $this->supports_inline_queries = $supports_inline_queries;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'is_bot' => $this->is_bot,
+            'username' => $this->username,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name
+        ];
+    }
+
+    public function __toString()
+    {
+        return json_encode($this, JSON_PRETTY_PRINT);
     }
 
 }

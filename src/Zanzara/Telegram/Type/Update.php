@@ -16,7 +16,7 @@ use Zanzara\Telegram\Type\Shipping\SuccessfulPayment;
  *
  * More on https://core.telegram.org/bots/api#update
  */
-class Update
+class Update implements \JsonSerializable
 {
 
     /**
@@ -405,6 +405,24 @@ class Update
     public function setEffectiveChat(?Chat $effectiveChat): void
     {
         $this->effectiveChat = $effectiveChat;
+    }
+
+    public function __toString()
+    {
+        return json_encode($this, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'update_id' => $this->update_id,
+            'update_type' => $this->updateType,
+            'chat' => $this->effectiveChat,
+            'user' => $this->effectiveUser
+        ];
     }
 
 }

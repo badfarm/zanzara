@@ -53,4 +53,34 @@ class CommandTest extends TestCase
         $bot->run();
     }
 
+    /**
+     *
+     */
+    public function testText()
+    {
+        $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateStream(__DIR__ . '/../update_types/message.json');
+        $bot = new Zanzara('test', $config);
+
+        $bot->onText('Hello', function (Context $ctx) {
+            $message = $ctx->getMessage();
+            $this->assertSame(52259544, $ctx->getUpdateId());
+            $this->assertSame(23756, $message->getMessageId());
+            $this->assertSame(222222222, $message->getFrom()->getId());
+            $this->assertSame(false, $message->getFrom()->isBot());
+            $this->assertSame('Michael', $message->getFrom()->getFirstName());
+            $this->assertSame('mscott', $message->getFrom()->getUsername());
+            $this->assertSame('it', $message->getFrom()->getLanguageCode());
+            $this->assertSame(222222222, $message->getChat()->getId());
+            $this->assertSame('Michael', $message->getChat()->getFirstName());
+            $this->assertSame('mscott', $message->getChat()->getUsername());
+            $this->assertSame('private', $message->getChat()->getType());
+            $this->assertSame(1584984664, $message->getDate());
+            $this->assertSame('Hello', $message->getText());
+        });
+
+        $bot->run();
+    }
+
 }

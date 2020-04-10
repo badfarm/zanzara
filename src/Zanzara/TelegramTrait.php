@@ -38,18 +38,18 @@ trait TelegramTrait
     protected abstract function getZanzaraMapper(): ZanzaraMapper;
 
     /**
-     * @param int|null $offset
+     * @param int $offset
+     * @param int $timeout
+     * @param int $limit telegram default is 100 if unspecified
      * @return PromiseInterface
      */
-    public function getUpdates(?int $offset = 1): PromiseInterface
+    public function getUpdates(int $offset = 1, int $timeout = 50, int $limit = 100): PromiseInterface
     {
         $method = "getUpdates";
 
-        $timeout = 50;
-
         $params = [
             "offset" => $offset,
-            "limit" => 100, //telegram default is 100 if unspecified
+            "limit" => $limit,
             "timeout" => $timeout
         ];
 

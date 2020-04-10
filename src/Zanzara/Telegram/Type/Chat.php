@@ -9,7 +9,7 @@ namespace Zanzara\Telegram\Type;
  *
  * More on https://core.telegram.org/bots/api#chat
  */
-class Chat
+class Chat implements \JsonSerializable
 {
 
     /**
@@ -336,6 +336,25 @@ class Chat
     public function setCanSetStickerSet(?bool $can_set_sticker_set): void
     {
         $this->can_set_sticker_set = $can_set_sticker_set;
+    }
+
+    public function __toString()
+    {
+        return json_encode($this, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'type' => $this->type,
+            'username' => $this->username,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name
+        ];
     }
 
 }

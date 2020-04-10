@@ -87,6 +87,7 @@ class Zanzara extends ActionResolver
 
             case Config::POLLING_MODE:
                 $this->loop->futureTick([$this, 'polling']);
+                echo "Zanzara is listening...\n";
                 $this->loop->run();
                 break;
 
@@ -94,36 +95,40 @@ class Zanzara extends ActionResolver
     }
 
     /**
-     * @param int|null $offset
+     * @param int $offset
      */
-    public function polling(?int $offset = 1)
+    public function polling(int $offset = 1)
     {
         $this->telegram->getUpdates($offset)->then(
             function (array $updates) use ($offset) {
 
-                if ($offset == 1) {
+                if ($offset === 1) {
                     //first run I need to get the current updateId from telegram
 
                     $lastUpdate = end($updates);
 
                     if ($lastUpdate != null) {
                         $offset = $lastUpdate->getUpdateId();
-                        $this->polling($offset);
-                    } else {
-                        $this->polling($offset);
                     }
-
+                    $this->polling($offset);
                 } else {
+                    /** @var Update[] $updates */
                     foreach ($updates as $update) {
                         $update->detectUpdateType();
-                        $this->exec($update);
+                        try {
+                            $this->exec($update);
+                        } catch (\Exception $e) {
+                            echo "Failed to process Telegram Update $update, reason: {$e->getMessage()}\n";
+                        }
                         $offset++;
                     }
                     $this->polling($offset);
                 }
             },
-            function (ErrorResponse $error) {
-                echo "There was an error: $error";
+            function (ErrorResponse $error) use ($offset) {
+                echo "Failed to fetch updates from Telegram: $error\n";
+                // recall polling with a configurable delay?
+                $this->polling($offset);
             });
     }
 
