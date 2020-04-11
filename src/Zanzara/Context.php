@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
+use Psr\Container\ContainerInterface;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\ChannelPost;
 use Zanzara\Telegram\Type\Chat;
@@ -44,23 +45,6 @@ class Context
     use TelegramTrait;
 
     /**
-     * The update received from Telegram.
-     *
-     * @var Update
-     */
-    private $update;
-
-    /**
-     * @var Browser
-     */
-    private $browser;
-
-    /**
-     * @var ZanzaraMapper
-     */
-    private $zanzaraMapper;
-
-    /**
      * Array used to pass data between middleware.
      *
      * @var array
@@ -74,24 +58,13 @@ class Context
 
     /**
      * @param Update $update
-     * @param Browser $browser
-     * @param ZanzaraMapper $zanzaraMapper
-     * @param ZanzaraLogger $logger
+     * @param ContainerInterface $container
      */
-    public function __construct(Update $update, Browser $browser, ZanzaraMapper $zanzaraMapper, ZanzaraLogger $logger)
+    public function __construct(Update $update, ContainerInterface $container)
     {
         $this->update = $update;
-        $this->browser = $browser;
-        $this->zanzaraMapper = $zanzaraMapper;
-        $this->logger = $logger;
-    }
-
-    /**
-     * @return Update
-     */
-    public function getUpdate(): Update
-    {
-        return $this->update;
+        $this->container = $container;
+        $this->browser = $container->get(Browser::class);
     }
 
     /**
@@ -123,26 +96,11 @@ class Context
     }
 
     /**
-     * @inheritDoc
+     * @return Update
      */
-    protected function getBrowser(): Browser
+    public function getUpdate(): Update
     {
-        return $this->browser;
+        return $this->update;
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected function getZanzaraMapper(): ZanzaraMapper
-    {
-        return $this->zanzaraMapper;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function getLogger(): ZanzaraLogger
-    {
-        return $this->logger;
-    }
 }

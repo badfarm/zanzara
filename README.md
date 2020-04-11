@@ -32,7 +32,7 @@ $bot->onCommand('start', function (Context $ctx) {
 $bot->run();
 ```
 
-Then run it through command line as follows
+Then run it from command line as follows
 
     php main.php
 
@@ -40,6 +40,40 @@ You should see
 
     Zanzara is listening...
 
-Send _/start_ to your Bot and it will reply with _Hello_!
+Send _/start_ to your Bot and it will reply with _Hello_ !
 
 ### Middleware
+
+Middleware is a core functionality for any application, it allows to perform actions before and after the request
+is processed. With Zanzara middleware are implemented as classes that implements a **MiddlewareInterface** which defines
+a **handle(Context $ctx, $next)** method. Here an example:
+
+```php
+class AuthMiddleware implements MiddlewareInterface
+{
+
+    public function handle(Context $ctx, $next)
+    {
+        // ... do something before
+        $next($ctx);
+        // ... do something after
+    }
+
+}
+```
+
+To use it:
+
+```php
+<?php
+
+$bot = new Zanzara('token');
+
+$bot->onCommand('start', function (Context $ctx) {
+
+    $ctx->reply('Hello');
+
+})->middleware(new AuthMiddleware());
+
+$bot->run();
+```

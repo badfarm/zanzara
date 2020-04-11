@@ -3,7 +3,9 @@
 namespace Zanzara;
 
 use Clue\React\Buzz\Message\ResponseException;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 use React\Promise\PromiseInterface;
 use ReflectionFunction;
 use Zanzara\Telegram\Type\Response\ErrorResponse;
@@ -38,17 +40,16 @@ class ZanzaraPromise implements PromiseInterface
 
     /**
      * PromiseWrapper constructor.
-     * @param ZanzaraMapper $zanzaraMapper
+     * @param ContainerInterface $container
      * @param PromiseInterface $promise
-     * @param ZanzaraLogger $logger
      * @param string $class
      */
-    public function __construct(ZanzaraMapper $zanzaraMapper, PromiseInterface $promise, ZanzaraLogger $logger, ?string $class = "Scalar")
+    public function __construct(ContainerInterface $container, PromiseInterface $promise, ?string $class = "Scalar")
     {
-        $this->zanzaraMapper = $zanzaraMapper;
+        $this->zanzaraMapper = $container->get(ZanzaraMapper::class);
+        $this->logger = $container->get(LoggerInterface::class);
         $this->promise = $promise;
         $this->class = $class;
-        $this->logger = $logger;
     }
 
     /**

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
+use DI\Container;
 use JsonMapper_Exception;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
@@ -24,6 +26,11 @@ use Zanzara\Telegram\Type\Update;
  */
 class Zanzara extends ActionResolver
 {
+
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
 
     /**
      * @var Config
@@ -46,11 +53,6 @@ class Zanzara extends ActionResolver
     private $loop;
 
     /**
-     * @var Browser
-     */
-    private $browser;
-
-    /**
      * @var LoggerInterface|null
      */
     private $logger;
@@ -58,23 +60,31 @@ class Zanzara extends ActionResolver
     /**
      * @param string $token
      * @param Config|null $config
-     * @param LoggerInterface $logger
-     * @param LoopInterface $loop
+     * @param LoggerInterface|null $logger
+     * @param ContainerInterface|null $container
+     * @param LoopInterface|null $loop
      */
     public function __construct(string $token,
                                 ?Config $config = null,
                                 ?LoggerInterface $logger = null,
+                                ?ContainerInterface $container = null,
                                 ?LoopInterface $loop = null)
     {
-        $config = $config ?? new Config();
-        $config->setBotToken($token);
-        $this->config = $config;
+        $this->container = $container ?? new Container();
+        $this->config = $config ?? new Config();
+        $this->config->setBotToken($token);
         $this->loop = $loop ?? Factory::create();
         $this->logger = new ZanzaraLogger($logger);
         $this->zanzaraMapper = new ZanzaraMapper();
-        $this->browser = (new Browser($this->loop))
-            ->withBase("{$config->getApiTelegramUrl()}/bot{$config->getBotToken()}");
-        $this->telegram = new Telegram($this->browser, $this->zanzaraMapper, $this->logger);
+        $browser = (new Browser($this->loop))
+            ->withBase("{$this->config->getApiTelegramUrl()}/bot{$this->config->getBotToken()}");
+        $this->container->set(Config::class, $this->config);
+        $this->container->set(LoopInterface::class, $this->loop);
+        $this->container->set(LoggerInterface::class, $this->logger);
+        $this->container->set(ZanzaraMapper::class, $this->zanzaraMapper);
+        $this->container->set(Browser::class, $browser);
+        $this->telegram = new Telegram($this->container);
+        $this->container->set(Telegram::class, $this->telegram);
     }
 
     /**
@@ -137,8 +147,7 @@ class Zanzara extends ActionResolver
                 }
             },
             function (ErrorResponse $error) use ($offset) {
-                $message = "Failed to fetch updates from Telegram: $error\n";
-                $this->logger->error($message);
+                $this->logger->error("Failed to fetch updates from Telegram: $error\n");
                 // recall polling with a configurable delay?
                 $this->polling($offset);
             });
@@ -149,7 +158,7 @@ class Zanzara extends ActionResolver
      */
     private function exec(Update $update)
     {
-        $context = new Context($update, $this->browser, $this->zanzaraMapper, $this->logger);
+        $context = new Context($update, $this->container);
         $actions = $this->resolve($update);
         foreach ($actions as $action) {
             $middlewareTip = $action->getTip();
