@@ -53,7 +53,7 @@ class Zanzara extends ActionResolver
     private $loop;
 
     /**
-     * @var LoggerInterface|null
+     * @var ZanzaraLogger
      */
     private $logger;
 
@@ -80,7 +80,7 @@ class Zanzara extends ActionResolver
             ->withBase("{$this->config->getApiTelegramUrl()}/bot{$this->config->getBotToken()}");
         $this->container->set(Config::class, $this->config);
         $this->container->set(LoopInterface::class, $this->loop);
-        $this->container->set(LoggerInterface::class, $this->logger);
+        $this->container->set(ZanzaraLogger::class, $this->logger);
         $this->container->set(ZanzaraMapper::class, $this->zanzaraMapper);
         $this->container->set(Browser::class, $browser);
         $this->telegram = new Telegram($this->container);

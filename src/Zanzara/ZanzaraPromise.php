@@ -5,7 +5,6 @@ namespace Zanzara;
 use Clue\React\Buzz\Message\ResponseException;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerInterface;
 use React\Promise\PromiseInterface;
 use ReflectionFunction;
 use Zanzara\Telegram\Type\Response\ErrorResponse;
@@ -47,7 +46,7 @@ class ZanzaraPromise implements PromiseInterface
     public function __construct(ContainerInterface $container, PromiseInterface $promise, ?string $class = "Scalar")
     {
         $this->zanzaraMapper = $container->get(ZanzaraMapper::class);
-        $this->logger = $container->get(LoggerInterface::class);
+        $this->logger = $container->get(ZanzaraLogger::class);
         $this->promise = $promise;
         $this->class = $class;
     }
@@ -67,7 +66,7 @@ class ZanzaraPromise implements PromiseInterface
                 $classParameter = $reflection->getParameters()[0]->getClass();
 
                 if ($classParameter != "" && $classParameter->getName() !== $this->class) {
-                    $this->logger->error("Type mismatch: shoud be {$this->class}, found {$classParameter->getName()}");
+                    $this->logger->error("Type mismatch: should be {$this->class}, found {$classParameter->getName()}");
                 }
 
                 if (is_scalar($object->result) && $this->class === "Scalar") {

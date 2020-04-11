@@ -7,9 +7,17 @@ namespace Zanzara;
 use Psr\Log\LoggerInterface;
 
 /**
- *
+ * @method emergency($message, array $context = array())
+ * @method alert($message, array $context = array())
+ * @method critical($message, array $context = array())
+ * @method error($message, array $context = array())
+ * @method warning($message, array $context = array())
+ * @method notice($message, array $context = array())
+ * @method info($message, array $context = array())
+ * @method debug($message, array $context = array())
+ * @method log($message, array $context = array())
  */
-class ZanzaraLogger implements LoggerInterface
+class ZanzaraLogger
 {
 
     /**
@@ -26,102 +34,12 @@ class ZanzaraLogger implements LoggerInterface
         $this->logger = $logger;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function emergency($message, array $context = array())
+    public function __call($name, $arguments)
     {
-        echo $message . "\n";
+        $message = $arguments[0];
+        echo "$message\n";
         if ($this->logger) {
-            $this->logger->emergency($message, $context);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function alert($message, array $context = array())
-    {
-        echo $message . "\n";
-        if ($this->logger) {
-            $this->logger->alert($message, $context);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function critical($message, array $context = array())
-    {
-        echo $message . "\n";
-        if ($this->logger) {
-            $this->logger->critical($message, $context);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function error($message, array $context = array())
-    {
-        echo $message . "\n";
-        if ($this->logger) {
-            $this->logger->error($message, $context);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function warning($message, array $context = array())
-    {
-        echo $message . "\n";
-        if ($this->logger) {
-            $this->logger->warning($message, $context);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function notice($message, array $context = array())
-    {
-        echo $message . "\n";
-        if ($this->logger) {
-            $this->logger->notice($message, $context);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function info($message, array $context = array())
-    {
-        echo $message . "\n";
-        if ($this->logger) {
-            $this->logger->info($message, $context);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function debug($message, array $context = array())
-    {
-        echo $message . "\n";
-        if ($this->logger) {
-            $this->logger->debug($message, $context);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function log($level, $message, array $context = array())
-    {
-        echo $message . "\n";
-        if ($this->logger) {
-            $this->logger->log($message, $context);
+            call_user_func_array([$this->logger, $name], $arguments);
         }
     }
 
