@@ -8,10 +8,11 @@ use React\Promise\PromiseInterface;
 use Zanzara\Telegram\Type\Update;
 
 /**
- * Class PromiseWrapperTest
- * @package PromiseWrapper
+ * These tests actually call the Telegram Bot Api, so they are meant to be executed when needed, not on each test suite
+ * execution. To skip them "Test" is used as prefix instead of suffix.
+ *
  */
-class PromiseWrapperTest extends TestCase
+class TestPromiseWrapper extends TestCase
 {
 
     /**

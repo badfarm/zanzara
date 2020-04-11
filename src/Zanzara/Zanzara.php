@@ -70,7 +70,7 @@ class Zanzara extends ActionResolver
         $config->setBotToken($token);
         $this->config = $config;
         $this->loop = $loop ?? Factory::create();
-        $this->logger = $logger;
+        $this->logger = new ZanzaraLogger($logger);
         $this->zanzaraMapper = new ZanzaraMapper();
         $this->browser = (new Browser($this->loop))
             ->withBase("{$config->getApiTelegramUrl()}/bot{$config->getBotToken()}");
@@ -129,8 +129,7 @@ class Zanzara extends ActionResolver
                             $this->exec($update);
                         } catch (\Throwable $e) {
                             $message = "Failed to process Telegram Update $update, reason: {$e->getMessage()}\n";
-                            echo $message;
-                            $this->logError($message);
+                            $this->logger->error($message);
                         }
                         $offset++;
                     }
@@ -139,8 +138,7 @@ class Zanzara extends ActionResolver
             },
             function (ErrorResponse $error) use ($offset) {
                 $message = "Failed to fetch updates from Telegram: $error\n";
-                echo $message;
-                $this->logError($message);
+                $this->logger->error($message);
                 // recall polling with a configurable delay?
                 $this->polling($offset);
             });
@@ -165,16 +163,6 @@ class Zanzara extends ActionResolver
     public function getLoop(): LoopInterface
     {
         return $this->loop;
-    }
-
-    /**
-     * @param string $message
-     */
-    private function logError(string $message)
-    {
-        if ($this->logger) {
-            $this->logger->error($message);
-        }
     }
 
     /**
