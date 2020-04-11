@@ -9,20 +9,18 @@ use JsonMapper_Exception;
 use Psr\Log\LoggerInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
-use Zanzara\Action\ActionCollector;
 use Zanzara\Action\ActionResolver;
 use Zanzara\Telegram\Type\Response\ErrorResponse;
 use Zanzara\Telegram\Type\Update;
 
 /**
- * Clients interact with Zanzara by creating an instance of this class.
+ * Framework entry point class.
+ * The framework collects a list of callbacks the user wants to execute based on the Update type received
+ * from Telegram.
+ * On run() the framework starts to listen for updates from Telegram. When an update is received it
+ * resolves the callbacks and execute them.
  *
- * The client has to declare the actions he wants to perform.
- * Actions are declared through public methods defined in @see ActionCollector.
- * After that he has to call @see Zanzara::run() that determines, accordingly to the Update type received from Telegram,
- * the actions to execute.
- * A @see Context object is passed through all middleware stack.
- *
+ * @see Zanzara::run()
  */
 class Zanzara extends ActionResolver
 {
@@ -85,6 +83,7 @@ class Zanzara extends ActionResolver
      */
     public function run(): void
     {
+        $this->feedMiddlewareStack();
 
         switch ($this->config->getUpdateMode()) {
 
@@ -118,7 +117,7 @@ class Zanzara extends ActionResolver
 
                     $lastUpdate = end($updates);
 
-                    if ($lastUpdate != null) {
+                    if ($lastUpdate) {
                         $offset = $lastUpdate->getUpdateId();
                     }
                     $this->polling($offset);
@@ -155,7 +154,6 @@ class Zanzara extends ActionResolver
         $context = new Context($update, $this->browser, $this->zanzaraMapper);
         $actions = $this->resolve($update);
         foreach ($actions as $action) {
-            $this->feedMiddlewareStack($action);
             $middlewareTip = $action->getTip();
             $middlewareTip($context);
         }

@@ -10,7 +10,7 @@ namespace Zanzara;
  *  $config = new \Zanzara\Config();
  *  $config->setUpdateMode(self::WEBHOOK_MODE);
  *  $config->setParseMode(self::PARSE_MODE_HTML);
- *  $bot = new \Zanzara\Zanzara('token', $loop, $config);
+ *  $bot = new \Zanzara\Zanzara('token', $config);
  *
  */
 class Config

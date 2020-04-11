@@ -9,12 +9,8 @@ use Zanzara\Telegram\Type\Response\ErrorResponse;
 
 /**
  * Wrapper for React Promise.
+ * Instead of returning the raw promise, cast it to a Telegram type.
  *
- * It casts the result of the original promise (@see ZanzaraPromise::$promise) to the specified
- * type (@see ZanzaraPromise::$class).
- *
- * Class ZanzaraPromise
- * @package Zanzara
  */
 class ZanzaraPromise implements PromiseInterface
 {

@@ -17,7 +17,11 @@ use Zanzara\Telegram\Type\Poll\Poll;
 use Zanzara\Telegram\Type\Update;
 
 /**
+ * Class that interacts with Telegram Api.
+ * Made trait in order to be used both by Telegram and Context classes.
  *
+ * @see Telegram
+ * @see Context
  */
 trait TelegramTrait
 {

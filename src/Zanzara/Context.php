@@ -21,7 +21,7 @@ use Zanzara\Telegram\Type\Update;
 use Zanzara\Telegram\Type\User;
 
 /**
- * @see Update shortcut methods
+ * Update shortcut methods
  * @method int getUpdateId()
  * @method Message|null getMessage()
  * @method EditedMessage|null getEditedMessage()
@@ -37,6 +37,7 @@ use Zanzara\Telegram\Type\User;
  * @method User|null getEffectiveUser()
  * @method Chat|null getEffectiveChat()
  *
+ * @see Update
  */
 class Context
 {

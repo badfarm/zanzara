@@ -8,8 +8,9 @@ use JsonMapper;
 use JsonMapper_Exception;
 
 /**
- * @see JsonMapper is used for deserialization.
+ * JsonMapper is used for deserialization.
  *
+ * @see JsonMapper
  */
 class ZanzaraMapper
 {

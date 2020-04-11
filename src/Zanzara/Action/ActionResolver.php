@@ -11,6 +11,7 @@ use Zanzara\Telegram\Type\Update;
 /**
  * Resolves the actions collected in ActionCollector accordingly to Telegram Update type.
  *
+ * @see ActionCollector
  */
 abstract class ActionResolver extends ActionCollector
 {
@@ -41,7 +42,7 @@ abstract class ActionResolver extends ActionCollector
 
             case CallbackQuery::class:
                 $text = $update->getCallbackQuery()->getMessage()->getText();
-                $this->findAndPush($actions, 'cbQueryTexts', $text);
+                $this->findAndPush($actions, 'cb_query_texts', $text);
                 break;
 
         }

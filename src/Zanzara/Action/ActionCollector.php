@@ -22,17 +22,17 @@ use Zanzara\Telegram\Type\Update;
 
 /**
  * Collects all actions a user wants to do.
- * @see Action
  *
+ * @see Action
  */
 abstract class ActionCollector
 {
 
     /**
      * Associative array for actions.
-     * Key is always the action type that can be either a simple string (eg. messages, cbQueryTexts) or the class
+     * Key is always the action type that can be either a simple string (eg. messages, cb_query_texts) or the class
      * name of the Update type, @see Update::detectUpdateType().
-     * Values can be an ordered array of @see Action or another associative array where the key
+     * Value can be an ordered array of @see Action or another associative array where the key
      * is the actionId and the value the actual @see Action.
      *
      * Eg.
@@ -123,7 +123,7 @@ abstract class ActionCollector
     public function onCbQueryText(string $text, callable $callback): MiddlewareCollector
     {
         $action = new Action($callback, $text);
-        $this->actions['cbQueryTexts'][$text] = $action;
+        $this->actions['cb_query_texts'][$text] = $action;
         return $action;
     }
 
@@ -262,15 +262,18 @@ abstract class ActionCollector
     }
 
     /**
-     * Add bot level middleware to Action middleware stack.
+     * Add cross-request middleware to each action middleware chain.
      *
-     * @param Action $action
      */
-    protected function feedMiddlewareStack(Action $action)
+    protected function feedMiddlewareStack()
     {
-        foreach ($this->middleware as $m) {
-            $action->middleware($m);
-        }
+        array_walk_recursive($this->actions, function ($value) {
+            if ($value instanceof Action) {
+                foreach ($this->middleware as $m) {
+                    $value->middleware($m);
+                }
+            }
+        });
     }
 
 }
