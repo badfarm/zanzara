@@ -68,15 +68,22 @@ class Context
     private $data = [];
 
     /**
+     * @var ZanzaraLogger
+     */
+    private $logger;
+
+    /**
      * @param Update $update
      * @param Browser $browser
      * @param ZanzaraMapper $zanzaraMapper
+     * @param ZanzaraLogger $logger
      */
-    public function __construct(Update $update, Browser $browser, ZanzaraMapper $zanzaraMapper)
+    public function __construct(Update $update, Browser $browser, ZanzaraMapper $zanzaraMapper, ZanzaraLogger $logger)
     {
         $this->update = $update;
         $this->browser = $browser;
         $this->zanzaraMapper = $zanzaraMapper;
+        $this->logger = $logger;
     }
 
     /**
@@ -131,4 +138,11 @@ class Context
         return $this->zanzaraMapper;
     }
 
+    /**
+     * @inheritDoc
+     */
+    protected function getLogger(): ZanzaraLogger
+    {
+        return $this->logger;
+    }
 }

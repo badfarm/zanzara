@@ -25,14 +25,21 @@ class Telegram
     private $zanzaraMapper;
 
     /**
+     * @var ZanzaraLogger
+     */
+    private $logger;
+
+    /**
      * Telegram constructor.
      * @param Browser $browser
      * @param ZanzaraMapper $zanzaraMapper
+     * @param ZanzaraLogger $logger
      */
-    public function __construct(Browser $browser, ZanzaraMapper $zanzaraMapper)
+    public function __construct(Browser $browser, ZanzaraMapper $zanzaraMapper, ZanzaraLogger $logger)
     {
         $this->browser = $browser;
         $this->zanzaraMapper = $zanzaraMapper;
+        $this->logger = $logger;
     }
 
     /**
@@ -57,6 +64,11 @@ class Telegram
     protected function getZanzaraMapper(): ZanzaraMapper
     {
         return $this->zanzaraMapper;
+    }
+
+    protected function getLogger(): ZanzaraLogger
+    {
+        return $this->logger;
     }
 
 }

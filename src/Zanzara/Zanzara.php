@@ -74,7 +74,7 @@ class Zanzara extends ActionResolver
         $this->zanzaraMapper = new ZanzaraMapper();
         $this->browser = (new Browser($this->loop))
             ->withBase("{$config->getApiTelegramUrl()}/bot{$config->getBotToken()}");
-        $this->telegram = new Telegram($this->browser, $this->zanzaraMapper);
+        $this->telegram = new Telegram($this->browser, $this->zanzaraMapper, $this->logger);
     }
 
     /**
@@ -149,7 +149,7 @@ class Zanzara extends ActionResolver
      */
     private function exec(Update $update)
     {
-        $context = new Context($update, $this->browser, $this->zanzaraMapper);
+        $context = new Context($update, $this->browser, $this->zanzaraMapper, $this->logger);
         $actions = $this->resolve($update);
         foreach ($actions as $action) {
             $middlewareTip = $action->getTip();

@@ -32,6 +32,11 @@ trait TelegramTrait
     protected abstract function getBrowser(): Browser;
 
     /**
+     * @return ZanzaraLogger
+     */
+    protected abstract function getLogger(): ZanzaraLogger;
+
+    /**
      * @return Update
      */
     protected abstract function getUpdate(): Update;
@@ -63,7 +68,7 @@ trait TelegramTrait
             "timeout" => $timeout + 10 //timout browser necessary bigger than telegram timeout. They can't be equal
         ));
 
-        return new ZanzaraPromise($this->getZanzaraMapper(), $browser->get("$method?$query"), Update::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $browser->get("$method?$query"), $this->getLogger(), Update::class);
     }
 
     /**
@@ -80,7 +85,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "text");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendMessage", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendMessage", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -107,7 +112,7 @@ trait TelegramTrait
     {
         $required = compact("url");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setWebhook", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setWebhook", $params), $this->getLogger());
     }
 
     /**
@@ -125,7 +130,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "from_chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("forwardMessage", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("forwardMessage", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -142,7 +147,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "photo");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendPhoto", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendPhoto", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -161,7 +166,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "audio");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendAudio", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendAudio", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -179,7 +184,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "document");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendDocument", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendDocument", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -198,7 +203,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "video");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVideo", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVideo", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -217,7 +222,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "animation");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendAnimation", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendAnimation", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -237,7 +242,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "voice");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVoice", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVoice", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -255,7 +260,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "video_note");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVideoNote", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVideoNote", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -272,7 +277,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "media");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendMediaGroup", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendMediaGroup", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -290,7 +295,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "latitude", "longitude");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendLocation", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendLocation", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -309,7 +314,7 @@ trait TelegramTrait
     {
         $required = compact("latitude", "longitude");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageLiveLocation", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageLiveLocation", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -323,7 +328,7 @@ trait TelegramTrait
      */
     public function stopMessageLiveLocation(?array $opt = []): PromiseInterface
     {
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("stopMessageLiveLocation", $opt), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("stopMessageLiveLocation", $opt), $this->getLogger(), Message::class);
     }
 
     /**
@@ -343,7 +348,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "latitude", "longitude", "title", "address");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVenue", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendVenue", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -361,7 +366,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "phone_number", "first_name");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendContact", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendContact", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -379,7 +384,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "question", "options");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendPoll", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendPoll", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -397,7 +402,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendDice", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendDice", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -416,7 +421,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "action");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendChatAction", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendChatAction", $params), $this->getLogger());
     }
 
     /**
@@ -432,7 +437,7 @@ trait TelegramTrait
     {
         $required = compact("user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getUserProfilePhotos", $params), UserProfilePhotos::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getUserProfilePhotos", $params), $this->getLogger(), UserProfilePhotos::class);
     }
 
     /**
@@ -452,7 +457,7 @@ trait TelegramTrait
     {
         $required = compact("file_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getFile", $params), File::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getFile", $params), $this->getLogger(), File::class);
     }
 
     /**
@@ -472,7 +477,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("kickChatMember", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("kickChatMember", $params), $this->getLogger());
     }
 
     /**
@@ -491,7 +496,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("unbanChatMember", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("unbanChatMember", $params), $this->getLogger());
     }
 
     /**
@@ -511,7 +516,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id", "permissions");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("restrictChatMember", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("restrictChatMember", $params), $this->getLogger());
     }
 
     /**
@@ -530,7 +535,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("promoteChatMember", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("promoteChatMember", $params), $this->getLogger());
     }
 
     /**
@@ -548,7 +553,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id", "custom_title");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatAdministratorCustomTitle", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatAdministratorCustomTitle", $params), $this->getLogger());
     }
 
     /**
@@ -566,7 +571,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "permissions");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatPermissions", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatPermissions", $params), $this->getLogger());
     }
 
     /**
@@ -584,7 +589,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("exportChatInviteLink", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("exportChatInviteLink", $params), $this->getLogger());
     }
 
     /**
@@ -602,7 +607,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "photo");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatPhoto", $params)); //bool
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatPhoto", $params), $this->getLogger()); //bool
     }
 
     /**
@@ -619,7 +624,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteChatPhoto", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteChatPhoto", $params), $this->getLogger());
     }
 
     /**
@@ -637,7 +642,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "title");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatTitle", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatTitle", $params), $this->getLogger());
     }
 
     /**
@@ -654,7 +659,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatDescription", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatDescription", $params), $this->getLogger());
     }
 
     /**
@@ -673,7 +678,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("pinChatMessage", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("pinChatMessage", $params), $this->getLogger());
     }
 
     /**
@@ -691,7 +696,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("unpinChatMessage", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("unpinChatMessage", $params), $this->getLogger());
     }
 
     /**
@@ -707,7 +712,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("leaveChat", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("leaveChat", $params), $this->getLogger());
     }
 
     /**
@@ -724,7 +729,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChat", $params), Chat::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChat", $params), $this->getLogger(), Chat::class);
     }
 
     /**
@@ -742,7 +747,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChatAdministrators", $params), ChatMember::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChatAdministrators", $params), $this->getLogger(), ChatMember::class);
     }
 
     /**
@@ -758,7 +763,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChatMembersCount", $params)); //integer
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChatMembersCount", $params), $this->getLogger()); //integer
     }
 
     /**
@@ -775,7 +780,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChatMember", $params), ChatMember::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getChatMember", $params), $this->getLogger(), ChatMember::class);
     }
 
     /**
@@ -794,7 +799,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "sticker_set_name");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatStickerSet", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setChatStickerSet", $params), $this->getLogger());
     }
 
     /**
@@ -812,7 +817,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteChatStickerSet", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteChatStickerSet", $params), $this->getLogger());
     }
 
     /**
@@ -829,7 +834,7 @@ trait TelegramTrait
     {
         $required = compact("callback_query_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerCallbackQuery", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerCallbackQuery", $params), $this->getLogger());
     }
 
     /**
@@ -845,7 +850,7 @@ trait TelegramTrait
     {
         $required = compact("commands");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setMyCommands", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setMyCommands", $params), $this->getLogger());
     }
 
     /**
@@ -862,7 +867,7 @@ trait TelegramTrait
     {
         $required = compact("text");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageText", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageText", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -876,7 +881,7 @@ trait TelegramTrait
      */
     public function editMessageCaption(?array $opt = []): PromiseInterface
     {
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageCaption", $opt), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageCaption", $opt), $this->getLogger(), Message::class);
     }
 
     /**
@@ -896,7 +901,7 @@ trait TelegramTrait
     {
         $required = compact("media");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageMedia", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageMedia", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -910,7 +915,7 @@ trait TelegramTrait
      */
     public function editMessageReplyMarkup(?array $opt = []): PromiseInterface
     {
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageReplyMarkup", $opt), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("editMessageReplyMarkup", $opt), $this->getLogger(), Message::class);
     }
 
     /**
@@ -928,7 +933,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("stopPoll", $params), Poll::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("stopPoll", $params), $this->getLogger(), Poll::class);
     }
 
     /**
@@ -951,7 +956,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteMessage", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteMessage", $params), $this->getLogger());
     }
 
     /**
@@ -968,7 +973,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "sticker");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendSticker", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendSticker", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -984,7 +989,7 @@ trait TelegramTrait
     {
         $required = compact("name");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getStickerSet", $params), StickerSet::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getStickerSet", $params), $this->getLogger(), StickerSet::class);
     }
 
     /**
@@ -1002,7 +1007,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "png_sticker");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("uploadStickerFile", $params), File::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("uploadStickerFile", $params), $this->getLogger(), File::class);
     }
 
     /**
@@ -1022,7 +1027,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "name", "title", "emojis");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("createNewStickerSet", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("createNewStickerSet", $params), $this->getLogger());
     }
 
     /**
@@ -1043,7 +1048,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "name", "png_sticker", "emojis");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("addStickerToSet", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("addStickerToSet", $params), $this->getLogger());
     }
 
     /**
@@ -1060,7 +1065,7 @@ trait TelegramTrait
     {
         $required = compact("sticker", "position");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setStickerPositionInSet", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setStickerPositionInSet", $params), $this->getLogger());
     }
 
     /**
@@ -1076,7 +1081,7 @@ trait TelegramTrait
     {
         $required = compact("sticker");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteStickerFromSet", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("deleteStickerFromSet", $params), $this->getLogger());
     }
 
     /**
@@ -1094,7 +1099,7 @@ trait TelegramTrait
     {
         $required = compact("name", "user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setStickerSetThumb", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setStickerSetThumb", $params), $this->getLogger());
     }
 
     /**
@@ -1112,7 +1117,7 @@ trait TelegramTrait
     {
         $required = compact("inline_query_id", "results");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerInlineQuery", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerInlineQuery", $params), $this->getLogger());
     }
 
     /**
@@ -1135,7 +1140,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "title", "description", "payload", "provider_token", "start_parameter", "currency", "prices");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendInvoice", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendInvoice", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -1154,7 +1159,7 @@ trait TelegramTrait
     {
         $required = compact("shipping_query_id", "ok");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerShippingQuery", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerShippingQuery", $params), $this->getLogger());
     }
 
     /**
@@ -1174,7 +1179,7 @@ trait TelegramTrait
     {
         $required = compact("pre_checkout_query_id", "ok");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerPreCheckoutQuery", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("answerPreCheckoutQuery", $params), $this->getLogger());
     }
 
     /**
@@ -1193,7 +1198,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "errors");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setPassportDataErrors", $params));
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setPassportDataErrors", $params), $this->getLogger());
     }
 
     /**
@@ -1210,7 +1215,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "game_short_name");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendGame", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("sendGame", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -1229,7 +1234,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "score");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setGameScore", $params), Message::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("setGameScore", $params), $this->getLogger(), Message::class);
     }
 
     /**
@@ -1246,8 +1251,9 @@ trait TelegramTrait
     {
         $required = compact("user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getGameHighScores", $params), GameHighScore::class);
+        return new ZanzaraPromise($this->getZanzaraMapper(), $this->callApi("getGameHighScores", $params), $this->getLogger(), GameHighScore::class);
     }
+
 
     /**
      * @param string $method
