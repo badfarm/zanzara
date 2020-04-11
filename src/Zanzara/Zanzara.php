@@ -138,7 +138,7 @@ class Zanzara extends ActionResolver
                         try {
                             $this->exec($update);
                         } catch (\Throwable $e) {
-                            $message = "Failed to process Telegram Update $update, reason: {$e->getMessage()}\n";
+                            $message = "Failed to process Telegram Update $update, reason: {$e->getMessage()}";
                             $this->logger->error($message);
                         }
                         $offset++;
@@ -147,7 +147,7 @@ class Zanzara extends ActionResolver
                 }
             },
             function (ErrorResponse $error) use ($offset) {
-                $this->logger->error("Failed to fetch updates from Telegram: $error\n");
+                $this->logger->error("Failed to fetch updates from Telegram: $error");
                 // recall polling with a configurable delay?
                 $this->polling($offset);
             });
