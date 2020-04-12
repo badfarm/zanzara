@@ -18,6 +18,7 @@ class Config
 
     public const WEBHOOK_MODE = "WEBHOOK";
     public const POLLING_MODE = "POLLING";
+    public const TEST_MODE = "TEST";
 
     public const PARSE_MODE_HTML = "HTML";
     public const PARSE_MODE_MARKDOWN = "MarkdownV2";
@@ -47,6 +48,11 @@ class Config
      * @var string
      */
     private $apiTelegramUrl = 'https://api.telegram.org';
+
+    /**
+     * @var int
+     */
+    private $serverPort = 8080;
 
     /**
      * @return string
@@ -126,6 +132,22 @@ class Config
     public function setApiTelegramUrl(string $apiTelegramUrl): void
     {
         $this->apiTelegramUrl = $apiTelegramUrl;
+    }
+
+    /**
+     * @return int
+     */
+    public function getServerPort(): int
+    {
+        return $this->serverPort;
+    }
+
+    /**
+     * @param int $serverPort
+     */
+    public function setServerPort(int $serverPort): void
+    {
+        $this->serverPort = $serverPort;
     }
 
 }

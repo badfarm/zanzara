@@ -67,9 +67,7 @@ class ZanzaraPromise implements PromiseInterface
 
                 if ($classParameter != "" && $classParameter->getName() !== $this->class) {
                     $this->logger->error("Type mismatch: should be {$this->class}, found {$classParameter->getName()}");
-                }
-
-                if (is_scalar($object->result) && $this->class === "Scalar") {
+                } else if (is_scalar($object->result) && $this->class === "Scalar") {
                     $onFulfilled($object->result);
                 } else {
                     $onFulfilled($this->zanzaraMapper->mapObject($object->result, $this->class));

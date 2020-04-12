@@ -16,6 +16,7 @@ use Zanzara\Telegram\Type\Game\GameHighScore;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Poll\Poll;
 use Zanzara\Telegram\Type\Update;
+use Zanzara\Telegram\Type\Webhook\WebhookInfo;
 
 /**
  * Class that interacts with Telegram Api.
@@ -109,6 +110,32 @@ trait TelegramTrait
         $required = compact("url");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("setWebhook", $params));
+    }
+
+    /**
+     * Use this method to get current webhook status. Requires no parameters. On success, returns a WebhookInfo object.
+     * If the bot is using getUpdates, will return an object with the url field empty.
+     *
+     * More on https://core.telegram.org/bots/api#getwebhookinfo
+     *
+     * @return PromiseInterface
+     */
+    public function getWebhookInfo(): PromiseInterface
+    {
+        return new ZanzaraPromise($this->container, $this->callApi("getWebhookInfo"), WebhookInfo::class);
+    }
+
+    /**
+     * Use this method to remove webhook integration if you decide to switch back to getUpdates. Returns True on
+     * success. Requires no parameters.
+     *
+     * More on https://core.telegram.org/bots/api#deletewebhook
+     *
+     * @return PromiseInterface
+     */
+    public function deleteWebhook(): PromiseInterface
+    {
+        return new ZanzaraPromise($this->container, $this->callApi("deleteWebhook"));
     }
 
     /**
@@ -1256,7 +1283,7 @@ trait TelegramTrait
      * @param array $params
      * @return PromiseInterface
      */
-    public function callApi(string $method, array $params)
+    public function callApi(string $method, array $params = [])
     {
         $headers = [
             "Content-type" => "application/json"

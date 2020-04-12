@@ -21,7 +21,7 @@ class PreCheckoutQueryTest extends TestCase
     public function testPreCheckoutQuery()
     {
         $config = new Config();
-        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateMode(Config::TEST_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/pre_checkout_query.json');
         $bot = new Zanzara('test', $config);
 

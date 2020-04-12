@@ -21,7 +21,7 @@ class SuccessfulPaymentTest extends TestCase
     public function testSuccessfulPayment()
     {
         $config = new Config();
-        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateMode(Config::TEST_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/successful_payment.json');
         $bot = new Zanzara('test', $config);
 

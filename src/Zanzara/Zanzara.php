@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
+use Clue\React\Block;
 use Clue\React\Buzz\Browser;
 use DI\Container;
 use JsonMapper_Exception;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
+use React\Http\Response;
+use React\Http\Server;
 use Zanzara\Action\ActionResolver;
 use Zanzara\Telegram\Type\Response\ErrorResponse;
 use Zanzara\Telegram\Type\Update;
+use Zanzara\Telegram\Type\Webhook\WebhookInfo;
 
 /**
  * Framework entry point class.
@@ -85,6 +90,7 @@ class Zanzara extends ActionResolver
         $this->container->set(Browser::class, $browser);
         $this->telegram = new Telegram($this->container);
         $this->container->set(Telegram::class, $this->telegram);
+        $this->container->set(Zanzara::class, $this);
     }
 
     /**
@@ -98,6 +104,32 @@ class Zanzara extends ActionResolver
         switch ($this->config->getUpdateMode()) {
 
             case Config::WEBHOOK_MODE:
+                /** @var WebhookInfo $webhookInfo */
+                $webhookInfo = Block\await($this->telegram->getWebhookInfo(), $this->loop);
+                if (!$webhookInfo->getUrl()) {
+                    $message = "Your bot doesn't have a webhook set, please set one before running Zanzara in webhook" .
+                        " mode. See https://core.telegram.org/bots/api#setwebhook";
+                    $this->logger->error($message);
+                } else {
+                    $this->startWebServer();
+                }
+                break;
+
+            case Config::POLLING_MODE:
+                /** @var WebhookInfo $webhookInfo */
+                $webhookInfo = Block\await($this->telegram->getWebhookInfo(), $this->loop);
+                if ($webhookInfo->getUrl()) {
+                    $message = "Your bot has a webhook set, please delete it before running Zanzara in polling mode. " .
+                        "See https://core.telegram.org/bots/api#deletewebhook";
+                    $this->logger->error($message);
+                } else {
+                    $this->loop->futureTick([$this, 'polling']);
+                    echo "Zanzara is listening...\n";
+                    $this->loop->run();
+                }
+                break;
+
+            case Config::TEST_MODE:
                 $json = file_get_contents($this->config->getUpdateStream());
                 /** @var Update $update */
                 $update = $this->zanzaraMapper->map($json, Update::class);
@@ -105,13 +137,27 @@ class Zanzara extends ActionResolver
                 $this->exec($update);
                 break;
 
-            case Config::POLLING_MODE:
-                $this->loop->futureTick([$this, 'polling']);
-                echo "Zanzara is listening...\n";
-                $this->loop->run();
-                break;
-
         }
+    }
+
+    /**
+     *
+     */
+    private function startWebServer()
+    {
+        $server = new Server(function (ServerRequestInterface $request) {
+            $json = (string)$request->getBody();
+            /** @var Update $update */
+            $update = $this->zanzaraMapper->map($json, Update::class);
+            $update->detectUpdateType();
+            $this->exec($update); // todo: try/catch?
+            return new Response();
+        });
+
+        $socket = new \React\Socket\Server($this->config->getServerPort(), $this->loop);
+        $server->listen($socket);
+        echo "Zanzara is listening...\n";
+        $this->loop->run();
     }
 
     /**

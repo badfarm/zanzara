@@ -12,6 +12,8 @@ use Zanzara\Telegram\Type\Update;
 use Zanzara\Zanzara;
 
 /**
+ * These tests actually call the Telegram Bot Api, so they are meant to be executed when needed, not on each test suite
+ * execution. To skip them "Test" is used as prefix instead of suffix.
  *
  */
 class TestLogger extends TestCase

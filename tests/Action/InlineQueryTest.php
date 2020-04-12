@@ -21,7 +21,7 @@ class InlineQueryTest extends TestCase
     public function testInlineQuery()
     {
         $config = new Config();
-        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateMode(Config::TEST_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/inline_query.json');
         $bot = new Zanzara('test', $config);
 
@@ -47,7 +47,7 @@ class InlineQueryTest extends TestCase
     public function testChosenInlineResult()
     {
         $config = new Config();
-        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateMode(Config::TEST_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/chosen_inline_result.json');
         $bot = new Zanzara('test', $config);
 

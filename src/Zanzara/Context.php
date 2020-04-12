@@ -52,11 +52,6 @@ class Context
     private $data = [];
 
     /**
-     * @var ZanzaraLogger
-     */
-    private $logger;
-
-    /**
      * @param Update $update
      * @param ContainerInterface $container
      */

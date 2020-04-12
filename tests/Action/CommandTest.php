@@ -22,7 +22,7 @@ class CommandTest extends TestCase
     public function testCommand()
     {
         $config = new Config();
-        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateMode(Config::TEST_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
         $bot = new Zanzara('test', $config);
 
@@ -59,7 +59,7 @@ class CommandTest extends TestCase
     public function testText()
     {
         $config = new Config();
-        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateMode(Config::TEST_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/message.json');
         $bot = new Zanzara('test', $config);
 

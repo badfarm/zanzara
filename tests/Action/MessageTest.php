@@ -21,7 +21,7 @@ class MessageTest extends TestCase
     public function testEditedMessage()
     {
         $config = new Config();
-        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateMode(Config::TEST_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/edited_message.json');
         $bot = new Zanzara('test', $config);
 
@@ -53,7 +53,7 @@ class MessageTest extends TestCase
     public function testForwardFromMessage()
     {
         $config = new Config();
-        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateMode(Config::TEST_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/forward_from_message.json');
         $bot = new Zanzara('test', $config);
 
@@ -80,7 +80,7 @@ class MessageTest extends TestCase
     public function testMessageEntities()
     {
         $config = new Config();
-        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateMode(Config::TEST_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/message_entities.json');
         $bot = new Zanzara('test', $config);
 
@@ -108,7 +108,7 @@ class MessageTest extends TestCase
     public function testPoll()
     {
         $config = new Config();
-        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateMode(Config::TEST_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/poll.json');
         $bot = new Zanzara('test', $config);
 
@@ -141,7 +141,7 @@ class MessageTest extends TestCase
     public function testReplyToMessage()
     {
         $config = new Config();
-        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateMode(Config::TEST_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/reply_to_message.json');
         $bot = new Zanzara('test', $config);
 

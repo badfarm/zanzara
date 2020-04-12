@@ -45,7 +45,7 @@ Send _/start_ to your Bot and it will reply with _Hello_ !
 ### Middleware
 
 Middleware is a core functionality for any application, it allows to perform actions before and after the request
-is processed. With Zanzara middleware are implemented as classes that implements a **MiddlewareInterface** which defines
+is processed. With Zanzara middleware are implemented as classes that implement a **MiddlewareInterface** which defines
 a **handle(Context $ctx, $next)** method. Here an example:
 
 ```php
