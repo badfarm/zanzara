@@ -34,7 +34,9 @@
         "psr/log": "^1.1",
         "psr/container": "^1.0",
         "clue/block-react": "1.3.1",
-        "php-di/php-di": "^6.1"
+        "php-di/php-di": "^6.1",
+        "php-http/multipart-stream-builder": "^1.1",
+        "ext-readline": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5",

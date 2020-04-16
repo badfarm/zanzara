@@ -122,6 +122,23 @@ class Zanzara extends ActionResolver
                     $message = "Your bot has a webhook set, please delete it before running Zanzara in polling mode. " .
                         "See https://core.telegram.org/bots/api#deletewebhook";
                     $this->logger->error($message);
+                    echo "Digit yes if you want to delete the webhook: ";
+                    $answer = readline();
+                    if (strtoupper($answer) === "YES") {
+                        $delete = Block\await($this->telegram->deleteWebhook(), $this->loop);
+                        if ($delete === true) {
+                            $this->logger->info("Webhook is deleted, Zanzara is starting in polling ...");
+                            $this->loop->futureTick([$this, 'polling']);
+                            echo "Zanzara is listening...\n";
+                            $this->loop->run();
+                        } else {
+                            $this->logger->error("Error deleting webhook: {$delete}");
+                        }
+                    } else {
+                        echo "Shutdown, you have to manually delete the webhook or start in webhook mode";
+                    }
+
+
                 } else {
                     $this->loop->futureTick([$this, 'polling']);
                     echo "Zanzara is listening...\n";
