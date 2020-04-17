@@ -45,13 +45,13 @@ trait TelegramTrait
     protected $update;
 
     /**
-     * Use this method to receive incoming updates using long polling (wiki). An Array of @param int $offset
+     * Use this method to receive incoming updates using long polling (wiki). An Array of @see Update objects is returned.
+     *
+     * @param int $offset
      * @param int $timeout
      * @param int $limit telegram default is 100 if unspecified
      * @param array $allowed_updates
      * @return PromiseInterface
-     * @see Update objects is returned.
-     *
      */
     public function getUpdates(int $offset = 1, int $timeout = 50, int $limit = 100, array $allowed_updates = []): PromiseInterface
     {
@@ -67,14 +67,14 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to send text messages. On success, the sent @param int $chat_id
-     * @param string $text
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Message is returned.
+     * Use this method to send text messages. On success, the sent @see Message is returned.
      *
      * More on https://core.telegram.org/bots/api#sendmessage
      *
+     * @param int $chat_id
+     * @param string $text
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function sendMessage(int $chat_id, string $text, ?array $opt = [])
     {
@@ -84,11 +84,11 @@ trait TelegramTrait
     }
 
     /**
-     * Same of @param string $text
+     * Same of @see Telegram::sendMessage() but the chat_id is always the caller chat_id.
+     *
+     * @param string $text
      * @param array|null $opt
      * @return PromiseInterface
-     * @see Telegram::sendMessage() but the chat_id is always the caller chat_id.
-     *
      */
     public function reply(string $text, ?array $opt = [])
     {
@@ -114,12 +114,12 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to get current webhook status. Requires no parameters. On success, returns a @return PromiseInterface
-     * @see WebhookInfo object.
+     * Use this method to get current webhook status. Requires no parameters. On success, returns a @see WebhookInfo object.
      * If the bot is using getUpdates, will return an object with the url field empty.
      *
      * More on https://core.telegram.org/bots/api#getwebhookinfo
      *
+     * @return PromiseInterface
      */
     public function getWebhookInfo(): PromiseInterface
     {
@@ -140,15 +140,15 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to forward messages of any kind. On success, the sent @param int $chat_id
+     * Use this method to forward messages of any kind. On success, the sent @see Message is returned.
+     *
+     * More on https://core.telegram.org/bots/api#forwardmessage
+     *
+     * @param int $chat_id
      * @param int $from_chat_id
      * @param int $message_id
      * @param array|null $opt
      * @return PromiseInterface
-     * @see Message is returned.
-     *
-     * More on https://core.telegram.org/bots/api#forwardmessage
-     *
      */
     public function forwardMessage(int $chat_id, int $from_chat_id, int $message_id, ?array $opt = []): PromiseInterface
     {
@@ -158,14 +158,14 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to send photos. On success, the sent @param int $chat_id
-     * @param $photo
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Message is returned.
+     * Use this method to send photos. On success, the sent @see Message is returned.
      *
      * More on https://core.telegram.org/bots/api#sendphoto
      *
+     * @param int $chat_id
+     * @param $photo
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function sendPhoto(int $chat_id, $photo, ?array $opt = []): PromiseInterface
     {
@@ -176,15 +176,15 @@ trait TelegramTrait
 
     /**
      * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio
-     * must be in the .MP3 or .M4A format. On success, the sent @param int $chat_id
-     * @param $audio
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Message is returned. Bots can currently send audio files
+     * must be in the .MP3 or .M4A format. On success, the sent @see Message is returned. Bots can currently send audio files
      * of up to 50 MB in size, this limit may be changed in the future.
      *
      * More on https://core.telegram.org/bots/api#sendaudio
      *
+     * @param int $chat_id
+     * @param $audio
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function sendAudio(int $chat_id, $audio, ?array $opt = []): PromiseInterface
     {
@@ -194,15 +194,15 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to send general files. On success, the sent @param int $chat_id
-     * @param $document
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Message is returned. Bots can currently send files of any
+     * Use this method to send general files. On success, the sent @see Message is returned. Bots can currently send files of any
      * type of up to 50 MB in size, this limit may be changed in the future.
      *
      * More on https://core.telegram.org/bots/api#senddocument
      *
+     * @param int $chat_id
+     * @param $document
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function sendDocument(int $chat_id, $document, ?array $opt = []): PromiseInterface
     {
@@ -213,15 +213,15 @@ trait TelegramTrait
 
     /**
      * Use this method to send video files, Telegram clients support mp4 videos (other formats may be sent as Document). On
-     * success, the sent @param int $chat_id
-     * @param $video
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may
+     * success, the sent @see Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may
      * be changed in the future.
      *
      * More on https://core.telegram.org/bots/api#sendvideo
      *
+     * @param int $chat_id
+     * @param $video
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function sendVideo(int $chat_id, $video, ?array $opt = []): PromiseInterface
     {
@@ -231,16 +231,16 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent @param int $chat_id
-     * @param $animation
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Message
+     * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent @see Message
      * is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the
      * future.
      *
      * More on https://core.telegram.org/bots/api#sendanimation
      *
+     * @param int $chat_id
+     * @param $animation
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function sendAnimation(int $chat_id, $animation, ?array $opt = []): PromiseInterface
     {
@@ -252,15 +252,15 @@ trait TelegramTrait
     /**
      * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message.
      * For this to work, your audio must be in an .OGG file encoded with OPUS (other formats may be sent as Audio or
-     * Document). On success, the sent @param int $chat_id
-     * @param $voice
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Message is returned. Bots can currently send voice messages of up to 50 MB in
+     * Document). On success, the sent @see Message is returned. Bots can currently send voice messages of up to 50 MB in
      * size, this limit may be changed in the future.
      *
      * More on https://core.telegram.org/bots/api#sendvoice
      *
+     * @param int $chat_id
+     * @param $voice
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function sendVoice(int $chat_id, $voice, ?array $opt = []): PromiseInterface
     {
@@ -271,14 +271,14 @@ trait TelegramTrait
 
     /**
      * As of v.4.0, Telegram clients support rounded square mp4 videos of up to 1 minute long. Use this method to send video
-     * messages. On success, the sent @param int $chat_id
-     * @param $video_note
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Message is returned.
+     * messages. On success, the sent @see Message is returned.
      *
      * More on https://core.telegram.org/bots/api#sendvideonote
      *
+     * @param int $chat_id
+     * @param $video_note
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function sendVideoNote(int $chat_id, $video_note, ?array $opt = []): PromiseInterface
     {
@@ -305,15 +305,15 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to send point on the map. On success, the sent @param int $chat_id
+     * Use this method to send point on the map. On success, the sent @see Message is returned.
+     *
+     * More on https://core.telegram.org/bots/api#sendlocation
+     *
+     * @param int $chat_id
      * @param $latitude
      * @param $longitude
      * @param array|null $opt
      * @return PromiseInterface
-     * @see Message is returned.
-     *
-     * More on https://core.telegram.org/bots/api#sendlocation
-     *
      */
     public function sendLocation(int $chat_id, $latitude, $longitude, ?array $opt = []): PromiseInterface
     {
@@ -325,14 +325,14 @@ trait TelegramTrait
     /**
      * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is
      * explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message was sent by the bot,
-     * the edited @param $latitude
-     * @param $longitude
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Message is returned, otherwise True is returned.
+     * the edited @see Message is returned, otherwise True is returned.
      *
      * More on https://core.telegram.org/bots/api#editmessagelivelocation
      *
+     * @param $latitude
+     * @param $longitude
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function editMessageLiveLocation($latitude, $longitude, ?array $opt = []): PromiseInterface
     {
@@ -343,12 +343,12 @@ trait TelegramTrait
 
     /**
      * Use this method to stop updating a live location message before live_period expires. On success, if the message was
-     * sent by the bot, the sent @param array|null $opt
-     * @return PromiseInterface
-     * @see Message is returned, otherwise True is returned.
+     * sent by the bot, the sent @see Message is returned, otherwise True is returned.
      *
      * More on https://core.telegram.org/bots/api#stopmessagelivelocation
      *
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function stopMessageLiveLocation(?array $opt = []): PromiseInterface
     {
@@ -356,17 +356,17 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to send information about a venue. On success, the sent @param int $chat_id
+     * Use this method to send information about a venue. On success, the sent @see Message is returned.
+     *
+     * More on https://core.telegram.org/bots/api#sendvenue
+     *
+     * @param int $chat_id
      * @param $latitude
      * @param $longitude
      * @param string $title
      * @param string $address
      * @param array|null $opt
      * @return PromiseInterface
-     * @see Message is returned.
-     *
-     * More on https://core.telegram.org/bots/api#sendvenue
-     *
      */
     public function sendVenue(int $chat_id, $latitude, $longitude, string $title, string $address, ?array $opt = []): PromiseInterface
     {
@@ -376,15 +376,15 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to send phone contacts. On success, the sent @param int $chat_id
+     * Use this method to send phone contacts. On success, the sent @see Message is returned.
+     *
+     * More on https://core.telegram.org/bots/api#sendcontact
+     *
+     * @param int $chat_id
      * @param string $phone_number
      * @param string $first_name
      * @param array|null $opt
      * @return PromiseInterface
-     * @see Message is returned.
-     *
-     * More on https://core.telegram.org/bots/api#sendcontact
-     *
      */
     public function sendContact(int $chat_id, string $phone_number, string $first_name, ?array $opt = []): PromiseInterface
     {
@@ -394,15 +394,15 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to send a native poll. On success, the sent @param int $chat_id
+     * Use this method to send a native poll. On success, the sent @see Message is returned.
+     *
+     * More on https://core.telegram.org/bots/api#sendpoll
+     *
+     * @param int $chat_id
      * @param string $question
      * @param $options
      * @param array|null $opt
      * @return PromiseInterface
-     * @see Message is returned.
-     *
-     * More on https://core.telegram.org/bots/api#sendpoll
-     *
      */
     public function sendPoll(int $chat_id, string $question, $options, ?array $opt = []): PromiseInterface
     {
@@ -412,15 +412,15 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to send a dice, which will have a random value from 1 to 6. On success, the sent @param int $chat_id
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Message is returned.
+     * Use this method to send a dice, which will have a random value from 1 to 6. On success, the sent @see Message is returned.
      * (Yes, we're aware of the "proper" singular of die. But it's awkward, and we decided to help it change. One dice at
      * a time!)
      *
      * More on https://core.telegram.org/bots/api#senddice
      *
+     * @param int $chat_id
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function sendDice(int $chat_id, ?array $opt = []): PromiseInterface
     {
@@ -434,28 +434,28 @@ trait TelegramTrait
      * seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on
      * success.
      *
-     * More on https://core.telegram.org/bots/api#sendchatlistener
+     * More on https://core.telegram.org/bots/api#sendchataction
      *
      * @param int $chat_id
-     * @param string $listener
+     * @param string $action
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendChatListener(int $chat_id, string $listener, ?array $opt = []): PromiseInterface
+    public function sendChatAction(int $chat_id, string $action, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "listener");
+        $required = compact("chat_id", "action");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendChatListener", $params));
+        return new ZanzaraPromise($this->container, $this->callApi("sendChatAction", $params));
     }
 
     /**
-     * Use this method to get a list of profile pictures for a user. Returns a @param int $user_id
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see UserProfilePhotos object.
+     * Use this method to get a list of profile pictures for a user. Returns a @see UserProfilePhotos object.
      *
      * More on https://core.telegram.org/bots/api#getuserprofilephotos
      *
+     * @param int $user_id
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function getUserProfilePhotos(int $user_id, ?array $opt = []): PromiseInterface
     {
@@ -466,16 +466,16 @@ trait TelegramTrait
 
     /**
      * Use this method to get basic info about a file and prepare it for downloading. For the moment, bots can download
-     * files of up to 20MB in size. On success, a @param string $file_id
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see File object is returned. The file can then be downloaded via the link
+     * files of up to 20MB in size. On success, a @see File object is returned. The file can then be downloaded via the link
      * https://api.telegram.org/file/bot&lt;token&gt;/&lt;file_path&gt;, where &lt;file_path&gt; is taken from the
      * response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can
      * be requested by calling getFile again.
      *
      * More on https://core.telegram.org/bots/api#getfile
      *
+     * @param string $file_id
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function getFile(string $file_id, ?array $opt = []): PromiseInterface
     {
@@ -741,13 +741,13 @@ trait TelegramTrait
 
     /**
      * Use this method to get up to date information about the chat (current name of the user for one-on-one conversations,
-     * current username of a user, group or channel, etc.). Returns a @param int $chat_id
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Chat object on success.
+     * current username of a user, group or channel, etc.). Returns a @see Chat object on success.
      *
      * More on https://core.telegram.org/bots/api#getchat
      *
+     * @param int $chat_id
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function getChat(int $chat_id, ?array $opt = []): PromiseInterface
     {
@@ -757,15 +757,15 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to get a list of administrators in a chat. On success, returns an Array of @param int $chat_id
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see ChatMember objects that
+     * Use this method to get a list of administrators in a chat. On success, returns an Array of @see ChatMember objects that
      * contains information about all chat administrators except other bots. If the chat is a group or a supergroup and
      * no administrators were appointed, only the creator will be returned.
      *
      * More on https://core.telegram.org/bots/api#getchatadministrators
      *
+     * @param int $chat_id
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function getChatAdministrators(int $chat_id, ?array $opt = []): PromiseInterface
     {
@@ -791,14 +791,14 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to get information about a member of a chat. Returns a @param int $chat_id
-     * @param int $user_id
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see ChatMember object on success.
+     * Use this method to get information about a member of a chat. Returns a @see ChatMember object on success.
      *
      * More on https://core.telegram.org/bots/api#getchatmember
      *
+     * @param int $chat_id
+     * @param int $user_id
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function getChatMember(int $chat_id, int $user_id, ?array $opt = []): PromiseInterface
     {
@@ -878,14 +878,14 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to edit text and game messages. On success, if edited message is sent by the bot, the edited @param string $text
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Message
+     * Use this method to edit text and game messages. On success, if edited message is sent by the bot, the edited @see Message
      * is returned, otherwise True is returned.
      *
      * More on https://core.telegram.org/bots/api#editmessagetext
      *
+     * @param string $text
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function editMessageText(string $text, ?array $opt = []): PromiseInterface
     {
@@ -895,13 +895,13 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to edit captions of messages. On success, if edited message is sent by the bot, the edited @param array|null $opt
-     * @return PromiseInterface
-     * @see Message is
+     * Use this method to edit captions of messages. On success, if edited message is sent by the bot, the edited @see Message is
      * returned, otherwise True is returned.
      *
      * More on https://core.telegram.org/bots/api#editmessagecaption
      *
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function editMessageCaption(?array $opt = []): PromiseInterface
     {
@@ -912,14 +912,14 @@ trait TelegramTrait
      * Use this method to edit animation, audio, document, photo, or video messages. If a message is a part of a message
      * album, then it can be edited only to a photo or a video. Otherwise, message type can be changed arbitrarily. When
      * inline message is edited, new file can't be uploaded. Use previously uploaded file via its file_id or specify a
-     * URL. On success, if the edited message was sent by the bot, the edited @param $media
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Message is returned, otherwise True is
+     * URL. On success, if the edited message was sent by the bot, the edited @see Message is returned, otherwise True is
      * returned.
      *
      * More on https://core.telegram.org/bots/api#editmessagemedia
      *
+     * @param $media
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function editMessageMedia($media, ?array $opt = []): PromiseInterface
     {
@@ -930,12 +930,12 @@ trait TelegramTrait
 
     /**
      * Use this method to edit only the reply markup of messages. On success, if edited message is sent by the bot, the
-     * edited @param array|null $opt
-     * @return PromiseInterface
-     * @see Message is returned, otherwise True is returned.
+     * edited @see Message is returned, otherwise True is returned.
      *
      * More on https://core.telegram.org/bots/api#editmessagereplymarkup
      *
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function editMessageReplyMarkup(?array $opt = []): PromiseInterface
     {
@@ -943,15 +943,15 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to stop a poll which was sent by the bot. On success, the stopped @param int $chat_id
-     * @param int $message_id
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Poll with the final results is
+     * Use this method to stop a poll which was sent by the bot. On success, the stopped @see Poll with the final results is
      * returned.
      *
      * More on https://core.telegram.org/bots/api#stoppoll
      *
+     * @param int $chat_id
+     * @param int $message_id
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function stopPoll(int $chat_id, int $message_id, ?array $opt = []): PromiseInterface
     {
@@ -984,14 +984,14 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to send static .WEBP or animated .TGS stickers. On success, the sent @param int $chat_id
-     * @param $sticker
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Message is returned.
+     * Use this method to send static .WEBP or animated .TGS stickers. On success, the sent @see Message is returned.
      *
      * More on https://core.telegram.org/bots/api#sendsticker
      *
+     * @param int $chat_id
+     * @param $sticker
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function sendSticker(int $chat_id, $sticker, ?array $opt = []): PromiseInterface
     {
@@ -1001,13 +1001,13 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to get a sticker set. On success, a @param string $name
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see StickerSet object is returned.
+     * Use this method to get a sticker set. On success, a @see StickerSet object is returned.
      *
      * More on https://core.telegram.org/bots/api#getstickerset
      *
+     * @param string $name
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function getStickerSet(string $name, ?array $opt = []): PromiseInterface
     {
@@ -1018,14 +1018,14 @@ trait TelegramTrait
 
     /**
      * Use this method to upload a .PNG file with a sticker for later use in createNewStickerSet and addStickerToSet methods
-     * (can be used multiple times). Returns the uploaded @param int $user_id
-     * @param $png_sticker
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see File on success.
+     * (can be used multiple times). Returns the uploaded @see File on success.
      *
      * More on https://core.telegram.org/bots/api#uploadstickerfile
      *
+     * @param int $user_id
+     * @param $png_sticker
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function uploadStickerFile(int $user_id, $png_sticker, ?array $opt = []): PromiseInterface
     {
@@ -1145,7 +1145,11 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to send invoices. On success, the sent @param int $chat_id
+     * Use this method to send invoices. On success, the sent @see Message is returned.
+     *
+     * More on https://core.telegram.org/bots/api#sendinvoice
+     *
+     * @param int $chat_id
      * @param string $title
      * @param string $description
      * @param string $payload
@@ -1155,10 +1159,6 @@ trait TelegramTrait
      * @param $prices
      * @param array|null $opt
      * @return PromiseInterface
-     * @see Message is returned.
-     *
-     * More on https://core.telegram.org/bots/api#sendinvoice
-     *
      */
     public function sendInvoice(int $chat_id, string $title, string $description, string $payload, string $provider_token, string $start_parameter, string $currency, $prices, ?array $opt = []): PromiseInterface
     {
@@ -1226,14 +1226,14 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to send a game. On success, the sent @param int $chat_id
-     * @param string $game_short_name
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Message is returned.
+     * Use this method to send a game. On success, the sent @see Message is returned.
      *
      * More on https://core.telegram.org/bots/api#sendgame
      *
+     * @param int $chat_id
+     * @param string $game_short_name
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function sendGame(int $chat_id, string $game_short_name, ?array $opt = []): PromiseInterface
     {
@@ -1244,15 +1244,15 @@ trait TelegramTrait
 
     /**
      * Use this method to set the score of the specified user in a game. On success, if the message was sent by the bot,
-     * returns the edited @param int $user_id
-     * @param int $score
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see Message, otherwise returns True. Returns an error, if the new score is not greater than the
+     * returns the edited @see Message, otherwise returns True. Returns an error, if the new score is not greater than the
      * user's current score in the chat and force is False.
      *
      * More on https://core.telegram.org/bots/api#setgamescore
      *
+     * @param int $user_id
+     * @param int $score
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function setGameScore(int $user_id, int $score, ?array $opt = []): PromiseInterface
     {
@@ -1263,13 +1263,13 @@ trait TelegramTrait
 
     /**
      * Use this method to get data for high score tables. Will return the score of the specified user and several of his
-     * neighbors in a game. On success, returns an Array of @param int $user_id
-     * @param array|null $opt
-     * @return PromiseInterface
-     * @see GameHighScore objects.
+     * neighbors in a game. On success, returns an Array of @see GameHighScore objects.
      *
      * More on https://core.telegram.org/bots/api#getgamehighscores
      *
+     * @param int $user_id
+     * @param array|null $opt
+     * @return PromiseInterface
      */
     public function getGameHighScores(int $user_id, ?array $opt = []): PromiseInterface
     {
