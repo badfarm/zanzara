@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zanzara\Test\Action;
+namespace Zanzara\Test\Listener;
 
 use PHPUnit\Framework\TestCase;
 use Zanzara\Config;

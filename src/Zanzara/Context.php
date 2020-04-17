@@ -6,6 +6,7 @@ namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
 use Psr\Container\ContainerInterface;
+use Zanzara\Telegram\TelegramTrait;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\ChannelPost;
 use Zanzara\Telegram\Type\Chat;

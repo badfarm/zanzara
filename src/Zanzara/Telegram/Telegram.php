@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zanzara;
+namespace Zanzara\Telegram;
 
 use Clue\React\Buzz\Browser;
 use Psr\Container\ContainerInterface;

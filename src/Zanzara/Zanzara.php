@@ -15,21 +15,17 @@ use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Http\Response;
 use React\Http\Server;
-use Zanzara\Action\ActionResolver;
+use Zanzara\Listener\ListenerResolver;
+use Zanzara\Telegram\Telegram;
 use Zanzara\Telegram\Type\Response\ErrorResponse;
 use Zanzara\Telegram\Type\Update;
 use Zanzara\Telegram\Type\Webhook\WebhookInfo;
 
 /**
- * Framework entry point class.
- * The framework collects a list of callbacks the user wants to execute based on the Update type received
- * from Telegram.
- * On run() the framework starts to listen for updates from Telegram. When an update is received it
- * resolves the callbacks and execute them.
  *
  * @see Zanzara::run()
  */
-class Zanzara extends ActionResolver
+class Zanzara extends ListenerResolver
 {
 
     /**
@@ -122,7 +118,7 @@ class Zanzara extends ActionResolver
                     $message = "Your bot has a webhook set, please delete it before running Zanzara in polling mode. " .
                         "See https://core.telegram.org/bots/api#deletewebhook";
                     $this->logger->error($message);
-                    echo "Digit yes if you want to delete the webhook: ";
+                    echo "Type 'yes' if you want to delete the webhook: ";
                     $answer = readline();
                     if (strtoupper($answer) === "YES") {
                         $delete = Block\await($this->telegram->deleteWebhook(), $this->loop);
@@ -222,9 +218,9 @@ class Zanzara extends ActionResolver
     private function exec(Update $update)
     {
         $context = new Context($update, $this->container);
-        $actions = $this->resolve($update);
-        foreach ($actions as $action) {
-            $middlewareTip = $action->getTip();
+        $listeners = $this->resolve($update);
+        foreach ($listeners as $listener) {
+            $middlewareTip = $listener->getTip();
             $middlewareTip($context);
         }
     }
@@ -243,6 +239,14 @@ class Zanzara extends ActionResolver
     public function getTelegram(): Telegram
     {
         return $this->telegram;
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer(): ContainerInterface
+    {
+        return $this->container;
     }
 
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zanzara\Action;
+namespace Zanzara\Listener;
 
 use Zanzara\Context;
 use Zanzara\Middleware\MiddlewareCollector;
@@ -10,12 +10,11 @@ use Zanzara\Middleware\MiddlewareInterface;
 use Zanzara\Middleware\MiddlewareNode;
 
 /**
- * Object returned to client when he declares an action.
- * Each action has a middleware chain.
- * On action instantiation the object itself is set as tip of the middleware stack.
+ * Each listener has a middleware chain.
+ * On listener instantiation the object itself is set as tip of the middleware stack.
  *
  */
-class Action extends MiddlewareCollector implements MiddlewareInterface
+class Listener extends MiddlewareCollector implements MiddlewareInterface
 {
 
     /**
