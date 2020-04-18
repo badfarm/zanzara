@@ -3,6 +3,7 @@
 use Symfony\Component\Dotenv\Dotenv;
 use Zanzara\Config;
 use Zanzara\Context;
+use Zanzara\Telegram\Type\Input\InputFile;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Update;
 use Zanzara\Zanzara;
@@ -44,6 +45,24 @@ $bot->onChannelPost(function (Context $ctx) {
     }, function ($error) {
         echo $error;
     });
+});
+
+
+$bot->onCommand("photo", function (Context $ctx) {
+    $chat_id = $ctx->getUpdate()->getEffectiveChat()->getId();
+    $ctx->sendPhoto($chat_id, new InputFile("file/photo.jpeg"));
+});
+
+
+$bot->onCommand("video", function (Context $ctx) {
+    $chat_id = $ctx->getUpdate()->getEffectiveChat()->getId();
+    $ctx->sendVideo($chat_id, new InputFile("file/video.mp4"));
+});
+
+
+$bot->onCommand("file", function (Context $ctx) {
+    $chat_id = $ctx->getUpdate()->getEffectiveChat()->getId();
+    $ctx->sendDocument($chat_id, new InputFile("file/file.txt"), ["thumb" => new InputFile("file/photo.jpeg")]);
 });
 
 

@@ -11,7 +11,6 @@ namespace Zanzara\Telegram\Type\Input;
  */
 class InputFile
 {
-    // che fi sa??? todo
 
     /**
      * Path of the file to be uploaded
@@ -19,6 +18,15 @@ class InputFile
      * @var string
      */
     private $path;
+
+    /**
+     * InputFile constructor.
+     * @param string $path
+     */
+    public function __construct(string $path)
+    {
+        $this->path = $path;
+    }
 
     /**
      * @return string
