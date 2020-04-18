@@ -7,16 +7,19 @@ namespace Zanzara\Telegram;
 use Clue\React\Buzz\Browser;
 use Psr\Container\ContainerInterface;
 use React\Promise\PromiseInterface;
+use RingCentral\Psr7\MultipartStream;
 use Zanzara\Telegram\Type\Chat;
 use Zanzara\Telegram\Type\ChatMember;
 use Zanzara\Telegram\Type\File\File;
 use Zanzara\Telegram\Type\File\StickerSet;
 use Zanzara\Telegram\Type\File\UserProfilePhotos;
 use Zanzara\Telegram\Type\Game\GameHighScore;
+use Zanzara\Telegram\Type\Input\InputFile;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Poll\Poll;
 use Zanzara\Telegram\Type\Update;
 use Zanzara\Telegram\Type\Webhook\WebhookInfo;
+use Zanzara\ZanzaraLogger;
 use Zanzara\ZanzaraPromise;
 
 /**
@@ -1281,14 +1284,46 @@ trait TelegramTrait
     /**
      * @param string $method
      * @param array $params
+     * @param string[] $headers
      * @return PromiseInterface
      */
-    public function callApi(string $method, array $params = [])
+    public function callApi(string $method, array $params = [], $headers = ["Content-type" => "application/json"])
     {
-        $headers = [
-            "Content-type" => "application/json"
-        ];
-
+        foreach ($params as $param) {
+            if ($param instanceof InputFile) {
+                $multipart = $this->prepareMultipartData($params);
+                $headers = array("Content-Length" => $multipart->getSize(), "Content-Type" => "multipart/form-data; boundary={$multipart->getBoundary()}");
+                return $this->browser->post($method, $headers, $multipart);
+            }
+        }
         return $this->browser->post($method, $headers, json_encode($params));
+    }
+
+    /**
+     * Create MultipartStream, iterate over params to find InputFile
+     *
+     * @param $params
+     * @return MultipartStream
+     */
+    private function prepareMultipartData($params)
+    {
+        $multipart_data = [];
+        foreach ($params as $key => $value) {
+            $data = ['name' => $key];
+            if ($value instanceof InputFile) {
+                if (file_exists($value->getPath())) {
+                    $fileData = file_get_contents($value->getPath());
+                    $data['contents'] = $fileData;
+                    $data['filename'] = basename($value->getPath());
+                } else {
+                    $this->container->get(ZanzaraLogger::class)->error("File not found: {$value->getPath()}");
+                }
+
+            } else {
+                $data['contents'] = strval($value);
+            }
+            array_push($multipart_data, $data);
+        }
+        return new MultipartStream($multipart_data);
     }
 }
