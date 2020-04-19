@@ -50,6 +50,8 @@ trait TelegramTrait
     /**
      * Use this method to receive incoming updates using long polling (wiki). An Array of @see Update objects is returned.
      *
+     * More on https://core.telegram.org/bots/api#getupdates
+     *
      * @param int $offset
      * @param int $timeout
      * @param int $limit telegram default is 100 if unspecified
@@ -72,30 +74,21 @@ trait TelegramTrait
     /**
      * Use this method to send text messages. On success, the sent @see Message is returned.
      *
+     * By default the message is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendmessage
      *
-     * @param int $chat_id
      * @param string $text
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendMessage(int $chat_id, string $text, ?array $opt = [])
+    public function sendMessage(string $text, ?array $opt = [])
     {
-        $required = compact("chat_id", "text");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("text");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendMessage", $params), Message::class);
-    }
-
-    /**
-     * Same of @see Telegram::sendMessage() but the chat_id is always the caller chat_id.
-     *
-     * @param string $text
-     * @param array|null $opt
-     * @return PromiseInterface
-     */
-    public function reply(string $text, ?array $opt = [])
-    {
-        return $this->sendMessage($this->update->getEffectiveChat()->getId(), $text, $opt);
     }
 
     /**
@@ -163,16 +156,19 @@ trait TelegramTrait
     /**
      * Use this method to send photos. On success, the sent @see Message is returned.
      *
+     * By default the photo is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendphoto
      *
-     * @param int $chat_id
      * @param $photo
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendPhoto(int $chat_id, $photo, ?array $opt = []): PromiseInterface
+    public function sendPhoto($photo, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "photo");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("photo");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendPhoto", $params), Message::class);
     }
@@ -182,16 +178,19 @@ trait TelegramTrait
      * must be in the .MP3 or .M4A format. On success, the sent @see Message is returned. Bots can currently send audio files
      * of up to 50 MB in size, this limit may be changed in the future.
      *
+     * By default the audio is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendaudio
      *
-     * @param int $chat_id
      * @param $audio
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendAudio(int $chat_id, $audio, ?array $opt = []): PromiseInterface
+    public function sendAudio($audio, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "audio");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("audio");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendAudio", $params), Message::class);
     }
@@ -200,16 +199,19 @@ trait TelegramTrait
      * Use this method to send general files. On success, the sent @see Message is returned. Bots can currently send files of any
      * type of up to 50 MB in size, this limit may be changed in the future.
      *
+     * By default the document is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#senddocument
      *
-     * @param int $chat_id
      * @param $document
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendDocument(int $chat_id, $document, ?array $opt = []): PromiseInterface
+    public function sendDocument($document, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "document");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("document");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendDocument", $params), Message::class);
     }
@@ -219,16 +221,19 @@ trait TelegramTrait
      * success, the sent @see Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may
      * be changed in the future.
      *
+     * By default the video is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendvideo
      *
-     * @param int $chat_id
      * @param $video
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendVideo(int $chat_id, $video, ?array $opt = []): PromiseInterface
+    public function sendVideo($video, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "video");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("video");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendVideo", $params), Message::class);
     }
@@ -238,16 +243,19 @@ trait TelegramTrait
      * is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the
      * future.
      *
+     * By default the animation is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendanimation
      *
-     * @param int $chat_id
      * @param $animation
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendAnimation(int $chat_id, $animation, ?array $opt = []): PromiseInterface
+    public function sendAnimation($animation, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "animation");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("animation");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendAnimation", $params), Message::class);
     }
@@ -258,16 +266,19 @@ trait TelegramTrait
      * Document). On success, the sent @see Message is returned. Bots can currently send voice messages of up to 50 MB in
      * size, this limit may be changed in the future.
      *
+     * By default the voice is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendvoice
      *
-     * @param int $chat_id
      * @param $voice
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendVoice(int $chat_id, $voice, ?array $opt = []): PromiseInterface
+    public function sendVoice($voice, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "voice");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("voice");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendVoice", $params), Message::class);
     }
@@ -276,16 +287,19 @@ trait TelegramTrait
      * As of v.4.0, Telegram clients support rounded square mp4 videos of up to 1 minute long. Use this method to send video
      * messages. On success, the sent @see Message is returned.
      *
+     * By default the video note is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendvideonote
      *
-     * @param int $chat_id
      * @param $video_note
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendVideoNote(int $chat_id, $video_note, ?array $opt = []): PromiseInterface
+    public function sendVideoNote($video_note, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "video_note");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("video_note");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendVideoNote", $params), Message::class);
     }
@@ -293,16 +307,19 @@ trait TelegramTrait
     /**
      * Use this method to send a group of photos or videos as an album. On success, an array of the sent @see Message 's is returned.
      *
+     * By default the media group is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendmediagroup
      *
-     * @param int $chat_id
      * @param $media
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendMediaGroup(int $chat_id, $media, ?array $opt = []): PromiseInterface
+    public function sendMediaGroup($media, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "media");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("media");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendMediaGroup", $params), Message::class);
     }
@@ -310,17 +327,20 @@ trait TelegramTrait
     /**
      * Use this method to send point on the map. On success, the sent @see Message is returned.
      *
+     * By default the location is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendlocation
      *
-     * @param int $chat_id
      * @param $latitude
      * @param $longitude
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendLocation(int $chat_id, $latitude, $longitude, ?array $opt = []): PromiseInterface
+    public function sendLocation($latitude, $longitude, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "latitude", "longitude");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("latitude", "longitude");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendLocation", $params), Message::class);
     }
@@ -339,6 +359,7 @@ trait TelegramTrait
      */
     public function editMessageLiveLocation($latitude, $longitude, ?array $opt = []): PromiseInterface
     {
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("latitude", "longitude");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("editMessageLiveLocation", $params), Message::class);
@@ -355,15 +376,18 @@ trait TelegramTrait
      */
     public function stopMessageLiveLocation(?array $opt = []): PromiseInterface
     {
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         return new ZanzaraPromise($this->container, $this->callApi("stopMessageLiveLocation", $opt), Message::class);
     }
 
     /**
      * Use this method to send information about a venue. On success, the sent @see Message is returned.
      *
+     * By default the venue is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendvenue
      *
-     * @param int $chat_id
      * @param $latitude
      * @param $longitude
      * @param string $title
@@ -371,9 +395,10 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendVenue(int $chat_id, $latitude, $longitude, string $title, string $address, ?array $opt = []): PromiseInterface
+    public function sendVenue($latitude, $longitude, string $title, string $address, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "latitude", "longitude", "title", "address");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("latitude", "longitude", "title", "address");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendVenue", $params), Message::class);
     }
@@ -381,17 +406,20 @@ trait TelegramTrait
     /**
      * Use this method to send phone contacts. On success, the sent @see Message is returned.
      *
+     * By default the contact is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendcontact
      *
-     * @param int $chat_id
      * @param string $phone_number
      * @param string $first_name
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendContact(int $chat_id, string $phone_number, string $first_name, ?array $opt = []): PromiseInterface
+    public function sendContact(string $phone_number, string $first_name, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "phone_number", "first_name");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("phone_number", "first_name");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendContact", $params), Message::class);
     }
@@ -399,17 +427,20 @@ trait TelegramTrait
     /**
      * Use this method to send a native poll. On success, the sent @see Message is returned.
      *
+     * By default the poll is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendpoll
      *
-     * @param int $chat_id
      * @param string $question
      * @param $options
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendPoll(int $chat_id, string $question, $options, ?array $opt = []): PromiseInterface
+    public function sendPoll(string $question, $options, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "question", "options");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("question", "options");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendPoll", $params), Message::class);
     }
@@ -419,17 +450,18 @@ trait TelegramTrait
      * (Yes, we're aware of the "proper" singular of die. But it's awkward, and we decided to help it change. One dice at
      * a time!)
      *
+     * By default the dice is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#senddice
      *
-     * @param int $chat_id
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendDice(int $chat_id, ?array $opt = []): PromiseInterface
+    public function sendDice(?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id");
-        $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendDice", $params), Message::class);
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        return new ZanzaraPromise($this->container, $this->callApi("sendDice", $opt), Message::class);
     }
 
     /**
@@ -437,16 +469,19 @@ trait TelegramTrait
      * seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on
      * success.
      *
+     * By default the chat action is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendchataction
      *
-     * @param int $chat_id
      * @param string $action
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendChatAction(int $chat_id, string $action, ?array $opt = []): PromiseInterface
+    public function sendChatAction(string $action, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "action");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("action");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendChatAction", $params));
     }
@@ -851,17 +886,18 @@ trait TelegramTrait
      * Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the
      * user as a notification at the top of the chat screen or as an alert. On success, True is returned.
      *
+     * By default it replies to the callback_query_id of the context's update. Use $opt param to specify a different
+     * callback_query_id. Eg. $opt = ['callback_query_id' => 'abcdefgh'];
+     *
      * More on https://core.telegram.org/bots/api#answercallbackquery
      *
-     * @param string $callback_query_id
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function answerCallbackQuery(string $callback_query_id, ?array $opt = []): PromiseInterface
+    public function answerCallbackQuery(?array $opt = []): PromiseInterface
     {
-        $required = compact("callback_query_id");
-        $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("answerCallbackQuery", $params));
+        $opt['callback_query_id'] = $opt['callback_query_id'] ?? $this->update->getCallbackQuery()->getId();
+        return new ZanzaraPromise($this->container, $this->callApi("answerCallbackQuery", $opt));
     }
 
     /**
@@ -989,16 +1025,19 @@ trait TelegramTrait
     /**
      * Use this method to send static .WEBP or animated .TGS stickers. On success, the sent @see Message is returned.
      *
+     * By default the sticker is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendsticker
      *
-     * @param int $chat_id
      * @param $sticker
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendSticker(int $chat_id, $sticker, ?array $opt = []): PromiseInterface
+    public function sendSticker($sticker, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "sticker");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("sticker");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendSticker", $params), Message::class);
     }
@@ -1133,16 +1172,19 @@ trait TelegramTrait
      * Use this method to send answers to an inline query. On success, True is returned.No more than 50 results per query
      * are allowed.
      *
+     * By default it replies to the inline_query_id of the context's update. Use $opt param to specify a different
+     * inline_query_id. Eg. $opt = ['inline_query_id' => 'abcdefgh'];
+     *
      * More on https://core.telegram.org/bots/api#answerinlinequery
      *
-     * @param string $inline_query_id
      * @param $results
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function answerInlineQuery(string $inline_query_id, $results, ?array $opt = []): PromiseInterface
+    public function answerInlineQuery($results, ?array $opt = []): PromiseInterface
     {
-        $required = compact("inline_query_id", "results");
+        $opt['inline_query_id'] = $opt['inline_query_id'] ?? $this->update->getInlineQuery()->getId();
+        $required = compact("results");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("answerInlineQuery", $params));
     }
@@ -1150,9 +1192,11 @@ trait TelegramTrait
     /**
      * Use this method to send invoices. On success, the sent @see Message is returned.
      *
+     * By default the invoice is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendinvoice
      *
-     * @param int $chat_id
      * @param string $title
      * @param string $description
      * @param string $payload
@@ -1163,9 +1207,10 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendInvoice(int $chat_id, string $title, string $description, string $payload, string $provider_token, string $start_parameter, string $currency, $prices, ?array $opt = []): PromiseInterface
+    public function sendInvoice(string $title, string $description, string $payload, string $provider_token, string $start_parameter, string $currency, $prices, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "title", "description", "payload", "provider_token", "start_parameter", "currency", "prices");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("title", "description", "payload", "provider_token", "start_parameter", "currency", "prices");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendInvoice", $params), Message::class);
     }
@@ -1175,16 +1220,19 @@ trait TelegramTrait
      * send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success,
      * True is returned.
      *
+     * By default it replies to the shipping_query_id of the context's update. Use $opt param to specify a different
+     * shipping_query_id. Eg. $opt = ['shipping_query_id' => 'abcdefgh'];
+     *
      * More on https://core.telegram.org/bots/api#answershippingquery
      *
-     * @param string $shipping_query_id
      * @param $ok
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function answerShippingQuery(string $shipping_query_id, $ok, ?array $opt = []): PromiseInterface
+    public function answerShippingQuery($ok, ?array $opt = []): PromiseInterface
     {
-        $required = compact("shipping_query_id", "ok");
+        $opt['shipping_query_id'] = $opt['shipping_query_id'] ?? $this->update->getShippingQuery()->getId();
+        $required = compact("ok");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("answerShippingQuery", $params));
     }
@@ -1195,16 +1243,19 @@ trait TelegramTrait
      * success, True is returned. Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query
      * was sent.
      *
+     * By default it replies to the pre_checkout_query_id of the context's update. Use $opt param to specify a different
+     * pre_checkout_query_id. Eg. $opt = ['pre_checkout_query_id' => 'abcdefgh'];
+     *
      * More on https://core.telegram.org/bots/api#answerprecheckoutquery
      *
-     * @param string $pre_checkout_query_id
      * @param $ok
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function answerPreCheckoutQuery(string $pre_checkout_query_id, $ok, ?array $opt = []): PromiseInterface
+    public function answerPreCheckoutQuery($ok, ?array $opt = []): PromiseInterface
     {
-        $required = compact("pre_checkout_query_id", "ok");
+        $opt['pre_checkout_query_id'] = $opt['pre_checkout_query_id'] ?? $this->update->getPreCheckoutQuery()->getId();
+        $required = compact("ok");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("answerPreCheckoutQuery", $params));
     }
@@ -1231,16 +1282,19 @@ trait TelegramTrait
     /**
      * Use this method to send a game. On success, the sent @see Message is returned.
      *
+     * By default the game is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#sendgame
      *
-     * @param int $chat_id
      * @param string $game_short_name
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendGame(int $chat_id, string $game_short_name, ?array $opt = []): PromiseInterface
+    public function sendGame(string $game_short_name, ?array $opt = []): PromiseInterface
     {
-        $required = compact("chat_id", "game_short_name");
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $required = compact("game_short_name");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendGame", $params), Message::class);
     }

@@ -10,7 +10,7 @@ $config->setUpdateMode(Config::WEBHOOK_MODE);
 $bot = new Zanzara($_ENV['BOT_KEY'], $config);
 
 $bot->onUpdate(function (\Zanzara\Context $ctx) {
-    $ctx->reply('Hello');
+    $ctx->sendMessage('Hello');
 });
 
 $bot->run();
