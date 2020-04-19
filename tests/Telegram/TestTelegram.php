@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zanzara\Test\Telegram;
 
 use PHPUnit\Framework\TestCase;
+use Zanzara\Config;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Response\ErrorResponse;
 use Zanzara\Zanzara;
@@ -96,6 +97,50 @@ class TestTelegram extends TestCase
         $telegram->forwardMessage($chatId, $fromChatId, $messageId)->then(
             function (Message $response) {
                 $this->assertSame('Hello', $response->getText());
+            },
+            function (ErrorResponse $error) {
+                echo $error;
+            }
+        );
+
+        $bot->getLoop()->run();
+    }
+
+    /**
+     *
+     */
+    public function testNonExistingParameter()
+    {
+        $bot = new Zanzara($_ENV['BOT_KEY']);
+        $telegram = $bot->getTelegram();
+
+        $chatId = (int)$_ENV['CHAT_ID'];
+        $telegram->sendMessage('Hello', ['chat_id' => $chatId, 'non-existing' => 'non'])->then(
+            function (Message $response) {
+                $this->assertSame('Hello', $response->getText());
+            },
+            function (ErrorResponse $error) {
+                echo $error;
+            }
+        );
+
+        $bot->getLoop()->run();
+    }
+
+    /**
+     *
+     */
+    public function testParseMode()
+    {
+        $config = new Config();
+        $config->setParseMode(Config::PARSE_MODE_HTML);
+        $bot = new Zanzara($_ENV['BOT_KEY'], $config);
+        $telegram = $bot->getTelegram();
+
+        $chatId = (int)$_ENV['CHAT_ID'];
+        $telegram->sendMessage("<b>Hello</b>", ['chat_id' => $chatId])->then(
+            function (Message $response) {
+                $this->assertSame("<b>Hello</b>", $response->getText());
             },
             function (ErrorResponse $error) {
                 echo $error;

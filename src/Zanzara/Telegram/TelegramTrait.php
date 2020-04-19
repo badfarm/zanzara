@@ -8,6 +8,7 @@ use Clue\React\Buzz\Browser;
 use Psr\Container\ContainerInterface;
 use React\Promise\PromiseInterface;
 use RingCentral\Psr7\MultipartStream;
+use Zanzara\Config;
 use Zanzara\Telegram\Type\Chat;
 use Zanzara\Telegram\Type\ChatMember;
 use Zanzara\Telegram\Type\File\File;
@@ -1343,6 +1344,7 @@ trait TelegramTrait
      */
     public function callApi(string $method, array $params = [], $headers = ["Content-type" => "application/json"])
     {
+        $params['parse_mode'] = $params['parse_mode'] ?? $this->container->get(Config::class)->getParseMode();
         foreach ($params as $param) {
             if ($param instanceof InputFile) {
                 $multipart = $this->prepareMultipartData($params);
