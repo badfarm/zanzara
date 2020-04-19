@@ -78,7 +78,7 @@ class ZanzaraPromise implements PromiseInterface
             },
             function (ResponseException $exception) use ($onRejected) {
                 $json = (string)$exception->getResponse()->getBody();
-                $onRejected($this->zanzaraMapper->map($json, ErrorResponse::class));
+                $onRejected($this->zanzaraMapper->mapJson($json, ErrorResponse::class));
             },
             $onProgress
         );

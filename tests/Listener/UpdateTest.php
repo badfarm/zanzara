@@ -21,7 +21,7 @@ class UpdateTest extends TestCase
     public function testUpdate()
     {
         $config = new Config();
-        $config->setUpdateMode(Config::TEST_MODE);
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
         $bot = new Zanzara('test', $config);
 

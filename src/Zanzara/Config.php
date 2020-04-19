@@ -18,7 +18,7 @@ class Config
 
     public const WEBHOOK_MODE = "WEBHOOK";
     public const POLLING_MODE = "POLLING";
-    public const TEST_MODE = "TEST";
+    public const REACTPHP_WEBHOOK_MODE = "REACTPHP_WEBHOOK";
 
     public const PARSE_MODE_HTML = "HTML";
     public const PARSE_MODE_MARKDOWN = "MarkdownV2";
@@ -50,9 +50,14 @@ class Config
     private $apiTelegramUrl = 'https://api.telegram.org';
 
     /**
-     * @var int
+     * @var string
      */
-    private $serverPort = 8080;
+    private $serverUri = "0.0.0.0:8080";
+
+    /**
+     * @var array
+     */
+    private $serverContext = [];
 
     /**
      * @return string
@@ -135,19 +140,35 @@ class Config
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getServerPort(): int
+    public function getServerUri(): string
     {
-        return $this->serverPort;
+        return $this->serverUri;
     }
 
     /**
-     * @param int $serverPort
+     * @param string $serverUri
      */
-    public function setServerPort(int $serverPort): void
+    public function setServerUri(string $serverUri): void
     {
-        $this->serverPort = $serverPort;
+        $this->serverUri = $serverUri;
+    }
+
+    /**
+     * @return array
+     */
+    public function getServerContext(): array
+    {
+        return $this->serverContext;
+    }
+
+    /**
+     * @param array $serverContext
+     */
+    public function setServerContext(array $serverContext): void
+    {
+        $this->serverContext = $serverContext;
     }
 
 }

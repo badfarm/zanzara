@@ -22,7 +22,7 @@ class CallbackQueryTest extends TestCase
     public function testCallbackQuery()
     {
         $config = new Config();
-        $config->setUpdateMode(Config::TEST_MODE);
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/callback_query.json');
         $bot = new Zanzara('test', $config);
 

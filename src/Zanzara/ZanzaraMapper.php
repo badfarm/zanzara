@@ -34,7 +34,7 @@ class ZanzaraMapper
      * @return mixed
      * @throws JsonMapper_Exception
      */
-    public function map(string $json, $class)
+    public function mapJson(string $json, $class)
     {
         $decoded = json_decode($json);
         return is_array($decoded) ?

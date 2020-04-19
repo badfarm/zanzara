@@ -7,7 +7,6 @@ namespace Zanzara;
 use Clue\React\Block;
 use Clue\React\Buzz\Browser;
 use DI\Container;
-use JsonMapper_Exception;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -89,17 +88,13 @@ class Zanzara extends ListenerResolver
         $this->container->set(Zanzara::class, $this);
     }
 
-    /**
-     *
-     * @throws JsonMapper_Exception
-     */
     public function run(): void
     {
         $this->feedMiddlewareStack();
 
         switch ($this->config->getUpdateMode()) {
 
-            case Config::WEBHOOK_MODE:
+            case Config::REACTPHP_WEBHOOK_MODE:
                 /** @var WebhookInfo $webhookInfo */
                 $webhookInfo = Block\await($this->telegram->getWebhookInfo(), $this->loop);
                 if (!$webhookInfo->getUrl()) {
@@ -107,7 +102,7 @@ class Zanzara extends ListenerResolver
                         " mode. See https://core.telegram.org/bots/api#setwebhook";
                     $this->logger->error($message);
                 } else {
-                    $this->startWebServer();
+                    $this->startReactPHPServer();
                 }
                 break;
 
@@ -134,7 +129,6 @@ class Zanzara extends ListenerResolver
                         echo "Shutdown, you have to manually delete the webhook or start in webhook mode";
                     }
 
-
                 } else {
                     $this->loop->futureTick([$this, 'polling']);
                     echo "Zanzara is listening...\n";
@@ -142,10 +136,10 @@ class Zanzara extends ListenerResolver
                 }
                 break;
 
-            case Config::TEST_MODE:
+            case Config::WEBHOOK_MODE:
                 $json = file_get_contents($this->config->getUpdateStream());
                 /** @var Update $update */
-                $update = $this->zanzaraMapper->map($json, Update::class);
+                $update = $this->zanzaraMapper->mapJson($json, Update::class);
                 $update->detectUpdateType();
                 $this->exec($update);
                 break;
@@ -156,18 +150,18 @@ class Zanzara extends ListenerResolver
     /**
      *
      */
-    private function startWebServer()
+    private function startReactPHPServer()
     {
         $server = new Server(function (ServerRequestInterface $request) {
             $json = (string)$request->getBody();
             /** @var Update $update */
-            $update = $this->zanzaraMapper->map($json, Update::class);
+            $update = $this->zanzaraMapper->mapJson($json, Update::class);
             $update->detectUpdateType();
-            $this->exec($update); // todo: try/catch?
+            $this->exec($update);
             return new Response();
         });
 
-        $socket = new \React\Socket\Server($this->config->getServerPort(), $this->loop);
+        $socket = new \React\Socket\Server($this->config->getServerUri(), $this->loop, $this->config->getServerContext());
         $server->listen($socket);
         echo "Zanzara is listening...\n";
         $this->loop->run();
