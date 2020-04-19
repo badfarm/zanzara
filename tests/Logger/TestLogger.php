@@ -29,7 +29,7 @@ class TestLogger extends TestCase
         $logger->pushHandler(new StreamHandler($logFile, Logger::WARNING));
         $bot = new Zanzara($_ENV['BOT_KEY'], new Config(), $logger);
         $telegram = $bot->getTelegram();
-        $telegram->sendMessage((int)$_ENV['CHAT_ID'], 'Hello')->then(
+        $telegram->sendMessage('Hello', ['chat_id' => (int)$_ENV['CHAT_ID']])->then(
             function (Update $update) {
                 // should never enter here
             }

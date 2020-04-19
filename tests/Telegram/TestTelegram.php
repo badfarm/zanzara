@@ -46,7 +46,7 @@ class TestTelegram extends TestCase
         $telegram = $bot->getTelegram();
 
         $chatId = (int)$_ENV['CHAT_ID'];
-        $telegram->sendMessage($chatId, 'Hello')->then(
+        $telegram->sendMessage('Hello', ['chat_id' => $chatId])->then(
             function (Message $response) {
                 $this->assertSame('Hello', $response->getText());
             },
@@ -67,7 +67,7 @@ class TestTelegram extends TestCase
         $telegram = $bot->getTelegram();
         $chatId = -12345;
 
-        $telegram->sendMessage($chatId, 'Hello')->then(
+        $telegram->sendMessage('Hello', ['chat_id' => $chatId])->then(
             function (Message $response) {
             },
             function (ErrorResponse $response) {
