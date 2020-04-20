@@ -157,6 +157,9 @@ trait TelegramTrait
     /**
      * Use this method to send photos. On success, the sent @see Message is returned.
      *
+     * The photo param can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * operation is synchronous, so the main thread is blocked.
+     *
      * By default the photo is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
      *
@@ -179,6 +182,9 @@ trait TelegramTrait
      * must be in the .MP3 or .M4A format. On success, the sent @see Message is returned. Bots can currently send audio files
      * of up to 50 MB in size, this limit may be changed in the future.
      *
+     * The audio and thumb params can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * operation is synchronous, so the main thread is blocked.
+     *
      * By default the audio is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
      *
@@ -199,6 +205,9 @@ trait TelegramTrait
     /**
      * Use this method to send general files. On success, the sent @see Message is returned. Bots can currently send files of any
      * type of up to 50 MB in size, this limit may be changed in the future.
+     *
+     * The document and thumb params can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * operation is synchronous, so the main thread is blocked.
      *
      * By default the document is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
@@ -222,6 +231,9 @@ trait TelegramTrait
      * success, the sent @see Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may
      * be changed in the future.
      *
+     * The video and thumb params can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * operation is synchronous, so the main thread is blocked.
+     *
      * By default the video is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
      *
@@ -243,6 +255,9 @@ trait TelegramTrait
      * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent @see Message
      * is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the
      * future.
+     *
+     * The animation and thumb params can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * operation is synchronous, so the main thread is blocked.
      *
      * By default the animation is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
@@ -267,6 +282,9 @@ trait TelegramTrait
      * Document). On success, the sent @see Message is returned. Bots can currently send voice messages of up to 50 MB in
      * size, this limit may be changed in the future.
      *
+     * The voice param can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * operation is synchronous, so the main thread is blocked.
+     *
      * By default the voice is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
      *
@@ -287,6 +305,9 @@ trait TelegramTrait
     /**
      * As of v.4.0, Telegram clients support rounded square mp4 videos of up to 1 minute long. Use this method to send video
      * messages. On success, the sent @see Message is returned.
+     *
+     * The video_note and thumb params can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * operation is synchronous, so the main thread is blocked.
      *
      * By default the video note is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
@@ -1026,6 +1047,9 @@ trait TelegramTrait
     /**
      * Use this method to send static .WEBP or animated .TGS stickers. On success, the sent @see Message is returned.
      *
+     * The sticker param can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * operation is synchronous, so the main thread is blocked.
+     *
      * By default the sticker is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
      *
@@ -1081,6 +1105,9 @@ trait TelegramTrait
      * Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus
      * created. You must use exactly one of the fields png_sticker or tgs_sticker. Returns True on success.
      *
+     * The png_sticker param can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * operation is synchronous, so the main thread is blocked.
+     *
      * More on https://core.telegram.org/bots/api#createnewstickerset
      *
      * @param int $user_id
@@ -1101,6 +1128,9 @@ trait TelegramTrait
      * Use this method to add a new sticker to a set created by the bot. You must use exactly one of the fields png_sticker
      * or tgs_sticker. Animated stickers can be added to animated sticker sets and only to them. Animated sticker sets
      * can have up to 50 stickers. Static sticker sets can have up to 120 stickers. Returns True on success.
+     *
+     * The png_sticker param can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * operation is synchronous, so the main thread is blocked.
      *
      * More on https://core.telegram.org/bots/api#addstickertoset
      *
@@ -1154,6 +1184,9 @@ trait TelegramTrait
     /**
      * Use this method to set the thumbnail of a sticker set. Animated thumbnails can be set for animated sticker sets only.
      * Returns True on success.
+     *
+     * The thumb param in $opt can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * operation is synchronous, so the main thread is blocked.
      *
      * More on https://core.telegram.org/bots/api#setstickersetthumb
      *
