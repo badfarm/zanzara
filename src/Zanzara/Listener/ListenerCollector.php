@@ -51,7 +51,7 @@ abstract class ListenerCollector
     protected $listeners = [];
 
     /**
-     * @var MiddlewareInterface[]
+     * @var array
      */
     protected $middleware = [];
 
@@ -298,10 +298,10 @@ abstract class ListenerCollector
     /**
      * Add a middleware at bot level.
      *
-     * @param MiddlewareInterface $middleware
+     * @param MiddlewareInterface|callable $middleware
      * @return $this
      */
-    public function middleware(MiddlewareInterface $middleware): self
+    public function middleware($middleware): self
     {
         array_unshift($this->middleware, $middleware);
         return $this;

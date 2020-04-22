@@ -15,7 +15,7 @@ class MiddlewareNode
 {
 
     /**
-     * @var MiddlewareInterface
+     * @var MiddlewareInterface|callable
      */
     private $current;
 
@@ -25,10 +25,10 @@ class MiddlewareNode
     private $next;
 
     /**
-     * @param MiddlewareInterface $current
+     * @param MiddlewareInterface|callable $current
      * @param MiddlewareNode|null $next
      */
-    public function __construct(MiddlewareInterface $current, ?MiddlewareNode $next = null)
+    public function __construct($current, ?MiddlewareNode $next = null)
     {
         $this->current = $current;
         $this->next = $next;
@@ -39,7 +39,12 @@ class MiddlewareNode
      */
     public function __invoke(Context $ctx)
     {
-        $this->current->handle($ctx, $this->next);
+        $current = $this->current;
+        if (is_callable($current)) {
+            $current($ctx, $this->next);
+        } else {
+            $current->handle($ctx, $this->next);
+        }
     }
 
 }

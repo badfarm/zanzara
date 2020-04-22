@@ -21,10 +21,10 @@ abstract class MiddlewareCollector
     /**
      * Last in, first out.
      *
-     * @param MiddlewareInterface $middleware
+     * @param MiddlewareInterface|callable $middleware
      * @return MiddlewareCollector
      */
-    public function middleware(MiddlewareInterface $middleware): self
+    public function middleware($middleware): self
     {
         $next = $this->tip;
         $node = new MiddlewareNode($middleware, $next);

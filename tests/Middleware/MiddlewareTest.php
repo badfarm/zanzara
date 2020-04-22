@@ -26,7 +26,13 @@ class MiddlewareTest extends TestCase
         $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
         $bot = new Zanzara('test', $config);
         $bot->middleware(new FirstMiddleware());
-        $bot->middleware(new SecondMiddleware());
+        $secondMiddleware = function (Context $ctx, $next) {
+            if ($ctx->get('first') === 'executed') {
+                $ctx->set('second', 'executed');
+                $next($ctx);
+            }
+        };
+        $bot->middleware($secondMiddleware);
 
         $bot->onUpdate(function (Context $ctx) {
 

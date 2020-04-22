@@ -1,12 +1,13 @@
 {
     "name": "zanzara/zanzara",
     "type": "library",
-    "description": "Asynchronous Telegram Bot Framework",
+    "description": "Asynchronous PHP Telegram Bot Framework",
     "keywords": [
         "telegram",
         "bot",
         "reactphp",
-        "async"
+        "async",
+        "php"
     ],
     "license": "MIT",
     "authors": [
