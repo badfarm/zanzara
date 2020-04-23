@@ -10,6 +10,8 @@ use DI\Container;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use React\Cache\ArrayCache;
+use React\Cache\CacheInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Http\Response;
@@ -86,6 +88,7 @@ class Zanzara extends ListenerResolver
         $this->telegram = new Telegram($this->container);
         $this->container->set(Telegram::class, $this->telegram);
         $this->container->set(Zanzara::class, $this);
+        $this->container->set(CacheInterface::class, new ArrayCache());
     }
 
     public function run(): void
@@ -132,7 +135,6 @@ class Zanzara extends ListenerResolver
                 } else {
                     $this->loop->futureTick([$this, 'polling']);
                     echo "Zanzara is listening...\n";
-                    $this->loop->run();
                 }
                 break;
 
@@ -145,6 +147,46 @@ class Zanzara extends ListenerResolver
                 break;
 
         }
+
+//        $f = function ($timer) {
+//            echo "dequeue...\n";
+//            $cache = $this->container->get(CacheInterface::class);
+//            $cache->get('message-queue')->then(
+//                function (array $res) use ($cache) {
+//                    if ($res) {
+//                        foreach ($res as $index => $value) {
+//                            unset($res[$index]);
+//                            $this->telegram->doSendMessage($value);
+//                        }
+//                    }
+//                    $cache->set('message-queue', $res);
+//                }
+//            );
+//        };
+
+//        $this->loop->addPeriodicTimer(1, $f);
+        $this->loop->addPeriodicTimer(2, [$this, 'dequeue']);
+        $this->loop->run();
+    }
+
+    public function dequeue($timer) {
+        $cache = $this->container->get(CacheInterface::class);
+        $cache->get('message-queue')->then(
+            function (array $res) use ($cache) {
+                if ($res) {
+                    $firstKey = array_keys($res)[0]; // in php >= 7.3 we could use "array_key_first()"
+                    $value = $res[$firstKey];
+                    unset($res[$firstKey]);
+                    $this->telegram->doSendMessage($value)->then(
+                        function ($message) {},
+                        function (ErrorResponse $error) {
+                            $this->logger->error("Failed to send message in bulk mode, reason: $error");
+                        }
+                    );
+                }
+                $cache->set('message-queue', $res);
+            }
+        );
     }
 
     /**

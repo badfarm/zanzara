@@ -6,6 +6,7 @@ namespace Zanzara\Telegram;
 
 use Clue\React\Buzz\Browser;
 use Psr\Container\ContainerInterface;
+use React\Cache\CacheInterface;
 use React\Promise\PromiseInterface;
 use RingCentral\Psr7\MultipartStream;
 use Zanzara\Config;
@@ -90,6 +91,32 @@ trait TelegramTrait
         $required = compact("text");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("sendMessage", $params), Message::class);
+    }
+
+    public function doSendMessage(array $params): PromiseInterface {
+        return new ZanzaraPromise($this->container, $this->callApi("sendMessage", $params), Message::class);
+    }
+
+    /**
+     * @param array $chatIds
+     * @param string $text
+     * @param array $opt
+     */
+    public function sendBulkMessage(array $chatIds, string $text, array $opt = [])
+    {
+        $opt['text'] = $text;
+        $cache = $this->container->get(CacheInterface::class);
+        $cache->get('message-queue')->then(
+            function ($res) use ($chatIds, $opt, $cache) {
+                $res = $res ?? [];
+                foreach ($chatIds as $chatId) {
+                    $clone = $opt;
+                    $clone['chat_id'] = $chatId;
+                    $res[] = $clone;
+                }
+                $cache->set('message-queue', $res);
+            }
+        );
     }
 
     /**
