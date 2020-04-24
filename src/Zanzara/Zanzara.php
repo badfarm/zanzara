@@ -10,8 +10,6 @@ use DI\Container;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use React\Cache\ArrayCache;
-use React\Cache\CacheInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Http\Response;
@@ -73,22 +71,16 @@ class Zanzara extends ListenerResolver
                                 ?LoopInterface $loop = null)
     {
         $this->container = $container ?? new Container();
-        $this->config = $config ?? new Config();
+        $this->config = $config ?? $this->container->get(Config::class);
         $this->config->setBotToken($token);
         $this->loop = $loop ?? Factory::create();
+        $this->container->set(LoopInterface::class, $this->loop); // loop cannot be created by container
         $this->logger = new ZanzaraLogger($logger);
-        $this->zanzaraMapper = new ZanzaraMapper();
-        $browser = (new Browser($this->loop))
-            ->withBase("{$this->config->getApiTelegramUrl()}/bot{$this->config->getBotToken()}");
-        $this->container->set(Config::class, $this->config);
-        $this->container->set(LoopInterface::class, $this->loop);
-        $this->container->set(ZanzaraLogger::class, $this->logger);
-        $this->container->set(ZanzaraMapper::class, $this->zanzaraMapper);
-        $this->container->set(Browser::class, $browser);
-        $this->telegram = new Telegram($this->container);
-        $this->container->set(Telegram::class, $this->telegram);
-        $this->container->set(Zanzara::class, $this);
-        $this->container->set(MessageQueue::class, new MessageQueue($this->container));
+        $this->container->set(ZanzaraLogger::class, $this->logger); // logger cannot be created by container
+        $this->zanzaraMapper = $this->container->get(ZanzaraMapper::class);
+        $this->container->set(Browser::class, (new Browser($this->loop)) // browser cannot be created by container
+            ->withBase("{$this->config->getApiTelegramUrl()}/bot{$this->config->getBotToken()}"));
+        $this->telegram = $this->container->get(Telegram::class);
     }
 
     public function run(): void

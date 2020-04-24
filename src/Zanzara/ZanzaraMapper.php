@@ -21,11 +21,11 @@ class ZanzaraMapper
     private $jsonMapper;
 
     /**
-     *
+     * @param JsonMapper $jsonMapper
      */
-    public function __construct()
+    public function __construct(JsonMapper $jsonMapper)
     {
-        $this->jsonMapper = new JsonMapper();
+        $this->jsonMapper = $jsonMapper;
     }
 
     /**
