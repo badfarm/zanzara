@@ -88,7 +88,7 @@ class Zanzara extends ListenerResolver
         $this->telegram = new Telegram($this->container);
         $this->container->set(Telegram::class, $this->telegram);
         $this->container->set(Zanzara::class, $this);
-        $this->container->set(CacheInterface::class, new ArrayCache());
+        $this->container->set(MessageQueue::class, new MessageQueue($this->container));
     }
 
     public function run(): void
@@ -124,7 +124,6 @@ class Zanzara extends ListenerResolver
                             $this->logger->info("Webhook is deleted, Zanzara is starting in polling ...");
                             $this->loop->futureTick([$this, 'polling']);
                             echo "Zanzara is listening...\n";
-                            $this->loop->run();
                         } else {
                             $this->logger->error("Error deleting webhook: {$delete}");
                         }
@@ -142,51 +141,12 @@ class Zanzara extends ListenerResolver
                 $json = file_get_contents($this->config->getUpdateStream());
                 /** @var Update $update */
                 $update = $this->zanzaraMapper->mapJson($json, Update::class);
-                $update->detectUpdateType();
-                $this->exec($update);
+                $this->processUpdate($update);
                 break;
 
         }
 
-//        $f = function ($timer) {
-//            echo "dequeue...\n";
-//            $cache = $this->container->get(CacheInterface::class);
-//            $cache->get('message-queue')->then(
-//                function (array $res) use ($cache) {
-//                    if ($res) {
-//                        foreach ($res as $index => $value) {
-//                            unset($res[$index]);
-//                            $this->telegram->doSendMessage($value);
-//                        }
-//                    }
-//                    $cache->set('message-queue', $res);
-//                }
-//            );
-//        };
-
-//        $this->loop->addPeriodicTimer(1, $f);
-        $this->loop->addPeriodicTimer(2, [$this, 'dequeue']);
         $this->loop->run();
-    }
-
-    public function dequeue($timer) {
-        $cache = $this->container->get(CacheInterface::class);
-        $cache->get('message-queue')->then(
-            function (array $res) use ($cache) {
-                if ($res) {
-                    $firstKey = array_keys($res)[0]; // in php >= 7.3 we could use "array_key_first()"
-                    $value = $res[$firstKey];
-                    unset($res[$firstKey]);
-                    $this->telegram->doSendMessage($value)->then(
-                        function ($message) {},
-                        function (ErrorResponse $error) {
-                            $this->logger->error("Failed to send message in bulk mode, reason: $error");
-                        }
-                    );
-                }
-                $cache->set('message-queue', $res);
-            }
-        );
     }
 
     /**
@@ -198,15 +158,13 @@ class Zanzara extends ListenerResolver
             $json = (string)$request->getBody();
             /** @var Update $update */
             $update = $this->zanzaraMapper->mapJson($json, Update::class);
-            $update->detectUpdateType();
-            $this->exec($update);
+            $this->processUpdate($update);
             return new Response();
         });
 
         $socket = new \React\Socket\Server($this->config->getServerUri(), $this->loop, $this->config->getServerContext());
         $server->listen($socket);
         echo "Zanzara is listening...\n";
-        $this->loop->run();
     }
 
     /**
@@ -229,9 +187,8 @@ class Zanzara extends ListenerResolver
                 } else {
                     /** @var Update[] $updates */
                     foreach ($updates as $update) {
-                        $update->detectUpdateType();
                         try {
-                            $this->exec($update);
+                            $this->processUpdate($update);
                         } catch (\Throwable $e) {
                             $message = "Failed to process Telegram Update $update, reason: {$e->getMessage()}";
                             $this->logger->error($message);
@@ -251,8 +208,9 @@ class Zanzara extends ListenerResolver
     /**
      * @param Update $update
      */
-    private function exec(Update $update)
+    private function processUpdate(Update $update)
     {
+        $update->detectUpdateType();
         $context = new Context($update, $this->container);
         $listeners = $this->resolve($update);
         foreach ($listeners as $listener) {

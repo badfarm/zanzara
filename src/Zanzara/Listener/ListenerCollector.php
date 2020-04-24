@@ -56,7 +56,7 @@ abstract class ListenerCollector
     protected $middleware = [];
 
     /**
-     * Replies to a command.
+     * Listen for the specified command.
      * Eg. $bot->onCommand('start', function(Context $ctx) {});
      *
      * @param string $command
@@ -72,7 +72,7 @@ abstract class ListenerCollector
     }
 
     /**
-     * Replies to a message based on its text.
+     * Listen for a message with the specified text.
      * Eg. $bot->onText('What time is it?', function(Context $ctx) {});
      *
      * @param string $text
@@ -87,7 +87,9 @@ abstract class ListenerCollector
     }
 
     /**
-     * Replies to a generic message.
+     * Listen for a generic message.
+     * You can call this function more than once, every callback will be executed.
+     *
      * Eg. $bot->onMessage(function(Context $ctx) {});
      *
      * @param callable $callback
@@ -101,7 +103,9 @@ abstract class ListenerCollector
     }
 
     /**
-     * Replies to a message that is a reply of another message.
+     * Listen for a message that is a reply of another message.
+     * You can call this function more than once, every callback will be executed.
+     *
      * Eg. $bot->onReplyToMessage(function(Context $ctx) {});
      *
      * @param callable $callback
@@ -115,7 +119,9 @@ abstract class ListenerCollector
     }
 
     /**
-     * Replies to an edited message.
+     * Listen for an edited message.
+     * You can call this function more than once, every callback will be executed.
+     *
      * Eg. $bot->onEditedMessage(function(Context $ctx) {});
      *
      * @param callable $callback
@@ -129,7 +135,8 @@ abstract class ListenerCollector
     }
 
     /**
-     * Replies to a callback query based on the text of the message.
+     * Listen for a callback query with the specified message text.
+     *
      * Eg. $bot->onCbQueryText('How many apples do you want?', function(Context $ctx) {});
      *
      * @param string $text
@@ -144,7 +151,9 @@ abstract class ListenerCollector
     }
 
     /**
-     * Replies to a generic callback query.
+     * Listen for a generic callback query.
+     * You can call this function more than once, every callback will be executed.
+     *
      * Eg. $bot->onCbQuery(function(Context $ctx) {});
      *
      * @param callable $callback
@@ -158,7 +167,9 @@ abstract class ListenerCollector
     }
 
     /**
-     * Replies to a shipping query.
+     * Listener for a shipping query.
+     * You can call this function more than once, every callback will be executed.
+     *
      * Eg. $bot->onShippingQuery(function(Context $ctx) {});
      *
      * @param callable $callback
@@ -172,7 +183,9 @@ abstract class ListenerCollector
     }
 
     /**
-     * Replies to a pre checkout query.
+     * Listen for a pre checkout query.
+     * You can call this function more than once, every callback will be executed.
+     *
      * Eg. $bot->onPreCheckoutQuery(function(Context $ctx) {});
      *
      * @param callable $callback
@@ -198,7 +211,9 @@ abstract class ListenerCollector
     }
 
     /**
-     * Replies to a successful payment.
+     * Listen for a successful payment.
+     * You can call this function more than once, every callback will be executed.
+     *
      * Eg. $bot->onSuccessfulPayment(function(Context $ctx) {});
      *
      * @param callable $callback
@@ -212,7 +227,9 @@ abstract class ListenerCollector
     }
 
     /**
-     * Replies to a passport data message.
+     * Listen for a passport data message.
+     * You can call this function more than once, every callback will be executed.
+     *
      * Eg. $bot->onPassportData(function(Context $ctx) {});
      *
      * @param callable $callback
@@ -226,7 +243,9 @@ abstract class ListenerCollector
     }
 
     /**
-     * Replies to an inline query.
+     * Listen for an inline query.
+     * You can call this function more than once, every callback will be executed.
+     *
      * Eg. $bot->onInlineQuery(function(Context $ctx) {});
      *
      * @param callable $callback
@@ -240,7 +259,9 @@ abstract class ListenerCollector
     }
 
     /**
-     * Replies to a chosen inline result.
+     * Listen for a chosen inline result.
+     * You can call this function more than once, every callback will be executed.
+     *
      * Eg. $bot->onChosenInlineResult(function(Context $ctx) {});
      *
      * @param callable $callback
@@ -254,7 +275,9 @@ abstract class ListenerCollector
     }
 
     /**
-     * Replies to a channel post.
+     * Listen for a channel post.
+     * You can call this function more than once, every callback will be executed.
+     *
      * Eg. $bot->onChannelPost(function(Context $ctx) {});
      *
      * @param callable $callback
@@ -268,7 +291,9 @@ abstract class ListenerCollector
     }
 
     /**
-     * Replies to an edited channel post.
+     * Listen for an edited channel post.
+     * You can call this function more than once, every callback will be executed.
+     *
      * Eg. $bot->onEditedChannelPost(function(Context $ctx) {});
      *
      * @param callable $callback
@@ -282,7 +307,9 @@ abstract class ListenerCollector
     }
 
     /**
-     * Replies to a generic update.
+     * Listen for a generic update.
+     * You can call this function more than once, every callback will be executed.
+     *
      * Eg. $bot->onUpdate(function(Context $ctx) {});
      *
      * @param callable $callback

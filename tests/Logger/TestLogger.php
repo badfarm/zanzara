@@ -25,6 +25,7 @@ class TestLogger extends TestCase
         if (file_exists($logFile)) {
             unlink($logFile);
         }
+        // note: production logger should by async. See https://github.com/WyriHaximus/reactphp-psr-3-loggly
         $logger = new Logger('zanzara');
         $logger->pushHandler(new StreamHandler($logFile, Logger::WARNING));
         $bot = new Zanzara($_ENV['BOT_KEY'], new Config(), $logger);

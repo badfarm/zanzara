@@ -6,10 +6,10 @@ namespace Zanzara\Telegram;
 
 use Clue\React\Buzz\Browser;
 use Psr\Container\ContainerInterface;
-use React\Cache\CacheInterface;
 use React\Promise\PromiseInterface;
 use RingCentral\Psr7\MultipartStream;
 use Zanzara\Config;
+use Zanzara\MessageQueue;
 use Zanzara\Telegram\Type\Chat;
 use Zanzara\Telegram\Type\ChatMember;
 use Zanzara\Telegram\Type\File\File;
@@ -90,33 +90,35 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("text");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendMessage", $params), Message::class);
+        return $this->doSendMessage($params);
     }
 
+    /**
+     * Do not use it. Use @see TelegramTrait::sendMessage() instead.
+     *
+     * @param array $params
+     * @return PromiseInterface
+     */
     public function doSendMessage(array $params): PromiseInterface {
         return new ZanzaraPromise($this->container, $this->callApi("sendMessage", $params), Message::class);
     }
 
     /**
+     * Use this method when to send a message to many chats. This method takes care of sending the message
+     * with a delay in order avoid 429 Telegram errors (https://core.telegram.org/bots/faq#broadcasting-to-users).
+     *
+     * Eg. $ctx->sendBulkMessage([1111111111, 2222222222, 333333333], 'A wonderful notification', [parse_mode => 'HTML']);
+     *
+     * More on https://core.telegram.org/bots/api#sendmessage
+     *
      * @param array $chatIds
      * @param string $text
      * @param array $opt
      */
-    public function sendBulkMessage(array $chatIds, string $text, array $opt = [])
+    public function sendBulkMessage(array $chatIds, string $text, array $opt = []): void
     {
-        $opt['text'] = $text;
-        $cache = $this->container->get(CacheInterface::class);
-        $cache->get('message-queue')->then(
-            function ($res) use ($chatIds, $opt, $cache) {
-                $res = $res ?? [];
-                foreach ($chatIds as $chatId) {
-                    $clone = $opt;
-                    $clone['chat_id'] = $chatId;
-                    $res[] = $clone;
-                }
-                $cache->set('message-queue', $res);
-            }
-        );
+        $this->container->get(MessageQueue::class)
+            ->push($chatIds, $text, $opt);
     }
 
     /**

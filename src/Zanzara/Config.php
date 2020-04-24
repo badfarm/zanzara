@@ -60,6 +60,11 @@ class Config
     private $serverContext = [];
 
     /**
+     * @var float
+     */
+    private $bulkMessageInterval = 2.0;
+
+    /**
      * @return string
      */
     public function getBotToken(): string
@@ -169,6 +174,22 @@ class Config
     public function setServerContext(array $serverContext): void
     {
         $this->serverContext = $serverContext;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBulkMessageInterval(): float
+    {
+        return $this->bulkMessageInterval;
+    }
+
+    /**
+     * @param float $bulkMessageInterval
+     */
+    public function setBulkMessageInterval(float $bulkMessageInterval): void
+    {
+        $this->bulkMessageInterval = $bulkMessageInterval;
     }
 
 }

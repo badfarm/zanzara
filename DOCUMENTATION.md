@@ -75,6 +75,23 @@ $bot->onCommand("start", function (Context $ctx) {
 $bot->run();
 ```
 #### No more 429 annoying errors
+Have you ever got a ```429``` error from Telegram? It happens when you send ```too many messages``` to one or more chats. The
+official Telegram [documentation]() encourage you to spread notifications over longer intervals. We do it for you, just
+use ```sendBulkMessage``` method:
+```php
+<?php
+
+require __DIR__ . '/../autoload.php';
+
+$bot = new Zanzara($_ENV['BOT_KEY']);
+
+$bot->onCommand("start", function (Context $ctx) {
+    $chatIds = []; // ... read users from database
+    $ctx->sendBulkMessage($chatIds, 'A new notification for you', ['parse_mode' => 'HTML']);
+});
+
+$bot->run();
+```
 
 #### Step by step messages (conversations)
 

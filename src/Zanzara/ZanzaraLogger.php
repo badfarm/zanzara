@@ -36,10 +36,8 @@ class ZanzaraLogger
 
     public function __call($name, $arguments)
     {
-        if ($name !== 'debug') {
-            $message = $arguments[0];
-            echo "$message\n";
-        }
+        $message = $arguments[0];
+        echo "$message\n";
         if ($this->logger) {
             call_user_func_array([$this->logger, $name], $arguments);
         }
