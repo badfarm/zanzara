@@ -79,7 +79,7 @@ class Zanzara extends ListenerResolver
         $this->container->set(ZanzaraLogger::class, $this->logger); // logger cannot be created by container
         $this->zanzaraMapper = $this->container->get(ZanzaraMapper::class);
         $this->container->set(Browser::class, (new Browser($this->loop)) // browser cannot be created by container
-            ->withBase("{$this->config->getApiTelegramUrl()}/bot{$this->config->getBotToken()}"));
+        ->withBase("{$this->config->getApiTelegramUrl()}/bot{$this->config->getBotToken()}"));
         $this->telegram = $this->container->get(Telegram::class);
     }
 
@@ -130,10 +130,16 @@ class Zanzara extends ListenerResolver
                 break;
 
             case Config::WEBHOOK_MODE:
-                $json = file_get_contents($this->config->getUpdateStream());
-                /** @var Update $update */
-                $update = $this->zanzaraMapper->mapJson($json, Update::class);
-                $this->processUpdate($update);
+                $token = $this->resolveTokenFromPath($_SERVER['REQUEST_URI']);
+                if (!$this->isWebhookAuthorized($token)) {
+                    http_response_code(403);
+                    $this->logger->error("Not authorized");
+                } else {
+                    $json = file_get_contents($this->config->getUpdateStream());
+                    /** @var Update $update */
+                    $update = $this->zanzaraMapper->mapJson($json, Update::class);
+                    $this->processUpdate($update);
+                }
                 break;
 
         }
@@ -142,11 +148,38 @@ class Zanzara extends ListenerResolver
     }
 
     /**
+     * @param string|null $token
+     * @return bool
+     */
+    private function isWebhookAuthorized(?string $token = null): bool
+    {
+        if (!$this->config->isWebhookTokenCheck()) {
+            return true;
+        }
+        return $token === $this->config->getBotToken();
+    }
+
+    /**
+     * @param string $path
+     * @return string|null
+     */
+    private function resolveTokenFromPath(string $path): ?string
+    {
+        $pathParams = explode('/', $path);
+        return end($pathParams) ?? null;
+    }
+
+    /**
      *
      */
     private function startReactPHPServer()
     {
         $server = new Server(function (ServerRequestInterface $request) {
+            $token = $this->resolveTokenFromPath($request->getUri()->getPath());
+            if (!$this->isWebhookAuthorized($token)) {
+                $this->logger->error("Not authorized");
+                return new Response(403, [], 'Not authorized');
+            }
             $json = (string)$request->getBody();
             /** @var Update $update */
             $update = $this->zanzaraMapper->mapJson($json, Update::class);

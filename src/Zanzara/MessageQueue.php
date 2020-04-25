@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
-use Psr\Container\ContainerInterface;
 use React\EventLoop\LoopInterface;
 use React\EventLoop\TimerInterface;
 use Zanzara\Telegram\Telegram;
@@ -39,14 +38,17 @@ class MessageQueue
 
     /**
      * MessageQueue constructor.
-     * @param ContainerInterface $container
+     * @param Telegram $telegram
+     * @param ZanzaraLogger $logger
+     * @param LoopInterface $loop
+     * @param Config $config
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(Telegram $telegram, ZanzaraLogger $logger, LoopInterface $loop, Config $config)
     {
-        $this->telegram = $container->get(Telegram::class);
-        $this->logger = $container->get(ZanzaraLogger::class);
-        $this->loop = $container->get(LoopInterface::class);
-        $this->config = $container->get(Config::class);
+        $this->telegram = $telegram;
+        $this->logger = $logger;
+        $this->loop = $loop;
+        $this->config = $config;
     }
 
     /**
@@ -54,14 +56,15 @@ class MessageQueue
      * @param string $text
      * @param array $opt
      */
-    public function push(array $chatIds, string $text, array $opt = []) {
+    public function push(array $chatIds, string $text, array $opt = [])
+    {
         $payload = []; // indexed array of Telegram params
         $opt['text'] = $text;
         // prepare the params array for each chatId
         foreach ($chatIds as $chatId) {
             $clone = $opt;
             $clone['chat_id'] = $chatId;
-            $payload[] = $clone;
+            array_push($payload, $clone);
         }
         $dequeue = function (TimerInterface $timer) use (&$payload) {
             // if there's no more message to dequeue cancel the timer
@@ -70,12 +73,11 @@ class MessageQueue
                 return;
             }
 
-            // process only the first element of the payload array, then remove it
-            $firstKey = array_keys($payload)[0]; // with php >= 7.3 we could use "array_key_first()" method
-            $params = $payload[$firstKey];
-            unset($payload[$firstKey]);
+            // pop and process
+            $params = array_pop($payload);
             $this->telegram->doSendMessage($params)->then(
-                function (Message $message) {},
+                function (Message $message) {
+                },
                 function (ErrorResponse $error) {
                     $this->logger->error("Failed to send message in bulk mode, reason: $error");
                 }

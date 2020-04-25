@@ -65,6 +65,11 @@ class Config
     private $bulkMessageInterval = 2.0;
 
     /**
+     * @var bool
+     */
+    private $webhookTokenCheck = false;
+
+    /**
      * @return string
      */
     public function getBotToken(): string
@@ -190,6 +195,22 @@ class Config
     public function setBulkMessageInterval(float $bulkMessageInterval): void
     {
         $this->bulkMessageInterval = $bulkMessageInterval;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWebhookTokenCheck(): bool
+    {
+        return $this->webhookTokenCheck;
+    }
+
+    /**
+     * @param bool $webhookTokenCheck
+     */
+    public function setWebhookTokenCheck(bool $webhookTokenCheck): void
+    {
+        $this->webhookTokenCheck = $webhookTokenCheck;
     }
 
 }
