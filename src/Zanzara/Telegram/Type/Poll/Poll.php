@@ -77,6 +77,35 @@ class Poll
     private $correct_option_id;
 
     /**
+     * Optional. Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style
+     * poll, 0-200 characters
+     *
+     * @var string|null
+     */
+    private $explanation;
+
+    /**
+     * Optional. Special entities like usernames, URLs, bot commands, etc. that appear in the explanation.
+     *
+     * @var \Zanzara\Telegram\Type\MessageEntity[]|null
+     */
+    private $explanation_entities;
+
+    /**
+     * Optional. Amount of time in seconds the poll will be active after creation.
+     *
+     * @var int|null
+     */
+    private $open_period;
+
+    /**
+     * Optional. Point in time (Unix timestamp) when the poll will be automatically closed.
+     *
+     * @var int|null
+     */
+    private $close_date;
+
+    /**
      * @return string
      */
     public function getId(): string
@@ -218,6 +247,70 @@ class Poll
     public function setCorrectOptionId(?int $correct_option_id): void
     {
         $this->correct_option_id = $correct_option_id;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getExplanation(): ?string
+    {
+        return $this->explanation;
+    }
+
+    /**
+     * @param string|null $explanation
+     */
+    public function setExplanation(?string $explanation): void
+    {
+        $this->explanation = $explanation;
+    }
+
+    /**
+     * @return \Zanzara\Telegram\Type\MessageEntity[]|null
+     */
+    public function getExplanationEntities(): ?array
+    {
+        return $this->explanation_entities;
+    }
+
+    /**
+     * @param \Zanzara\Telegram\Type\MessageEntity[]|null $explanation_entities
+     */
+    public function setExplanationEntities(?array $explanation_entities): void
+    {
+        $this->explanation_entities = $explanation_entities;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getOpenPeriod(): ?int
+    {
+        return $this->open_period;
+    }
+
+    /**
+     * @param int|null $open_period
+     */
+    public function setOpenPeriod(?int $open_period): void
+    {
+        $this->open_period = $open_period;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCloseDate(): ?int
+    {
+        return $this->close_date;
+    }
+
+    /**
+     * @param int|null $close_date
+     */
+    public function setCloseDate(?int $close_date): void
+    {
+        $this->close_date = $close_date;
     }
 
 }

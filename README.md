@@ -4,7 +4,7 @@ Asynchronous PHP Telegram Bot Framework built on top of [ReactPHP](https://react
 ---
 
 ### Features
-* Full [Telegram Bot Api 4.7](https://core.telegram.org/bots/api) support (March 2020)
+* Full [Telegram Bot Api 4.8](https://core.telegram.org/bots/api) support (April 2020)
 * Middleware chain for requests
 * Step by step messages (conversations)
 * Fast since it's based on asynchronous non-blocking I/O model

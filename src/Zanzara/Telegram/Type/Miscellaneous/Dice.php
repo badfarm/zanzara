@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zanzara\Telegram\Type;
+namespace Zanzara\Telegram\Type\Miscellaneous;
 
 /**
  * This object represents a dice with random value from 1 to 6. (Yes, we're aware of the "proper" singular of die. But
@@ -21,6 +21,13 @@ class Dice
     private $value;
 
     /**
+     * Emoji on which the dice throw animation is based.
+     *
+     * @var string
+     */
+    private $emoji;
+
+    /**
      * @return int
      */
     public function getValue(): int
@@ -34,6 +41,22 @@ class Dice
     public function setValue(int $value): void
     {
         $this->value = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmoji(): string
+    {
+        return $this->emoji;
+    }
+
+    /**
+     * @param string $emoji
+     */
+    public function setEmoji(string $emoji): void
+    {
+        $this->emoji = $emoji;
     }
 
 }
