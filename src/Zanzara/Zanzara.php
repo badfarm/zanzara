@@ -28,7 +28,7 @@ class Zanzara extends ListenerResolver
 {
 
     /**
-     * @var ContainerInterface
+     * @var Container
      */
     private $container;
 
@@ -61,13 +61,13 @@ class Zanzara extends ListenerResolver
      * @param string $token
      * @param Config|null $config
      * @param LoggerInterface|null $logger
-     * @param ContainerInterface|null $container
+     * @param Container|null $container
      * @param LoopInterface|null $loop
      */
     public function __construct(string $token,
                                 ?Config $config = null,
                                 ?LoggerInterface $logger = null,
-                                ?ContainerInterface $container = null,
+                                ?Container $container = null,
                                 ?LoopInterface $loop = null)
     {
         $this->container = $container ?? new Container();
@@ -197,7 +197,12 @@ class Zanzara extends ListenerResolver
      */
     public function polling(int $offset = 1)
     {
-        $this->telegram->getUpdates($offset)->then(
+        $this->telegram->getUpdates([
+            'offset' => $offset,
+            'limit' => $this->config->getPollingLimit(),
+            'timeout' => $this->config->getPollingTimeout(),
+            'allowed_updates' => $this->config->getPollingAllowedUpdates(),
+        ])->then(
             function (array $updates) use ($offset) {
 
                 if ($offset === 1) {
@@ -261,9 +266,9 @@ class Zanzara extends ListenerResolver
     }
 
     /**
-     * @return ContainerInterface
+     * @return Container
      */
-    public function getContainer(): ContainerInterface
+    public function getContainer(): Container
     {
         return $this->container;
     }

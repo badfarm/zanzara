@@ -70,6 +70,32 @@ class Config
     private $webhookTokenCheck = false;
 
     /**
+     * Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should be positive, short polling
+     * should be used for testing purposes only.
+     *
+     * @var int
+     */
+    private $pollingTimeout = 50;
+
+    /**
+     * Limits the number of updates to be retrieved. Values between 1-100 are accepted. Defaults to 100.
+     *
+     * @var int
+     */
+    private $pollingLimit = 100;
+
+    /**
+     * A JSON-serialized list of the update types you want your bot to receive. For example, specify
+     * [“message”, “edited_channel_post”, “callback_query”] to only receive updates of these types. See Update for a
+     * complete list of available update types. Specify an empty list to receive all updates regardless of type
+     * (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect
+     * updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.
+     *
+     * @var array
+     */
+    private $pollingAllowedUpdates = [];
+
+    /**
      * @return string
      */
     public function getBotToken(): string
@@ -211,6 +237,54 @@ class Config
     public function setWebhookTokenCheck(bool $webhookTokenCheck): void
     {
         $this->webhookTokenCheck = $webhookTokenCheck;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPollingTimeout(): int
+    {
+        return $this->pollingTimeout;
+    }
+
+    /**
+     * @param int $pollingTimeout
+     */
+    public function setPollingTimeout(int $pollingTimeout): void
+    {
+        $this->pollingTimeout = $pollingTimeout;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPollingLimit(): int
+    {
+        return $this->pollingLimit;
+    }
+
+    /**
+     * @param int $pollingLimit
+     */
+    public function setPollingLimit(int $pollingLimit): void
+    {
+        $this->pollingLimit = $pollingLimit;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPollingAllowedUpdates(): array
+    {
+        return $this->pollingAllowedUpdates;
+    }
+
+    /**
+     * @param array $pollingAllowedUpdates
+     */
+    public function setPollingAllowedUpdates(array $pollingAllowedUpdates): void
+    {
+        $this->pollingAllowedUpdates = $pollingAllowedUpdates;
     }
 
 }

@@ -54,20 +54,16 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#getupdates
      *
-     * @param int $offset
-     * @param int $timeout
-     * @param int $limit telegram default is 100 if unspecified
-     * @param array $allowed_updates
+     * @param array $opt
      * @return PromiseInterface
      */
-    public function getUpdates(int $offset = 1, int $timeout = 50, int $limit = 100, array $allowed_updates = []): PromiseInterface
+    public function getUpdates(array $opt = []): PromiseInterface
     {
         $method = "getUpdates";
-        $params = compact("offset", "timeout", "limit", "allowed_updates");
-        $query = http_build_query($params);
+        $query = http_build_query($opt);
 
         $browser = $this->browser->withOptions(array(
-            "timeout" => $timeout + 10 //timout browser necessary bigger than telegram timeout. They can't be equal
+            "timeout" => $opt['timeout'] + 10 //timout browser necessary bigger than telegram timeout. They can't be equal
         ));
 
         return new ZanzaraPromise($this->container, $browser->get("$method?$query"), Update::class);
