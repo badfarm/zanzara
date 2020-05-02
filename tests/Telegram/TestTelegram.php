@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Zanzara\Test\Telegram;
 
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Zanzara\Config;
 use Zanzara\Telegram\Type\Message;
@@ -148,6 +150,26 @@ class TestTelegram extends TestCase
         );
 
         $bot->getLoop()->run();
+    }
+
+    /**
+     *
+     */
+    public function testSendBulkMessage()
+    {
+        $logFile = __DIR__ . '/app.log';
+        if (file_exists($logFile)) {
+            unlink($logFile);
+        }
+        // note: production logger should by async. See https://github.com/WyriHaximus/reactphp-psr-3-loggly
+        $logger = new Logger('zanzara');
+        $logger->pushHandler(new StreamHandler($logFile, Logger::WARNING));
+        $bot = new Zanzara($_ENV['BOT_KEY'], new Config(), $logger);
+        $telegram = $bot->getTelegram();
+        $chatId = (int)$_ENV['CHAT_ID'];
+        $telegram->sendBulkMessage([$chatId, $chatId, $chatId], 'Hello');
+        $bot->getLoop()->run();
+        $this->assertFileNotExists($logFile);
     }
 
 }

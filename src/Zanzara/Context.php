@@ -116,7 +116,9 @@ class Context
     /**
      * Nothing is done, it's only for readable purpose
      */
-    public function redoStep(){}
+    public function redoStep()
+    {
+    }
 
     /**
      * Clean the cache for this userId

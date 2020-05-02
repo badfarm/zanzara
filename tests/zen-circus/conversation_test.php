@@ -18,7 +18,6 @@ $config->setUpdateMode(Config::POLLING_MODE);
 
 $bot = new Zanzara( $_ENV['BOT_KEY'], $config);
 
-
 $bot->onCommand("start", function (Context $ctx) {
     $ctx->sendMessage("Hi, what's your name?");
     $ctx->nextStep("checkName");
@@ -44,7 +43,6 @@ function checkAge(Context $ctx)
 $bot->onCommand("help", function (Context $ctx) {
     $ctx->sendMessage("Lancia /start per iniziare");
 });
-
 
 $bot->run();
 

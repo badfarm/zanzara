@@ -21,7 +21,7 @@ use Zanzara\Telegram\Type\Shipping\SuccessfulPayment;
 use Zanzara\Telegram\Type\Update;
 
 /**
- * @see Listener
+ *
  */
 abstract class ListenerCollector
 {
@@ -332,10 +332,20 @@ abstract class ListenerCollector
     }
 
     /**
-     * Add a middleware at bot level.
+     * Define a middleware that will be executed for every listener function and before listener-specific middleware.
+     *
+     * Eg:
+     * $bot = new Zanzara($_ENV['BOT_TOKEN']);
+     * $bot->middleware(new GenericMiddleware());
+     *
+     * $bot->onCommand('start', function(Context $ctx) {
+     *      $ctx->sendMessage('Hello');
+     * })->middleware(new SpecificMiddleware());
+     *
+     * In this case GenericMiddleware will be executed before SpecificMiddleware.
      *
      * @param MiddlewareInterface|callable $middleware
-     * @return $this
+     * @return self
      */
     public function middleware($middleware): self
     {

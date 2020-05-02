@@ -21,8 +21,13 @@ use Zanzara\Telegram\Type\Update;
 use Zanzara\Telegram\Type\Webhook\WebhookInfo;
 
 /**
+ * /**
+ * Framework workflow is:
+ * 1) register the listeners (onCommand, onUpdate, etc.) @see ListenerCollector
+ * 2) start listening for updates (either via webhook or polling) @see Zanzara::run()
+ * 3) when a new update is received, deserialize it and, according to its type, execute the correct
+ * listener functions. @see ListenerResolver::resolve()
  *
- * @see Zanzara::run()
  */
 class Zanzara extends ListenerResolver
 {

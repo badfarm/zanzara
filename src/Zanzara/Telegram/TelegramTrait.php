@@ -95,12 +95,13 @@ trait TelegramTrait
      * @param array $params
      * @return PromiseInterface
      */
-    public function doSendMessage(array $params): PromiseInterface {
+    public function doSendMessage(array $params): PromiseInterface
+    {
         return new ZanzaraPromise($this->container, $this->callApi("sendMessage", $params), Message::class);
     }
 
     /**
-     * Use this method when to send a message to many chats. This method takes care of sending the message
+     * Use this method to send a message to many chats. This method takes care of sending the message
      * with a delay in order avoid 429 Telegram errors (https://core.telegram.org/bots/faq#broadcasting-to-users).
      *
      * Eg. $ctx->sendBulkMessage([1111111111, 2222222222, 333333333], 'A wonderful notification', [parse_mode => 'HTML']);
