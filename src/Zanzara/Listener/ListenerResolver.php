@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Zanzara\Listener;
 
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Contracts\Cache\CacheInterface;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Update;
@@ -15,6 +17,28 @@ use Zanzara\Telegram\Type\Update;
  */
 abstract class ListenerResolver extends ListenerCollector
 {
+
+    /**
+     * @var CacheInterface
+     */
+    private $cache;
+
+
+    /**
+     * @return CacheInterface
+     */
+    public function getCache(): CacheInterface
+    {
+        return $this->cache;
+    }
+
+    /**
+     * @param FilesystemAdapter $cache
+     */
+    public function setCache(FilesystemAdapter $cache): void
+    {
+        $this->cache = $cache;
+    }
 
     /**
      * @param Update $update
@@ -33,9 +57,11 @@ abstract class ListenerResolver extends ListenerCollector
                     $listener = $this->findAndPush($listeners, 'messages', $text);
                     // do not manage the update as conversation if the text is already managed as command/text
                     if (!$listener) {
-                        $userId = $update->getMessage()->getFrom()->getId();
-                        $userConversation = 'dummyConversation'; // $redis->getConversation($userId)
-                        $this->findAndPush($listeners, 'conversations', $userConversation);
+                        $userId = $update->getEffectiveChat()->getId();
+                        $handler = $this->cache->getItem(strval($userId))->get();
+                        if ($handler) {
+                            $this->findAndPush($listeners, 'conversations', $handler);
+                        }
                     }
                 }
                 break;
@@ -44,7 +70,6 @@ abstract class ListenerResolver extends ListenerCollector
                 $text = $update->getCallbackQuery()->getMessage()->getText();
                 $this->findAndPush($listeners, 'cb_query_texts', $text);
                 break;
-
         }
 
         $this->merge($listeners, $updateType);

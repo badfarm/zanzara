@@ -6,6 +6,7 @@ namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Zanzara\Telegram\TelegramTrait;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\ChannelPost;
@@ -97,6 +98,27 @@ class Context
     public function getUpdate(): Update
     {
         return $this->update;
+    }
+
+    public function nextStep(string $handler)
+    {
+        $chatId = $this->update->getEffectiveChat()->getId();
+        $cache = $this->container->get(FilesystemAdapter::class);
+        $item = $cache->getItem(strval($chatId));
+        $item->set($handler);
+        $cache->save($item);
+    }
+
+    /**
+     * Nothing is done, it's only for readable purpose
+     */
+    public function redoStep(){}
+
+    public function endConversation()
+    {
+        $userId = $this->update->getEffectiveChat()->getId();
+        $cache = $this->container->get(FilesystemAdapter::class);
+        $cache->deleteItem(strval($userId));
     }
 
 }

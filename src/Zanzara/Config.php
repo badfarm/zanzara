@@ -4,13 +4,19 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
+use React\EventLoop\LoopInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+
 /**
  * Configuration for Zanzara. Expected to be used as follow:
  *
  *  $config = new \Zanzara\Config();
+ *  $config->setBotToken("your_token");
  *  $config->setUpdateMode(self::WEBHOOK_MODE);
  *  $config->setParseMode(self::PARSE_MODE_HTML);
- *  $bot = new \Zanzara\Zanzara('token', $config);
+ *  $bot = new \Zanzara\Zanzara($config);
  *
  */
 class Config
@@ -28,6 +34,21 @@ class Config
      * @var string
      */
     private $botToken;
+
+    /**
+     * @var LoopInterface|null
+     */
+    private $loop;
+
+    /**
+     * @var CacheInterface|null
+     */
+    private $cache;
+
+    /**
+     * @var ContainerInterface|null
+     */
+    private $container;
 
     /**
      * @var string
@@ -96,6 +117,11 @@ class Config
     private $pollingAllowedUpdates = [];
 
     /**
+     * @var LoggerInterface|null
+     */
+    private $logger;
+
+    /**
      * @return string
      */
     public function getBotToken(): string
@@ -109,6 +135,22 @@ class Config
     public function setBotToken(string $botToken): void
     {
         $this->botToken = $botToken;
+    }
+
+    /**
+     * @return LoopInterface|null
+     */
+    public function getLoop(): ?LoopInterface
+    {
+        return $this->loop;
+    }
+
+    /**
+     * @param LoopInterface|null $loop
+     */
+    public function setLoop(?LoopInterface $loop): void
+    {
+        $this->loop = $loop;
     }
 
     /**
@@ -285,6 +327,54 @@ class Config
     public function setPollingAllowedUpdates(array $pollingAllowedUpdates): void
     {
         $this->pollingAllowedUpdates = $pollingAllowedUpdates;
+    }
+
+    /**
+     * @return LoggerInterface|null
+     */
+    public function getLogger(): ?LoggerInterface
+    {
+        return $this->logger;
+    }
+
+    /**
+     * @param LoggerInterface|null $logger
+     */
+    public function setLogger(?LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
+    }
+
+    /**
+     * @return CacheInterface|null
+     */
+    public function getCache(): ?CacheInterface
+    {
+        return $this->cache;
+    }
+
+    /**
+     * @param CacheInterface|null $cache
+     */
+    public function setCache(?CacheInterface $cache): void
+    {
+        $this->cache = $cache;
+    }
+
+    /**
+     * @return ContainerInterface|null
+     */
+    public function getContainer(): ?ContainerInterface
+    {
+        return $this->container;
+    }
+
+    /**
+     * @param ContainerInterface|null $container
+     */
+    public function setContainer(?ContainerInterface $container): void
+    {
+        $this->container = $container;
     }
 
 }
