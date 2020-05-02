@@ -118,7 +118,7 @@ class Zanzara extends ListenerResolver
                 break;
 
             case Config::WEBHOOK_MODE:
-                $token = $this->resolveTokenFromPath($_SERVER['REQUEST_URI']);
+                $token = $this->resolveTokenFromPath($_SERVER['REQUEST_URI'] ?? '');
                 if (!$this->isWebhookAuthorized($token)) {
                     http_response_code(403);
                     $this->logger->error("Not authorized");
