@@ -6,7 +6,7 @@ namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Contracts\Cache\CacheInterface;
 use Zanzara\Telegram\TelegramTrait;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\ChannelPost;
@@ -100,10 +100,14 @@ class Context
         return $this->update;
     }
 
-    public function nextStep(string $handler)
+    /**
+     * Save the next state with callable function
+     * @param callable $handler
+     */
+    public function nextStep(callable $handler)
     {
         $chatId = $this->update->getEffectiveChat()->getId();
-        $cache = $this->container->get(FilesystemAdapter::class);
+        $cache = $this->container->get(CacheInterface::class);
         $item = $cache->getItem(strval($chatId));
         $item->set($handler);
         $cache->save($item);
@@ -114,10 +118,13 @@ class Context
      */
     public function redoStep(){}
 
+    /**
+     * Clean the cache for this userId
+     */
     public function endConversation()
     {
         $userId = $this->update->getEffectiveChat()->getId();
-        $cache = $this->container->get(FilesystemAdapter::class);
+        $cache = $this->container->get(CacheInterface::class);
         $cache->deleteItem(strval($userId));
     }
 

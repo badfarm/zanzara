@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Zanzara\Listener;
 
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Psr\Container\ContainerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
+use Zanzara\Context;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Update;
@@ -23,6 +24,10 @@ abstract class ListenerResolver extends ListenerCollector
      */
     private $cache;
 
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
 
     /**
      * @return CacheInterface
@@ -33,11 +38,27 @@ abstract class ListenerResolver extends ListenerCollector
     }
 
     /**
-     * @param FilesystemAdapter $cache
+     * @param CacheInterface $cache
      */
-    public function setCache(FilesystemAdapter $cache): void
+    public function setCache(CacheInterface $cache): void
     {
         $this->cache = $cache;
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer(): ContainerInterface
+    {
+        return $this->container;
+    }
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public function setContainer(ContainerInterface $container): void
+    {
+        $this->container = $container;
     }
 
     /**
@@ -55,12 +76,19 @@ abstract class ListenerResolver extends ListenerCollector
                 $text = $update->getMessage()->getText();
                 if ($text) {
                     $listener = $this->findAndPush($listeners, 'messages', $text);
-                    // do not manage the update as conversation if the text is already managed as command/text
-                    if (!$listener) {
+                    //todo maybe some problem with the regex handler in the future
+                    if ($listener) {
+                        //clean the state because a listener has been found
+                        $userId = $update->getEffectiveChat()->getId();
+                        $cache = $this->container->get(CacheInterface::class);
+                        $cache->deleteItem(strval($userId));
+                    } else {
+                        //there is no listener so we look for the state
                         $userId = $update->getEffectiveChat()->getId();
                         $handler = $this->cache->getItem(strval($userId))->get();
                         if ($handler) {
-                            $this->findAndPush($listeners, 'conversations', $handler);
+                            //there is the state so we call the handler
+                            call_user_func($handler, new Context($update, $this->container));
                         }
                     }
                 }

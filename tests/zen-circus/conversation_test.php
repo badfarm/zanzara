@@ -3,9 +3,6 @@
 use Symfony\Component\Dotenv\Dotenv;
 use Zanzara\Config;
 use Zanzara\Context;
-use Zanzara\Telegram\Type\Input\InputFile;
-use Zanzara\Telegram\Type\Message;
-use Zanzara\Telegram\Type\Update;
 use Zanzara\Zanzara;
 
 require "../../vendor/autoload.php";
@@ -24,23 +21,29 @@ $key = $_ENV['BOT_KEY'];
 
 $bot->onCommand("start", function (Context $ctx) {
     $ctx->sendMessage("Ciao come ti chiami?");
-    $ctx->nextStep("name");
+    $ctx->nextStep("checkName");
 });
 
-$bot->onConversation("name", function (Context $ctx){
+function checkName(Context $ctx){
     $ctx->sendMessage("Beautiful name {$ctx->getMessage()->getText()}, what is your age?");
-    $ctx->nextStep("age");
-});
+    $ctx->nextStep("checkAge");
+}
 
-$bot->onConversation("age", function (Context $ctx){
+function checkAge(Context $ctx){
     if(ctype_digit($ctx->getMessage()->getText())){
         $ctx->sendMessage("Ok perfect, bye");
-        $ctx->endConversation(); //Must be used. This method clean the cache.
+        $ctx->endConversation(); //Must be used. This method clean the state for this conversation
     }else{
         $ctx->sendMessage("Must be a number, retry");
         $ctx->redoStep(); //can be omitted
     }
+}
+
+$bot->onCommand("help", function (Context $ctx) {
+    $ctx->sendMessage("Lancia /start per iniziare");
 });
+
+
 
 $bot->run();
 
