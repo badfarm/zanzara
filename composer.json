@@ -1,5 +1,6 @@
 {
     "name": "zanzara/zanzara",
+    "version": "0.1.0",
     "type": "library",
     "description": "Asynchronous PHP Telegram Bot Framework",
     "keywords": [
