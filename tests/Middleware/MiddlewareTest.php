@@ -24,7 +24,8 @@ class MiddlewareTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
-        $bot = new Zanzara('test', $config);
+        $config->setBotToken("test");
+        $bot = new Zanzara($config);
         $bot->middleware(new FirstMiddleware());
         $secondMiddleware = function (Context $ctx, $next) {
             if ($ctx->get('first') === 'executed') {

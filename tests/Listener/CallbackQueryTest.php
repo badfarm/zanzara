@@ -24,7 +24,8 @@ class CallbackQueryTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/callback_query.json');
-        $bot = new Zanzara('test', $config);
+        $config->setBotToken("test");
+        $bot = new Zanzara($config);
 
         $bot->onCbQueryText('Manage your data', function (Context $ctx) {
             $this->assertCallbackQuery($ctx->getCallbackQuery());

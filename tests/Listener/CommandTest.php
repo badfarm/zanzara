@@ -24,7 +24,8 @@ class CommandTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
-        $bot = new Zanzara('test', $config);
+        $config->setBotToken("test");
+        $bot = new Zanzara($config);
 
         $bot->onCommand('start', function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -61,7 +62,8 @@ class CommandTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/message.json');
-        $bot = new Zanzara('test', $config);
+        $config->setBotToken("test");
+        $bot = new Zanzara($config);
 
         $bot->onText('Hello', function (Context $ctx) {
             $message = $ctx->getMessage();
