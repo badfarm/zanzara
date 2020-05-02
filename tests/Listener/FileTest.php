@@ -23,8 +23,7 @@ class FileTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/animation.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -57,8 +56,7 @@ class FileTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/contact.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -80,8 +78,7 @@ class FileTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/document.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -105,8 +102,7 @@ class FileTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/voice.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -130,8 +126,7 @@ class FileTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/location.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -152,8 +147,7 @@ class FileTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/photo.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -190,8 +184,7 @@ class FileTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/sticker.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -224,8 +217,7 @@ class FileTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/video.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();

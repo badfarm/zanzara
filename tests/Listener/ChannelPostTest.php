@@ -23,8 +23,7 @@ class ChannelPostTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/channel_post.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onChannelPost(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -48,8 +47,7 @@ class ChannelPostTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/edited_channel_post.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onEditedChannelPost(function (Context $ctx) {
             $update = $ctx->getUpdate();

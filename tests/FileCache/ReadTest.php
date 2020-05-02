@@ -19,9 +19,8 @@ class ReadTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
-        $config->setBotToken("test");
         $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onCommand('start', function (Context $ctx) {
 

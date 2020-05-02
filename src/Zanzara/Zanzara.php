@@ -41,7 +41,7 @@ class Zanzara extends ListenerResolver
      * @var Telegram
      */
     private $telegram;
-    
+
     /**
      * @var ZanzaraLogger
      */
@@ -53,9 +53,10 @@ class Zanzara extends ListenerResolver
     private $loop;
 
     /**
+     * @param string $botKey
      * @param Config|null $config
      */
-    public function __construct(Config $config)
+    public function __construct(string $botKey, ?Config $config = null)
     {
         $this->config = $config;
         $this->setContainer($config->getContainer() ?? new Container());
@@ -65,7 +66,7 @@ class Zanzara extends ListenerResolver
         $this->getContainer()->set(ZanzaraLogger::class, $this->logger); // logger cannot be created by container
         $this->zanzaraMapper = $this->getContainer()->get(ZanzaraMapper::class);
         $this->getContainer()->set(Browser::class, (new Browser($this->loop)) // browser cannot be created by container
-        ->withBase("{$this->config->getApiTelegramUrl()}/bot{$this->config->getBotToken()}"));
+        ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botKey}"));
         $this->telegram = $this->getContainer()->get(Telegram::class);
         $this->setCache($this->config->getCache() ?? new ArrayAdapter());
         $this->getContainer()->set(CacheInterface::class, $this->getCache());

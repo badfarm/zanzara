@@ -23,8 +23,7 @@ class MessageTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/edited_message.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onEditedMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -56,8 +55,7 @@ class MessageTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/forward_from_message.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -84,8 +82,7 @@ class MessageTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/message_entities.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -113,8 +110,7 @@ class MessageTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/poll.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();
@@ -147,8 +143,7 @@ class MessageTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/reply_to_message.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onReplyToMessage(function (Context $ctx) {
             $update = $ctx->getUpdate();

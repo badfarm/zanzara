@@ -13,10 +13,10 @@ $dotenv->load("../../.env");
 $config = new Config();
 $config->setLogger(new \Monolog\Logger("test"));
 $config->setCache(new \Symfony\Component\Cache\Adapter\ArrayAdapter());
-$config->setBotToken($_ENV['BOT_KEY']);
 $config->setUpdateMode(Config::POLLING_MODE);
-$bot = new Zanzara($config);
+
 $key = $_ENV['BOT_KEY'];
+$bot = new Zanzara($key, $config);
 
 
 $bot->onCommand("start", function (Context $ctx) {

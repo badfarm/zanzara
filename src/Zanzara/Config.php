@@ -13,7 +13,6 @@ use Symfony\Contracts\Cache\CacheInterface;
  * Configuration for Zanzara. Expected to be used as follow:
  *
  *  $config = new \Zanzara\Config();
- *  $config->setBotToken("your_token");
  *  $config->setUpdateMode(self::WEBHOOK_MODE);
  *  $config->setParseMode(self::PARSE_MODE_HTML);
  *  $bot = new \Zanzara\Zanzara($config);
@@ -30,10 +29,6 @@ class Config
     public const PARSE_MODE_MARKDOWN = "MarkdownV2";
     public const PARSE_MODE_MARKDOWN_LEGACY = "Markdown";
 
-    /**
-     * @var string
-     */
-    private $botToken;
 
     /**
      * @var LoopInterface|null
@@ -120,22 +115,6 @@ class Config
      * @var LoggerInterface|null
      */
     private $logger;
-
-    /**
-     * @return string
-     */
-    public function getBotToken(): string
-    {
-        return $this->botToken;
-    }
-
-    /**
-     * @param string $botToken
-     */
-    public function setBotToken(string $botToken): void
-    {
-        $this->botToken = $botToken;
-    }
 
     /**
      * @return LoopInterface|null

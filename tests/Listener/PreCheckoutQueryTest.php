@@ -23,8 +23,7 @@ class PreCheckoutQueryTest extends TestCase
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
         $config->setUpdateStream(__DIR__ . '/../update_types/pre_checkout_query.json');
-        $config->setBotToken("test");
-        $bot = new Zanzara($config);
+        $bot = new Zanzara("test", $config);
 
         $bot->onPreCheckoutQuery(function (Context $ctx) {
             $update = $ctx->getUpdate();
