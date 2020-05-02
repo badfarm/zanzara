@@ -61,11 +61,15 @@ abstract class ListenerResolver extends ListenerCollector
      */
     private function findAndPush(array &$listeners, string $listenerType, string $listenerId): ?Listener
     {
-        $res = $this->listeners[$listenerType][$listenerId] ?? null;
-        if ($res) {
-            $listeners[] = $res;
+        if (isset($this->listeners[$listenerType])) {
+            foreach ($this->listeners[$listenerType] as $regex => $listener) {
+                if (preg_match($regex, $listenerId)) {
+                    $listeners[] = $listener;
+                    return $listener;
+                }
+            }
         }
-        return $res;
+        return null;
     }
 
     /**
