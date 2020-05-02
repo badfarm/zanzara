@@ -15,18 +15,18 @@ $config->setLogger(new \Monolog\Logger("test"));
 $config->setCache(new \Symfony\Component\Cache\Adapter\ArrayAdapter());
 $config->setUpdateMode(Config::POLLING_MODE);
 
-$key = $_ENV['BOT_KEY'];
-$bot = new Zanzara($key, $config);
+
+$bot = new Zanzara( $_ENV['BOT_KEY'], $config);
 
 
 $bot->onCommand("start", function (Context $ctx) {
-    $ctx->sendMessage("Ciao come ti chiami?");
+    $ctx->sendMessage("Hi, what's your name?");
     $ctx->nextStep("checkName");
 });
 
 function checkName(Context $ctx)
 {
-    $ctx->sendMessage("Beautiful name {$ctx->getMessage()->getText()}, what is your age?");
+    $ctx->sendMessage("{$ctx->getMessage()->getText()}, what is your age?");
     $ctx->nextStep("checkAge");
 }
 
@@ -34,10 +34,10 @@ function checkAge(Context $ctx)
 {
     if (ctype_digit($ctx->getMessage()->getText())) {
         $ctx->sendMessage("Ok perfect, bye");
-        $ctx->endConversation(); //Must be used. This method clean the state for this conversation
+        $ctx->endConversation(); //Must be used, this method clean the state for this conversation
     } else {
         $ctx->sendMessage("Must be a number, retry");
-        $ctx->redoStep(); //can be omitted
+        $ctx->redoStep(); //can be omitted, only for readable purpose
     }
 }
 

@@ -94,6 +94,50 @@ $bot->run();
 ```
 
 #### Step by step messages (conversations)
+We need a way to handle the state in a persistent way across "sessions". In the config with the setCache method you can
+pass a cache implementation that follow [psr-6 interface](https://www.php-fig.org/psr/psr-6/).
+By default Zanzara use these implementations:
+- [ArrayAdapter](https://symfony.com/doc/current/components/cache/adapters/array_cache_adapter.html) if started in polling mode (this is not persistant, everything is deleted on every restart)
+- [FilesystemAdapter](https://symfony.com/doc/current/components/cache/adapters/filesystem_adapter.html) if started in webhook mode 
+
+Zanzara has a dependecy to [symfony cache](https://symfony.com/doc/current/components/cache.html), so you can use all the implementations provided in their website.
+
+In this example without config, by default zanzara start in polling mode with ArrayAdapter as cache.
+This cache implementation should be used only in development for quick prototyping, we suggest more robust cache adapter such as [redis](https://symfony.com/doc/current/components/cache/adapters/redis_adapter.html)
+or [memcached](https://symfony.com/doc/current/components/cache/adapters/memcached_adapter.html)
+```php
+$bot = new Zanzara( $_ENV['BOT_KEY']);
+
+
+$bot->onCommand("start", function (Context $ctx) {
+    $ctx->sendMessage("Hi, what's your name?");
+    $ctx->nextStep("checkName");
+});
+
+function checkName(Context $ctx)
+{
+    $ctx->sendMessage("{$ctx->getMessage()->getText()}, what is your age?");
+    $ctx->nextStep("checkAge");
+}
+
+function checkAge(Context $ctx)
+{
+    if (ctype_digit($ctx->getMessage()->getText())) {
+        $ctx->sendMessage("Ok perfect, bye");
+        $ctx->endConversation(); //Must be used, this method clean the state for this conversation
+    } else {
+        $ctx->sendMessage("Must be a number, retry");
+        $ctx->redoStep(); //can be omitted used only for readable purpose
+    }
+}
+
+$bot->onCommand("help", function (Context $ctx) {
+    $ctx->sendMessage("Lancia /start per iniziare");
+});
+
+
+$bot->run();
+```
 
 #### It's built on top of ReactPHP
 Last but not least, you can take advantage of all [ReactPHP](https://reactphp.org/) features.
