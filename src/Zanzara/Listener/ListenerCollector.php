@@ -65,7 +65,7 @@ abstract class ListenerCollector
      */
     public function onCommand(string $command, callable $callback): MiddlewareCollector
     {
-        $command = "/$command";
+        $command = "/\/$command/";
         $listener = new Listener($callback, $command);
         $this->listeners['messages'][$command] = $listener;
         return $listener;
@@ -75,12 +75,16 @@ abstract class ListenerCollector
      * Listen for a message with the specified text.
      * Eg. $bot->onText('What time is it?', function(Context $ctx) {});
      *
+     * Text is a regex, so you could also do something like:
+     * $bot->onText('[a-zA-Z]{15}?', function(Context $ctx) {});
+     *
      * @param string $text
      * @param callable $callback
      * @return MiddlewareCollector
      */
     public function onText(string $text, callable $callback): MiddlewareCollector
     {
+        $text = "/$text/";
         $listener = new Listener($callback, $text);
         $this->listeners['messages'][$text] = $listener;
         return $listener;
@@ -139,12 +143,16 @@ abstract class ListenerCollector
      *
      * Eg. $bot->onCbQueryText('How many apples do you want?', function(Context $ctx) {});
      *
+     * Text is a regex, so you could also do something like:
+     * $bot->onText('[a-zA-Z]{27}?', function(Context $ctx) {});
+     *
      * @param string $text
      * @param callable $callback
      * @return MiddlewareCollector
      */
     public function onCbQueryText(string $text, callable $callback): MiddlewareCollector
     {
+        $text = "/$text/";
         $listener = new Listener($callback, $text);
         $this->listeners['cb_query_texts'][$text] = $listener;
         return $listener;
@@ -205,6 +213,7 @@ abstract class ListenerCollector
      */
     public function onConversation(string $conversationId, callable $callback): MiddlewareCollector
     {
+        $conversationId = "/$conversationId/";
         $listener = new Listener($callback, $conversationId);
         $this->listeners['conversations'][$conversationId] = $listener;
         return $listener;
