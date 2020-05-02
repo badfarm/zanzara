@@ -15,7 +15,7 @@ class ZanzaraMapperTest extends TestCase
 
     public function testZanzaraMapper()
     {
-        $mapper = new ZanzaraMapper();
+        $mapper = new ZanzaraMapper(new \JsonMapper());
 
         $json = file_get_contents(__DIR__ . '/one.json');
         /** @var Dummy $dummy */

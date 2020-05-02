@@ -7,7 +7,6 @@ namespace Zanzara;
 use Clue\React\Block;
 use Clue\React\Buzz\Browser;
 use DI\Container;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use React\EventLoop\Factory;
@@ -130,7 +129,7 @@ class Zanzara extends ListenerResolver
                 break;
 
             case Config::WEBHOOK_MODE:
-                $token = $this->resolveTokenFromPath($_SERVER['REQUEST_URI']);
+                $token = $this->resolveTokenFromPath($_SERVER['REQUEST_URI'] ?? '');
                 if (!$this->isWebhookAuthorized($token)) {
                     http_response_code(403);
                     $this->logger->error("Not authorized");
