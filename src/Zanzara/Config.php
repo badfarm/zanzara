@@ -29,6 +29,10 @@ class Config
     public const PARSE_MODE_MARKDOWN = "MarkdownV2";
     public const PARSE_MODE_MARKDOWN_LEGACY = "Markdown";
 
+    /**
+     * @var string
+     */
+    private $botToken;
 
     /**
      * @var LoopInterface|null
@@ -354,6 +358,22 @@ class Config
     public function setContainer(?ContainerInterface $container): void
     {
         $this->container = $container;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBotToken(): string
+    {
+        return $this->botToken;
+    }
+
+    /**
+     * @param string $botToken
+     */
+    public function setBotToken(string $botToken): void
+    {
+        $this->botToken = $botToken;
     }
 
 }

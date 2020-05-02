@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Zanzara\Listener;
 
-use Psr\Container\ContainerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
-use Zanzara\Context;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Update;
@@ -22,44 +20,7 @@ abstract class ListenerResolver extends ListenerCollector
     /**
      * @var CacheInterface
      */
-    private $cache;
-
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
-     * @return CacheInterface
-     */
-    public function getCache(): CacheInterface
-    {
-        return $this->cache;
-    }
-
-    /**
-     * @param CacheInterface $cache
-     */
-    public function setCache(CacheInterface $cache): void
-    {
-        $this->cache = $cache;
-    }
-
-    /**
-     * @return ContainerInterface
-     */
-    public function getContainer(): ContainerInterface
-    {
-        return $this->container;
-    }
-
-    /**
-     * @param ContainerInterface $container
-     */
-    public function setContainer(ContainerInterface $container): void
-    {
-        $this->container = $container;
-    }
+    protected $cache;
 
     /**
      * @param Update $update
@@ -80,15 +41,14 @@ abstract class ListenerResolver extends ListenerCollector
                     if ($listener) {
                         //clean the state because a listener has been found
                         $userId = $update->getEffectiveChat()->getId();
-                        $cache = $this->container->get(CacheInterface::class);
-                        $cache->deleteItem(strval($userId));
+                        $this->cache->deleteItem(strval($userId));
                     } else {
                         //there is no listener so we look for the state
                         $userId = $update->getEffectiveChat()->getId();
                         $handler = $this->cache->getItem(strval($userId))->get();
                         if ($handler) {
-                            //there is the state so we call the handler
-                            call_user_func($handler, new Context($update, $this->container));
+                            // wrap the handler function as listener and push it in the array
+                            $listeners[] = new Listener($handler, $text);
                         }
                     }
                 }

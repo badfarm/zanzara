@@ -8,11 +8,11 @@ use Clue\React\Block;
 use Clue\React\Buzz\Browser;
 use DI\Container;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Http\Response;
 use React\Http\Server;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Contracts\Cache\CacheInterface;
 use Zanzara\Listener\ListenerResolver;
 use Zanzara\Telegram\Telegram;
@@ -26,6 +26,11 @@ use Zanzara\Telegram\Type\Webhook\WebhookInfo;
  */
 class Zanzara extends ListenerResolver
 {
+
+    /**
+     * @var Container
+     */
+    private $container;
 
     /**
      * @var Config
@@ -53,23 +58,24 @@ class Zanzara extends ListenerResolver
     private $loop;
 
     /**
-     * @param string $botKey
+     * @param string $botToken
      * @param Config|null $config
      */
-    public function __construct(string $botKey, ?Config $config = null)
+    public function __construct(string $botToken, ?Config $config = null)
     {
-        $this->config = $config;
-        $this->setContainer($config->getContainer() ?? new Container());
+        $this->config = $config ?? new Config();
+        $this->config->setBotToken($botToken);
+        $this->container = $config->getContainer() ?? new Container();
         $this->loop = ($config->getLoop() ?? Factory::create());
-        $this->getContainer()->set(LoopInterface::class, $this->loop); // loop cannot be created by container
+        $this->container->set(LoopInterface::class, $this->loop); // loop cannot be created by container
         $this->logger = new ZanzaraLogger($config->getLogger());
-        $this->getContainer()->set(ZanzaraLogger::class, $this->logger); // logger cannot be created by container
-        $this->zanzaraMapper = $this->getContainer()->get(ZanzaraMapper::class);
-        $this->getContainer()->set(Browser::class, (new Browser($this->loop)) // browser cannot be created by container
-        ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botKey}"));
-        $this->telegram = $this->getContainer()->get(Telegram::class);
-        $this->setCache($this->config->getCache() ?? new ArrayAdapter());
-        $this->getContainer()->set(CacheInterface::class, $this->getCache());
+        $this->container->set(ZanzaraLogger::class, $this->logger); // logger cannot be created by container
+        $this->zanzaraMapper = $this->container->get(ZanzaraMapper::class);
+        $this->container->set(Browser::class, (new Browser($this->loop)) // browser cannot be created by container
+        ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botToken}"));
+        $this->telegram = $this->container->get(Telegram::class);
+        $this->cache = $this->config->getCache() ?? new ArrayAdapter();
+        $this->container->set(CacheInterface::class, $this->cache);
     }
 
     public function run(): void
@@ -230,7 +236,7 @@ class Zanzara extends ListenerResolver
     private function processUpdate(Update $update)
     {
         $update->detectUpdateType();
-        $context = new Context($update, $this->getContainer());
+        $context = new Context($update, $this->container);
         $listeners = $this->resolve($update);
         foreach ($listeners as $listener) {
             $middlewareTip = $listener->getTip();
@@ -249,6 +255,14 @@ class Zanzara extends ListenerResolver
     public function getLoop(): LoopInterface
     {
         return $this->loop;
+    }
+
+    /**
+     * @return Container
+     */
+    public function getContainer(): Container
+    {
+        return $this->container;
     }
 
 }
