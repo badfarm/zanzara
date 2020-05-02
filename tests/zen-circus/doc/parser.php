@@ -12,7 +12,6 @@ use Zanzara\Telegram\Type\Poll\Poll;
 use Zanzara\Telegram\Type\Update;
 use Zanzara\Telegram\Type\Webhook\WebhookInfo;
 
-
 require "../../../vendor/autoload.php";
 
 $class = new ReflectionClass(TelegramTrait::class);
@@ -91,10 +90,10 @@ foreach ($methods as $method) {
     $res .= "\n";
 }
 
-
 file_put_contents(__DIR__ . '/res.md', $res);
 echo $res;
 
-function fromBackwardToForwardSlashes($string) {
+function fromBackwardToForwardSlashes($string)
+{
     return str_replace("\\", "/", $string);
 }

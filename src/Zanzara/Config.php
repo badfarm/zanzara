@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
-use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use React\EventLoop\LoopInterface;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -45,7 +44,7 @@ class Config
     private $cache;
 
     /**
-     * @var ContainerInterface|null
+     * @var Container|null
      */
     private $container;
 
@@ -345,17 +344,17 @@ class Config
     }
 
     /**
-     * @return ContainerInterface|null
+     * @return Container|null
      */
-    public function getContainer(): ?ContainerInterface
+    public function getContainer(): ?Container
     {
         return $this->container;
     }
 
     /**
-     * @param ContainerInterface|null $container
+     * @param Container|null $container
      */
-    public function setContainer(?ContainerInterface $container): void
+    public function setContainer(?Container $container): void
     {
         $this->container = $container;
     }

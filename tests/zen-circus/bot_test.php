@@ -46,24 +46,20 @@ $bot->onChannelPost(function (Context $ctx) {
     });
 });
 
-
 $bot->onCommand("photo", function (Context $ctx) {
     $chat_id = $ctx->getUpdate()->getEffectiveChat()->getId();
     $ctx->sendPhoto(new InputFile("file/photo.jpeg"));
 });
-
 
 $bot->onCommand("video", function (Context $ctx) {
     $chat_id = $ctx->getUpdate()->getEffectiveChat()->getId();
     $ctx->sendVideo(new InputFile("file/video.mp4"));
 });
 
-
 $bot->onCommand("file", function (Context $ctx) {
     $chat_id = $ctx->getUpdate()->getEffectiveChat()->getId();
     $ctx->sendDocument(new InputFile("file/file.txt"), ["thumb" => new InputFile("file/photo.jpeg")]);
 });
-
 
 echo "The bot is listening ... \n";
 

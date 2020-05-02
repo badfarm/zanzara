@@ -10,9 +10,7 @@ use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Update;
 
 /**
- * Resolves the listeners collected in ListenerCollector accordingly to Telegram Update type.
  *
- * @see ListenerCollector
  */
 abstract class ListenerResolver extends ListenerCollector
 {
@@ -74,12 +72,11 @@ abstract class ListenerResolver extends ListenerCollector
      */
     private function findAndPush(array &$listeners, string $listenerType, string $listenerId): ?Listener
     {
-        if (isset($this->listeners[$listenerType])) {
-            foreach ($this->listeners[$listenerType] as $regex => $listener) {
-                if (preg_match($regex, $listenerId)) {
-                    $listeners[] = $listener;
-                    return $listener;
-                }
+        $typedListeners = $this->listeners[$listenerType] ?? [];
+        foreach ($typedListeners as $regex => $listener) {
+            if (preg_match($regex, $listenerId)) {
+                $listeners[] = $listener;
+                return $listener;
             }
         }
         return null;
