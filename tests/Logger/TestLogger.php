@@ -28,7 +28,9 @@ class TestLogger extends TestCase
         // note: production logger should by async. See https://github.com/WyriHaximus/reactphp-psr-3-loggly
         $logger = new Logger('zanzara');
         $logger->pushHandler(new StreamHandler($logFile, Logger::WARNING));
-        $bot = new Zanzara($_ENV['BOT_KEY'], new Config(), $logger);
+        $config = new Config();
+        $config->setLogger($logger);
+        $bot = new Zanzara($_ENV['BOT_KEY'], $config);
         $telegram = $bot->getTelegram();
         $telegram->sendMessage('Hello', ['chat_id' => (int)$_ENV['CHAT_ID']])->then(
             function (Update $update) {

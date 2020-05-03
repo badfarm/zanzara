@@ -57,7 +57,6 @@ class Zanzara extends ListenerResolver
      */
     private $loop;
 
-
     /**
      * @param string $botToken
      * @param Config|null $config

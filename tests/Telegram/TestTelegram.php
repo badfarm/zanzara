@@ -28,7 +28,7 @@ class TestTelegram extends TestCase
         $bot = new Zanzara($_ENV['BOT_KEY']);
         $telegram = $bot->getTelegram();
 
-        $telegram->getUpdates(1, 1)->then(
+        $telegram->getUpdates(['offset' => 1, 'timeout' => 1])->then(
             function ($updates) {
                 $this->assertIsArray($updates);
             },
@@ -164,7 +164,9 @@ class TestTelegram extends TestCase
         // note: production logger should by async. See https://github.com/WyriHaximus/reactphp-psr-3-loggly
         $logger = new Logger('zanzara');
         $logger->pushHandler(new StreamHandler($logFile, Logger::WARNING));
-        $bot = new Zanzara($_ENV['BOT_KEY'], new Config(), $logger);
+        $config = new Config();
+        $config->setLogger($logger);
+        $bot = new Zanzara($_ENV['BOT_KEY'], $config);
         $telegram = $bot->getTelegram();
         $chatId = (int)$_ENV['CHAT_ID'];
         $telegram->sendBulkMessage([$chatId, $chatId, $chatId], 'Hello');
