@@ -207,19 +207,6 @@ abstract class ListenerCollector
     }
 
     /**
-     * @param string $conversationId
-     * @param callable $callback
-     * @return MiddlewareCollector
-     */
-    public function onConversation(string $conversationId, callable $callback): MiddlewareCollector
-    {
-        $conversationId = "/$conversationId/";
-        $listener = new Listener($callback, $conversationId);
-        $this->listeners['conversations'][$conversationId] = $listener;
-        return $listener;
-    }
-
-    /**
      * Listen for a successful payment.
      * You can call this function more than once, every callback will be executed.
      *
