@@ -12,7 +12,7 @@ $dotenv->load("../../.env");
 
 $config = new Config();
 $config->setLogger(new \Monolog\Logger("test"));
-$config->setCache(new \Symfony\Component\Cache\Adapter\ArrayAdapter());
+$config->setCache(new \React\Cache\ArrayCache());
 $config->setUpdateMode(Config::POLLING_MODE);
 
 

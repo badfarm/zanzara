@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Zanzara\Listener;
 
-use Symfony\Contracts\Cache\CacheInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
+use React\Cache\CacheInterface;
+use Zanzara\Context;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Update;
@@ -16,9 +19,9 @@ abstract class ListenerResolver extends ListenerCollector
 {
 
     /**
-     * @var CacheInterface
+     * @var ContainerInterface
      */
-    protected $cache;
+    protected $container;
 
     /**
      * @param Update $update
@@ -35,19 +38,27 @@ abstract class ListenerResolver extends ListenerCollector
                 $text = $update->getMessage()->getText();
                 if ($text) {
                     $listener = $this->findAndPush($listeners, 'messages', $text);
-                    //todo maybe some problem with the regex handler in the future
+
+                    $cache = $this->container->get(CacheInterface::class);
+
                     if ($listener) {
                         //clean the state because a listener has been found
                         $userId = $update->getEffectiveChat()->getId();
-                        $this->cache->deleteItem(strval($userId));
+                        $cache->delete(strval($userId))->then(function ($result) {
+                            if ($result !== true) {
+                                $this->container->get(LoggerInterface::class)->error($result);
+                            }
+                        });
                     } else {
                         //there is no listener so we look for the state
                         $userId = $update->getEffectiveChat()->getId();
-                        $handler = $this->cache->getItem(strval($userId))->get();
-                        if ($handler) {
-                            // wrap the handler function as listener and push it in the array
-                            $listeners[] = new Listener($handler, $text);
-                        }
+                        $cache->get(strval($userId))->then(function (callable $handler) use ($update) {
+                            if ($handler) {
+                                call_user_func($handler, new Context($update, $this->container));
+                            }
+                        }, function ($error) {
+                            $this->container->get(LoggerInterface::class)->error($error);
+                        });
                     }
                 }
                 break;

@@ -8,12 +8,13 @@ use Clue\React\Block;
 use Clue\React\Buzz\Browser;
 use DI\Container;
 use Psr\Http\Message\ServerRequestInterface;
+use React\Cache\ArrayCache;
+use React\Cache\CacheInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Http\Response;
 use React\Http\Server;
-use Symfony\Component\Cache\Adapter\ArrayAdapter;
-use Symfony\Contracts\Cache\CacheInterface;
+use Throwable;
 use Zanzara\Listener\ListenerResolver;
 use Zanzara\Telegram\Telegram;
 use Zanzara\Telegram\Type\Response\ErrorResponse;
@@ -31,11 +32,6 @@ use Zanzara\Telegram\Type\Webhook\WebhookInfo;
  */
 class Zanzara extends ListenerResolver
 {
-
-    /**
-     * @var Container
-     */
-    private $container;
 
     /**
      * @var Config
@@ -62,6 +58,7 @@ class Zanzara extends ListenerResolver
      */
     private $loop;
 
+
     /**
      * @param string $botToken
      * @param Config|null $config
@@ -79,8 +76,7 @@ class Zanzara extends ListenerResolver
         $this->container->set(Browser::class, (new Browser($this->loop)) // browser cannot be created by container
         ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botToken}"));
         $this->telegram = $this->container->get(Telegram::class);
-        $this->cache = $this->config->getCache() ?? new ArrayAdapter();
-        $this->container->set(CacheInterface::class, $this->cache);
+        $this->container->set(CacheInterface::class, $this->config->getCache() ?? new ArrayCache());
     }
 
     public function run(): void
@@ -219,8 +215,8 @@ class Zanzara extends ListenerResolver
                     foreach ($updates as $update) {
                         try {
                             $this->processUpdate($update);
-                        } catch (\Throwable $e) {
-                            $message = "Failed to process Telegram Update $update, reason: {$e->getMessage()}";
+                        } catch (Throwable $e) {
+                            $message = "Failed to process Telegram Update $update, reason: {$e}";
                             $this->logger->error($message);
                         }
                         $offset++;

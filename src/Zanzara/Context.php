@@ -6,7 +6,8 @@ namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
 use Psr\Container\ContainerInterface;
-use Symfony\Contracts\Cache\CacheInterface;
+use Psr\Log\LoggerInterface;
+use React\Cache\CacheInterface;
 use Zanzara\Telegram\TelegramTrait;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\ChannelPost;
@@ -108,9 +109,12 @@ class Context
     {
         $chatId = $this->update->getEffectiveChat()->getId();
         $cache = $this->container->get(CacheInterface::class);
-        $item = $cache->getItem(strval($chatId));
-        $item->set($handler);
-        $cache->save($item);
+        $cache->set(strval($chatId), $handler)->then(function ($result){
+            if($result !== true){
+                $this->container->get(LoggerInterface::class)->error($result);
+            }
+        });
+
     }
 
     /**
@@ -127,7 +131,11 @@ class Context
     {
         $userId = $this->update->getEffectiveChat()->getId();
         $cache = $this->container->get(CacheInterface::class);
-        $cache->deleteItem(strval($userId));
+        $cache->delete(strval($userId))->then(function ($result){
+            if($result !== true){
+                $this->container->get(LoggerInterface::class)->error($result);
+            }
+        });
     }
 
 }

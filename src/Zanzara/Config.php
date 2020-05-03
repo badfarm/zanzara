@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
+use DI\Container;
 use Psr\Log\LoggerInterface;
+use React\Cache\CacheInterface;
 use React\EventLoop\LoopInterface;
-use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * Configuration for Zanzara. Expected to be used as follow:
