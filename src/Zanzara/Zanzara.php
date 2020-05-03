@@ -22,7 +22,6 @@ use Zanzara\Telegram\Type\Update;
 use Zanzara\Telegram\Type\Webhook\WebhookInfo;
 
 /**
- * /**
  * Framework workflow is:
  * 1) register the listeners (onCommand, onUpdate, etc.) @see ListenerCollector
  * 2) start listening for updates (either via webhook or polling) @see Zanzara::run()
@@ -67,10 +66,10 @@ class Zanzara extends ListenerResolver
     {
         $this->config = $config ?? new Config();
         $this->config->setBotToken($botToken);
-        $this->container = $config->getContainer() ?? new Container();
-        $this->loop = ($config->getLoop() ?? Factory::create());
+        $this->container = $this->config->getContainer() ?? new Container();
+        $this->loop = ($this->config->getLoop() ?? Factory::create());
         $this->container->set(LoopInterface::class, $this->loop); // loop cannot be created by container
-        $this->logger = new ZanzaraLogger($config->getLogger());
+        $this->logger = new ZanzaraLogger($this->config->getLogger());
         $this->container->set(ZanzaraLogger::class, $this->logger); // logger cannot be created by container
         $this->zanzaraMapper = $this->container->get(ZanzaraMapper::class);
         $this->container->set(Browser::class, (new Browser($this->loop)) // browser cannot be created by container

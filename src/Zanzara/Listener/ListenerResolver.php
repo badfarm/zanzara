@@ -54,7 +54,7 @@ abstract class ListenerResolver extends ListenerCollector
                         $userId = $update->getEffectiveChat()->getId();
                         $cache->get(strval($userId))->then(function (callable $handler) use ($update) {
                             if ($handler) {
-                                call_user_func($handler, new Context($update, $this->container));
+                                $handler(new Context($update, $this->container));
                             }
                         }, function ($error) {
                             $this->container->get(LoggerInterface::class)->error($error);
