@@ -43,21 +43,23 @@ abstract class ListenerResolver extends ListenerCollector
 
                     if ($listener) {
                         //clean the state because a listener has been found
-                        $userId = $update->getEffectiveChat()->getId();
-                        $cache->delete(strval($userId))->then(function ($result) {
+                        $chatId = $update->getEffectiveChat()->getId();
+                        $cache->delete(strval($chatId))->then(function ($result) use ($update) {
                             if ($result !== true) {
-                                $this->container->get(LoggerInterface::class)->error($result);
+                                $message = "Failed to clear conversation state from cache, update is $update";
+                                $this->container->get(LoggerInterface::class)->error($message);
                             }
                         });
                     } else {
                         //there is no listener so we look for the state
-                        $userId = $update->getEffectiveChat()->getId();
-                        $cache->get(strval($userId))->then(function (callable $handler) use ($update) {
+                        $chatId = $update->getEffectiveChat()->getId();
+                        $cache->get(strval($chatId))->then(function (callable $handler) use ($update) {
                             if ($handler) {
                                 $handler(new Context($update, $this->container));
                             }
-                        }, function ($error) {
-                            $this->container->get(LoggerInterface::class)->error($error);
+                        }, function ($error) use ($update) {
+                            $message = "Failed to retrieve conversation state from cache for update $update, reason: $error";
+                            $this->container->get(LoggerInterface::class)->error($message);
                         });
                     }
                 }

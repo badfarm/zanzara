@@ -109,9 +109,10 @@ class Context
     {
         $chatId = $this->update->getEffectiveChat()->getId();
         $cache = $this->container->get(CacheInterface::class);
-        $cache->set(strval($chatId), $handler)->then(function ($result){
-            if($result !== true){
-                $this->container->get(LoggerInterface::class)->error($result);
+        $cache->set(strval($chatId), $handler)->then(function ($result) {
+            if ($result !== true) {
+                $message = "Failed to set conversation state into cache, update is {$this->update}";
+                $this->container->get(LoggerInterface::class)->error($message);
             }
         });
 
@@ -125,15 +126,16 @@ class Context
     }
 
     /**
-     * Clean the cache for this userId
+     * Clean the cache for this chatId
      */
     public function endConversation()
     {
-        $userId = $this->update->getEffectiveChat()->getId();
+        $chatId = $this->update->getEffectiveChat()->getId();
         $cache = $this->container->get(CacheInterface::class);
-        $cache->delete(strval($userId))->then(function ($result){
-            if($result !== true){
-                $this->container->get(LoggerInterface::class)->error($result);
+        $cache->delete(strval($chatId))->then(function ($result) {
+            if ($result !== true) {
+                $message = "Failed to clear conversation state from cache, update is {$this->update}";
+                $this->container->get(LoggerInterface::class)->error($message);
             }
         });
     }
