@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Zanzara\Test\PromiseWrapper;
 
 use Clue\React\Buzz\Browser;

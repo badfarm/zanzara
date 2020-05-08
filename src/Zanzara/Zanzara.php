@@ -75,6 +75,7 @@ class Zanzara extends ListenerResolver
         ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botToken}"));
         $this->telegram = $this->container->get(Telegram::class);
         $this->container->set(CacheInterface::class, $this->config->getCache() ?? new ArrayCache());
+        $this->container->set(Config::class, $this->config);
     }
 
     public function run(): void

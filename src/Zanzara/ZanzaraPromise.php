@@ -51,6 +51,13 @@ class ZanzaraPromise implements PromiseInterface
         $this->logger = $container->get(ZanzaraLogger::class);
         $this->promise = $promise;
         $this->class = $class;
+        $this->then(
+            function ($res) {
+            },
+            function (ErrorResponse $error) {
+                $this->logger->error($error);
+            }
+        );
     }
 
     /**
