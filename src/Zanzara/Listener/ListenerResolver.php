@@ -7,6 +7,7 @@ namespace Zanzara\Listener;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use React\Cache\CacheInterface;
+use Throwable;
 use Zanzara\Context;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\Message;
@@ -55,7 +56,12 @@ abstract class ListenerResolver extends ListenerCollector
                         $chatId = $update->getEffectiveChat()->getId();
                         $cache->get(strval($chatId))->then(function (callable $handler) use ($update) {
                             if ($handler) {
-                                $handler(new Context($update, $this->container));
+                                try {
+                                    $handler(new Context($update, $this->container));
+                                } catch (Throwable $e) {
+                                    $message = "Failed to process Telegram Update $update, reason: $e";
+                                    $this->container->get(LoggerInterface::class)->error($message);
+                                }
                             }
                         }, function ($error) use ($update) {
                             $message = "Failed to retrieve conversation state from cache for update $update, reason: $error";

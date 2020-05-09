@@ -25,7 +25,7 @@ Create a file named ```main.php``` and paste the following code:
 
 require __DIR__ . '/../autoload.php';
 
-$bot = new Zanzara($_ENV['BOT_KEY']);
+$bot = new Zanzara($_ENV['BOT_TOKEN']);
 
 $bot->onCommand('start', function (Context $ctx) {
     $ctx->sendMessage('Hello');

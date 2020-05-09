@@ -92,6 +92,7 @@ trait TelegramTrait
     /**
      * Do not use it. Use @see TelegramTrait::sendMessage() instead.
      *
+     * @internal
      * @param array $params
      * @return PromiseInterface
      */
@@ -968,6 +969,12 @@ trait TelegramTrait
      * Use this method to edit text and game messages. On success, if edited message is sent by the bot, the edited @see Message
      * is returned, otherwise True is returned.
      *
+     * By default the chat_id taken from the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
+     * By default the message_id is taken from the context's update. Use $opt param to specify a different
+     * message_id. Eg. $opt = ['message_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#editmessagetext
      *
      * @param string $text
@@ -976,6 +983,8 @@ trait TelegramTrait
      */
     public function editMessageText(string $text, ?array $opt = []): PromiseInterface
     {
+        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
+        $opt['message_id'] = $opt['message_id'] ?? $this->update->getCallbackQuery()->getMessage()->getMessageId();
         $required = compact("text");
         $params = array_merge($required, $opt);
         return new ZanzaraPromise($this->container, $this->callApi("editMessageText", $params), Message::class);

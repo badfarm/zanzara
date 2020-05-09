@@ -140,4 +140,12 @@ class Context
         });
     }
 
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer(): ContainerInterface
+    {
+        return $this->container;
+    }
+
 }
