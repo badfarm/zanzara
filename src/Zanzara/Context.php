@@ -111,11 +111,9 @@ class Context
         $cache = $this->container->get(CacheInterface::class);
         $cache->set(strval($chatId), $handler)->then(function ($result) {
             if ($result !== true) {
-                $message = "Failed to set conversation state into cache, update is {$this->update}";
-                $this->container->get(LoggerInterface::class)->error($message);
+                $this->container->get(ZanzaraLogger::class)->errorWriteConversationCache($this->update, $result);
             }
         });
-
     }
 
     /**
@@ -134,8 +132,7 @@ class Context
         $cache = $this->container->get(CacheInterface::class);
         $cache->delete(strval($chatId))->then(function ($result) {
             if ($result !== true) {
-                $message = "Failed to clear conversation state from cache, update is {$this->update}";
-                $this->container->get(LoggerInterface::class)->error($message);
+                $this->container->get(ZanzaraLogger::class)->errorClearConversationCache($result);
             }
         });
     }

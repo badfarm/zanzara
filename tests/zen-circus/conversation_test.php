@@ -1,5 +1,7 @@
 <?php
 
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Symfony\Component\Dotenv\Dotenv;
 use Zanzara\Config;
 use Zanzara\Context;
@@ -11,12 +13,10 @@ $dotenv = new Dotenv();
 $dotenv->load("../../.env");
 
 $config = new Config();
-$config->setLogger(new \Monolog\Logger("test"));
 $config->setCache(new \React\Cache\ArrayCache());
 $config->setUpdateMode(Config::POLLING_MODE);
 
-
-$bot = new Zanzara( $_ENV['BOT_KEY'], $config);
+$bot = new Zanzara($_ENV['BOT_KEY'], $config);
 
 $bot->onCommand("start", function (Context $ctx) {
     $ctx->sendMessage("Hi, what's your name?");

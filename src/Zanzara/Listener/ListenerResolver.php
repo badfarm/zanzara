@@ -12,6 +12,7 @@ use Zanzara\Context;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Update;
+use Zanzara\ZanzaraLogger;
 
 /**
  *
@@ -47,25 +48,27 @@ abstract class ListenerResolver extends ListenerCollector
                         $chatId = $update->getEffectiveChat()->getId();
                         $cache->delete(strval($chatId))->then(function ($result) use ($update) {
                             if ($result !== true) {
-                                $message = "Failed to clear conversation state from cache, update is $update";
-                                $this->container->get(LoggerInterface::class)->error($message);
+                                $this->container->get(ZanzaraLogger::class)->errorClearConversationCache($result);
                             }
                         });
                     } else {
                         //there is no listener so we look for the state
                         $chatId = $update->getEffectiveChat()->getId();
-                        $cache->get(strval($chatId))->then(function (callable $handler) use ($update) {
+                        $cache->get(strval($chatId))->then(function (callable $handler) use ($update, $cache, $chatId) {
                             if ($handler) {
                                 try {
                                     $handler(new Context($update, $this->container));
-                                } catch (Throwable $e) {
-                                    $message = "Failed to process Telegram Update $update, reason: $e";
-                                    $this->container->get(LoggerInterface::class)->error($message);
+                                } catch (Throwable $err) {
+                                    $this->container->get(ZanzaraLogger::class)->errorUpdate($update, $err);
+                                    $cache->delete(strval($chatId))->then(function ($result) {
+                                        if ($result !== true) {
+                                            $this->container->get(ZanzaraLogger::class)->errorClearConversationCache($result);
+                                        }
+                                    });
                                 }
                             }
-                        }, function ($error) use ($update) {
-                            $message = "Failed to retrieve conversation state from cache for update $update, reason: $error";
-                            $this->container->get(LoggerInterface::class)->error($message);
+                        }, function ($err) use ($update) {
+                            $this->container->get(ZanzaraLogger::class)->errorUpdate($update, $err);
                         });
                     }
                 }

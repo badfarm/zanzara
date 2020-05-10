@@ -184,7 +184,7 @@ class Zanzara extends ListenerResolver
 
         $socket = new \React\Socket\Server($this->config->getServerUri(), $this->loop, $this->config->getServerContext());
         $server->listen($socket);
-        echo "Zanzara is listening...\n";
+        $this->logger->info("Zanzara is listening...");
     }
 
     /**
@@ -215,8 +215,7 @@ class Zanzara extends ListenerResolver
                         try {
                             $this->processUpdate($update);
                         } catch (Throwable $e) {
-                            $message = "Failed to process Telegram Update $update, reason: {$e}";
-                            $this->logger->error($message);
+                            $this->logger->errorUpdate($update, $e);
                         }
                         $offset++;
                     }

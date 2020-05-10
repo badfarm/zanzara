@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zanzara;
 
 use Psr\Log\LoggerInterface;
+use Zanzara\Telegram\Type\Update;
 
 /**
  * @method emergency($message, array $context = array())
@@ -41,6 +42,25 @@ class ZanzaraLogger
         if ($this->logger) {
             call_user_func_array([$this->logger, $name], $arguments);
         }
+    }
+
+    public function errorUpdate(Update $update, $error)
+    {
+        $message = "Failed to process Telegram Update $update, reason: $error";
+        $this->error($message);
+    }
+
+    public function errorClearConversationCache($error)
+    {
+        $message = "Failed to clear conversation state from cache, reason: {$error}";
+        $this->error($message);
+    }
+
+    public function errorWriteConversationCache(Update $update, $error)
+    {
+        $message = "Failed to set conversation state into cache, update is {$update}, reason: {$error}";
+        $this->error($message);
+
     }
 
 }
