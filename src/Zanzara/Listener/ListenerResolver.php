@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Zanzara\Listener;
 
 use Psr\Container\ContainerInterface;
-use Psr\Log\LoggerInterface;
-use React\Cache\CacheInterface;
 use Throwable;
 use Zanzara\Context;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Update;
+use Zanzara\ZanzaraCache;
 use Zanzara\ZanzaraLogger;
 
 /**
@@ -41,35 +40,16 @@ abstract class ListenerResolver extends ListenerCollector
                 if ($text) {
                     $listener = $this->findAndPush($listeners, 'messages', $text);
 
-                    $cache = $this->container->get(CacheInterface::class);
+                    $cache = $this->container->get(ZanzaraCache::class);
 
                     if ($listener) {
                         //clean the state because a listener has been found
                         $chatId = $update->getEffectiveChat()->getId();
-                        $cache->delete(strval($chatId))->then(function ($result) use ($update) {
-                            if ($result !== true) {
-                                $this->container->get(ZanzaraLogger::class)->errorClearConversationCache($result);
-                            }
-                        });
+                        $cache->deleteByChatId($chatId);
                     } else {
                         //there is no listener so we look for the state
                         $chatId = $update->getEffectiveChat()->getId();
-                        $cache->get(strval($chatId))->then(function (callable $handler) use ($update, $cache, $chatId) {
-                            if ($handler) {
-                                try {
-                                    $handler(new Context($update, $this->container));
-                                } catch (Throwable $err) {
-                                    $this->container->get(ZanzaraLogger::class)->errorUpdate($update, $err);
-                                    $cache->delete(strval($chatId))->then(function ($result) {
-                                        if ($result !== true) {
-                                            $this->container->get(ZanzaraLogger::class)->errorClearConversationCache($result);
-                                        }
-                                    });
-                                }
-                            }
-                        }, function ($err) use ($update) {
-                            $this->container->get(ZanzaraLogger::class)->errorUpdate($update, $err);
-                        });
+                        $cache->callHandlerByChatId($chatId, $update, $this->container);
                     }
                 }
                 break;

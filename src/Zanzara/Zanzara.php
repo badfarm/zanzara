@@ -9,7 +9,6 @@ use Clue\React\Buzz\Browser;
 use DI\Container;
 use Psr\Http\Message\ServerRequestInterface;
 use React\Cache\ArrayCache;
-use React\Cache\CacheInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Http\Response;
@@ -68,13 +67,12 @@ class Zanzara extends ListenerResolver
         $this->container = $this->config->getContainer() ?? new Container();
         $this->loop = ($this->config->getLoop() ?? Factory::create());
         $this->container->set(LoopInterface::class, $this->loop); // loop cannot be created by container
-        $this->logger = new ZanzaraLogger($this->config->getLogger());
-        $this->container->set(ZanzaraLogger::class, $this->logger); // logger cannot be created by container
+        $this->container->set(ZanzaraLogger::class,  new ZanzaraLogger($this->config->getLogger())); // logger cannot be created by container
         $this->zanzaraMapper = $this->container->get(ZanzaraMapper::class);
         $this->container->set(Browser::class, (new Browser($this->loop)) // browser cannot be created by container
         ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botToken}"));
         $this->telegram = $this->container->get(Telegram::class);
-        $this->container->set(CacheInterface::class, $this->config->getCache() ?? new ArrayCache());
+        $this->container->set(ZanzaraCache::class, new ZanzaraCache($this->config->getCache() ?? new ArrayCache(), $this->container->get(ZanzaraLogger::class)));
         $this->container->set(Config::class, $this->config);
     }
 

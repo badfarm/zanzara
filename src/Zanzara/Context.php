@@ -108,12 +108,8 @@ class Context
     public function nextStep(callable $handler)
     {
         $chatId = $this->update->getEffectiveChat()->getId();
-        $cache = $this->container->get(CacheInterface::class);
-        $cache->set(strval($chatId), $handler)->then(function ($result) {
-            if ($result !== true) {
-                $this->container->get(ZanzaraLogger::class)->errorWriteConversationCache($this->update, $result);
-            }
-        });
+        $cache = $this->container->get(ZanzaraCache::class);
+        $cache->setByChatId($chatId, $handler);
     }
 
     /**
@@ -129,12 +125,8 @@ class Context
     public function endConversation()
     {
         $chatId = $this->update->getEffectiveChat()->getId();
-        $cache = $this->container->get(CacheInterface::class);
-        $cache->delete(strval($chatId))->then(function ($result) {
-            if ($result !== true) {
-                $this->container->get(ZanzaraLogger::class)->errorClearConversationCache($result);
-            }
-        });
+        $cache = $this->container->get(ZanzaraCache::class);
+        $cache->deleteByChatId($chatId);
     }
 
     /**

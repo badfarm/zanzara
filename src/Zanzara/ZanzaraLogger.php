@@ -56,9 +56,9 @@ class ZanzaraLogger
         $this->error($message);
     }
 
-    public function errorWriteConversationCache(Update $update, $error)
+    public function errorWriteConversationCache($error)
     {
-        $message = "Failed to set conversation state into cache, update is {$update}, reason: {$error}";
+        $message = "Failed to set conversation state into cache, reason: {$error}";
         $this->error($message);
 
     }
