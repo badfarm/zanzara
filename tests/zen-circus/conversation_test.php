@@ -1,7 +1,5 @@
 <?php
 
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 use Symfony\Component\Dotenv\Dotenv;
 use Zanzara\Config;
 use Zanzara\Context;

@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Zanzara\Listener;
 
 use Psr\Container\ContainerInterface;
-use Throwable;
-use Zanzara\Context;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Update;
 use Zanzara\ZanzaraCache;
-use Zanzara\ZanzaraLogger;
 
 /**
  *

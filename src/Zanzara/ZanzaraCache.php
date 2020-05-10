@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Zanzara;
-
 
 use React\Cache\CacheInterface;
 use React\Promise\PromiseInterface;
@@ -23,6 +21,7 @@ class ZanzaraCache
      * @var CacheInterface|null
      */
     private $cache;
+
     /**
      * @var ZanzaraLogger
      */
