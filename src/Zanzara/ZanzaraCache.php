@@ -54,7 +54,7 @@ class ZanzaraCache
         }
     }
 
-    public function deleteByChatId($chatId)
+    public function deleteConversationByChatId($chatId)
     {
         $this->cache->delete($this->getConversationByChatId($chatId))->then(function ($result) {
             if ($result !== true) {
@@ -63,7 +63,7 @@ class ZanzaraCache
         });
     }
 
-    public function setByChatId($chatId, $data)
+    public function setConversationByChatId($chatId, $data)
     {
         $this->cache->set($this->getConversationByChatId($chatId), $data)->then(function ($result) {
             if ($result !== true) {
@@ -80,7 +80,7 @@ class ZanzaraCache
                     $handler(new Context($update, $container));
                 } catch (Throwable $err) {
                     $this->logger->errorUpdate($update, $err);
-                    $this->deleteByChatId($chatId);
+                    $this->deleteConversationByChatId($chatId);
                 }
             }
         }, function ($err) use ($container, $update) {
