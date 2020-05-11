@@ -8,6 +8,7 @@ use Clue\React\Block;
 use Clue\React\Buzz\Browser;
 use DI\Container;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 use React\Cache\ArrayCache;
 use React\Cache\CacheInterface;
 use React\EventLoop\Factory;
@@ -66,9 +67,10 @@ class Zanzara extends ListenerResolver
         $this->config = $config ?? new Config();
         $this->config->setBotToken($botToken);
         $this->container = $this->config->getContainer() ?? new Container();
-        $this->loop = ($this->config->getLoop() ?? Factory::create());
+        $this->loop = $this->config->getLoop() ?? Factory::create();
         $this->container->set(LoopInterface::class, $this->loop); // loop cannot be created by container
-        $this->container->set(ZanzaraLogger::class, new ZanzaraLogger($this->config->getLogger())); // logger cannot be created by container
+        $this->container->set(LoggerInterface::class, $this->config->getLogger());
+        $this->logger = $this->container->get(ZanzaraLogger::class);
         $this->zanzaraMapper = $this->container->get(ZanzaraMapper::class);
         $this->container->set(Browser::class, (new Browser($this->loop)) // browser cannot be created by container
         ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botToken}"));
