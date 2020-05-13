@@ -9,7 +9,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use React\Promise\PromiseInterface;
 use ReflectionFunction;
-use Zanzara\Telegram\Type\Response\ErrorResponse;
+use Zanzara\Telegram\Type\Response\TelegramException;
 
 /**
  * Wrapper for React Promise.
@@ -54,7 +54,7 @@ class ZanzaraPromise implements PromiseInterface
         $this->then(
             function ($res) {
             },
-            function (ErrorResponse $error) {
+            function (TelegramException $error) {
                 $this->logger->error($error);
             }
         );
@@ -85,7 +85,7 @@ class ZanzaraPromise implements PromiseInterface
             },
             function (ResponseException $exception) use ($onRejected) {
                 $json = (string)$exception->getResponse()->getBody();
-                $onRejected($this->zanzaraMapper->mapJson($json, ErrorResponse::class));
+                $onRejected($this->zanzaraMapper->mapJson($json, TelegramException::class));
             },
             $onProgress
         );

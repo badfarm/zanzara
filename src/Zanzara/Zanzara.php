@@ -18,7 +18,7 @@ use React\Http\Server;
 use Throwable;
 use Zanzara\Listener\ListenerResolver;
 use Zanzara\Telegram\Telegram;
-use Zanzara\Telegram\Type\Response\ErrorResponse;
+use Zanzara\Telegram\Type\Response\TelegramException;
 use Zanzara\Telegram\Type\Update;
 use Zanzara\Telegram\Type\Webhook\WebhookInfo;
 
@@ -223,7 +223,7 @@ class Zanzara extends ListenerResolver
                     $this->polling($offset);
                 }
             },
-            function (ErrorResponse $error) use ($offset) {
+            function (TelegramException $error) use ($offset) {
                 $this->logger->error("Failed to fetch updates from Telegram: $error");
                 // recall polling with a configurable delay?
                 $this->polling($offset);

@@ -8,7 +8,7 @@ use React\EventLoop\LoopInterface;
 use React\EventLoop\TimerInterface;
 use Zanzara\Telegram\Telegram;
 use Zanzara\Telegram\Type\Message;
-use Zanzara\Telegram\Type\Response\ErrorResponse;
+use Zanzara\Telegram\Type\Response\TelegramException;
 
 /**
  *
@@ -78,7 +78,7 @@ class MessageQueue
             $this->telegram->doSendMessage($params)->then(
                 function (Message $message) {
                 },
-                function (ErrorResponse $error) {
+                function (TelegramException $error) {
                     $this->logger->error("Failed to send message in bulk mode, reason: $error");
                 }
             );

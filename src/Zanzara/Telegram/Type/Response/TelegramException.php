@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Response;
 
+use Exception;
+
 /**
  *
  */
-class ErrorResponse implements \JsonSerializable
+class TelegramException extends Exception implements \JsonSerializable
 {
 
     /**

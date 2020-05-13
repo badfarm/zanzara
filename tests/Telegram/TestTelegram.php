@@ -9,7 +9,7 @@ use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Zanzara\Config;
 use Zanzara\Telegram\Type\Message;
-use Zanzara\Telegram\Type\Response\ErrorResponse;
+use Zanzara\Telegram\Type\Response\TelegramException;
 use Zanzara\Zanzara;
 
 /**
@@ -32,7 +32,7 @@ class TestTelegram extends TestCase
             function ($updates) {
                 $this->assertIsArray($updates);
             },
-            function (ErrorResponse $error) {
+            function (TelegramException $error) {
                 echo $error;
             }
         );
@@ -53,7 +53,7 @@ class TestTelegram extends TestCase
             function (Message $response) {
                 $this->assertSame('Hello', $response->getText());
             },
-            function (ErrorResponse $error) {
+            function (TelegramException $error) {
                 echo $error;
             }
         );
@@ -73,7 +73,7 @@ class TestTelegram extends TestCase
         $telegram->sendMessage('Hello', ['chat_id' => $chatId])->then(
             function (Message $response) {
             },
-            function (ErrorResponse $response) {
+            function (TelegramException $response) {
                 $this->assertSame('Bad Request: chat not found', $response->getDescription());
                 $this->assertSame(
                     '{"error_code":400,"description":"Bad Request: chat not found"}',
@@ -100,7 +100,7 @@ class TestTelegram extends TestCase
             function (Message $response) {
                 $this->assertSame('Hello', $response->getText());
             },
-            function (ErrorResponse $error) {
+            function (TelegramException $error) {
                 echo $error;
             }
         );
@@ -121,7 +121,7 @@ class TestTelegram extends TestCase
             function (Message $response) {
                 $this->assertSame('Hello', $response->getText());
             },
-            function (ErrorResponse $error) {
+            function (TelegramException $error) {
                 echo $error;
             }
         );
@@ -144,7 +144,7 @@ class TestTelegram extends TestCase
             function (Message $response) {
                 $this->assertSame("<b>Hello</b>", $response->getText());
             },
-            function (ErrorResponse $error) {
+            function (TelegramException $error) {
                 echo $error;
             }
         );

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Zanzara\Telegram;
 
 use Clue\React\Buzz\Browser;
+use Clue\React\Buzz\Message\ResponseException;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
 use React\Promise\PromiseInterface;
 use RingCentral\Psr7\MultipartStream;
 use Zanzara\Config;
@@ -19,9 +21,11 @@ use Zanzara\Telegram\Type\Game\GameHighScore;
 use Zanzara\Telegram\Type\Input\InputFile;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Poll\Poll;
+use Zanzara\Telegram\Type\Response\TelegramException;
 use Zanzara\Telegram\Type\Update;
 use Zanzara\Telegram\Type\Webhook\WebhookInfo;
 use Zanzara\ZanzaraLogger;
+use Zanzara\ZanzaraMapper;
 use Zanzara\ZanzaraPromise;
 
 /**
@@ -108,7 +112,46 @@ trait TelegramTrait
      */
     public function doSendMessage(array $params): PromiseInterface
     {
-        return new ZanzaraPromise($this->container, $this->callApi("sendMessage", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendMessage", $params), Message::class);
+    }
+
+    /**
+     * ZanzaraPromise class was removed since it swallowed the promise chain.
+     * We actually have to call the original promise, get the response and propagate the casted response along
+     * the promise chain.
+     * For the rejected promise, we have to cast the original exception to a TelegramException and rethrow it
+     * in order to let the user receive the exception in his onRejected function.
+     *
+     * Unfortunately, we don't have control on user's callback input parameter anymore. In this way the user
+     * needs to manage the otherwise() promise callback to see the error.
+     *
+     * @param PromiseInterface $promise
+     * @param string $class
+     * @return PromiseInterface
+     */
+    private function wrapPromise(PromiseInterface $promise, string $class = "Scalar"): PromiseInterface
+    {
+        $mapper = $this->container->get(ZanzaraMapper::class);
+        $logger = $this->container->get(ZanzaraLogger::class);
+
+        return $promise->then(
+            function (ResponseInterface $response) use ($class, $mapper) {
+                $json = (string)$response->getBody();
+                $object = json_decode($json);
+
+                if (is_scalar($object->result) && $class === "Scalar") {
+                    return $object->result;
+                }
+
+                return $mapper->mapObject($object->result, $class);
+            },
+            function (ResponseException $exception) use ($logger, $mapper) {
+                $json = (string)$exception->getResponse()->getBody();
+                $telegramException = $mapper->mapJson($json, TelegramException::class);
+                $logger->error($telegramException);
+                throw $telegramException;
+            }
+        );
     }
 
     /**
