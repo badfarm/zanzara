@@ -78,7 +78,17 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#sendmessage
      *
      * @param string $text
-     * @param array|null $opt
+     * @param array|null $opt = [
+     *     'chat_id' => 123456789,
+     *     'parse_mode' => 'HTML',
+     *     'disable_web_page_preview' => true,
+     *     'disable_notification' => true,
+     *     'reply_to_message_id' => 123456789,
+     *     'reply_markup' => ['force_reply' => true],
+     *     'reply_markup' => ['inline_keyboard' => [[
+     *          ['callback_data' => 'data', 'text' => 'text']
+     *      ]]
+     * ]
      * @return PromiseInterface
      */
     public function sendMessage(string $text, ?array $opt = [])
