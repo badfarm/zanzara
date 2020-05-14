@@ -26,7 +26,6 @@ use Zanzara\Telegram\Type\Update;
 use Zanzara\Telegram\Type\Webhook\WebhookInfo;
 use Zanzara\ZanzaraLogger;
 use Zanzara\ZanzaraMapper;
-use Zanzara\ZanzaraPromise;
 
 /**
  * Class that interacts with Telegram Api.
@@ -70,7 +69,7 @@ trait TelegramTrait
             "timeout" => $opt['timeout'] + 10 //timout browser necessary bigger than telegram timeout. They can't be equal
         ));
 
-        return new ZanzaraPromise($this->container, $browser->get("$method?$query"), Update::class);
+        return $this->wrapPromise($browser->get("$method?$query"), Update::class);
     }
 
     /**
@@ -116,45 +115,6 @@ trait TelegramTrait
     }
 
     /**
-     * ZanzaraPromise class was removed since it swallowed the promise chain.
-     * We actually have to call the original promise, get the response and propagate the casted response along
-     * the promise chain.
-     * For the rejected promise, we have to cast the original exception to a TelegramException and rethrow it
-     * in order to let the user receive the exception in his onRejected function.
-     *
-     * Unfortunately, we don't have control on user's callback input parameter anymore. In this way the user
-     * needs to manage the otherwise() promise callback to see the error.
-     *
-     * @param PromiseInterface $promise
-     * @param string $class
-     * @return PromiseInterface
-     */
-    private function wrapPromise(PromiseInterface $promise, string $class = "Scalar"): PromiseInterface
-    {
-        $mapper = $this->container->get(ZanzaraMapper::class);
-        $logger = $this->container->get(ZanzaraLogger::class);
-
-        return $promise->then(
-            function (ResponseInterface $response) use ($class, $mapper) {
-                $json = (string)$response->getBody();
-                $object = json_decode($json);
-
-                if (is_scalar($object->result) && $class === "Scalar") {
-                    return $object->result;
-                }
-
-                return $mapper->mapObject($object->result, $class);
-            },
-            function (ResponseException $exception) use ($logger, $mapper) {
-                $json = (string)$exception->getResponse()->getBody();
-                $telegramException = $mapper->mapJson($json, TelegramException::class);
-                $logger->error($telegramException);
-                throw $telegramException;
-            }
-        );
-    }
-
-    /**
      * Use this method to send a message to many chats. This method takes care of sending the message
      * with a delay in order avoid 429 Telegram errors (https://core.telegram.org/bots/faq#broadcasting-to-users).
      *
@@ -187,7 +147,7 @@ trait TelegramTrait
     {
         $required = compact("url");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("setWebhook", $params));
+        return $this->wrapPromise($this->callApi("setWebhook", $params));
     }
 
     /**
@@ -200,7 +160,7 @@ trait TelegramTrait
      */
     public function getWebhookInfo(): PromiseInterface
     {
-        return new ZanzaraPromise($this->container, $this->callApi("getWebhookInfo"), WebhookInfo::class);
+        return $this->wrapPromise($this->callApi("getWebhookInfo"), WebhookInfo::class);
     }
 
     /**
@@ -213,7 +173,7 @@ trait TelegramTrait
      */
     public function deleteWebhook(): PromiseInterface
     {
-        return new ZanzaraPromise($this->container, $this->callApi("deleteWebhook"));
+        return $this->wrapPromise($this->callApi("deleteWebhook"));
     }
 
     /**
@@ -231,7 +191,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "from_chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("forwardMessage", $params), Message::class);
+        return $this->wrapPromise($this->callApi("forwardMessage", $params), Message::class);
     }
 
     /**
@@ -254,7 +214,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("photo");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendPhoto", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendPhoto", $params), Message::class);
     }
 
     /**
@@ -279,7 +239,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("audio");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendAudio", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendAudio", $params), Message::class);
     }
 
     /**
@@ -303,7 +263,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("document");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendDocument", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendDocument", $params), Message::class);
     }
 
     /**
@@ -328,7 +288,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("video");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendVideo", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendVideo", $params), Message::class);
     }
 
     /**
@@ -353,7 +313,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("animation");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendAnimation", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendAnimation", $params), Message::class);
     }
 
     /**
@@ -379,7 +339,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("voice");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendVoice", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendVoice", $params), Message::class);
     }
 
     /**
@@ -403,7 +363,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("video_note");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendVideoNote", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendVideoNote", $params), Message::class);
     }
 
     /**
@@ -423,7 +383,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("media");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendMediaGroup", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendMediaGroup", $params), Message::class);
     }
 
     /**
@@ -444,7 +404,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("latitude", "longitude");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendLocation", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendLocation", $params), Message::class);
     }
 
     /**
@@ -464,7 +424,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("latitude", "longitude");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("editMessageLiveLocation", $params), Message::class);
+        return $this->wrapPromise($this->callApi("editMessageLiveLocation", $params), Message::class);
     }
 
     /**
@@ -479,7 +439,7 @@ trait TelegramTrait
     public function stopMessageLiveLocation(?array $opt = []): PromiseInterface
     {
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
-        return new ZanzaraPromise($this->container, $this->callApi("stopMessageLiveLocation", $opt), Message::class);
+        return $this->wrapPromise($this->callApi("stopMessageLiveLocation", $opt), Message::class);
     }
 
     /**
@@ -502,7 +462,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("latitude", "longitude", "title", "address");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendVenue", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendVenue", $params), Message::class);
     }
 
     /**
@@ -523,7 +483,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("phone_number", "first_name");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendContact", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendContact", $params), Message::class);
     }
 
     /**
@@ -544,7 +504,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("question", "options");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendPoll", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendPoll", $params), Message::class);
     }
 
     /**
@@ -563,7 +523,7 @@ trait TelegramTrait
     public function sendDice(?array $opt = []): PromiseInterface
     {
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
-        return new ZanzaraPromise($this->container, $this->callApi("sendDice", $opt), Message::class);
+        return $this->wrapPromise($this->callApi("sendDice", $opt), Message::class);
     }
 
     /**
@@ -585,7 +545,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("action");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendChatAction", $params));
+        return $this->wrapPromise($this->callApi("sendChatAction", $params));
     }
 
     /**
@@ -601,7 +561,7 @@ trait TelegramTrait
     {
         $required = compact("user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("getUserProfilePhotos", $params), UserProfilePhotos::class);
+        return $this->wrapPromise($this->callApi("getUserProfilePhotos", $params), UserProfilePhotos::class);
     }
 
     /**
@@ -621,7 +581,7 @@ trait TelegramTrait
     {
         $required = compact("file_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("getFile", $params), File::class);
+        return $this->wrapPromise($this->callApi("getFile", $params), File::class);
     }
 
     /**
@@ -641,7 +601,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("kickChatMember", $params));
+        return $this->wrapPromise($this->callApi("kickChatMember", $params));
     }
 
     /**
@@ -660,7 +620,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("unbanChatMember", $params));
+        return $this->wrapPromise($this->callApi("unbanChatMember", $params));
     }
 
     /**
@@ -680,7 +640,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id", "permissions");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("restrictChatMember", $params));
+        return $this->wrapPromise($this->callApi("restrictChatMember", $params));
     }
 
     /**
@@ -699,7 +659,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("promoteChatMember", $params));
+        return $this->wrapPromise($this->callApi("promoteChatMember", $params));
     }
 
     /**
@@ -717,7 +677,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id", "custom_title");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("setChatAdministratorCustomTitle", $params));
+        return $this->wrapPromise($this->callApi("setChatAdministratorCustomTitle", $params));
     }
 
     /**
@@ -735,7 +695,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "permissions");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("setChatPermissions", $params));
+        return $this->wrapPromise($this->callApi("setChatPermissions", $params));
     }
 
     /**
@@ -753,7 +713,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("exportChatInviteLink", $params));
+        return $this->wrapPromise($this->callApi("exportChatInviteLink", $params));
     }
 
     /**
@@ -771,7 +731,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "photo");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("setChatPhoto", $params)); //bool
+        return $this->wrapPromise($this->callApi("setChatPhoto", $params)); //bool
     }
 
     /**
@@ -788,7 +748,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("deleteChatPhoto", $params));
+        return $this->wrapPromise($this->callApi("deleteChatPhoto", $params));
     }
 
     /**
@@ -806,7 +766,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "title");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("setChatTitle", $params));
+        return $this->wrapPromise($this->callApi("setChatTitle", $params));
     }
 
     /**
@@ -823,7 +783,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("setChatDescription", $params));
+        return $this->wrapPromise($this->callApi("setChatDescription", $params));
     }
 
     /**
@@ -842,7 +802,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("pinChatMessage", $params));
+        return $this->wrapPromise($this->callApi("pinChatMessage", $params));
     }
 
     /**
@@ -860,7 +820,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("unpinChatMessage", $params));
+        return $this->wrapPromise($this->callApi("unpinChatMessage", $params));
     }
 
     /**
@@ -876,7 +836,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("leaveChat", $params));
+        return $this->wrapPromise($this->callApi("leaveChat", $params));
     }
 
     /**
@@ -893,7 +853,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("getChat", $params), Chat::class);
+        return $this->wrapPromise($this->callApi("getChat", $params), Chat::class);
     }
 
     /**
@@ -911,7 +871,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("getChatAdministrators", $params), ChatMember::class);
+        return $this->wrapPromise($this->callApi("getChatAdministrators", $params), ChatMember::class);
     }
 
     /**
@@ -927,7 +887,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("getChatMembersCount", $params)); //integer
+        return $this->wrapPromise($this->callApi("getChatMembersCount", $params)); //integer
     }
 
     /**
@@ -944,7 +904,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("getChatMember", $params), ChatMember::class);
+        return $this->wrapPromise($this->callApi("getChatMember", $params), ChatMember::class);
     }
 
     /**
@@ -963,7 +923,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "sticker_set_name");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("setChatStickerSet", $params));
+        return $this->wrapPromise($this->callApi("setChatStickerSet", $params));
     }
 
     /**
@@ -981,7 +941,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("deleteChatStickerSet", $params));
+        return $this->wrapPromise($this->callApi("deleteChatStickerSet", $params));
     }
 
     /**
@@ -999,7 +959,7 @@ trait TelegramTrait
     public function answerCallbackQuery(?array $opt = []): PromiseInterface
     {
         $opt['callback_query_id'] = $opt['callback_query_id'] ?? $this->update->getCallbackQuery()->getId();
-        return new ZanzaraPromise($this->container, $this->callApi("answerCallbackQuery", $opt));
+        return $this->wrapPromise($this->callApi("answerCallbackQuery", $opt));
     }
 
     /**
@@ -1015,7 +975,7 @@ trait TelegramTrait
     {
         $required = compact("commands");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("setMyCommands", $params));
+        return $this->wrapPromise($this->callApi("setMyCommands", $params));
     }
 
     /**
@@ -1040,7 +1000,7 @@ trait TelegramTrait
         $opt['message_id'] = $opt['message_id'] ?? $this->update->getCallbackQuery()->getMessage()->getMessageId();
         $required = compact("text");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("editMessageText", $params), Message::class);
+        return $this->wrapPromise($this->callApi("editMessageText", $params), Message::class);
     }
 
     /**
@@ -1054,7 +1014,7 @@ trait TelegramTrait
      */
     public function editMessageCaption(?array $opt = []): PromiseInterface
     {
-        return new ZanzaraPromise($this->container, $this->callApi("editMessageCaption", $opt), Message::class);
+        return $this->wrapPromise($this->callApi("editMessageCaption", $opt), Message::class);
     }
 
     /**
@@ -1074,7 +1034,7 @@ trait TelegramTrait
     {
         $required = compact("media");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("editMessageMedia", $params), Message::class);
+        return $this->wrapPromise($this->callApi("editMessageMedia", $params), Message::class);
     }
 
     /**
@@ -1088,7 +1048,7 @@ trait TelegramTrait
      */
     public function editMessageReplyMarkup(?array $opt = []): PromiseInterface
     {
-        return new ZanzaraPromise($this->container, $this->callApi("editMessageReplyMarkup", $opt), Message::class);
+        return $this->wrapPromise($this->callApi("editMessageReplyMarkup", $opt), Message::class);
     }
 
     /**
@@ -1106,7 +1066,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("stopPoll", $params), Poll::class);
+        return $this->wrapPromise($this->callApi("stopPoll", $params), Poll::class);
     }
 
     /**
@@ -1129,7 +1089,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("deleteMessage", $params));
+        return $this->wrapPromise($this->callApi("deleteMessage", $params));
     }
 
     /**
@@ -1152,7 +1112,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("sticker");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendSticker", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendSticker", $params), Message::class);
     }
 
     /**
@@ -1168,7 +1128,7 @@ trait TelegramTrait
     {
         $required = compact("name");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("getStickerSet", $params), StickerSet::class);
+        return $this->wrapPromise($this->callApi("getStickerSet", $params), StickerSet::class);
     }
 
     /**
@@ -1186,7 +1146,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "png_sticker");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("uploadStickerFile", $params), File::class);
+        return $this->wrapPromise($this->callApi("uploadStickerFile", $params), File::class);
     }
 
     /**
@@ -1209,7 +1169,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "name", "title", "emojis");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("createNewStickerSet", $params));
+        return $this->wrapPromise($this->callApi("createNewStickerSet", $params));
     }
 
     /**
@@ -1233,7 +1193,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "name", "png_sticker", "emojis");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("addStickerToSet", $params));
+        return $this->wrapPromise($this->callApi("addStickerToSet", $params));
     }
 
     /**
@@ -1250,7 +1210,7 @@ trait TelegramTrait
     {
         $required = compact("sticker", "position");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("setStickerPositionInSet", $params));
+        return $this->wrapPromise($this->callApi("setStickerPositionInSet", $params));
     }
 
     /**
@@ -1266,7 +1226,7 @@ trait TelegramTrait
     {
         $required = compact("sticker");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("deleteStickerFromSet", $params));
+        return $this->wrapPromise($this->callApi("deleteStickerFromSet", $params));
     }
 
     /**
@@ -1287,7 +1247,7 @@ trait TelegramTrait
     {
         $required = compact("name", "user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("setStickerSetThumb", $params));
+        return $this->wrapPromise($this->callApi("setStickerSetThumb", $params));
     }
 
     /**
@@ -1308,7 +1268,7 @@ trait TelegramTrait
         $opt['inline_query_id'] = $opt['inline_query_id'] ?? $this->update->getInlineQuery()->getId();
         $required = compact("results");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("answerInlineQuery", $params));
+        return $this->wrapPromise($this->callApi("answerInlineQuery", $params));
     }
 
     /**
@@ -1334,7 +1294,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("title", "description", "payload", "provider_token", "start_parameter", "currency", "prices");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendInvoice", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendInvoice", $params), Message::class);
     }
 
     /**
@@ -1356,7 +1316,7 @@ trait TelegramTrait
         $opt['shipping_query_id'] = $opt['shipping_query_id'] ?? $this->update->getShippingQuery()->getId();
         $required = compact("ok");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("answerShippingQuery", $params));
+        return $this->wrapPromise($this->callApi("answerShippingQuery", $params));
     }
 
     /**
@@ -1379,7 +1339,7 @@ trait TelegramTrait
         $opt['pre_checkout_query_id'] = $opt['pre_checkout_query_id'] ?? $this->update->getPreCheckoutQuery()->getId();
         $required = compact("ok");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("answerPreCheckoutQuery", $params));
+        return $this->wrapPromise($this->callApi("answerPreCheckoutQuery", $params));
     }
 
     /**
@@ -1398,7 +1358,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "errors");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("setPassportDataErrors", $params));
+        return $this->wrapPromise($this->callApi("setPassportDataErrors", $params));
     }
 
     /**
@@ -1418,7 +1378,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("game_short_name");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("sendGame", $params), Message::class);
+        return $this->wrapPromise($this->callApi("sendGame", $params), Message::class);
     }
 
     /**
@@ -1437,7 +1397,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "score");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("setGameScore", $params), Message::class);
+        return $this->wrapPromise($this->callApi("setGameScore", $params), Message::class);
     }
 
     /**
@@ -1454,7 +1414,7 @@ trait TelegramTrait
     {
         $required = compact("user_id");
         $params = array_merge($required, $opt);
-        return new ZanzaraPromise($this->container, $this->callApi("getGameHighScores", $params), GameHighScore::class);
+        return $this->wrapPromise($this->callApi("getGameHighScores", $params), GameHighScore::class);
     }
 
     /**
@@ -1503,4 +1463,43 @@ trait TelegramTrait
         }
         return new MultipartStream($multipart_data);
     }
+
+    /**
+     * ZanzaraPromise class was removed since it swallowed the promise chain.
+     * We actually have to call the original promise, get the response and propagate the casted response along
+     * the promise chain.
+     * For the rejected promise, we have to cast the original exception to a TelegramException and rethrow it
+     * in order to let the user receive the exception in his onRejected function.
+     *
+     * Unfortunately, we don't have control on user's callback input parameter anymore. In this way the user
+     * needs to manage the otherwise() promise callback to see the error.
+     *
+     * @param PromiseInterface $promise
+     * @param string $class
+     * @return PromiseInterface
+     */
+    private function wrapPromise(PromiseInterface $promise, string $class = "Scalar"): PromiseInterface
+    {
+        $mapper = $this->container->get(ZanzaraMapper::class);
+        $logger = $this->container->get(ZanzaraLogger::class);
+
+        return $promise
+            ->then(function (ResponseInterface $response) use ($class, $mapper) {
+                $json = (string)$response->getBody();
+                $object = json_decode($json);
+
+                if (is_scalar($object->result) && $class === "Scalar") {
+                    return $object->result;
+                }
+
+                return $mapper->mapObject($object->result, $class);
+
+            }, function (ResponseException $exception) use ($logger, $mapper) {
+                $json = (string)$exception->getResponse()->getBody();
+                $telegramException = $mapper->mapJson($json, TelegramException::class);
+                $logger->error($telegramException);
+                throw $telegramException;
+            });
+    }
+
 }
