@@ -90,7 +90,10 @@ trait TelegramTrait
      *     'reply_markup' => ['force_reply' => true],
      *     'reply_markup' => ['inline_keyboard' => [[
      *          ['callback_data' => 'data', 'text' => 'text']
-     *      ]]
+     *      ]]],
+     *      'reply_markup' => ['resize_keyboard' => true, 'one_time_keyboard' => true, 'selective' => true, 'keyboard' => [[
+     *          ['text' => 'text', 'request_contact' => true, 'request_location' => true, 'request_poll' => ['type' => 'quiz']]
+     *      ]]]
      * ]
      * @return PromiseInterface
      */
@@ -991,7 +994,11 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#editmessagetext
      *
      * @param string $text
-     * @param array|null $opt
+     * @param array|null $opt = [
+     *     'reply_markup' => ['inline_keyboard' => [[
+     *          ['callback_data' => 'data', 'text' => 'text']
+     *      ]]]
+     * ]
      * @return PromiseInterface
      */
     public function editMessageText(string $text, ?array $opt = []): PromiseInterface
@@ -1294,6 +1301,16 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("title", "description", "payload", "provider_token", "start_parameter", "currency", "prices");
         $params = array_merge($required, $opt);
+        return $this->wrapPromise($this->callApi("sendInvoice", $params), Message::class);
+    }
+
+    /**
+     * @param array $params
+     * @return PromiseInterface
+     */
+    public function doSendInvoice(array $params): PromiseInterface
+    {
+        $params['chat_id'] = $params['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         return $this->wrapPromise($this->callApi("sendInvoice", $params), Message::class);
     }
 
