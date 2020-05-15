@@ -1315,16 +1315,6 @@ trait TelegramTrait
     }
 
     /**
-     * @param array $params
-     * @return PromiseInterface
-     */
-    public function doSendInvoice(array $params): PromiseInterface
-    {
-        $params['chat_id'] = $params['chat_id'] ?? $this->update->getEffectiveChat()->getId();
-        return $this->wrapPromise($this->callApi("sendInvoice", $params), Message::class);
-    }
-
-    /**
      * If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will
      * send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success,
      * True is returned.
