@@ -144,7 +144,7 @@ abstract class ListenerCollector
      * Eg. $bot->onCbQueryText('How many apples do you want?', function(Context $ctx) {});
      *
      * Text is a regex, so you could also do something like:
-     * $bot->onText('[a-zA-Z]{27}?', function(Context $ctx) {});
+     * $bot->onCbQueryText('[a-zA-Z]{27}?', function(Context $ctx) {});
      *
      * @param string $text
      * @param callable $callback
@@ -155,6 +155,28 @@ abstract class ListenerCollector
         $text = "/$text/";
         $listener = new Listener($callback, $text);
         $this->listeners['cb_query_texts'][$text] = $listener;
+        return $listener;
+    }
+
+    /**
+     * Listen for a callback query with the specified callback data.
+     *
+     * Eg. $bot->onCbQueryData(['accept', 'refuse'], function(Context $ctx) {});
+     *
+     * Data values are a regex, so you could also do something like:
+     * $bot->onCbQueryData(['acc.'], function(Context $ctx) {});
+     *
+     * @param array $data
+     * @param callable $callback
+     * @return MiddlewareCollector
+     */
+    public function onCbQueryData(array $data, callable $callback): MiddlewareCollector
+    {
+        // merge values with "|" (eg. "accept|refuse|later"), then ListenerResolver will check the callback data
+        // against that regex.
+        $id = '/' . implode('|', $data) . '/';
+        $listener = new Listener($callback, $id);
+        $this->listeners['cb_query_data'][$id] = $listener;
         return $listener;
     }
 
