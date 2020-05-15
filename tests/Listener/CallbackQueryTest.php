@@ -37,6 +37,20 @@ class CallbackQueryTest extends TestCase
         $bot->run();
     }
 
+    public function testCbQueryData()
+    {
+        $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateStream(__DIR__ . '/../update_types/callback_query.json');
+        $bot = new Zanzara("test", $config);
+
+        $bot->onCbQueryData(['read', 'write'], function (Context $ctx) {
+            $this->assertCallbackQuery($ctx->getCallbackQuery());
+        });
+
+        $bot->run();
+    }
+
     private function assertCallbackQuery(CallbackQuery $callbackQuery)
     {
         $message = $callbackQuery->getMessage();
