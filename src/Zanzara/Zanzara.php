@@ -198,36 +198,31 @@ class Zanzara extends ListenerResolver
             'limit' => $this->config->getPollingLimit(),
             'timeout' => $this->config->getPollingTimeout(),
             'allowed_updates' => $this->config->getPollingAllowedUpdates(),
-        ])->then(
-            function (array $updates) use ($offset) {
-
-                if ($offset === 1) {
-                    //first run I need to get the current updateId from telegram
-
-                    $lastUpdate = end($updates);
-
-                    if ($lastUpdate) {
-                        $offset = $lastUpdate->getUpdateId();
-                    }
-                    $this->polling($offset);
-                } else {
-                    /** @var Update[] $updates */
-                    foreach ($updates as $update) {
-                        try {
-                            $this->processUpdate($update);
-                        } catch (Throwable $e) {
-                            $this->logger->errorUpdate($update, $e);
-                        }
-                        $offset++;
-                    }
-                    $this->polling($offset);
+        ])->then(function (array $updates) use (&$offset) {
+            if ($offset === 1) {
+                //first run I need to get the current updateId from telegram
+                $lastUpdate = end($updates);
+                if ($lastUpdate) {
+                    $offset = $lastUpdate->getUpdateId();
                 }
-            },
-            function (TelegramException $error) use ($offset) {
-                $this->logger->error("Failed to fetch updates from Telegram: $error");
-                // recall polling with a configurable delay?
                 $this->polling($offset);
-            });
+            } else {
+                /** @var Update[] $updates */
+                foreach ($updates as $update) {
+                    // increase the offset before executing the update, this way if the update processing fails
+                    // the framework doesn't try to execute it endlessly
+                    $offset++;
+                    $this->processUpdate($update);
+                }
+                $this->polling($offset);
+            }
+        }, function (TelegramException $error) use (&$offset) {
+            $this->logger->error("Failed to fetch updates from Telegram: $error");
+            $this->polling($offset); // consider place a delay before restarting to poll
+        })->otherwise(function ($e) use (&$offset) {
+            $this->logger->errorUpdate($e);
+            $this->polling($offset); // consider place a delay before restarting to poll
+        });
     }
 
     /**

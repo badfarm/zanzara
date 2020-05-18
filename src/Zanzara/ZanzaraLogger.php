@@ -38,15 +38,15 @@ class ZanzaraLogger
     public function __call($name, $arguments)
     {
         $message = $arguments[0];
-        echo "$message" . PHP_EOL;
+        echo $message . PHP_EOL;
         if ($this->logger) {
             call_user_func_array([$this->logger, $name], $arguments);
         }
     }
 
-    public function errorUpdate(Update $update, $error)
+    public function errorUpdate($error, ?Update $update = null)
     {
-        $message = "Failed to process Telegram Update $update, reason: $error";
+        $message = "Failed to process Telegram update $update, reason: $error";
         $this->error($message);
     }
 
