@@ -20,20 +20,19 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.1",
         "ext-json": "*",
-        "netresearch/jsonmapper": "^2.0",
-        "react/event-loop": "^1.1",
-        "react/http": "^0.8.6",
-        "react/react": "1.0",
-        "clue/buzz-react": "2.7",
+        "ext-readline": "*",
         "psr/log": "^1.1",
         "psr/container": "^1.0",
-        "clue/block-react": "1.3.1",
         "php-di/php-di": "^6.1",
+        "react/event-loop": "^1.1",
+        "react/http": "^0.8.6",
+        "react/react": "^1.0",
+        "react/cache": "^1.0.0",
+        "clue/buzz-react": "^2.7",
         "php-http/multipart-stream-builder": "^1.1",
-        "ext-readline": "*",
-        "react/cache": "^1.0.0"
+        "netresearch/jsonmapper": "^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5",

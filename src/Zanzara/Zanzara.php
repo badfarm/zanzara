@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
-use Clue\React\Block;
 use Clue\React\Buzz\Browser;
 use DI\Container;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,7 +14,6 @@ use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Http\Response;
 use React\Http\Server;
-use Throwable;
 use Zanzara\Listener\ListenerResolver;
 use Zanzara\Telegram\Telegram;
 use Zanzara\Telegram\Type\Response\TelegramException;
@@ -86,43 +84,49 @@ class Zanzara extends ListenerResolver
         switch ($this->config->getUpdateMode()) {
 
             case Config::REACTPHP_WEBHOOK_MODE:
-                /** @var WebhookInfo $webhookInfo */
-                $webhookInfo = Block\await($this->telegram->getWebhookInfo(), $this->loop);
-                if (!$webhookInfo->getUrl()) {
-                    $message = "Your bot doesn't have a webhook set, please set one before running Zanzara in webhook" .
-                        " mode. See https://core.telegram.org/bots/api#setwebhook";
-                    $this->logger->error($message);
-                } else {
-                    $this->startReactPHPServer();
-                }
+                $this->telegram->getWebhookInfo()->then(
+                    function (WebhookInfo $webhookInfo) {
+                        if (!$webhookInfo->getUrl()) {
+                            $message = "Your bot doesn't have a webhook set, please set one before running Zanzara in webhook" .
+                                " mode. See https://core.telegram.org/bots/api#setwebhook";
+                            $this->logger->error($message);
+                            return;
+                        }
+                        $this->startReactPHPServer();
+                    }
+                );
                 break;
 
             case Config::POLLING_MODE:
-                /** @var WebhookInfo $webhookInfo */
-                $webhookInfo = Block\await($this->telegram->getWebhookInfo(), $this->loop);
-                if ($webhookInfo->getUrl()) {
-                    $message = "Your bot has a webhook set, please delete it before running Zanzara in polling mode. " .
-                        "See https://core.telegram.org/bots/api#deletewebhook";
-                    $this->logger->error($message);
-                    echo "Type 'yes' if you want to delete the webhook: ";
-                    $answer = readline();
-                    if (strtoupper($answer) === "YES") {
-                        $delete = Block\await($this->telegram->deleteWebhook(), $this->loop);
-                        if ($delete === true) {
-                            $this->logger->info("Webhook is deleted, Zanzara is starting in polling ...");
+                $this->telegram->getWebhookInfo()->then(
+                    function (WebhookInfo $webhookInfo) {
+                        if (!$webhookInfo->getUrl()) {
                             $this->loop->futureTick([$this, 'polling']);
                             echo "Zanzara is listening...\n";
-                        } else {
-                            $this->logger->error("Error deleting webhook: {$delete}");
+                            return;
                         }
-                    } else {
-                        echo "Shutdown, you have to manually delete the webhook or start in webhook mode";
+                        $message = "Your bot has a webhook set, please delete it before running Zanzara in polling mode. " .
+                            "See https://core.telegram.org/bots/api#deletewebhook";
+                        $this->logger->error($message);
+                        echo "Type 'yes' if you want to delete the webhook: ";
+                        $answer = readline();
+                        if (strtoupper($answer) === "YES") {
+                            $this->telegram->deleteWebhook()->then(
+                                function ($res) {
+                                    if ($res === true) {
+                                        $this->logger->info("Webhook is deleted, Zanzara is starting in polling ...");
+                                        $this->loop->futureTick([$this, 'polling']);
+                                        echo "Zanzara is listening...\n";
+                                    } else {
+                                        $this->logger->error("Error deleting webhook");
+                                    }
+                                }
+                            );
+                        } else {
+                            echo "Shutdown, you have to manually delete the webhook or start in webhook mode";
+                        }
                     }
-
-                } else {
-                    $this->loop->futureTick([$this, 'polling']);
-                    echo "Zanzara is listening...\n";
-                }
+                );
                 break;
 
             case Config::WEBHOOK_MODE:
