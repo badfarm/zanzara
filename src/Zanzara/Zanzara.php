@@ -12,6 +12,7 @@ use React\Cache\ArrayCache;
 use React\Cache\CacheInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
+use React\Filesystem\Filesystem;
 use React\Http\Response;
 use React\Http\Server;
 use Zanzara\Listener\ListenerResolver;
@@ -75,6 +76,7 @@ class Zanzara extends ListenerResolver
         $this->telegram = $this->container->get(Telegram::class);
         $this->container->set(CacheInterface::class, $this->config->getCache() ?? new ArrayCache());
         $this->container->set(Config::class, $this->config);
+        #$this->container->set(Filesystem::class, Filesystem::create($this->loop)); todo test on linux
     }
 
     public function run(): void

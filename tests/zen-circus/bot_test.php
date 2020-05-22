@@ -24,13 +24,13 @@ $bot->onCommand("start", function (Context $ctx) use ($bot) {
     $ctx->sendMessage("Ciao condottiero")->then(function (Message $response) use ($ctx, $bot) {
         $message_id = $response->getMessageId();
         $chat_id = $ctx->getUpdate()->getEffectiveChat()->getId();
-        $ctx->editMessageText("ciao condottiero changed", compact("chat_id", "message_id"));
+
+
         $ctx->deleteMessage($chat_id, $message_id)->then(function (bool $response) {
             echo $response . "\n";
         });
 
-        $ctx->sendMessage("ciao")->then(function (Update $message) {
-            var_dump($message);
+        $ctx->sendMessage("ciao")->then(function (Message $message) {
         });
     });
 });

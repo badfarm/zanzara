@@ -107,7 +107,7 @@ class Context
     {
         $chatId = $this->update->getEffectiveChat()->getId();
         $cache = $this->container->get(ZanzaraCache::class);
-        $cache->setConversationByChatId($chatId, $handler);
+        return $cache->setConversationByChatId($chatId, $handler);
     }
 
     /**
@@ -124,7 +124,7 @@ class Context
     {
         $chatId = $this->update->getEffectiveChat()->getId();
         $cache = $this->container->get(ZanzaraCache::class);
-        $cache->deleteConversationByChatId($chatId);
+        return $cache->deleteConversationByChatId($chatId);
     }
 
     /**

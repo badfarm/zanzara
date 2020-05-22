@@ -24,7 +24,11 @@ $bot->onCommand("start", function (Context $ctx) {
 function checkName(Context $ctx)
 {
     $ctx->sendMessage("{$ctx->getMessage()->getText()}, what is your age?");
-    $ctx->nextStep("checkAge");
+    $ctx->nextStep("checkAge")->then(function ($result) {
+        echo $result;
+    }, function ($error){
+        echo $error;
+    });
 }
 
 function checkAge(Context $ctx)

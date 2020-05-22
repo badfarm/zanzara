@@ -8,6 +8,7 @@ use Clue\React\Buzz\Browser;
 use Clue\React\Buzz\Message\ResponseException;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
+use React\Filesystem\Filesystem;
 use React\Promise\PromiseInterface;
 use RingCentral\Psr7\MultipartStream;
 use Zanzara\Config;
@@ -26,6 +27,7 @@ use Zanzara\Telegram\Type\Update;
 use Zanzara\Telegram\Type\Webhook\WebhookInfo;
 use Zanzara\ZanzaraLogger;
 use Zanzara\ZanzaraMapper;
+use function React\Promise\all;
 
 /**
  * Class that interacts with Telegram Api.
@@ -1454,11 +1456,46 @@ trait TelegramTrait
     }
 
     /**
+     * todo test on linux
      * Create MultipartStream, iterate over params to find InputFile
      *
      * @param $params
-     * @return MultipartStream
+     * @return PromiseInterface
      */
+    private function prepareMultipartDataAsync($params)
+    {
+        $filesystem = $this->container->get(Filesystem::class);
+        $multipart_data = [];
+        $fileNames = [];
+        $promises = [];
+        foreach ($params as $key => $value) {
+            $data = ['name' => $key];
+            if ($value instanceof InputFile) {
+                //array_push($fileNames, $value->getPath());
+
+                array_push($promises, $filesystem->getContents($value->getPath())->then(function ($contents) use ($value) {
+                    $data['contents'] = $contents;
+                    $data['filename'] = basename($value->getPath());
+                    array_push($multipart_data, $data);
+                }, function ($error) use ($value) {
+                    $this->container->get(ZanzaraLogger::class)->error($error);
+                    return $error;
+                }));
+
+            } else {
+                $data['contents'] = strval($value);
+                array_push($multipart_data, $data);
+            }
+        }
+
+        return all($promises)->then(function () use ($multipart_data) {
+            return new MultipartStream($multipart_data);
+        }, function ($error) {
+            $this->container->get(ZanzaraLogger::class)->error($error);
+            return $error;
+        });
+    }
+
     private function prepareMultipartData($params)
     {
         $multipart_data = [];
@@ -1480,6 +1517,7 @@ trait TelegramTrait
         }
         return new MultipartStream($multipart_data);
     }
+
 
     /**
      * ZanzaraPromise class was removed since it swallowed the promise chain.
