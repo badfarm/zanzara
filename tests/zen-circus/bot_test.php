@@ -15,6 +15,7 @@ $dotenv->load("../../.env");
 
 $config = new Config();
 $config->setUpdateMode(Config::POLLING_MODE);
+$config->useReactFileSystem(false);
 $bot = new Zanzara($_ENV['BOT_KEY'], $config);
 $key = $_ENV['BOT_KEY'];
 
@@ -61,7 +62,6 @@ $bot->onCommand("file", function (Context $ctx) {
     $ctx->sendDocument(new InputFile("file/file.txt"), ["thumb" => new InputFile("file/photo.jpeg")]);
 });
 
-echo "The bot is listening ... \n";
 
 $bot->run();
 

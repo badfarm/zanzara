@@ -1445,11 +1445,22 @@ trait TelegramTrait
     public function callApi(string $method, array $params = [], $headers = ["Content-type" => "application/json"])
     {
         $params['parse_mode'] = $params['parse_mode'] ?? $this->container->get(Config::class)->getParseMode();
+
         foreach ($params as $param) {
             if ($param instanceof InputFile) {
-                $multipart = $this->prepareMultipartData($params);
-                $headers = array("Content-Length" => $multipart->getSize(), "Content-Type" => "multipart/form-data; boundary={$multipart->getBoundary()}");
-                return $this->browser->post($method, $headers, $multipart);
+
+                $async = $this->container->get(Config::class)->isReactFileSystem();
+
+                if ($async) {
+                    return $this->prepareMultipartDataAsync($params)->then(function ($result) use ($method) {
+                        $headers = array("Content-Length" => $result->getSize(), "Content-Type" => "multipart/form-data; boundary={$result->getBoundary()}");
+                        return $this->browser->post($method, $headers, $result);
+                    });
+                } else {
+                    $multipart = $this->prepareMultipartData($params);
+                    $headers = array("Content-Length" => $multipart->getSize(), "Content-Type" => "multipart/form-data; boundary={$multipart->getBoundary()}");
+                    return $this->browser->post($method, $headers, $multipart);
+                }
             }
         }
         return $this->browser->post($method, $headers, json_encode($params));
@@ -1466,29 +1477,31 @@ trait TelegramTrait
     {
         $filesystem = $this->container->get(Filesystem::class);
         $multipart_data = [];
-        $fileNames = [];
         $promises = [];
         foreach ($params as $key => $value) {
-            $data = ['name' => $key];
-            if ($value instanceof InputFile) {
-                //array_push($fileNames, $value->getPath());
 
-                array_push($promises, $filesystem->getContents($value->getPath())->then(function ($contents) use ($value) {
+            if ($value instanceof InputFile) {
+                array_push($promises, $filesystem->getContents($value->getPath())->then(function ($contents) use ($value, $multipart_data, $key) {
+                    $data = ['name' => $key];
                     $data['contents'] = $contents;
                     $data['filename'] = basename($value->getPath());
-                    array_push($multipart_data, $data);
+                    return $data;
                 }, function ($error) use ($value) {
                     $this->container->get(ZanzaraLogger::class)->error($error);
                     return $error;
                 }));
 
             } else {
+                $data = ['name' => $key];
                 $data['contents'] = strval($value);
                 array_push($multipart_data, $data);
             }
         }
 
-        return all($promises)->then(function () use ($multipart_data) {
+        return all($promises)->then(function ($files) use($multipart_data) {
+            foreach ($files as $key => $value){
+                array_push($multipart_data, $value);
+            }
             return new MultipartStream($multipart_data);
         }, function ($error) {
             $this->container->get(ZanzaraLogger::class)->error($error);

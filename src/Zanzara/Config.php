@@ -45,6 +45,11 @@ class Config
     private $cache;
 
     /**
+     * @var boolean
+     */
+    private $useReactFileSystem = false;
+
+    /**
      * @var Container|null
      */
     private $container;
@@ -374,6 +379,22 @@ class Config
     public function setBotToken(string $botToken): void
     {
         $this->botToken = $botToken;
+    }
+
+    /**
+     * @param bool $bool
+     */
+    public function useReactFileSystem(bool $bool)
+    {
+        $this->useReactFileSystem = $bool;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReactFileSystem()
+    {
+        return $this->useReactFileSystem;
     }
 
 }

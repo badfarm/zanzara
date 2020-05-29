@@ -76,7 +76,9 @@ class Zanzara extends ListenerResolver
         $this->telegram = $this->container->get(Telegram::class);
         $this->container->set(CacheInterface::class, $this->config->getCache() ?? new ArrayCache());
         $this->container->set(Config::class, $this->config);
-        #$this->container->set(Filesystem::class, Filesystem::create($this->loop)); todo test on linux
+        if($config->isReactFileSystem()){
+            $this->container->set(Filesystem::class, Filesystem::create($this->loop));
+        }
     }
 
     public function run(): void
@@ -127,7 +129,9 @@ class Zanzara extends ListenerResolver
                         } else {
                             echo "Shutdown, you have to manually delete the webhook or start in webhook mode";
                         }
-                    }
+                    }, function ($err){
+                        echo $err;
+                }
                 );
                 break;
 

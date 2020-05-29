@@ -127,6 +127,13 @@ class Context
         return $cache->deleteConversationByChatId($chatId);
     }
 
+    public function getUserData()
+    {
+        $userId = $this->update->getEffectiveChat()->getUsername();
+        $cache = $this->container->get(ZanzaraCache::class);
+        $cache->getUserData($userId);
+    }
+
     /**
      * @return ContainerInterface
      */

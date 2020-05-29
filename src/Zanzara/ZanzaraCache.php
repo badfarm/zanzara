@@ -29,6 +29,8 @@ class ZanzaraCache
 
     private const CONVERSATION = "CONVERSATION";
 
+    private const USERDATA = "USERDATA";
+
     /**
      * ZanzaraLogger constructor.
      * @param CacheInterface|null $cache
@@ -88,9 +90,18 @@ class ZanzaraCache
         });
     }
 
+    public function getUserData($userId){
+        return $this->cache->get($this->getUserDataByUserId($userId));
+    }
+
     private function getConversationByChatId($chatId)
     {
         return ZanzaraCache::CONVERSATION . strval($chatId);
+    }
+
+    private function getUserDataByUserId($userId)
+    {
+        return ZanzaraCache::USERDATA . strval($userId);
     }
 
 }
