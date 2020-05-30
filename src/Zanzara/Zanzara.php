@@ -270,4 +270,22 @@ class Zanzara extends ListenerResolver
         return $this->container;
     }
 
+    public function setGlobalData($key, $data)
+    {
+        $cache = $this->container->get(ZanzaraCache::class);
+        return $cache->setGlobalCacheData($key, $data);
+    }
+
+    public function getGlobalData($key)
+    {
+        $cache = $this->container->get(ZanzaraCache::class);
+        return $cache->getGlobalCacheData($key);
+    }
+
+    public function deleteGlobalData($key)
+    {
+        $cache = $this->container->get(ZanzaraCache::class);
+        return $cache->deleteCacheGlobalData();
+    }
+
 }

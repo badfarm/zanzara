@@ -29,7 +29,11 @@ class ZanzaraCache
 
     private const CONVERSATION = "CONVERSATION";
 
+    private const CHATDATA = " CHATDATA";
+
     private const USERDATA = "USERDATA";
+
+    private const GLOBALDATA = "GLOBALDATA";
 
     /**
      * ZanzaraLogger constructor.
@@ -42,66 +46,277 @@ class ZanzaraCache
         $this->cache = $cache;
     }
 
+
+    public function getGlobalCacheData($key)
+    {
+        $cacheKey = self::GLOBALDATA;
+        return $this->getCacheItem($cacheKey, $key);
+    }
+
+    public function setGlobalCacheData($key, $data)
+    {
+        $cacheKey = self::GLOBALDATA;
+        return $this->setCache($cacheKey, $key, $data);
+    }
+
+    public function deleteAllCacheGlobalData()
+    {
+        $cacheKey = self::GLOBALDATA;
+        return $this->deleteCache([$cacheKey]);
+    }
+
+    public function deleteCacheItemGlobalData($key)
+    {
+        $cacheKey = self::GLOBALDATA;
+        return $this->deleteCacheItem($cacheKey, $key);
+    }
+
+
+    /**
+     * Get the correct key value for chatId data stored in cache
+     * @param $chatId
+     * @return string
+     */
+    private function getKeyChatId($chatId)
+    {
+        return ZanzaraCache::CHATDATA . strval($chatId);
+    }
+
+    public function getCacheChatData($chatId)
+    {
+        $cacheKey = $this->getKeyChatId($chatId);
+        return $this->getCache($cacheKey);
+    }
+
+    public function getItemCacheChatData($chatId, $key)
+    {
+        $cacheKey = $this->getKeyChatId($chatId);
+        return $this->getCacheItem($cacheKey, $key);
+    }
+
+    public function setCacheChatData($chatId, $key, $data)
+    {
+        $cacheKey = $this->getKeyChatId($chatId);
+        return $this->setCache($cacheKey, $key, $data);
+    }
+
+    public function deleteAllCacheChatData($chatId)
+    {
+        $cacheKey = $this->getKeyChatId($chatId);
+        return $this->deleteCache([$cacheKey]);
+    }
+
+    public function deleteCacheItemChatData($chatId, $key)
+    {
+        $cacheKey = $this->getKeyChatId($chatId);
+        return $this->deleteCacheItem($cacheKey, $key);
+
+    }
+
+
+    /**
+     * Get the correct key value for userId data stored in cache
+     * @param $userId
+     * @return string
+     */
+    private function getKeyUserId($userId)
+    {
+        return ZanzaraCache::USERDATA . strval($userId);
+    }
+
+    public function getCacheUserData($userId, $key)
+    {
+        $cacheKey = $this->getKeyUserId($userId);
+        return $this->getCacheItem($cacheKey, $key);
+    }
+
+    public function setCacheUserData($userId, $key, $data)
+    {
+        $cacheKey = $this->getKeyUserId($userId);
+        return $this->setCache($cacheKey, $key, $data);
+    }
+
+    public function deleteAllCacheUserData($userId)
+    {
+        $cacheKey = $this->getKeyUserId($userId);
+        return $this->deleteCache([$cacheKey]);
+    }
+
+    public function deleteCacheItemUserData($userId, $key)
+    {
+        $cacheKey = $this->getKeyUserId($userId);
+        return $this->deleteCacheItem($cacheKey, $key);
+    }
+
+
+    /**
+     * Get key of the conversation by chatId
+     * @param $chatId
+     * @return string
+     */
+    private function getKeyConversation($chatId)
+    {
+        return ZanzaraCache::CONVERSATION . strval($chatId);
+    }
+
+    public function setConversation($chatId, $data)
+    {
+        $key = "state";
+        $cacheKey = $this->getKeyConversation($chatId);
+        return $this->setCache($cacheKey, $key, $data);
+    }
+
+    /**
+     * delete a cache iteam and return the promise
+     * @param $chatId
+     * @return PromiseInterface
+     */
+    public function deleteConversationCache($chatId)
+    {
+        return $this->deleteCache([$this->getKeyConversation($chatId)]);
+    }
+
+
     /**
      * Use only to call native method of CacheInterface
      * @param $name
      * @param $arguments
      * @return PromiseInterface
      */
-    public function __call($name, $arguments): PromiseInterface
+    public function __call($name, $arguments): ?PromiseInterface
     {
         if ($this->cache) {
             return call_user_func_array([$this->cache, $name], $arguments);
         }
+        return null; //should not happen. Don't call cache without instance
     }
 
-    public function deleteConversationByChatId($chatId)
+
+    /**
+     * Delete a key inside array stored in cacheKey
+     * @param $cacheKey
+     * @param $key
+     * @return PromiseInterface
+     */
+    public function deleteCacheItem($cacheKey, $key)
     {
-        return $this->cache->delete($this->getConversationByChatId($chatId))->then(function ($result) {
-            if ($result !== true) {
-                $this->logger->errorClearConversationCache($result);
+        return $this->cache->get($cacheKey)->then(function ($arrayData) use ($cacheKey, $key) {
+            if (!$arrayData) {
+                return true; //there isn't anything so it's deleted
+            } else {
+                unset($arrayData[$key]);
             }
+
+            return $this->cache->set($cacheKey, $arrayData)->then(function ($result) {
+                if ($result !== true) {
+                    $this->logger->errorWriteCache($result);
+                }
+                return $result;
+            });
         });
     }
 
-    public function setConversationByChatId($chatId, $data)
+
+    /**
+     * delete a cache iteam and return the promise
+     * @param array $keys
+     * @return PromiseInterface
+     */
+    public function deleteCache(array $keys)
     {
-        return $this->cache->set($this->getConversationByChatId($chatId), $data)->then(function ($result) {
+        return $this->cache->deleteMultiple($keys)->then(function ($result) {
             if ($result !== true) {
-                $this->logger->errorWriteConversationCache($result);
+                $this->logger->errorClearCache($result);
             }
             return $result;
         });
     }
 
+
+    /**
+     * Get cache item inside array stored in cacheKey
+     * @param $cacheKey
+     * @param $key
+     * @return PromiseInterface
+     */
+    public function getCacheItem($cacheKey, $key)
+    {
+        return $this->cache->get($cacheKey)->then(function ($arrayData) use ($key) {
+            if ($arrayData && array_key_exists($key, $arrayData)) {
+                return $arrayData[$key];
+            } else {
+                return null;
+            }
+        });
+    }
+
+    public function getCache($cacheKey)
+    {
+        return $this->cache->get($cacheKey)->then(function ($arrayData) {
+            return $arrayData;
+        });
+    }
+
+    /**
+     * Wipe entire cache.
+     * @return PromiseInterface
+     */
+    public function wipeCache()
+    {
+        return $this->cache->clear()->then(function ($result) {
+            return $result;
+        });
+    }
+
+
+    /**
+     * set a cache value and return the promise
+     * @param $cacheKey
+     * @param $key
+     * @param $data
+     * @return PromiseInterface
+     */
+    public function setCache($cacheKey, $key, $data)
+    {
+        return $this->cache->get($cacheKey)->then(function ($arrayData) use ($key, $data, $cacheKey) {
+            if (!$arrayData) {
+                $arrayData = array();
+                $arrayData[$key] = $data;
+            } else {
+                $arrayData[$key] = $data;
+            }
+
+            return $this->cache->set($cacheKey, $arrayData)->then(function ($result) {
+                if ($result !== true) {
+                    $this->logger->errorWriteCache($result);
+                }
+                return $result;
+            });
+        });
+    }
+
+    /**
+     * Used by ListenerResolver to call the correct handler stored inside cache
+     * @param $chatId
+     * @param $update
+     * @param $container
+     * @return PromiseInterface
+     */
     public function callHandlerByChatId($chatId, $update, $container)
     {
-        return $this->cache->get($this->getConversationByChatId($chatId))->then(function (callable $handler) use ($update, $chatId, $container) {
-            if ($handler) {
+        return $this->cache->get($this->getKeyConversation($chatId))->then(function (array $conversation) use ($update, $chatId, $container) {
+            if ($conversation) {
+                $handler = $conversation["state"];
                 try {
                     $handler(new Context($update, $container));
                 } catch (Throwable $err) {
-                    $this->logger->errorUpdate($err ,$update);
-                    $this->deleteConversationByChatId($chatId);
+                    $this->logger->errorUpdate($err, $update);
+                    $this->deleteConversationCache($chatId);
                 }
             }
         }, function ($err) use ($container, $update) {
             $container->get(ZanzaraLogger::class)->errorUpdate($update, $err);
         });
-    }
-
-    public function getUserData($userId){
-        return $this->cache->get($this->getUserDataByUserId($userId));
-    }
-
-    private function getConversationByChatId($chatId)
-    {
-        return ZanzaraCache::CONVERSATION . strval($chatId);
-    }
-
-    private function getUserDataByUserId($userId)
-    {
-        return ZanzaraCache::USERDATA . strval($userId);
     }
 
 }

@@ -42,7 +42,7 @@ abstract class ListenerResolver extends ListenerCollector
                     if ($listener) {
                         //clean the state because a listener has been found
                         $chatId = $update->getEffectiveChat()->getId();
-                        $cache->deleteConversationByChatId($chatId);
+                        $cache->deleteConversationCache($chatId);
                     } else {
                         //there is no listener so we look for the state
                         $chatId = $update->getEffectiveChat()->getId();

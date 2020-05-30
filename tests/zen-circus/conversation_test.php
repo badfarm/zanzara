@@ -18,33 +18,61 @@ $bot = new Zanzara($_ENV['BOT_KEY'], $config);
 
 $bot->onCommand("start", function (Context $ctx) {
     $ctx->sendMessage("Hi, what's your name?");
+
     $ctx->nextStep("checkName");
 });
 
 function checkName(Context $ctx)
 {
-    $ctx->sendMessage("{$ctx->getMessage()->getText()}, what is your age?");
-    $ctx->nextStep("checkAge")->then(function ($result) {
-        echo $result;
-    }, function ($error){
-        echo $error;
-    });
+    $name = $ctx->getMessage()->getText();
+    if(strlen($name) < 5){
+        $ctx->sendMessage("Il nome deve essere più di 5 caratteri ignorante");
+    }else{
+        $ctx->setChatData("name", $name);
+        $ctx->sendMessage("{$name}, what is your age?");
+        $ctx->nextStep("checkAge");
+    }
 }
 
 function checkAge(Context $ctx)
 {
-    if (ctype_digit($ctx->getMessage()->getText())) {
-        $ctx->sendMessage("Ok perfect, bye");
-        $ctx->endConversation(); //Must be used, this method clean the state for this conversation
+    $age = $ctx->getMessage()->getText();
+    if (ctype_digit($age)) {
+        $ctx->setChatData("eta", $age);
+        $ctx->sendMessage("Confirm the data?");
+        $ctx->nextStep("endConversation");
     } else {
         $ctx->sendMessage("Must be a number, retry");
-        $ctx->redoStep(); //can be omitted, only for readable purpose
     }
 }
 
-$bot->onCommand("help", function (Context $ctx) {
-    $ctx->sendMessage("Lancia /start per iniziare");
+function endConversation(Context $ctx){
+    $ctx->getChatData()->then(function ($arrayData) use ($ctx) {
+        $ctx->sendMessage(implode(",",$arrayData));
+    });
+    $ctx->endConversation();
+}
+
+$bot->onCommand("chatdata", function (Context $ctx) {
+    $ctx->getChatData()->then(function ($arrayData) use ($ctx) {
+        if($arrayData){
+            $ctx->sendMessage(implode(",",$arrayData));
+        }else{
+            $ctx->sendMessage("empty");
+        }
+
+    });
 });
+
+$bot->onCommand("clearchatdata", function (Context $ctx) {
+    $ctx->deleteAllChatData()->then(function ($result) use ($ctx) {
+        if($result){
+            $ctx->sendMessage("cleared chat data");
+        }
+    });
+});
+
+
 
 $bot->run();
 
