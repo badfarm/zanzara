@@ -6,7 +6,7 @@ use Zanzara\Zanzara;
 require __DIR__ . '/../bootstrap.php';
 
 $config = new Config();
-$config->setUpdateMode(Config::REACTPHP_WEBHOOK_MODE);
+$config->setUpdateMode(Config::POLLING_MODE);
 $bot = new Zanzara($_ENV['BOT_KEY'], $config);
 
 $bot->onUpdate(function (\Zanzara\Context $ctx) {

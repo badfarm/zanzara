@@ -1,12 +1,17 @@
 # Zanzara
 Asynchronous PHP Telegram Bot Framework built on top of [ReactPHP](https://reactphp.org/)
 
+[![Bot API](https://img.shields.io/badge/Bot%20API-4.8%20(April%202020)-blue)](https://core.telegram.org/bots/api)
+[![PHP](https://img.shields.io/badge/PHP-%3E%3D7.1-blue)](https://www.php.net/)
+[![Code style](https://img.shields.io/badge/code%20style-standard-green)](https://www.php-fig.org/psr/psr-2/)
+[![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/bohzio/zanzara/blob/develop/LICENSE.md)
+
 ---
 
 ### Features
 * Full [Telegram Bot Api 4.8](https://core.telegram.org/bots/api) support (April 2020)
 * Middleware chain for requests
-* Step by step messages (conversations)
+* Step by step messages (conversations) and user-related data cache
 * Fast since it's based on asynchronous non-blocking I/O model
 * Lightweight (no web server or database required)
 * Bulk message sending (no more 429 annoying errors)
@@ -16,7 +21,7 @@ Asynchronous PHP Telegram Bot Framework built on top of [ReactPHP](https://react
 composer require bohzio/zanzara
 ```
     
-### Get started
+### Quickstart
 
 Create a file named ```main.php``` and paste the following code:
 

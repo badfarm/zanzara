@@ -4,7 +4,6 @@ namespace Zanzara;
 
 use React\Cache\CacheInterface;
 use React\Promise\PromiseInterface;
-use Throwable;
 
 /**
  * @method get($key, $default = null)
@@ -307,15 +306,13 @@ class ZanzaraCache
         return $this->cache->get($this->getKeyConversation($chatId))->then(function (array $conversation) use ($update, $chatId, $container) {
             if ($conversation) {
                 $handler = $conversation["state"];
-                try {
-                    $handler(new Context($update, $container));
-                } catch (Throwable $err) {
-                    $this->logger->errorUpdate($err, $update);
-                    $this->deleteConversationCache($chatId);
-                }
+                $handler(new Context($update, $container));
             }
         }, function ($err) use ($container, $update) {
-            $container->get(ZanzaraLogger::class)->errorUpdate($update, $err);
+            $this->logger->errorUpdate($update, $err);
+        })->otherwise(function ($err, $update, $chatId) {
+            $this->logger->errorUpdate($err, $update);
+            $this->deleteConversationCache($chatId);
         });
     }
 
