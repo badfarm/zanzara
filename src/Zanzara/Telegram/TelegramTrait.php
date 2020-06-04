@@ -204,6 +204,7 @@ trait TelegramTrait
      *
      * The photo param can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
+     * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
      * By default the photo is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
@@ -229,6 +230,7 @@ trait TelegramTrait
      *
      * The audio and thumb params can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
+     * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
      * By default the audio is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
@@ -253,6 +255,7 @@ trait TelegramTrait
      *
      * The document and thumb params can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
+     * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
      * By default the document is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
@@ -278,6 +281,7 @@ trait TelegramTrait
      *
      * The video and thumb params can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
+     * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
      * By default the video is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
@@ -303,6 +307,7 @@ trait TelegramTrait
      *
      * The animation and thumb params can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
+     * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
      * By default the animation is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
@@ -329,6 +334,7 @@ trait TelegramTrait
      *
      * The voice param can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
+     * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
      * By default the voice is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
@@ -353,6 +359,7 @@ trait TelegramTrait
      *
      * The video_note and thumb params can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
+     * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
      * By default the video note is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
@@ -1106,6 +1113,7 @@ trait TelegramTrait
      *
      * The sticker param can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
+     * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
      * By default the sticker is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
@@ -1164,6 +1172,7 @@ trait TelegramTrait
      *
      * The png_sticker param can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
+     * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
      * More on https://core.telegram.org/bots/api#createnewstickerset
      *
@@ -1188,6 +1197,7 @@ trait TelegramTrait
      *
      * The png_sticker param can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
+     * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
      * More on https://core.telegram.org/bots/api#addstickertoset
      *
@@ -1244,6 +1254,7 @@ trait TelegramTrait
      *
      * The thumb param in $opt can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
+     * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
      * More on https://core.telegram.org/bots/api#setstickersetthumb
      *
