@@ -127,7 +127,7 @@ class Zanzara extends ListenerResolver
                                 }
                             );
                         } else {
-                            echo "Shutdown, you have to manually delete the webhook or start in webhook mode";
+                            $this->logger->error("Shutdown, you have to manually delete the webhook or start in webhook mode");
                         }
                     }, function ($err){
                         echo $err;
