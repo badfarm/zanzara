@@ -68,5 +68,14 @@ class ZanzaraLogger
 
     }
 
+    public function errorNotAuthorized()
+    {
+        $this->error($this->getNotAuthorizedMessage());
+    }
+
+    public function getNotAuthorizedMessage()
+    {
+        return "Not authorized, please provide a valid bot token";
+    }
 
 }

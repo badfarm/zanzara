@@ -76,7 +76,7 @@ class Zanzara extends ListenerResolver
         $this->telegram = $this->container->get(Telegram::class);
         $this->container->set(CacheInterface::class, $this->config->getCache() ?? new ArrayCache());
         $this->container->set(Config::class, $this->config);
-        if($config->isReactFileSystem()){
+        if($this->config->isReactFileSystem()){
             $this->container->set(Filesystem::class, Filesystem::create($this->loop));
         }
     }
@@ -96,7 +96,7 @@ class Zanzara extends ListenerResolver
                             $this->logger->error($message);
                             return;
                         }
-                        $this->startReactPHPServer();
+                        $this->startServer();
                     }
                 );
                 break;
@@ -139,7 +139,7 @@ class Zanzara extends ListenerResolver
                 $token = $this->resolveTokenFromPath($_SERVER['REQUEST_URI'] ?? '');
                 if (!$this->isWebhookAuthorized($token)) {
                     http_response_code(403);
-                    $this->logger->error("Not authorized");
+                    $this->logger->errorNotAuthorized();
                 } else {
                     $json = file_get_contents($this->config->getUpdateStream());
                     /** @var Update $update */
@@ -178,21 +178,28 @@ class Zanzara extends ListenerResolver
     /**
      *
      */
-    private function startReactPHPServer()
+    private function startServer()
     {
-        $server = new Server(function (ServerRequestInterface $request) {
+        $processingUpdate = null;
+        $server = new Server(function (ServerRequestInterface $request) use (&$processingUpdate) {
             $token = $this->resolveTokenFromPath($request->getUri()->getPath());
             if (!$this->isWebhookAuthorized($token)) {
-                $this->logger->error("Not authorized");
-                return new Response(403, [], 'Not authorized');
+                $this->logger->errorNotAuthorized();
+                return new Response(403, [], $this->logger->getNotAuthorizedMessage());
             }
             $json = (string)$request->getBody();
-            /** @var Update $update */
-            $update = $this->zanzaraMapper->mapJson($json, Update::class);
-            $this->processUpdate($update);
+            /** @var Update $processingUpdate */
+            $processingUpdate = $this->zanzaraMapper->mapJson($json, Update::class);
+            $this->processUpdate($processingUpdate);
             return new Response();
         });
-
+        $server->on('error', function ($e) use (&$processingUpdate) {
+            $this->logger->errorUpdate($e, $processingUpdate);
+            $errorHandler = $this->config->getErrorHandler();
+            if ($errorHandler) {
+                $errorHandler($e, new Context($processingUpdate, $this->container));
+            }
+        });
         $socket = new \React\Socket\Server($this->config->getServerUri(), $this->loop, $this->config->getServerContext());
         $server->listen($socket);
         $this->logger->info("Zanzara is listening...");
@@ -203,12 +210,13 @@ class Zanzara extends ListenerResolver
      */
     public function polling(int $offset = 1)
     {
+        $processingUpdate = null;
         $this->telegram->getUpdates([
             'offset' => $offset,
             'limit' => $this->config->getPollingLimit(),
             'timeout' => $this->config->getPollingTimeout(),
             'allowed_updates' => $this->config->getPollingAllowedUpdates(),
-        ])->then(function (array $updates) use (&$offset) {
+        ])->then(function (array $updates) use (&$offset, &$processingUpdate) {
             if ($offset === 1) {
                 //first run I need to get the current updateId from telegram
                 $lastUpdate = end($updates);
@@ -222,6 +230,7 @@ class Zanzara extends ListenerResolver
                     // increase the offset before executing the update, this way if the update processing fails
                     // the framework doesn't try to execute it endlessly
                     $offset++;
+                    $processingUpdate = $update;
                     $this->processUpdate($update);
                 }
                 $this->polling($offset);
@@ -229,8 +238,12 @@ class Zanzara extends ListenerResolver
         }, function (TelegramException $error) use (&$offset) {
             $this->logger->error("Failed to fetch updates from Telegram: $error");
             $this->polling($offset); // consider place a delay before restarting to poll
-        })->otherwise(function ($e) use (&$offset) {
+        })->otherwise(function ($e) use (&$offset, &$processingUpdate) {
             $this->logger->errorUpdate($e);
+            $errorHandler = $this->config->getErrorHandler();
+            if ($errorHandler) {
+                $errorHandler($e, new Context($processingUpdate, $this->container));
+            }
             $this->polling($offset); // consider place a delay before restarting to poll
         });
     }

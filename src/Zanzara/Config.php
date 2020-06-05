@@ -126,6 +126,11 @@ class Config
     private $logger;
 
     /**
+     * @var callable|null
+     */
+    private $errorHandler;
+
+    /**
      * @return LoopInterface|null
      */
     public function getLoop(): ?LoopInterface
@@ -395,6 +400,22 @@ class Config
     public function isReactFileSystem()
     {
         return $this->useReactFileSystem;
+    }
+
+    /**
+     * @return callable|null
+     */
+    public function getErrorHandler(): ?callable
+    {
+        return $this->errorHandler;
+    }
+
+    /**
+     * @param callable|null $errorHandler
+     */
+    public function setErrorHandler(?callable $errorHandler): void
+    {
+        $this->errorHandler = $errorHandler;
     }
 
 }

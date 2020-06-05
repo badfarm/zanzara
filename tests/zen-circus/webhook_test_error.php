@@ -8,13 +8,14 @@ use Zanzara\Zanzara;
 require __DIR__ . '/../bootstrap.php';
 
 $config = new Config();
+$config->setUpdateMode(Config::REACTPHP_WEBHOOK_MODE);
 $config->setErrorHandler(function ($e, Context $ctx) {
-    echo "Custom error handling, {$e->getMessage()}";
+    echo "Customer error handling: {$ctx->getEffectiveUser()->getFirstName()}";
 });
 $bot = new Zanzara($_ENV['BOT_KEY'], $config);
 
 $bot->onUpdate(function (Context $ctx) {
-    throw new ZanzaraException("Nothing interesting");
+    throw new ZanzaraException("Super error");
 });
 
 $bot->run();
