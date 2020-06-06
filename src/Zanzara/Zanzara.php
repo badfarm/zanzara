@@ -58,6 +58,11 @@ class Zanzara extends ListenerResolver
     private $loop;
 
     /**
+     * @var Server
+     */
+    private $server;
+
+    /**
      * @param string $botToken
      * @param Config|null $config
      */
@@ -79,6 +84,9 @@ class Zanzara extends ListenerResolver
         if ($this->config->isReactFileSystem()) {
             $this->container->set(Filesystem::class, Filesystem::create($this->loop));
         }
+        if ($this->config->getUpdateMode() === Config::REACTPHP_WEBHOOK_MODE) {
+            $this->prepareServer();
+        }
     }
 
     public function run(): void
@@ -92,7 +100,7 @@ class Zanzara extends ListenerResolver
                     function (WebhookInfo $webhookInfo) {
                         if (!$webhookInfo->getUrl()) {
                             $message = "Your bot doesn't have a webhook set, please set one before running Zanzara in webhook" .
-                                " mode. See https://core.telegram.org/bots/api#setwebhook";
+                                " mode. See https://github.com/badfarm/zanzara/wiki#set-webhook";
                             $this->logger->error($message);
                             return;
                         }
@@ -172,13 +180,10 @@ class Zanzara extends ListenerResolver
         return end($pathParams) ?? null;
     }
 
-    /**
-     *
-     */
-    private function startServer()
+    private function prepareServer()
     {
         $processingUpdate = null;
-        $server = new Server(function (ServerRequestInterface $request) use (&$processingUpdate) {
+        $this->server = new Server(function (ServerRequestInterface $request) use (&$processingUpdate) {
             $token = $this->resolveTokenFromPath($request->getUri()->getPath());
             if (!$this->isWebhookAuthorized($token)) {
                 $this->logger->errorNotAuthorized();
@@ -190,15 +195,22 @@ class Zanzara extends ListenerResolver
             $this->processUpdate($processingUpdate);
             return new Response();
         });
-        $server->on('error', function ($e) use (&$processingUpdate) {
+        $this->server->on('error', function ($e) use (&$processingUpdate) {
             $this->logger->errorUpdate($e, $processingUpdate);
             $errorHandler = $this->config->getErrorHandler();
             if ($errorHandler) {
                 $errorHandler($e, new Context($processingUpdate, $this->container));
             }
         });
+    }
+
+    /**
+     *
+     */
+    private function startServer()
+    {
         $socket = new \React\Socket\Server($this->config->getServerUri(), $this->loop, $this->config->getServerContext());
-        $server->listen($socket);
+        $this->server->listen($socket);
         $this->logger->info("Zanzara is listening...");
     }
 
@@ -270,6 +282,14 @@ class Zanzara extends ListenerResolver
     public function getLoop(): LoopInterface
     {
         return $this->loop;
+    }
+
+    /**
+     * @return Server
+     */
+    public function getServer(): Server
+    {
+        return $this->server;
     }
 
     /**
