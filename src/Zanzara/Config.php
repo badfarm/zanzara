@@ -261,7 +261,7 @@ class Config
     /**
      * @return bool
      */
-    public function isWebhookTokenCheck(): bool
+    public function isWebhookTokenCheckEnabled(): bool
     {
         return $this->webhookTokenCheck;
     }
@@ -269,7 +269,7 @@ class Config
     /**
      * @param bool $webhookTokenCheck
      */
-    public function setWebhookTokenCheck(bool $webhookTokenCheck): void
+    public function enableWebhookTokenCheck(bool $webhookTokenCheck): void
     {
         $this->webhookTokenCheck = $webhookTokenCheck;
     }

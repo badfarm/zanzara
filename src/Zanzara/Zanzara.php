@@ -164,7 +164,7 @@ class Zanzara extends ListenerResolver
      */
     private function isWebhookAuthorized(?string $token = null): bool
     {
-        if (!$this->config->isWebhookTokenCheck()) {
+        if (!$this->config->isWebhookTokenCheckEnabled()) {
             return true;
         }
         return $token === $this->config->getBotToken();
