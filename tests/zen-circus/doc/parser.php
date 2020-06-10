@@ -79,7 +79,7 @@ foreach ($methods as $method) {
     $returnType = $wiredReturnTypes[$method->getName()] ?? $returnType;
     if (isset($packagedClass[$returnType])) {
         $invertedSlashes = fromBackwardToForwardSlashes($packagedClass[$returnType]);
-        $returnType = "[$returnType](https://github.com/bohzio/zanzara/blob/develop/src/$invertedSlashes.php)";
+        $returnType = "[$returnType](https://github.com/badfarm/zanzara/blob/develop/src/$invertedSlashes.php)";
     }
     $matches = [];
     $regex = "/More on (https:.+)/";
