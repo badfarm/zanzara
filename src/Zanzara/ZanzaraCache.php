@@ -303,7 +303,7 @@ class ZanzaraCache
     public function callHandlerByChatId($chatId, $update, $container)
     {
         return $this->cache->get($this->getKeyConversation($chatId))->then(function (array $conversation) use ($update, $chatId, $container) {
-            if ($conversation) {
+            if (!empty($conversation)) {
                 $handler = $conversation["state"];
                 $handler(new Context($update, $container));
             }

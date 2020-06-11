@@ -1478,7 +1478,7 @@ trait TelegramTrait
     }
 
     /**
-     * todo test on linux
+     *
      * Create MultipartStream, iterate over params to find InputFile
      *
      * @param $params
@@ -1497,7 +1497,7 @@ trait TelegramTrait
                     $data['contents'] = $contents;
                     $data['filename'] = basename($value->getPath());
                     return $data;
-                }, function ($error) use ($value) {
+                }, function ($error) {
                     $this->container->get(ZanzaraLogger::class)->error($error);
                     return $error;
                 }));
