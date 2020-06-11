@@ -114,7 +114,7 @@ class Zanzara extends ListenerResolver
                     function (WebhookInfo $webhookInfo) {
                         if (!$webhookInfo->getUrl()) {
                             $this->loop->futureTick([$this, 'polling']);
-                            echo "Zanzara is listening...\n";
+                            $this->logger->info("Zanzara is listening...");
                             return;
                         }
                         $message = "Your bot has a webhook set, please delete it before running Zanzara in polling mode. " .

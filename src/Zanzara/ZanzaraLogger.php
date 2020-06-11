@@ -38,7 +38,11 @@ class ZanzaraLogger
     public function __call($name, $arguments)
     {
         $message = $arguments[0];
-        fwrite(STDERR, $message . PHP_EOL);
+        if ($name === 'error') {
+            fwrite(STDERR, $message . PHP_EOL);
+        } else {
+            echo $message . PHP_EOL;
+        }
         if ($this->logger) {
             call_user_func_array([$this->logger, $name], $arguments);
         }

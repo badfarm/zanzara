@@ -65,7 +65,7 @@ abstract class ListenerCollector
      */
     public function onCommand(string $command, callable $callback): MiddlewareCollector
     {
-        $command = "/\/$command/";
+        $command = "/^\/$command$/";
         $listener = new Listener($callback, $command);
         $this->listeners['messages'][$command] = $listener;
         return $listener;
