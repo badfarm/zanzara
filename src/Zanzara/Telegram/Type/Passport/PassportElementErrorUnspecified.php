@@ -11,21 +11,7 @@ namespace Zanzara\Telegram\Type\Passport;
  */
 class PassportElementErrorUnspecified extends PassportElementError
 {
-
-    /**
-     * Error source, must be unspecified
-     *
-     * @var string
-     */
-    private $source;
-
-    /**
-     * Type of element of the user's Telegram Passport which has the issue
-     *
-     * @var string
-     */
-    private $type;
-
+    
     /**
      * Base64-encoded element hash
      *

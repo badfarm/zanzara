@@ -51,13 +51,13 @@ class ZanzaraCache
         return $this->getCache($cacheKey);
     }
 
-    public function setGlobalCacheData($key, $data)
+    public function setGlobalCacheData(string $key, $data)
     {
         $cacheKey = self::GLOBALDATA;
         return $this->setCache($cacheKey, $key, $data);
     }
 
-    public function getCacheItemGlobalData($key)
+    public function getCacheItemGlobalData(string $key)
     {
         $cacheKey = self::GLOBALDATA;
         return $this->getCacheItem($cacheKey, $key);
@@ -69,7 +69,7 @@ class ZanzaraCache
         return $this->deleteCache([$cacheKey]);
     }
 
-    public function deleteCacheItemGlobalData($key)
+    public function deleteCacheItemGlobalData(string $key)
     {
         $cacheKey = self::GLOBALDATA;
         return $this->deleteCacheItem($cacheKey, $key);
@@ -80,36 +80,36 @@ class ZanzaraCache
      * @param $chatId
      * @return string
      */
-    private function getKeyChatId($chatId)
+    private function getKeyChatId(int $chatId)
     {
         return ZanzaraCache::CHATDATA . strval($chatId);
     }
 
-    public function getCacheChatData($chatId)
+    public function getCacheChatData(int $chatId)
     {
         $cacheKey = $this->getKeyChatId($chatId);
         return $this->getCache($cacheKey);
     }
 
-    public function getItemCacheChatData($chatId, $key)
+    public function getItemCacheChatData(int $chatId, string $key)
     {
         $cacheKey = $this->getKeyChatId($chatId);
         return $this->getCacheItem($cacheKey, $key);
     }
 
-    public function setCacheChatData($chatId, $key, $data)
+    public function setCacheChatData(int $chatId, string $key, $data)
     {
         $cacheKey = $this->getKeyChatId($chatId);
         return $this->setCache($cacheKey, $key, $data);
     }
 
-    public function deleteAllCacheChatData($chatId)
+    public function deleteAllCacheChatData(int $chatId)
     {
         $cacheKey = $this->getKeyChatId($chatId);
         return $this->deleteCache([$cacheKey]);
     }
 
-    public function deleteCacheItemChatData($chatId, $key)
+    public function deleteCacheItemChatData(int $chatId, string $key)
     {
         $cacheKey = $this->getKeyChatId($chatId);
         return $this->deleteCacheItem($cacheKey, $key);
@@ -121,36 +121,36 @@ class ZanzaraCache
      * @param $userId
      * @return string
      */
-    private function getKeyUserId($userId)
+    private function getKeyUserId(int $userId)
     {
         return ZanzaraCache::USERDATA . strval($userId);
     }
 
-    public function getCacheUserData($userId)
+    public function getCacheUserData(int $userId)
     {
         $cacheKey = $this->getKeyUserId($userId);
         return $this->getCache($cacheKey);
     }
 
-    public function getItemCacheUserData($userId, $key)
+    public function getItemCacheUserData(int $userId, string $key)
     {
         $cacheKey = $this->getKeyUserId($userId);
         return $this->getCacheItem($cacheKey, $key);
     }
 
-    public function setCacheUserData($userId, $key, $data)
+    public function setCacheUserData(int $userId, string $key, $data)
     {
         $cacheKey = $this->getKeyUserId($userId);
         return $this->setCache($cacheKey, $key, $data);
     }
 
-    public function deleteAllCacheUserData($userId)
+    public function deleteAllCacheUserData(int $userId)
     {
         $cacheKey = $this->getKeyUserId($userId);
         return $this->deleteCache([$cacheKey]);
     }
 
-    public function deleteCacheItemUserData($userId, $key)
+    public function deleteCacheItemUserData(int $userId, string $key)
     {
         $cacheKey = $this->getKeyUserId($userId);
         return $this->deleteCacheItem($cacheKey, $key);
@@ -161,12 +161,12 @@ class ZanzaraCache
      * @param $chatId
      * @return string
      */
-    private function getKeyConversation($chatId)
+    private function getKeyConversation(int $chatId)
     {
         return ZanzaraCache::CONVERSATION . strval($chatId);
     }
 
-    public function setConversation($chatId, $data)
+    public function setConversation(int $chatId, $data)
     {
         $key = "state";
         $cacheKey = $this->getKeyConversation($chatId);
@@ -178,7 +178,7 @@ class ZanzaraCache
      * @param $chatId
      * @return PromiseInterface
      */
-    public function deleteConversationCache($chatId)
+    public function deleteConversationCache(int $chatId)
     {
         return $this->deleteCache([$this->getKeyConversation($chatId)]);
     }
@@ -203,7 +203,7 @@ class ZanzaraCache
      * @param $key
      * @return PromiseInterface
      */
-    public function deleteCacheItem($cacheKey, $key)
+    public function deleteCacheItem(string $cacheKey, $key)
     {
         return $this->cache->get($cacheKey)->then(function ($arrayData) use ($cacheKey, $key) {
             if (!$arrayData) {
@@ -242,7 +242,7 @@ class ZanzaraCache
      * @param $key
      * @return PromiseInterface
      */
-    public function getCacheItem($cacheKey, $key)
+    public function getCacheItem(string $cacheKey, $key)
     {
         return $this->cache->get($cacheKey)->then(function ($arrayData) use ($key) {
             if ($arrayData && array_key_exists($key, $arrayData)) {
@@ -253,7 +253,7 @@ class ZanzaraCache
         });
     }
 
-    public function getCache($cacheKey)
+    public function getCache(string $cacheKey)
     {
         return $this->cache->get($cacheKey);
     }
@@ -274,7 +274,7 @@ class ZanzaraCache
      * @param $data
      * @return PromiseInterface
      */
-    public function setCache($cacheKey, $key, $data)
+    public function setCache(string $cacheKey, string $key, $data)
     {
         return $this->cache->get($cacheKey)->then(function ($arrayData) use ($key, $data, $cacheKey) {
             if (!$arrayData) {
@@ -300,7 +300,7 @@ class ZanzaraCache
      * @param $container
      * @return PromiseInterface
      */
-    public function callHandlerByChatId($chatId, $update, $container)
+    public function callHandlerByChatId(int $chatId, $update, $container)
     {
         return $this->cache->get($this->getKeyConversation($chatId))->then(function (array $conversation) use ($update, $chatId, $container) {
             if (!empty($conversation)) {

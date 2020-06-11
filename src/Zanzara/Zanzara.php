@@ -6,6 +6,8 @@ namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
 use DI\Container;
+use DI\DependencyException;
+use DI\NotFoundException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use React\Cache\ArrayCache;
@@ -15,6 +17,7 @@ use React\EventLoop\LoopInterface;
 use React\Filesystem\Filesystem;
 use React\Http\Response;
 use React\Http\Server;
+use React\Promise\PromiseInterface;
 use Zanzara\Listener\ListenerResolver;
 use Zanzara\Telegram\Telegram;
 use Zanzara\Telegram\Type\Response\TelegramException;
@@ -300,22 +303,79 @@ class Zanzara extends ListenerResolver
         return $this->container;
     }
 
+    /**
+     * Set global data
+     * @param $key
+     * @param $data
+     * @return PromiseInterface
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     public function setGlobalData($key, $data)
     {
         $cache = $this->container->get(ZanzaraCache::class);
         return $cache->setGlobalCacheData($key, $data);
     }
 
-    public function getGlobalData($key)
+    /**
+     * Gel all global data
+     * @return PromiseInterface
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function getGlobalData()
     {
         $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->getGlobalCacheData($key);
+        return $cache->getGlobalCacheData();
     }
 
-    public function deleteGlobalData($key)
+    /**
+     * Get item of global data by key
+     * @param $key
+     * @return PromiseInterface
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function getItemGlobalData($key)
+    {
+        $cache = $this->container->get(ZanzaraCache::class);
+        return $cache->getCacheItemGlobalData($key);
+    }
+
+    /**
+     * Delete item of global data by key
+     * @param $key
+     * @return PromiseInterface
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function deleteItemGlobalData($key)
+    {
+        $cache = $this->container->get(ZanzaraCache::class);
+        return $cache->deleteCacheItemGlobalData($key);
+    }
+
+    /**
+     * Delete all global data
+     * @return PromiseInterface
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function deleteGlobalData()
     {
         $cache = $this->container->get(ZanzaraCache::class);
         return $cache->deleteCacheGlobalData();
     }
 
+    /**
+     * Wipe entire cache
+     * @return PromiseInterface
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function wipeCache()
+    {
+        $cache = $this->container->get(ZanzaraCache::class);
+        return $cache->wipeCache();
+    }
 }
