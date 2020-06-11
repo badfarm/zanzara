@@ -1509,8 +1509,8 @@ trait TelegramTrait
             }
         }
 
-        return all($promises)->then(function ($files) use($multipart_data) {
-            foreach ($files as $key => $value){
+        return all($promises)->then(function ($files) use ($multipart_data) {
+            foreach ($files as $key => $value) {
                 array_push($multipart_data, $value);
             }
             return new MultipartStream($multipart_data);
@@ -1541,7 +1541,6 @@ trait TelegramTrait
         }
         return new MultipartStream($multipart_data);
     }
-
 
     /**
      * ZanzaraPromise class was removed since it swallowed the promise chain.

@@ -100,9 +100,6 @@ class Context
         return $this->update;
     }
 
-
-
-
     /**
      * Save the next state with callable function. Used to go to the next conversation handler
      * @param callable $handler
@@ -124,7 +121,6 @@ class Context
         $cache = $this->container->get(ZanzaraCache::class);
         return $cache->deleteConversationCache($chatId);
     }
-
 
     /**
      * Return all the chat data of the context
@@ -185,7 +181,6 @@ class Context
         return $cache->deleteAllCacheChatData($chatId);
     }
 
-
     /**
      * Get user data by context
      * @return PromiseInterface
@@ -244,7 +239,6 @@ class Context
         $cache = $this->container->get(ZanzaraCache::class);
         return $cache->deleteAllCacheUserData($chatId);
     }
-
 
     /**
      * Set global data
@@ -309,7 +303,6 @@ class Context
         $cache = $this->container->get(ZanzaraCache::class);
         return $cache->wipeCache();
     }
-
 
     /**
      * Get container instance

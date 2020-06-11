@@ -7,7 +7,6 @@ namespace Zanzara;
 use React\EventLoop\LoopInterface;
 use React\EventLoop\TimerInterface;
 use Zanzara\Telegram\Telegram;
-use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Response\TelegramException;
 
 /**
@@ -79,7 +78,7 @@ class MessageQueue
                 ->otherwise(function (TelegramException $error) {
                     $this->logger->error("Failed to send message in bulk mode, reason: $error");
                 }
-            );
+                );
         };
         $this->loop->addPeriodicTimer($this->config->getBulkMessageInterval(), $dequeue);
     }

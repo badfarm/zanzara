@@ -25,9 +25,9 @@ $bot->onCommand("start", function (Context $ctx) {
 function checkName(Context $ctx)
 {
     $name = $ctx->getMessage()->getText();
-    if(strlen($name) < 5){
+    if (strlen($name) < 5) {
         $ctx->sendMessage("Il nome deve essere più di 5 caratteri ignorante");
-    }else{
+    } else {
         $ctx->setChatData("name", $name);
         $ctx->sendMessage("{$name}, what is your age?");
         $ctx->nextStep("checkAge");
@@ -46,32 +46,31 @@ function checkAge(Context $ctx)
     }
 }
 
-function endConversation(Context $ctx){
+function endConversation(Context $ctx)
+{
     $ctx->getChatData()->then(function ($arrayData) use ($ctx) {
-        $ctx->sendMessage(implode(",",$arrayData));
+        $ctx->sendMessage(implode(",", $arrayData));
     });
     $ctx->endConversation();
 }
 
-
 $bot->onCommand("chatdata", function (Context $ctx) {
-
 
     $ctx->getItemChatData("name")->then(function ($data) use ($ctx) {
         $ctx->sendMessage($data);
     });
 
     $ctx->deleteItemChatData("name")->then(function ($result) use ($ctx) {
-        if($result){
+        if ($result) {
             $ctx->sendMessage("deleted item");
         }
 
     });
 
     $ctx->getItemChatData("name")->then(function ($data) use ($ctx) {
-        if($data){
+        if ($data) {
             $ctx->sendMessage($data);
-        }else{
+        } else {
             $ctx->sendMessage("empty");
         }
 
@@ -80,13 +79,11 @@ $bot->onCommand("chatdata", function (Context $ctx) {
 
 $bot->onCommand("clearchatdata", function (Context $ctx) {
     $ctx->deleteChatData()->then(function ($result) use ($ctx) {
-        if($result){
+        if ($result) {
             $ctx->sendMessage("cleared chat data");
         }
     });
 });
-
-
 
 $bot->run();
 

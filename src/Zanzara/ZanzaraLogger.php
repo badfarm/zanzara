@@ -50,7 +50,8 @@ class ZanzaraLogger
         $this->error($message);
     }
 
-    public function errorGetCache($error){
+    public function errorGetCache($error)
+    {
         $message = "Failed to get data from cache, reason: {$error}";
         $this->error($message);
     }

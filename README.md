@@ -21,7 +21,7 @@ Asynchronous PHP Telegram Bot Framework built on top of [ReactPHP](https://react
 * Lightweight (no web server or database required)
 * Bulk message sending (no more 429 annoying errors)
 
-### Installation
+### Installation (not ready yet)
 ```
 composer require badfarm/zanzara
 ```

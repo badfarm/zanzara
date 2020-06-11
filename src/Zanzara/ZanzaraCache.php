@@ -45,7 +45,6 @@ class ZanzaraCache
         $this->cache = $cache;
     }
 
-
     public function getGlobalCacheData()
     {
         $cacheKey = self::GLOBALDATA;
@@ -75,7 +74,6 @@ class ZanzaraCache
         $cacheKey = self::GLOBALDATA;
         return $this->deleteCacheItem($cacheKey, $key);
     }
-
 
     /**
      * Get the correct key value for chatId data stored in cache
@@ -118,7 +116,6 @@ class ZanzaraCache
 
     }
 
-
     /**
      * Get the correct key value for userId data stored in cache
      * @param $userId
@@ -135,7 +132,8 @@ class ZanzaraCache
         return $this->getCache($cacheKey);
     }
 
-    public function getItemCacheUserData($userId, $key){
+    public function getItemCacheUserData($userId, $key)
+    {
         $cacheKey = $this->getKeyUserId($userId);
         return $this->getCacheItem($cacheKey, $key);
     }
@@ -157,7 +155,6 @@ class ZanzaraCache
         $cacheKey = $this->getKeyUserId($userId);
         return $this->deleteCacheItem($cacheKey, $key);
     }
-
 
     /**
      * Get key of the conversation by chatId
@@ -186,7 +183,6 @@ class ZanzaraCache
         return $this->deleteCache([$this->getKeyConversation($chatId)]);
     }
 
-
     /**
      * Use only to call native method of CacheInterface
      * @param $name
@@ -200,7 +196,6 @@ class ZanzaraCache
         }
         return null; //should not happen. Don't call cache without instance
     }
-
 
     /**
      * Delete a key inside array stored in cacheKey
@@ -226,7 +221,6 @@ class ZanzaraCache
         });
     }
 
-
     /**
      * delete a cache iteam and return the promise
      * @param array $keys
@@ -241,7 +235,6 @@ class ZanzaraCache
             return $result;
         });
     }
-
 
     /**
      * Get cache item inside array stored in cacheKey
@@ -273,7 +266,6 @@ class ZanzaraCache
     {
         return $this->cache->clear();
     }
-
 
     /**
      * set a cache value and return the promise

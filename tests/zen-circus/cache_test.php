@@ -16,7 +16,6 @@ $config->setUpdateMode(Config::POLLING_MODE);
 
 $bot = new Zanzara($_ENV['BOT_KEY'], $config);
 
-
 /**
  *  There are 3 separed cache environment:
  *
@@ -45,13 +44,11 @@ $bot = new Zanzara($_ENV['BOT_KEY'], $config);
  *
  */
 
-
 $bot->onCommand("chatdata", function (Context $ctx) {
 
     $ctx->setChatData("eta", 22);
     $ctx->setChatData("name", "mattia");
     $ctx->setChatData("address", "piscine di Brebbia, n 6");
-
 
     //return the assoc array of all the chat data of the chatId context
     $ctx->getChatData()->then(function ($arrayData) use ($ctx) {
@@ -70,7 +67,6 @@ $bot->onCommand("chatdata", function (Context $ctx) {
             $ctx->sendMessage("deleted item");
         }
     });
-
 
     $ctx->getChatData()->then(function ($arrayData) use ($ctx) {
         //I can send it back to the user creating a list of the items
@@ -95,13 +91,11 @@ $bot->onCommand("chatdata", function (Context $ctx) {
     });
 });
 
-
 $bot->onCommand("userdata", function (Context $ctx) {
 
     $ctx->setUserData("eta", 22);
     $ctx->setUserData("name", "mattia");
     $ctx->setUserData("address", "piscine di Brebbia, n 6");
-
 
     //return the assoc array of all the chat data of the chatId context
     $ctx->getUserData()->then(function ($arrayData) use ($ctx) {
@@ -148,13 +142,11 @@ $bot->onCommand("userdata", function (Context $ctx) {
     });
 });
 
-
 $bot->onCommand("globaldata", function (Context $ctx) {
 
     $ctx->setGlobalData("eta", 22);
     $ctx->setGlobalData("name", "mattia");
     $ctx->setGlobalData("address", "piscine di Brebbia, n 6");
-
 
     //return the assoc array of all the chat data of the chatId context
     $ctx->getGlobalData()->then(function ($arrayData) use ($ctx) {
@@ -200,7 +192,6 @@ $bot->onCommand("globaldata", function (Context $ctx) {
         }
     });
 });
-
 
 $bot->run();
 
