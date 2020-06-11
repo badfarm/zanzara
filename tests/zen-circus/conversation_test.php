@@ -53,10 +53,26 @@ function endConversation(Context $ctx){
     $ctx->endConversation();
 }
 
+
 $bot->onCommand("chatdata", function (Context $ctx) {
-    $ctx->getChatData()->then(function ($arrayData) use ($ctx) {
-        if($arrayData){
-            $ctx->sendMessage(implode(",",$arrayData));
+
+
+
+
+    $ctx->getItemChatData("name")->then(function ($data) use ($ctx) {
+        $ctx->sendMessage($data);
+    });
+
+    $ctx->deleteItemChatData("name")->then(function ($result) use ($ctx) {
+        if($result){
+            $ctx->sendMessage("deleted item");
+        }
+
+    });
+
+    $ctx->getItemChatData("name")->then(function ($data) use ($ctx) {
+        if($data){
+            $ctx->sendMessage($data);
         }else{
             $ctx->sendMessage("empty");
         }
@@ -65,7 +81,7 @@ $bot->onCommand("chatdata", function (Context $ctx) {
 });
 
 $bot->onCommand("clearchatdata", function (Context $ctx) {
-    $ctx->deleteAllChatData()->then(function ($result) use ($ctx) {
+    $ctx->deleteChatData()->then(function ($result) use ($ctx) {
         if($result){
             $ctx->sendMessage("cleared chat data");
         }

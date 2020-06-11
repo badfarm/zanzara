@@ -46,10 +46,10 @@ class ZanzaraCache
     }
 
 
-    public function getGlobalCacheData($key)
+    public function getGlobalCacheData()
     {
         $cacheKey = self::GLOBALDATA;
-        return $this->getCacheItem($cacheKey, $key);
+        return $this->getCache($cacheKey);
     }
 
     public function setGlobalCacheData($key, $data)
@@ -58,7 +58,13 @@ class ZanzaraCache
         return $this->setCache($cacheKey, $key, $data);
     }
 
-    public function deleteAllCacheGlobalData()
+    public function getCacheItemGlobalData($key)
+    {
+        $cacheKey = self::GLOBALDATA;
+        return $this->getCacheItem($cacheKey, $key);
+    }
+
+    public function deleteCacheGlobalData()
     {
         $cacheKey = self::GLOBALDATA;
         return $this->deleteCache([$cacheKey]);
@@ -123,8 +129,13 @@ class ZanzaraCache
         return ZanzaraCache::USERDATA . strval($userId);
     }
 
-    public function getCacheUserData($userId, $key)
+    public function getCacheUserData($userId)
     {
+        $cacheKey = $this->getKeyUserId($userId);
+        return $this->getCache($cacheKey);
+    }
+
+    public function getItemCacheUserData($userId, $key){
         $cacheKey = $this->getKeyUserId($userId);
         return $this->getCacheItem($cacheKey, $key);
     }
