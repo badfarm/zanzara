@@ -14,21 +14,6 @@ class PassportElementErrorSelfie extends PassportElementError
 {
 
     /**
-     * Error source, must be selfie
-     *
-     * @var string
-     */
-    private $source;
-
-    /**
-     * The section of the user's Telegram Passport which has the issue, one of "passport", "driver_license",
-     * "identity_card", "internal_passport"
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
      * Base64-encoded hash of the file with the selfie
      *
      * @var string

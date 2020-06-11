@@ -13,21 +13,6 @@ class PassportElementErrorFile extends PassportElementError
 {
 
     /**
-     * Error source, must be file
-     *
-     * @var string
-     */
-    private $source;
-
-    /**
-     * The section of the user's Telegram Passport which has the issue, one of "utility_bill", "bank_statement",
-     * "rental_agreement", "passport_registration", "temporary_registration"
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
      * Base64-encoded file hash
      *
      * @var string

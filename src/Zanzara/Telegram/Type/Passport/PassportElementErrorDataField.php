@@ -14,21 +14,6 @@ class PassportElementErrorDataField extends PassportElementError
 {
 
     /**
-     * Error source, must be data
-     *
-     * @var string
-     */
-    private $source;
-
-    /**
-     * The section of the user's Telegram Passport which has the error, one of "personal_details", "passport",
-     * "driver_license", "identity_card", "internal_passport", "address"
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
      * Name of the data field which has the error
      *
      * @var string
@@ -96,5 +81,4 @@ class PassportElementErrorDataField extends PassportElementError
     {
         $this->message = $message;
     }
-
 }
