@@ -40,7 +40,7 @@ $bot = new Zanzara($_ENV['BOT_KEY'], $config);
  *  For userdata it's the same, but it's indexed on the userId of the context.
  *
  *  The only differenct with global data is that it can be accessed with the $ctx(only for simplicity but it's
- *  not referred to the context) and with the $bot istance.
+ *  not referred to the context) and with the $bot instance.
  *
  *
  */

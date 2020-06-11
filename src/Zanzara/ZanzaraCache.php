@@ -262,9 +262,7 @@ class ZanzaraCache
 
     public function getCache($cacheKey)
     {
-        return $this->cache->get($cacheKey)->then(function ($arrayData) {
-            return $arrayData;
-        });
+        return $this->cache->get($cacheKey);
     }
 
     /**
@@ -273,9 +271,7 @@ class ZanzaraCache
      */
     public function wipeCache()
     {
-        return $this->cache->clear()->then(function ($result) {
-            return $result;
-        });
+        return $this->cache->clear();
     }
 
 

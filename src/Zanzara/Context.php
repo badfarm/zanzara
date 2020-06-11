@@ -192,7 +192,7 @@ class Context
      */
     public function getUserData()
     {
-        $userId = $this->update->getEffectiveChat()->getUsername();
+        $userId = $this->update->getEffectiveUser()->getId();
         $cache = $this->container->get(ZanzaraCache::class);
         return $cache->getCacheUserData($userId);
     }
@@ -204,7 +204,7 @@ class Context
      */
     public function getItemUserData($key)
     {
-        $chatId = $this->update->getEffectiveChat()->getUsername();
+        $chatId = $this->update->getEffectiveUser()->getId();
         $cache = $this->container->get(ZanzaraCache::class);
         return $cache->getItemCacheUserData($chatId, $key);
     }
@@ -217,7 +217,7 @@ class Context
      */
     public function setUserData($key, $data)
     {
-        $userId = $this->update->getEffectiveChat()->getUsername();
+        $userId = $this->update->getEffectiveUser()->getId();
         $cache = $this->container->get(ZanzaraCache::class);
         return $cache->setCacheUserData($userId, $key, $data);
     }
@@ -229,7 +229,7 @@ class Context
      */
     public function deleteItemUserData($key)
     {
-        $userId = $this->update->getEffectiveChat()->getUsername();
+        $userId = $this->update->getEffectiveUser()->getId();
         $cache = $this->container->get(ZanzaraCache::class);
         return $cache->deleteCacheItemUserData($userId, $key);
     }
@@ -240,7 +240,7 @@ class Context
      */
     public function deleteUserData()
     {
-        $chatId = $this->update->getEffectiveChat()->getUsername();
+        $chatId = $this->update->getEffectiveUser()->getId();
         $cache = $this->container->get(ZanzaraCache::class);
         return $cache->deleteAllCacheUserData($chatId);
     }

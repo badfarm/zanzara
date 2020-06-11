@@ -57,8 +57,6 @@ function endConversation(Context $ctx){
 $bot->onCommand("chatdata", function (Context $ctx) {
 
 
-
-
     $ctx->getItemChatData("name")->then(function ($data) use ($ctx) {
         $ctx->sendMessage($data);
     });
