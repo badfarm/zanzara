@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zanzara\Listener;
 
-use Psr\Container\ContainerInterface;
+use DI\Container;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Update;
@@ -17,7 +17,7 @@ abstract class ListenerResolver extends ListenerCollector
 {
 
     /**
-     * @var ContainerInterface
+     * @var Container
      */
     protected $container;
 
@@ -54,8 +54,12 @@ abstract class ListenerResolver extends ListenerCollector
             case CallbackQuery::class:
                 $callbackQuery = $update->getCallbackQuery();
                 $text = $callbackQuery->getMessage()->getText();
-                $this->findAndPush($listeners, 'cb_query_texts', $text);
-                $this->findAndPush($listeners, 'cb_query_data', $callbackQuery->getData());
+                if ($text) {
+                    $this->findAndPush($listeners, 'cb_query_texts', $text);
+                }
+                if ($callbackQuery->getData()) {
+                    $this->findAndPush($listeners, 'cb_query_data', $callbackQuery->getData());
+                }
                 break;
         }
 
