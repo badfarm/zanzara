@@ -1,6 +1,5 @@
 {
-    "name": "zanzara/zanzara",
-    "version": "0.1.0",
+    "name": "badfarm/zanzara",
     "type": "library",
     "description": "Asynchronous PHP Telegram Bot Framework",
     "keywords": [
@@ -33,7 +32,7 @@
         "clue/buzz-react": "^2.7",
         "php-http/multipart-stream-builder": "^1.1",
         "netresearch/jsonmapper": "^2.0",
-        "react/filesystem": "0.1.1"
+        "react/filesystem": "^0.1.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5",
