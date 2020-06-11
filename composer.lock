@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5efa88a40ea6f5754618a106dd0b8e47",
+    "content-hash": "409a6f0033f604bdbc92ec0987b91989",
     "packages": [
         {
             "name": "cakephp/core",
@@ -1233,16 +1233,16 @@
         },
         {
             "name": "react/filesystem",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/filesystem.git",
-                "reference": "ddb11f9c1a9786898447f44cbb9be56af05e0d01"
+                "reference": "766cdef9ba806367114f0c5ba36ea2a6eec8ccd2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/filesystem/zipball/ddb11f9c1a9786898447f44cbb9be56af05e0d01",
-                "reference": "ddb11f9c1a9786898447f44cbb9be56af05e0d01",
+                "url": "https://api.github.com/repos/reactphp/filesystem/zipball/766cdef9ba806367114f0c5ba36ea2a6eec8ccd2",
+                "reference": "766cdef9ba806367114f0c5ba36ea2a6eec8ccd2",
                 "shasum": ""
             },
             "require": {
@@ -1286,7 +1286,7 @@
                 "eio",
                 "filesystem"
             ],
-            "time": "2018-08-09T15:20:03+00:00"
+            "time": "2018-10-22T12:10:29+00:00"
         },
         {
             "name": "react/http",
