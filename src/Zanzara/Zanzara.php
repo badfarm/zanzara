@@ -90,6 +90,7 @@ class Zanzara extends ListenerResolver
         if ($this->config->getUpdateMode() === Config::REACTPHP_WEBHOOK_MODE) {
             $this->prepareServer();
         }
+        $this->cache = $this->container->get(ZanzaraCache::class);
     }
 
     public function run(): void
@@ -282,6 +283,9 @@ class Zanzara extends ListenerResolver
         return $this->telegram;
     }
 
+    /**
+     * @return LoopInterface
+     */
     public function getLoop(): LoopInterface
     {
         return $this->loop;
@@ -304,7 +308,14 @@ class Zanzara extends ListenerResolver
     }
 
     /**
-     * Set global data
+     * Sets an item of the global data.
+     * This cache is not related to any chat or user.
+     *
+     * Eg:
+     * $ctx->setGlobalData('age', 21)->then(function($result) {
+     *
+     * });
+     *
      * @param $key
      * @param $data
      * @return PromiseInterface
@@ -313,69 +324,92 @@ class Zanzara extends ListenerResolver
      */
     public function setGlobalData($key, $data)
     {
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->setGlobalCacheData($key, $data);
+        return $this->cache->setGlobalCacheData($key, $data);
     }
 
     /**
-     * Gel all global data
+     * Returns all the global data.
+     * This cache is not related to any chat or user.
+     *
+     * Eg:
+     * $ctx->getGlobalData()->then(function($data) {
+     *      $age = $data['age'];
+     * });
+     *
      * @return PromiseInterface
      * @throws DependencyException
      * @throws NotFoundException
      */
     public function getGlobalData()
     {
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->getGlobalCacheData();
+        return $this->cache->getGlobalCacheData();
     }
 
     /**
-     * Get item of global data by key
+     * Gets an item of the global data.
+     * This cache is not related to any chat or user.
+     *
+     * Eg:
+     * $ctx->getGlobalDataItem('age')->then(function($age) {
+     *
+     * });
+     *
      * @param $key
      * @return PromiseInterface
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function getItemGlobalData($key)
+    public function getGlobalDataItem($key)
     {
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->getCacheItemGlobalData($key);
+        return $this->cache->getCacheGlobalDataItem($key);
     }
 
     /**
-     * Delete item of global data by key
+     * Deletes an item from the global data.
+     * This cache is not related to any chat or user.
+     *
+     * Eg:
+     * $ctx->deleteGlobalDataItem('age')->then(function($result) {
+     *
+     * });
+     *
      * @param $key
      * @return PromiseInterface
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function deleteItemGlobalData($key)
+    public function deleteGlobalDataItem($key)
     {
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->deleteCacheItemGlobalData($key);
+        return $this->cache->deleteCacheItemGlobalData($key);
     }
 
     /**
-     * Delete all global data
+     * Deletes all global data.
+     *
+     * Eg:
+     * $ctx->deleteGlobalData()->then(function($result) {
+     *
+     * });
+     *
      * @return PromiseInterface
      * @throws DependencyException
      * @throws NotFoundException
      */
     public function deleteGlobalData()
     {
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->deleteCacheGlobalData();
+        return $this->cache->deleteCacheGlobalData();
     }
 
     /**
-     * Wipe entire cache
+     * Wipe entire cache.
+     *
      * @return PromiseInterface
      * @throws DependencyException
      * @throws NotFoundException
      */
     public function wipeCache()
     {
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->wipeCache();
+        return $this->cache->wipeCache();
     }
+
 }

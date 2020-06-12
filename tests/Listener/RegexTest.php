@@ -23,7 +23,7 @@ class RegexTest extends TestCase
         $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
         $bot = new Zanzara('test', $config);
 
-        $bot->onCommand('s.', function (Context $ctx) {
+        $bot->onCommand('start', function (Context $ctx) {
             $update = $ctx->getUpdate();
             $message = $update->getMessage();
             $this->assertSame(52259544, $update->getUpdateId());

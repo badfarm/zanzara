@@ -22,6 +22,11 @@ abstract class ListenerResolver extends ListenerCollector
     protected $container;
 
     /**
+     * @var ZanzaraCache
+     */
+    protected $cache;
+
+    /**
      * @param Update $update
      * @return Listener[]
      */
@@ -37,16 +42,14 @@ abstract class ListenerResolver extends ListenerCollector
                 if ($text) {
                     $listener = $this->findAndPush($listeners, 'messages', $text);
 
-                    $cache = $this->container->get(ZanzaraCache::class);
-
                     if ($listener) {
                         //clean the state because a listener has been found
                         $chatId = $update->getEffectiveChat()->getId();
-                        $cache->deleteConversationCache($chatId);
+                        $this->cache->deleteConversationCache($chatId);
                     } else {
                         //there is no listener so we look for the state
                         $chatId = $update->getEffectiveChat()->getId();
-                        $cache->callHandlerByChatId($chatId, $update, $this->container);
+                        $this->cache->callHandlerByChatId($chatId, $update, $this->container);
                     }
                 }
                 break;

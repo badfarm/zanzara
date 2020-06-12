@@ -56,18 +56,18 @@ function endConversation(Context $ctx)
 
 $bot->onCommand("chatdata", function (Context $ctx) {
 
-    $ctx->getItemChatData("name")->then(function ($data) use ($ctx) {
+    $ctx->getChatDataItem("name")->then(function ($data) use ($ctx) {
         $ctx->sendMessage($data);
     });
 
-    $ctx->deleteItemChatData("name")->then(function ($result) use ($ctx) {
+    $ctx->deleteChatDataItem("name")->then(function ($result) use ($ctx) {
         if ($result) {
             $ctx->sendMessage("deleted item");
         }
 
     });
 
-    $ctx->getItemChatData("name")->then(function ($data) use ($ctx) {
+    $ctx->getChatDataItem("name")->then(function ($data) use ($ctx) {
         if ($data) {
             $ctx->sendMessage($data);
         } else {

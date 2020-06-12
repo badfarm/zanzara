@@ -57,12 +57,12 @@ $bot->onCommand("chatdata", function (Context $ctx) {
     });
 
     //return the value of the key name
-    $ctx->getItemChatData("name")->then(function ($data) use ($ctx) {
+    $ctx->getChatDataItem("name")->then(function ($data) use ($ctx) {
         //send data back to the user
         $ctx->sendMessage($data);
     });
 
-    $ctx->deleteItemChatData("name")->then(function ($result) use ($ctx) {
+    $ctx->deleteChatDataItem("name")->then(function ($result) use ($ctx) {
         if ($result) {
             $ctx->sendMessage("deleted item");
         }
@@ -104,12 +104,12 @@ $bot->onCommand("userdata", function (Context $ctx) {
     });
 
     //return the value of the key name
-    $ctx->getItemUserData("name")->then(function ($data) use ($ctx) {
+    $ctx->getUserDataItem("name")->then(function ($data) use ($ctx) {
         //send data back to the user
         $ctx->sendMessage($data);
     });
 
-    $ctx->deleteItemUserData("name")->then(function ($result) use ($ctx) {
+    $ctx->deleteUserDataItem("name")->then(function ($result) use ($ctx) {
         if ($result) {
             $ctx->sendMessage("deleted item");
         }
@@ -155,12 +155,12 @@ $bot->onCommand("globaldata", function (Context $ctx) {
     });
 
     //return the value of the key name
-    $ctx->getItemGlobalData("name")->then(function ($data) use ($ctx) {
+    $ctx->getGlobalDataItem("name")->then(function ($data) use ($ctx) {
         //send data back to the user
         $ctx->sendMessage($data);
     });
 
-    $ctx->deleteItemGlobalData("name")->then(function ($result) use ($ctx) {
+    $ctx->deleteGlobalDataItem("name")->then(function ($result) use ($ctx) {
         if ($result) {
             $ctx->sendMessage("deleted item");
         }

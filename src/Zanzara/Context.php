@@ -54,6 +54,11 @@ class Context
     private $data = [];
 
     /**
+     * @var ZanzaraCache
+     */
+    private $cache;
+
+    /**
      * @param Update $update
      * @param ContainerInterface $container
      */
@@ -62,6 +67,7 @@ class Context
         $this->update = $update;
         $this->container = $container;
         $this->browser = $container->get(Browser::class);
+        $this->cache = $container->get(ZanzaraCache::class);
     }
 
     /**
@@ -101,207 +107,294 @@ class Context
     }
 
     /**
-     * Save the next state with callable function. Used to go to the next conversation handler
-     * @param callable $handler
+     * Used to either start a new conversation or to set next step handler for an existing conversation.
+     * Conversations are based on chat_id.
+     * By default a in-memory cache is used to keep the conversation's state.
+     * See https://github.com/badfarm/zanzara/wiki#conversations-and-user-data-cache.
+     * Use the returned promise to know if the operation was successful.
+     *
+     * @param callable $handler This callable must be take on parameter of type Context
      * @return PromiseInterface
      */
-    public function nextStep(callable $handler)
+    public function nextStep(callable $handler): PromiseInterface
     {
         $chatId = $this->update->getEffectiveChat()->getId();
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->setConversation($chatId, $handler);
+        return $this->cache->setConversationHandler($chatId, $handler);
     }
 
     /**
-     * Clean the cache for the conversation based on chatId
+     * Ends the conversation by cleaning the cache.
+     * Conversations are based on chat_id.
+     * See https://github.com/badfarm/zanzara/wiki#conversations-and-user-data-cache.
+     * Use the returned promise to know if the operation was successful.
+     *
+     * @return PromiseInterface
      */
-    public function endConversation()
+    public function endConversation(): PromiseInterface
     {
         $chatId = $this->update->getEffectiveChat()->getId();
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->deleteConversationCache($chatId);
+        return $this->cache->deleteConversationCache($chatId);
     }
 
     /**
-     * Return all the chat data of the context
+     * Returns all the chat-related data.
+     *
+     * Eg:
+     * $ctx->getChatData()->then(function($data) {
+     *      $age = $data['age'];
+     * });
+     *
      * @return PromiseInterface
      */
     public function getChatData()
     {
         $chatId = $this->update->getEffectiveChat()->getId();
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->getCacheChatData($chatId);
+        return $this->cache->getCacheChatData($chatId);
     }
 
     /**
-     * Get chat data by key
+     * Gets an item of the chat data.
+     *
+     * Eg:
+     * $ctx->getChatDataItem('age')->then(function($age) {
+     *
+     * });
+     *
      * @param $key
      * @return PromiseInterface
      */
-    public function getItemChatData($key)
+    public function getChatDataItem($key): PromiseInterface
     {
         $chatId = $this->update->getEffectiveChat()->getId();
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->getItemCacheChatData($chatId, $key);
+        return $this->cache->getCacheChatDataItem($chatId, $key);
     }
 
     /**
-     * Set chat data by key
+     * Sets an item of the chat data.
+     *
+     * Eg:
+     * $ctx->setChatData('age', 21)->then(function($result) {
+     *
+     * });
+     *
      * @param $key
      * @param $data
      * @return PromiseInterface
      */
-    public function setChatData($key, $data)
+    public function setChatData($key, $data): PromiseInterface
     {
         $chatId = $this->update->getEffectiveChat()->getId();
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->setCacheChatData($chatId, $key, $data);
+        return $this->cache->setCacheChatData($chatId, $key, $data);
     }
 
     /**
-     * Delete an item of the chat data
+     * Deletes an item from the chat data.
+     *
+     * Eg:
+     * $ctx->deleteChatDataItem('age')->then(function($result) {
+     *
+     * });
+     *
      * @param $key
      * @return PromiseInterface
      */
-    public function deleteItemChatData($key)
+    public function deleteChatDataItem($key): PromiseInterface
     {
         $chatId = $this->update->getEffectiveChat()->getId();
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->deleteCacheItemChatData($chatId, $key);
+        return $this->cache->deleteCacheChatDataItem($chatId, $key);
     }
 
     /**
-     * Delete all chat data
+     * Deletes all chat data.
+     *
+     * Eg:
+     * $ctx->deleteChatData()->then(function($result) {
+     *
+     * });
+     *
      * @return PromiseInterface
      */
-    public function deleteChatData()
+    public function deleteChatData(): PromiseInterface
     {
         $chatId = $this->update->getEffectiveChat()->getId();
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->deleteAllCacheChatData($chatId);
+        return $this->cache->deleteAllCacheChatData($chatId);
     }
 
     /**
-     * Get user data by context
+     * Returns all the user-related data.
+     *
+     * Eg:
+     * $ctx->getUserData()->then(function($data) {
+     *      $age = $data['age'];
+     * });
+     *
      * @return PromiseInterface
      */
-    public function getUserData()
+    public function getUserData(): PromiseInterface
     {
         $userId = $this->update->getEffectiveUser()->getId();
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->getCacheUserData($userId);
+        return $this->cache->getCacheUserData($userId);
     }
 
     /**
-     * Get user data by key
+     * Gets an item of the user data.
+     *
+     * Eg:
+     * $ctx->getUserDataItem('age')->then(function($age) {
+     *
+     * });
+     *
      * @param $key
      * @return PromiseInterface
      */
-    public function getItemUserData($key)
+    public function getUserDataItem($key): PromiseInterface
     {
-        $chatId = $this->update->getEffectiveUser()->getId();
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->getItemCacheUserData($chatId, $key);
+        $userId = $this->update->getEffectiveUser()->getId();
+        return $this->cache->getCacheUserDataItem($userId, $key);
     }
 
     /**
-     * Set user data by key
+     * Sets an item of the user data.
+     *
+     * Eg:
+     * $ctx->setUserData('age', 21)->then(function($result) {
+     *
+     * });
+     *
      * @param $key
      * @param $data
      * @return PromiseInterface
      */
-    public function setUserData($key, $data)
+    public function setUserData($key, $data): PromiseInterface
     {
         $userId = $this->update->getEffectiveUser()->getId();
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->setCacheUserData($userId, $key, $data);
+        return $this->cache->setCacheUserData($userId, $key, $data);
     }
 
     /**
-     * Delete item of user data by key
+     * Deletes an item from the user data.
+     *
+     * Eg:
+     * $ctx->deleteUserDataItem('age')->then(function($result) {
+     *
+     * });
+     *
      * @param $key
      * @return PromiseInterface
      */
-    public function deleteItemUserData($key)
+    public function deleteUserDataItem($key): PromiseInterface
     {
         $userId = $this->update->getEffectiveUser()->getId();
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->deleteCacheItemUserData($userId, $key);
+        return $this->cache->deleteCacheItemUserData($userId, $key);
     }
 
     /**
-     * Delete all user data
+     * Deletes all user data.
+     *
+     * Eg:
+     * $ctx->deleteUserData()->then(function($result) {
+     *
+     * });
+     *
      * @return PromiseInterface
      */
-    public function deleteUserData()
+    public function deleteUserData(): PromiseInterface
     {
-        $chatId = $this->update->getEffectiveUser()->getId();
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->deleteAllCacheUserData($chatId);
+        $userId = $this->update->getEffectiveUser()->getId();
+        return $this->cache->deleteAllCacheUserData($userId);
     }
 
     /**
-     * Set global data
+     * Sets an item of the global data.
+     * This cache is not related to any chat or user.
+     *
+     * Eg:
+     * $ctx->setGlobalData('age', 21)->then(function($result) {
+     *
+     * });
+     *
      * @param $key
      * @param $data
      * @return PromiseInterface
      */
     public function setGlobalData($key, $data)
     {
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->setGlobalCacheData($key, $data);
+        return $this->cache->setGlobalCacheData($key, $data);
     }
 
     /**
-     * Gel all global data
+     * Returns all the global data.
+     * This cache is not related to any chat or user.
+     *
+     * Eg:
+     * $ctx->getGlobalData()->then(function($data) {
+     *      $age = $data['age'];
+     * });
+     *
      * @return PromiseInterface
      */
-    public function getGlobalData()
+    public function getGlobalData(): PromiseInterface
     {
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->getGlobalCacheData();
+        return $this->cache->getGlobalCacheData();
     }
 
     /**
-     * Get item of global data by key
+     * Gets an item of the global data.
+     * This cache is not related to any chat or user.
+     *
+     * Eg:
+     * $ctx->getGlobalDataItem('age')->then(function($age) {
+     *
+     * });
+     *
      * @param $key
      * @return PromiseInterface
      */
-    public function getItemGlobalData($key)
+    public function getGlobalDataItem($key): PromiseInterface
     {
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->getCacheItemGlobalData($key);
+        return $this->cache->getCacheGlobalDataItem($key);
     }
 
     /**
-     * Delete item of global data by key
+     * Deletes an item from the global data.
+     * This cache is not related to any chat or user.
+     *
+     * Eg:
+     * $ctx->deleteGlobalDataItem('age')->then(function($result) {
+     *
+     * });
+     *
      * @param $key
      * @return PromiseInterface
      */
-    public function deleteItemGlobalData($key)
+    public function deleteGlobalDataItem($key): PromiseInterface
     {
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->deleteCacheItemGlobalData($key);
+        return $this->cache->deleteCacheItemGlobalData($key);
     }
 
     /**
-     * Delete all global data
+     * Deletes all global data.
+     *
+     * Eg:
+     * $ctx->deleteGlobalData()->then(function($result) {
+     *
+     * });
+     *
      * @return PromiseInterface
      */
-    public function deleteGlobalData()
+    public function deleteGlobalData(): PromiseInterface
     {
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->deleteCacheGlobalData();
+        return $this->cache->deleteCacheGlobalData();
     }
 
     /**
-     * Wipe entire cache
+     * Wipe entire cache.
+     *
      * @return PromiseInterface
      */
-    public function wipeCache()
+    public function wipeCache(): PromiseInterface
     {
-        $cache = $this->container->get(ZanzaraCache::class);
-        return $cache->wipeCache();
+        return $this->cache->wipeCache();
     }
 
     /**
