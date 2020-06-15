@@ -193,10 +193,28 @@ $bot->onCommand("globaldata", function (Context $ctx) {
     });
 });
 
-$bot->onCommand('append', function (Context $ctx) {
+$bot->onCommand('appendUser', function (Context $ctx) {
     $random = rand(1000, 9999);
     $ctx->appendUserData('myData', $random)->then(function ($res) use ($ctx) {
         $ctx->getUserDataItem('myData')->then(function ($data) use ($ctx) {
+            $ctx->sendMessage(json_encode($data));
+        });
+    });
+});
+
+$bot->onCommand('appendChat', function (Context $ctx) {
+    $random = rand(1000, 9999);
+    $ctx->appendChatData('myData', $random)->then(function ($res) use ($ctx) {
+        $ctx->getChatDataItem('myData')->then(function ($data) use ($ctx) {
+            $ctx->sendMessage(json_encode($data));
+        });
+    });
+});
+
+$bot->onCommand('appendGlobal', function (Context $ctx) {
+    $random = rand(1000, 9999);
+    $ctx->appendGlobalData('myData', $random)->then(function ($res) use ($ctx) {
+        $ctx->getGlobalDataItem('myData')->then(function ($data) use ($ctx) {
             $ctx->sendMessage(json_encode($data));
         });
     });
