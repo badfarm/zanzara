@@ -6,8 +6,6 @@ namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
 use DI\Container;
-use DI\DependencyException;
-use DI\NotFoundException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use React\Cache\ArrayCache;
@@ -319,12 +317,27 @@ class Zanzara extends ListenerResolver
      * @param $key
      * @param $data
      * @return PromiseInterface
-     * @throws DependencyException
-     * @throws NotFoundException
      */
     public function setGlobalData($key, $data)
     {
         return $this->cache->setGlobalCacheData($key, $data);
+    }
+
+    /**
+     * Append data to an existing global cache item. The item value is always an array.
+     *
+     * Eg:
+     * $ctx->appendGlobalData('users', ['Mike', 'John'])->then(function($result) {
+     *
+     * });
+     *
+     * @param $key
+     * @param $data
+     * @return PromiseInterface
+     */
+    public function appendGlobalData($key, $data): PromiseInterface
+    {
+        return $this->cache->appendGlobalCacheData($key, $data);
     }
 
     /**
@@ -337,8 +350,6 @@ class Zanzara extends ListenerResolver
      * });
      *
      * @return PromiseInterface
-     * @throws DependencyException
-     * @throws NotFoundException
      */
     public function getGlobalData()
     {
@@ -356,8 +367,6 @@ class Zanzara extends ListenerResolver
      *
      * @param $key
      * @return PromiseInterface
-     * @throws DependencyException
-     * @throws NotFoundException
      */
     public function getGlobalDataItem($key)
     {
@@ -375,8 +384,6 @@ class Zanzara extends ListenerResolver
      *
      * @param $key
      * @return PromiseInterface
-     * @throws DependencyException
-     * @throws NotFoundException
      */
     public function deleteGlobalDataItem($key)
     {
@@ -392,8 +399,6 @@ class Zanzara extends ListenerResolver
      * });
      *
      * @return PromiseInterface
-     * @throws DependencyException
-     * @throws NotFoundException
      */
     public function deleteGlobalData()
     {
@@ -404,8 +409,6 @@ class Zanzara extends ListenerResolver
      * Wipe entire cache.
      *
      * @return PromiseInterface
-     * @throws DependencyException
-     * @throws NotFoundException
      */
     public function wipeCache()
     {
