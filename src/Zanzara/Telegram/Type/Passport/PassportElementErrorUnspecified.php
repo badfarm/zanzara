@@ -11,7 +11,7 @@ namespace Zanzara\Telegram\Type\Passport;
  */
 class PassportElementErrorUnspecified extends PassportElementError
 {
-    
+
     /**
      * Base64-encoded element hash
      *

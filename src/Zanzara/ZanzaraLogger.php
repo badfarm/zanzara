@@ -68,9 +68,8 @@ class ZanzaraLogger
 
     public function errorWriteCache($error)
     {
-        $message = "Failed to set conversation state into cache, reason: {$error}";
+        $message = "Failed to write into cache, reason: {$error}";
         $this->error($message);
-
     }
 
     public function errorNotAuthorized()

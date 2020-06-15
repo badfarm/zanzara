@@ -188,6 +188,24 @@ class Context
     }
 
     /**
+     * Append data to an existing chat cache item. The item value is always an array.
+     *
+     * Eg:
+     * $ctx->appendChatData('users', ['Mike', 'John'])->then(function($result) {
+     *
+     * });
+     *
+     * @param $key
+     * @param $data
+     * @return PromiseInterface
+     */
+    public function appendChatData($key, $data): PromiseInterface
+    {
+        $chatId = $this->update->getEffectiveChat()->getId();
+        return $this->cache->appendCacheChatData($chatId, $key, $data);
+    }
+
+    /**
      * Deletes an item from the chat data.
      *
      * Eg:
@@ -272,6 +290,24 @@ class Context
     }
 
     /**
+     * Append data to an existing user cache item. The item value is always an array.
+     *
+     * Eg:
+     * $ctx->appendUserData('users', ['Mike', 'John'])->then(function($result) {
+     *
+     * });
+     *
+     * @param $key
+     * @param $data
+     * @return PromiseInterface
+     */
+    public function appendUserData($key, $data): PromiseInterface
+    {
+        $userId = $this->update->getEffectiveUser()->getId();
+        return $this->cache->appendCacheUserData($userId, $key, $data);
+    }
+
+    /**
      * Deletes an item from the user data.
      *
      * Eg:
@@ -320,6 +356,23 @@ class Context
     public function setGlobalData($key, $data)
     {
         return $this->cache->setGlobalCacheData($key, $data);
+    }
+
+    /**
+     * Append data to an existing global cache item. The item value is always an array.
+     *
+     * Eg:
+     * $ctx->appendGlobalData('users', ['Mike', 'John'])->then(function($result) {
+     *
+     * });
+     *
+     * @param $key
+     * @param $data
+     * @return PromiseInterface
+     */
+    public function appendGlobalData($key, $data): PromiseInterface
+    {
+        return $this->cache->appendGlobalCacheData($key, $data);
     }
 
     /**

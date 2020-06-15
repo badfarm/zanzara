@@ -29,10 +29,10 @@
         "react/http": "^0.8.6",
         "react/react": "^1.0",
         "react/cache": "^1.0.0",
+        "react/filesystem": "^0.1.2",
         "clue/buzz-react": "^2.7",
         "php-http/multipart-stream-builder": "^1.1",
-        "netresearch/jsonmapper": "^2.0",
-        "react/filesystem": "^0.1.2"
+        "netresearch/jsonmapper": "^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5",

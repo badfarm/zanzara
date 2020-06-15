@@ -57,6 +57,12 @@ class ZanzaraCache
         return $this->doSet($cacheKey, $key, $data);
     }
 
+    public function appendGlobalCacheData(string $key, $data)
+    {
+        $cacheKey = self::GLOBALDATA;
+        return $this->appendCacheData($cacheKey, $key, $data);
+    }
+
     public function getCacheGlobalDataItem(string $key)
     {
         $cacheKey = self::GLOBALDATA;
@@ -103,6 +109,12 @@ class ZanzaraCache
         return $this->doSet($cacheKey, $key, $data);
     }
 
+    public function appendCacheChatData(int $chatId, string $key, $data)
+    {
+        $cacheKey = $this->getChatIdKey($chatId);
+        return $this->appendCacheData($cacheKey, $key, $data);
+    }
+
     public function deleteAllCacheChatData(int $chatId)
     {
         $cacheKey = $this->getChatIdKey($chatId);
@@ -141,6 +153,12 @@ class ZanzaraCache
     {
         $cacheKey = $this->getUserIdKey($userId);
         return $this->doSet($cacheKey, $key, $data);
+    }
+
+    public function appendCacheUserData(int $userId, string $key, $data)
+    {
+        $cacheKey = $this->getUserIdKey($userId);
+        return $this->appendCacheData($cacheKey, $key, $data);
     }
 
     public function deleteAllCacheUserData(int $userId)
@@ -279,6 +297,28 @@ class ZanzaraCache
             } else {
                 $arrayData[$key] = $data;
             }
+
+            return $this->cache->set($cacheKey, $arrayData)->then(function ($result) {
+                if ($result !== true) {
+                    $this->logger->errorWriteCache($result);
+                }
+                return $result;
+            });
+        });
+    }
+
+    /**
+     * Append data to an existing cache item. The item value is always an array.
+     *
+     * @param string $cacheKey
+     * @param string $key
+     * @param $data
+     * @return PromiseInterface
+     */
+    public function appendCacheData(string $cacheKey, string $key, $data)
+    {
+        return $this->cache->get($cacheKey)->then(function ($arrayData) use ($key, $data, $cacheKey) {
+            $arrayData[$key][] = $data;
 
             return $this->cache->set($cacheKey, $arrayData)->then(function ($result) {
                 if ($result !== true) {
