@@ -15,8 +15,8 @@ $dotenv->load("../../.env");
 $config = new Config();
 $config->setUpdateMode(Config::POLLING_MODE);
 $config->useReactFileSystem(false);
-$bot = new Zanzara($_ENV['BOT_KEY'], $config);
-$key = $_ENV['BOT_KEY'];
+$bot = new Zanzara($_ENV['BOT_TOKEN'], $config);
+$key = $_ENV['BOT_TOKEN'];
 
 $bot->onCommand("start", function (Context $ctx) use ($bot) {
     echo "I'm processing the /start command \n";

@@ -14,7 +14,7 @@ $config = new Config();
 $config->setCache(new \React\Cache\ArrayCache());
 $config->setUpdateMode(Config::POLLING_MODE);
 
-$bot = new Zanzara($_ENV['BOT_KEY'], $config);
+$bot = new Zanzara($_ENV['BOT_TOKEN'], $config);
 
 $bot->onCommand("start", function (Context $ctx) {
     $ctx->sendMessage("Hi, what's your name?");

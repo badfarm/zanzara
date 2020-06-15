@@ -4,7 +4,7 @@ use Zanzara\Zanzara;
 
 require __DIR__ . '/../bootstrap.php';
 
-$bot = new Zanzara($_ENV['BOT_KEY']);
+$bot = new Zanzara($_ENV['BOT_TOKEN']);
 
 $bot->onUpdate(function (\Zanzara\Context $ctx) {
     $chatId = $ctx->getEffectiveChat()->getId();

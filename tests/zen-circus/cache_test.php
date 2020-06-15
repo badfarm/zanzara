@@ -14,7 +14,7 @@ $config = new Config();
 $config->setCache(new \React\Cache\ArrayCache());
 $config->setUpdateMode(Config::POLLING_MODE);
 
-$bot = new Zanzara($_ENV['BOT_KEY'], $config);
+$bot = new Zanzara($_ENV['BOT_TOKEN'], $config);
 
 /**
  *  There are 3 separed cache environment:

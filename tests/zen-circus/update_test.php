@@ -8,7 +8,7 @@ require __DIR__ . '/../bootstrap.php';
 
 $config = new Config();
 $config->setUpdateMode(Config::POLLING_MODE);
-$bot = new Zanzara($_ENV['BOT_KEY'], $config);
+$bot = new Zanzara($_ENV['BOT_TOKEN'], $config);
 
 $bot->onUpdate(function (Context $ctx) {
     $ctx->sendMessage('Hello');

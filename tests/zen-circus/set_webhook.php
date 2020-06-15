@@ -5,7 +5,7 @@ use Zanzara\Zanzara;
 
 require __DIR__ . '/../bootstrap.php';
 
-$bot = new Zanzara($_ENV['BOT_KEY']);
+$bot = new Zanzara($_ENV['BOT_TOKEN']);
 $telegram = $bot->getTelegram();
 
 $telegram->setWebhook('https://mydomain.com/hook.php')->then(

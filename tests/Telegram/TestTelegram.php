@@ -25,7 +25,7 @@ class TestTelegram extends TestCase
      */
     public function testGetUpdates()
     {
-        $bot = new Zanzara($_ENV['BOT_KEY']);
+        $bot = new Zanzara($_ENV['BOT_TOKEN']);
         $telegram = $bot->getTelegram();
 
         $telegram->getUpdates(['offset' => 1, 'timeout' => 1])->then(
@@ -45,7 +45,7 @@ class TestTelegram extends TestCase
      */
     public function testSendMessage()
     {
-        $bot = new Zanzara($_ENV['BOT_KEY']);
+        $bot = new Zanzara($_ENV['BOT_TOKEN']);
         $telegram = $bot->getTelegram();
 
         $chatId = (int)$_ENV['CHAT_ID'];
@@ -66,7 +66,7 @@ class TestTelegram extends TestCase
      */
     public function testError()
     {
-        $bot = new Zanzara($_ENV['BOT_KEY']);
+        $bot = new Zanzara($_ENV['BOT_TOKEN']);
         $telegram = $bot->getTelegram();
         $chatId = -12345;
 
@@ -90,7 +90,7 @@ class TestTelegram extends TestCase
      */
     public function testForwardMessage()
     {
-        $bot = new Zanzara($_ENV['BOT_KEY']);
+        $bot = new Zanzara($_ENV['BOT_TOKEN']);
         $telegram = $bot->getTelegram();
         $chatId = (int)$_ENV['CHANNEL_CHAT_ID'];
         $fromChatId = (int)$_ENV['CHAT_ID'];
@@ -113,7 +113,7 @@ class TestTelegram extends TestCase
      */
     public function testNonExistingParameter()
     {
-        $bot = new Zanzara($_ENV['BOT_KEY']);
+        $bot = new Zanzara($_ENV['BOT_TOKEN']);
         $telegram = $bot->getTelegram();
 
         $chatId = (int)$_ENV['CHAT_ID'];
@@ -136,7 +136,7 @@ class TestTelegram extends TestCase
     {
         $config = new Config();
         $config->setParseMode(Config::PARSE_MODE_HTML);
-        $bot = new Zanzara($_ENV['BOT_KEY'], $config);
+        $bot = new Zanzara($_ENV['BOT_TOKEN'], $config);
         $telegram = $bot->getTelegram();
 
         $chatId = (int)$_ENV['CHAT_ID'];
@@ -166,7 +166,7 @@ class TestTelegram extends TestCase
         $logger->pushHandler(new StreamHandler($logFile, Logger::WARNING));
         $config = new Config();
         $config->setLogger($logger);
-        $bot = new Zanzara($_ENV['BOT_KEY'], $config);
+        $bot = new Zanzara($_ENV['BOT_TOKEN'], $config);
         $telegram = $bot->getTelegram();
         $chatId = (int)$_ENV['CHAT_ID'];
         $telegram->sendBulkMessage([$chatId, $chatId, $chatId], 'Hello');

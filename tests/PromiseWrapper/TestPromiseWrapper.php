@@ -34,7 +34,7 @@ class TestPromiseWrapper extends TestCase
     public function send($loop): PromiseInterface
     {
         $browser = new Browser($loop);
-        $promise = $browser->get("https://api.telegram.org/bot{$_ENV['BOT_KEY']}/getUpdates");
+        $promise = $browser->get("https://api.telegram.org/bot{$_ENV['BOT_TOKEN']}/getUpdates");
         return new ZanzaraPromise($promise, Update::class);
     }
 

@@ -30,7 +30,7 @@ class TestLogger extends TestCase
         $logger->pushHandler(new StreamHandler($logFile, Logger::WARNING));
         $config = new Config();
         $config->setLogger($logger);
-        $bot = new Zanzara($_ENV['BOT_KEY'], $config);
+        $bot = new Zanzara($_ENV['BOT_TOKEN'], $config);
         $telegram = $bot->getTelegram();
         $telegram->sendMessage('Hello', ['chat_id' => (int)$_ENV['CHAT_ID']])->then(
             function (Update $update) {
