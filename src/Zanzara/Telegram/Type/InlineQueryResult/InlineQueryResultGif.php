@@ -46,11 +46,19 @@ class InlineQueryResultGif extends InlineQueryResult
     private $gif_duration;
 
     /**
-     * URL of the static thumbnail for the result (jpeg or gif)
+     * URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result.
      *
      * @var string
      */
     private $thumb_url;
+
+    /**
+     * Optional. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to
+     * “image/jpeg”.
+     *
+     * @var string|null
+     */
+    private $thumb_mime_type;
 
     /**
      * Optional. Title for the result
@@ -246,6 +254,22 @@ class InlineQueryResultGif extends InlineQueryResult
     public function setInputMessageContent(?InputMessageContent $input_message_content): void
     {
         $this->input_message_content = $input_message_content;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getThumbMimeType(): ?string
+    {
+        return $this->thumb_mime_type;
+    }
+
+    /**
+     * @param string|null $thumb_mime_type
+     */
+    public function setThumbMimeType(?string $thumb_mime_type): void
+    {
+        $this->thumb_mime_type = $thumb_mime_type;
     }
 
 }

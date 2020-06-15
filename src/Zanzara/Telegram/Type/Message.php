@@ -382,6 +382,13 @@ class Message
     private $reply_markup;
 
     /**
+     * Optional. Bot through which the message was sent.
+     *
+     * @var User|null
+     */
+    private $via_bot;
+
+    /**
      * @return int
      */
     public function getMessageId(): int
@@ -1147,6 +1154,22 @@ class Message
     public function setReplyMarkup(?InlineKeyboardMarkup $reply_markup): void
     {
         $this->reply_markup = $reply_markup;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getViaBot(): ?User
+    {
+        return $this->via_bot;
+    }
+
+    /**
+     * @param User|null $via_bot
+     */
+    public function setViaBot(?User $via_bot): void
+    {
+        $this->via_bot = $via_bot;
     }
 
 }
