@@ -4,7 +4,7 @@
 
 Asynchronous PHP Telegram Bot Framework built on top of [ReactPHP](https://reactphp.org/)
 
-[![Bot API](https://img.shields.io/badge/Bot%20API-4.8%20(April%202020)-blue)](https://core.telegram.org/bots/api)
+[![Bot API](https://img.shields.io/badge/Bot%20API-4.9%20(June%202020)-blue)](https://core.telegram.org/bots/api)
 [![PHP](https://img.shields.io/badge/PHP-%3E%3D7.2-blue)](https://www.php.net/)
 [![Build Status](https://travis-ci.org/badfarm/zanzara.svg?branch=master)](https://travis-ci.org/badfarm/zanzara)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/badfarm/zanzara/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/badfarm/zanzara/?branch=develop)
@@ -14,7 +14,7 @@ Asynchronous PHP Telegram Bot Framework built on top of [ReactPHP](https://react
 ---
 
 ### Features
-* Full [Telegram Bot Api 4.8](https://core.telegram.org/bots/api) support (April 2020)
+* Full [Telegram Bot Api 4.9](https://core.telegram.org/bots/api) support (June 2020)
 * Middleware chain for requests
 * Step by step messages (conversations) and user-related data cache
 * Fast since it's based on asynchronous non-blocking I/O model
