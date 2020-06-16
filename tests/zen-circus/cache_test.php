@@ -220,6 +220,16 @@ $bot->onCommand('appendGlobal', function (Context $ctx) {
     });
 });
 
+$bot->onCommand('ttlSet', function (Context $ctx) {
+    $ctx->setUserData('key1', 'data1', 10);
+});
+
+$bot->onCommand('ttlGet', function (Context $ctx) {
+    $ctx->getUserDataItem('key1')->then(function ($item) use ($ctx) {
+        $ctx->sendMessage("this: " . $item);
+    });
+});
+
 $bot->run();
 
 

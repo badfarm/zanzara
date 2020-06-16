@@ -26,6 +26,11 @@ class ZanzaraCache
      */
     private $logger;
 
+    /**
+     * @var Config
+     */
+    private $config;
+
     private const CONVERSATION = "CONVERSATION";
 
     private const CHATDATA = " CHATDATA";
@@ -38,11 +43,13 @@ class ZanzaraCache
      * ZanzaraLogger constructor.
      * @param CacheInterface|null $cache
      * @param ZanzaraLogger $logger
+     * @param Config $config
      */
-    public function __construct(?CacheInterface $cache, ZanzaraLogger $logger)
+    public function __construct(?CacheInterface $cache, ZanzaraLogger $logger, Config $config)
     {
         $this->logger = $logger;
         $this->cache = $cache;
+        $this->config = $config;
     }
 
     public function getGlobalCacheData()
@@ -51,16 +58,16 @@ class ZanzaraCache
         return $this->doGet($cacheKey);
     }
 
-    public function setGlobalCacheData(string $key, $data)
+    public function setGlobalCacheData(string $key, $data, $ttl = null)
     {
         $cacheKey = self::GLOBALDATA;
-        return $this->doSet($cacheKey, $key, $data);
+        return $this->doSet($cacheKey, $key, $data, $ttl);
     }
 
-    public function appendGlobalCacheData(string $key, $data)
+    public function appendGlobalCacheData(string $key, $data, $ttl = null)
     {
         $cacheKey = self::GLOBALDATA;
-        return $this->appendCacheData($cacheKey, $key, $data);
+        return $this->appendCacheData($cacheKey, $key, $data, $ttl);
     }
 
     public function getCacheGlobalDataItem(string $key)
@@ -103,16 +110,16 @@ class ZanzaraCache
         return $this->getCacheItem($cacheKey, $key);
     }
 
-    public function setCacheChatData(int $chatId, string $key, $data)
+    public function setCacheChatData(int $chatId, string $key, $data, $ttl = null)
     {
         $cacheKey = $this->getChatIdKey($chatId);
-        return $this->doSet($cacheKey, $key, $data);
+        return $this->doSet($cacheKey, $key, $data, $ttl);
     }
 
-    public function appendCacheChatData(int $chatId, string $key, $data)
+    public function appendCacheChatData(int $chatId, string $key, $data, $ttl = null)
     {
         $cacheKey = $this->getChatIdKey($chatId);
-        return $this->appendCacheData($cacheKey, $key, $data);
+        return $this->appendCacheData($cacheKey, $key, $data, $ttl);
     }
 
     public function deleteAllCacheChatData(int $chatId)
@@ -149,16 +156,16 @@ class ZanzaraCache
         return $this->getCacheItem($cacheKey, $key);
     }
 
-    public function setCacheUserData(int $userId, string $key, $data)
+    public function setCacheUserData(int $userId, string $key, $data, $ttl = null)
     {
         $cacheKey = $this->getUserIdKey($userId);
-        return $this->doSet($cacheKey, $key, $data);
+        return $this->doSet($cacheKey, $key, $data, $ttl);
     }
 
-    public function appendCacheUserData(int $userId, string $key, $data)
+    public function appendCacheUserData(int $userId, string $key, $data, $ttl = null)
     {
         $cacheKey = $this->getUserIdKey($userId);
-        return $this->appendCacheData($cacheKey, $key, $data);
+        return $this->appendCacheData($cacheKey, $key, $data, $ttl);
     }
 
     public function deleteAllCacheUserData(int $userId)
@@ -283,14 +290,16 @@ class ZanzaraCache
 
     /**
      * set a cache value and return the promise
-     * @param $cacheKey
-     * @param $key
+     * @param string $cacheKey
+     * @param string $key
      * @param $data
+     * @param null $ttl
      * @return PromiseInterface
      */
-    public function doSet(string $cacheKey, string $key, $data)
+    public function doSet(string $cacheKey, string $key, $data, $ttl = null)
     {
-        return $this->cache->get($cacheKey)->then(function ($arrayData) use ($key, $data, $cacheKey) {
+        $ttl = $ttl ?? $this->config->getCacheTtl();
+        return $this->cache->get($cacheKey)->then(function ($arrayData) use ($ttl, $key, $data, $cacheKey) {
             if (!$arrayData) {
                 $arrayData = array();
                 $arrayData[$key] = $data;
@@ -298,7 +307,7 @@ class ZanzaraCache
                 $arrayData[$key] = $data;
             }
 
-            return $this->cache->set($cacheKey, $arrayData)->then(function ($result) {
+            return $this->cache->set($cacheKey, $arrayData, $ttl)->then(function ($result) {
                 if ($result !== true) {
                     $this->logger->errorWriteCache($result);
                 }
@@ -313,14 +322,16 @@ class ZanzaraCache
      * @param string $cacheKey
      * @param string $key
      * @param $data
+     * @param null $ttl
      * @return PromiseInterface
      */
-    public function appendCacheData(string $cacheKey, string $key, $data)
+    public function appendCacheData(string $cacheKey, string $key, $data, $ttl = null)
     {
-        return $this->cache->get($cacheKey)->then(function ($arrayData) use ($key, $data, $cacheKey) {
+        $ttl = $ttl ?? $this->config->getCacheTtl();
+        return $this->cache->get($cacheKey)->then(function ($arrayData) use ($ttl, $key, $data, $cacheKey) {
             $arrayData[$key][] = $data;
 
-            return $this->cache->set($cacheKey, $arrayData)->then(function ($result) {
+            return $this->cache->set($cacheKey, $arrayData, $ttl)->then(function ($result) {
                 if ($result !== true) {
                     $this->logger->errorWriteCache($result);
                 }

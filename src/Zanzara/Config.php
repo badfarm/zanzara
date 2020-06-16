@@ -131,6 +131,11 @@ class Config
     private $errorHandler;
 
     /**
+     * @var float|null
+     */
+    private $cacheTtl = 180;
+
+    /**
      * @return LoopInterface|null
      */
     public function getLoop(): ?LoopInterface
@@ -416,6 +421,22 @@ class Config
     public function setErrorHandler(?callable $errorHandler): void
     {
         $this->errorHandler = $errorHandler;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getCacheTtl(): ?float
+    {
+        return $this->cacheTtl;
+    }
+
+    /**
+     * @param float|null $cacheTtl
+     */
+    public function setCacheTtl(?float $cacheTtl): void
+    {
+        $this->cacheTtl = $cacheTtl;
     }
 
 }

@@ -179,12 +179,13 @@ class Context
      *
      * @param $key
      * @param $data
+     * @param $ttl
      * @return PromiseInterface
      */
-    public function setChatData($key, $data): PromiseInterface
+    public function setChatData($key, $data, $ttl = null): PromiseInterface
     {
         $chatId = $this->update->getEffectiveChat()->getId();
-        return $this->cache->setCacheChatData($chatId, $key, $data);
+        return $this->cache->setCacheChatData($chatId, $key, $data, $ttl);
     }
 
     /**
@@ -197,12 +198,13 @@ class Context
      *
      * @param $key
      * @param $data
+     * @param null $ttl
      * @return PromiseInterface
      */
-    public function appendChatData($key, $data): PromiseInterface
+    public function appendChatData($key, $data, $ttl = null): PromiseInterface
     {
         $chatId = $this->update->getEffectiveChat()->getId();
-        return $this->cache->appendCacheChatData($chatId, $key, $data);
+        return $this->cache->appendCacheChatData($chatId, $key, $data, $ttl);
     }
 
     /**
@@ -281,12 +283,13 @@ class Context
      *
      * @param $key
      * @param $data
+     * @param null $ttl
      * @return PromiseInterface
      */
-    public function setUserData($key, $data): PromiseInterface
+    public function setUserData($key, $data, $ttl = null): PromiseInterface
     {
         $userId = $this->update->getEffectiveUser()->getId();
-        return $this->cache->setCacheUserData($userId, $key, $data);
+        return $this->cache->setCacheUserData($userId, $key, $data, $ttl);
     }
 
     /**
@@ -299,12 +302,13 @@ class Context
      *
      * @param $key
      * @param $data
+     * @param null $ttl
      * @return PromiseInterface
      */
-    public function appendUserData($key, $data): PromiseInterface
+    public function appendUserData($key, $data, $ttl = null): PromiseInterface
     {
         $userId = $this->update->getEffectiveUser()->getId();
-        return $this->cache->appendCacheUserData($userId, $key, $data);
+        return $this->cache->appendCacheUserData($userId, $key, $data, $ttl);
     }
 
     /**
@@ -351,11 +355,12 @@ class Context
      *
      * @param $key
      * @param $data
+     * @param null $ttl
      * @return PromiseInterface
      */
-    public function setGlobalData($key, $data)
+    public function setGlobalData($key, $data, $ttl = null)
     {
-        return $this->cache->setGlobalCacheData($key, $data);
+        return $this->cache->setGlobalCacheData($key, $data, $ttl);
     }
 
     /**
@@ -368,11 +373,12 @@ class Context
      *
      * @param $key
      * @param $data
+     * @param null $ttl
      * @return PromiseInterface
      */
-    public function appendGlobalData($key, $data): PromiseInterface
+    public function appendGlobalData($key, $data, $ttl = null): PromiseInterface
     {
-        return $this->cache->appendGlobalCacheData($key, $data);
+        return $this->cache->appendGlobalCacheData($key, $data, $ttl);
     }
 
     /**
