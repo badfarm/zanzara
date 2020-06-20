@@ -14,11 +14,11 @@ Asynchronous PHP Telegram Bot Framework built on top of [ReactPHP](https://react
 ---
 
 ### Features
+* Long polling support (no webserver required)
 * Full [Telegram Bot Api 4.9](https://core.telegram.org/bots/api) support (June 2020)
 * Middleware chain for requests
 * Step by step messages (conversations) and user-related data cache
 * Fast since it's based on asynchronous non-blocking I/O model
-* Lightweight (no web server or database required)
 * Bulk message sending (no more 429 annoying errors)
 
 ### Installation
