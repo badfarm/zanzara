@@ -356,7 +356,7 @@ class ZanzaraCache
             }
         }, function ($err) use ($container, $update) {
             $this->logger->errorUpdate($update, $err);
-        })->otherwise(function ($err, $update, $chatId) {
+        })->otherwise(function ($err) use ($update, $chatId) {
             $this->logger->errorUpdate($err, $update);
             $this->deleteConversationCache($chatId);
         });
