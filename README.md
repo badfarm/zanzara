@@ -38,7 +38,7 @@ use Zanzara\Context;
 
 require __DIR__ . '/vendor/autoload.php';
 
-$bot = new Zanzara($_ENV['BOT_TOKEN']);
+$bot = new Zanzara("YOUR-BOT-TOKEN");
 
 $bot->onCommand('start', function (Context $ctx) {
     $ctx->sendMessage('Hello');
