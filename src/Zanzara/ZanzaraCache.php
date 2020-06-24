@@ -7,9 +7,9 @@ use React\Promise\PromiseInterface;
 
 /**
  * @method get($key, $default = null)
- * @method set($key, $value, $ttl = false)
+ * @method set($key, $value, $ttl = null)
  * @method delete($key)
- * @method setMultiple(array $values, $ttl = false)
+ * @method setMultiple(array $values, $ttl = null)
  * @method deleteMultiple(array $keys)
  * @method clear()
  * @method has($key)
@@ -288,21 +288,19 @@ class ZanzaraCache
         return $this->cache->clear();
     }
 
-
     /**
      * Default ttl is false. That means that user doesn't pass any value, so we use the ttl set in config.
      * If ttl is different from false simply return the ttl, it means that the value is set calling the function.
      * @param $ttl
      * @return float|null
      */
-    private function checkttl($ttl)
+    private function checkTtl($ttl)
     {
         if ($ttl === false) {
             $ttl = $this->config->getCacheTtl();
         }
         return $ttl;
     }
-
 
     /**
      * set a cache value and return the promise
@@ -314,7 +312,7 @@ class ZanzaraCache
      */
     public function doSet(string $cacheKey, string $key, $data, $ttl = false)
     {
-        $ttl = $this->checkttl($ttl);
+        $ttl = $this->checkTtl($ttl);
         return $this->cache->get($cacheKey)->then(function ($arrayData) use ($ttl, $key, $data, $cacheKey) {
             if (!$arrayData) {
                 $arrayData = array();
@@ -344,7 +342,7 @@ class ZanzaraCache
     public function appendCacheData(string $cacheKey, string $key, $data, $ttl = false)
     {
 
-        $ttl = $this->checkttl($ttl);
+        $ttl = $this->checkTtl($ttl);
         return $this->cache->get($cacheKey)->then(function ($arrayData) use ($ttl, $key, $data, $cacheKey) {
             $arrayData[$key][] = $data;
 
