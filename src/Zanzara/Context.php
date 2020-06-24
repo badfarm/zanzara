@@ -6,6 +6,7 @@ namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
 use Psr\Container\ContainerInterface;
+use React\EventLoop\LoopInterface;
 use React\Promise\PromiseInterface;
 use Zanzara\Telegram\TelegramTrait;
 use Zanzara\Telegram\Type\CallbackQuery;
@@ -463,6 +464,14 @@ class Context
     public function getContainer(): ContainerInterface
     {
         return $this->container;
+    }
+
+    /**
+     * @return LoopInterface
+     */
+    public function getLoop(): LoopInterface
+    {
+        return $this->container->get(LoopInterface::class);
     }
 
 }
