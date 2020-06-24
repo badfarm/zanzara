@@ -316,10 +316,10 @@ class Zanzara extends ListenerResolver
      *
      * @param $key
      * @param $data
-     * @param null $ttl
+     * @param $ttl
      * @return PromiseInterface
      */
-    public function setGlobalData($key, $data, $ttl = null)
+    public function setGlobalData($key, $data, $ttl = false)
     {
         return $this->cache->setGlobalCacheData($key, $data, $ttl);
     }
@@ -334,10 +334,10 @@ class Zanzara extends ListenerResolver
      *
      * @param $key
      * @param $data
-     * @param null $ttl
+     * @param $ttl
      * @return PromiseInterface
      */
-    public function appendGlobalData($key, $data, $ttl = null): PromiseInterface
+    public function appendGlobalData($key, $data, $ttl = false): PromiseInterface
     {
         return $this->cache->appendGlobalCacheData($key, $data, $ttl);
     }

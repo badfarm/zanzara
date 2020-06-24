@@ -131,6 +131,9 @@ class Config
     private $errorHandler;
 
     /**
+     * Default ttl in seconds. Null means that item will stay in the cache
+     * for as long as the underlying implementation supports.
+     * Check reactphp cache implementation for more information
      * @var float|null
      */
     private $cacheTtl = 180;

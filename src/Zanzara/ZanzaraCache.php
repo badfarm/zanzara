@@ -7,9 +7,9 @@ use React\Promise\PromiseInterface;
 
 /**
  * @method get($key, $default = null)
- * @method set($key, $value, $ttl = null)
+ * @method set($key, $value, $ttl = false)
  * @method delete($key)
- * @method setMultiple(array $values, $ttl = null)
+ * @method setMultiple(array $values, $ttl = false)
  * @method deleteMultiple(array $keys)
  * @method clear()
  * @method has($key)
@@ -58,13 +58,13 @@ class ZanzaraCache
         return $this->doGet($cacheKey);
     }
 
-    public function setGlobalCacheData(string $key, $data, $ttl = null)
+    public function setGlobalCacheData(string $key, $data, $ttl = false)
     {
         $cacheKey = self::GLOBALDATA;
         return $this->doSet($cacheKey, $key, $data, $ttl);
     }
 
-    public function appendGlobalCacheData(string $key, $data, $ttl = null)
+    public function appendGlobalCacheData(string $key, $data, $ttl = false)
     {
         $cacheKey = self::GLOBALDATA;
         return $this->appendCacheData($cacheKey, $key, $data, $ttl);
@@ -110,13 +110,13 @@ class ZanzaraCache
         return $this->getCacheItem($cacheKey, $key);
     }
 
-    public function setCacheChatData(int $chatId, string $key, $data, $ttl = null)
+    public function setCacheChatData(int $chatId, string $key, $data, $ttl = false)
     {
         $cacheKey = $this->getChatIdKey($chatId);
         return $this->doSet($cacheKey, $key, $data, $ttl);
     }
 
-    public function appendCacheChatData(int $chatId, string $key, $data, $ttl = null)
+    public function appendCacheChatData(int $chatId, string $key, $data, $ttl = false)
     {
         $cacheKey = $this->getChatIdKey($chatId);
         return $this->appendCacheData($cacheKey, $key, $data, $ttl);
@@ -156,13 +156,13 @@ class ZanzaraCache
         return $this->getCacheItem($cacheKey, $key);
     }
 
-    public function setCacheUserData(int $userId, string $key, $data, $ttl = null)
+    public function setCacheUserData(int $userId, string $key, $data, $ttl = false)
     {
         $cacheKey = $this->getUserIdKey($userId);
         return $this->doSet($cacheKey, $key, $data, $ttl);
     }
 
-    public function appendCacheUserData(int $userId, string $key, $data, $ttl = null)
+    public function appendCacheUserData(int $userId, string $key, $data, $ttl = false)
     {
         $cacheKey = $this->getUserIdKey($userId);
         return $this->appendCacheData($cacheKey, $key, $data, $ttl);
@@ -288,17 +288,33 @@ class ZanzaraCache
         return $this->cache->clear();
     }
 
+
+    /**
+     * Default ttl is false. That means that user doesn't pass any value, so we use the ttl set in config.
+     * If ttl is different from false simply return the ttl, it means that the value is set calling the function.
+     * @param $ttl
+     * @return float|null
+     */
+    private function checkttl($ttl)
+    {
+        if ($ttl === false) {
+            $ttl = $this->config->getCacheTtl();
+        }
+        return $ttl;
+    }
+
+
     /**
      * set a cache value and return the promise
      * @param string $cacheKey
      * @param string $key
      * @param $data
-     * @param null $ttl
+     * @param $ttl
      * @return PromiseInterface
      */
-    public function doSet(string $cacheKey, string $key, $data, $ttl = null)
+    public function doSet(string $cacheKey, string $key, $data, $ttl = false)
     {
-        $ttl = $ttl ?? $this->config->getCacheTtl();
+        $ttl = $this->checkttl($ttl);
         return $this->cache->get($cacheKey)->then(function ($arrayData) use ($ttl, $key, $data, $cacheKey) {
             if (!$arrayData) {
                 $arrayData = array();
@@ -322,12 +338,13 @@ class ZanzaraCache
      * @param string $cacheKey
      * @param string $key
      * @param $data
-     * @param null $ttl
+     * @param $ttl
      * @return PromiseInterface
      */
-    public function appendCacheData(string $cacheKey, string $key, $data, $ttl = null)
+    public function appendCacheData(string $cacheKey, string $key, $data, $ttl = false)
     {
-        $ttl = $ttl ?? $this->config->getCacheTtl();
+
+        $ttl = $this->checkttl($ttl);
         return $this->cache->get($cacheKey)->then(function ($arrayData) use ($ttl, $key, $data, $cacheKey) {
             $arrayData[$key][] = $data;
 
