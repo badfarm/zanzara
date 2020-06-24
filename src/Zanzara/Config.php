@@ -60,9 +60,9 @@ class Config
     private $updateMode = self::POLLING_MODE;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private $parseMode = self::PARSE_MODE_MARKDOWN;
+    private $parseMode;
 
     /**
      * @var string
@@ -171,17 +171,17 @@ class Config
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getParseMode(): string
+    public function getParseMode(): ?string
     {
         return $this->parseMode;
     }
 
     /**
-     * @param string $parseMode
+     * @param string|null $parseMode
      */
-    public function setParseMode(string $parseMode): void
+    public function setParseMode(?string $parseMode): void
     {
         $this->parseMode = $parseMode;
     }

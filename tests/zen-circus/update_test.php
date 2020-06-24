@@ -7,11 +7,12 @@ use Zanzara\Zanzara;
 require __DIR__ . '/../bootstrap.php';
 
 $config = new Config();
+$config->setParseMode(Config::PARSE_MODE_MARKDOWN);
 $config->setUpdateMode(Config::POLLING_MODE);
 $bot = new Zanzara($_ENV['BOT_TOKEN'], $config);
 
 $bot->onUpdate(function (Context $ctx) {
-    $ctx->sendMessage('Hello');
+    $ctx->sendMessage('Hello.', ['parse_mode' => 'HTML']);
 });
 
 $bot->onCommand("test", function (Context $ctx) {

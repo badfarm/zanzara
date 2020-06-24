@@ -1455,8 +1455,9 @@ trait TelegramTrait
      */
     public function callApi(string $method, array $params = [], $headers = ["Content-type" => "application/json"])
     {
-        $params['parse_mode'] = $params['parse_mode'] ?? $this->container->get(Config::class)->getParseMode();
-
+        if ($this->container->get(Config::class)->getParseMode() && !isset($params['parse_mode'])) {
+            $params['parse_mode'] = $this->container->get(Config::class)->getParseMode();
+        }
         foreach ($params as $param) {
             if ($param instanceof InputFile) {
 
