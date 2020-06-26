@@ -8,6 +8,7 @@ use DI\Container;
 use Psr\Log\LoggerInterface;
 use React\Cache\CacheInterface;
 use React\EventLoop\LoopInterface;
+use React\Socket\Connector;
 
 /**
  * Configuration for Zanzara. Expected to be used as follow:
@@ -137,6 +138,11 @@ class Config
      * @var float|null
      */
     private $cacheTtl = 180;
+
+    /**
+     * @var Connector|null
+     */
+    private $connector;
 
     /**
      * @return LoopInterface|null
@@ -440,6 +446,22 @@ class Config
     public function setCacheTtl(?float $cacheTtl): void
     {
         $this->cacheTtl = $cacheTtl;
+    }
+
+    /**
+     * @return Connector|null
+     */
+    public function getConnector(): ?Connector
+    {
+        return $this->connector;
+    }
+
+    /**
+     * @param Connector|null $connector
+     */
+    public function setConnector(?Connector $connector): void
+    {
+        $this->connector = $connector;
     }
 
 }

@@ -77,7 +77,7 @@ class Zanzara extends ListenerResolver
         $this->container->set(LoggerInterface::class, $this->config->getLogger());
         $this->logger = $this->container->get(ZanzaraLogger::class);
         $this->zanzaraMapper = $this->container->get(ZanzaraMapper::class);
-        $this->container->set(Browser::class, (new Browser($this->loop)) // browser cannot be created by container
+        $this->container->set(Browser::class, (new Browser($this->loop, $this->config->getConnector())) // browser cannot be created by container
         ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botToken}"));
         $this->telegram = $this->container->get(Telegram::class);
         $this->container->set(CacheInterface::class, $this->config->getCache() ?? new ArrayCache());
