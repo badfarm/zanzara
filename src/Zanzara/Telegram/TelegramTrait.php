@@ -1572,12 +1572,14 @@ trait TelegramTrait
                 }
 
                 return $mapper->mapObject($object->result, $class);
-
-            }, function (ResponseException $exception) use ($logger, $mapper) {
+            })->otherwise(function (ResponseException $exception) use ($logger, $mapper) {
                 $json = (string)$exception->getResponse()->getBody();
                 $telegramException = $mapper->mapJson($json, TelegramException::class);
                 $logger->error($telegramException);
                 throw $telegramException;
+            })->otherwise(function ($e) use ($logger) {
+                $logger->error("Failed to call Telegram Bot Api, reason $e");
+                throw $e;
             });
     }
 
