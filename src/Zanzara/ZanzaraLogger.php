@@ -77,6 +77,11 @@ class ZanzaraLogger
         $this->error($this->getNotAuthorizedMessage());
     }
 
+    public function errorTelegramApi($e)
+    {
+        $this->error("Failed to call Telegram Bot Api, reason: $e");
+    }
+
     public function getNotAuthorizedMessage()
     {
         return "Not authorized, please provide a valid bot token";
