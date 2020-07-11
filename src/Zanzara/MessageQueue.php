@@ -74,11 +74,9 @@ class MessageQueue
 
             // pop and process
             $params = array_pop($payload);
-            $this->telegram->doSendMessage($params)
-                ->otherwise(function (TelegramException $error) {
-                    $this->logger->error("Failed to send message in bulk mode, reason: $error");
-                }
-                );
+            $this->telegram->doSendMessage($params)->otherwise(function (TelegramException $error) {
+                $this->logger->error("Failed to send message in bulk mode, reason: $error");
+            });
         };
         $this->loop->addPeriodicTimer($this->config->getBulkMessageInterval(), $dequeue);
     }

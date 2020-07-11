@@ -13,7 +13,7 @@ use React\Cache\CacheInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Filesystem\Filesystem;
-use React\Http\Response;
+use React\Http\Message\Response;
 use React\Http\Server;
 use React\Promise\PromiseInterface;
 use Zanzara\Listener\ListenerResolver;
@@ -185,7 +185,7 @@ class Zanzara extends ListenerResolver
     private function prepareServer()
     {
         $processingUpdate = null;
-        $this->server = new Server(function (ServerRequestInterface $request) use (&$processingUpdate) {
+        $this->server = new Server($this->loop, function (ServerRequestInterface $request) use (&$processingUpdate) {
             $token = $this->resolveTokenFromPath($request->getUri()->getPath());
             if (!$this->isWebhookAuthorized($token)) {
                 $this->logger->errorNotAuthorized();
