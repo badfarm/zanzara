@@ -71,7 +71,7 @@ trait TelegramTrait
             "timeout" => $opt['timeout'] + 10 //timout browser necessary bigger than telegram timeout. They can't be equal
         ));
 
-        return $this->wrapPromise($browser->get("$method?$query"), Update::class);
+        return $this->wrapPromise($browser->get("$method?$query"), $method, $opt, Update::class);
     }
 
     /**
@@ -116,7 +116,7 @@ trait TelegramTrait
      */
     public function doSendMessage(array $params): PromiseInterface
     {
-        return $this->wrapPromise($this->callApi("sendMessage", $params), Message::class);
+        return $this->callApi("sendMessage", $params, Message::class);
     }
 
     /**
@@ -152,7 +152,7 @@ trait TelegramTrait
     {
         $required = compact("url");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("setWebhook", $params));
+        return $this->callApi("setWebhook", $params);
     }
 
     /**
@@ -165,7 +165,7 @@ trait TelegramTrait
      */
     public function getWebhookInfo(): PromiseInterface
     {
-        return $this->wrapPromise($this->callApi("getWebhookInfo"), WebhookInfo::class);
+        return $this->callApi("getWebhookInfo", [], WebhookInfo::class);
     }
 
     /**
@@ -178,7 +178,7 @@ trait TelegramTrait
      */
     public function deleteWebhook(): PromiseInterface
     {
-        return $this->wrapPromise($this->callApi("deleteWebhook"));
+        return $this->callApi("deleteWebhook");
     }
 
     /**
@@ -196,7 +196,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "from_chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("forwardMessage", $params), Message::class);
+        return $this->callApi("forwardMessage", $params, Message::class);
     }
 
     /**
@@ -220,7 +220,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("photo");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendPhoto", $params), Message::class);
+        return $this->callApi("sendPhoto", $params, Message::class);
     }
 
     /**
@@ -246,7 +246,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("audio");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendAudio", $params), Message::class);
+        return $this->callApi("sendAudio", $params, Message::class);
     }
 
     /**
@@ -271,7 +271,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("document");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendDocument", $params), Message::class);
+        return $this->callApi("sendDocument", $params, Message::class);
     }
 
     /**
@@ -297,7 +297,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("video");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendVideo", $params), Message::class);
+        return $this->callApi("sendVideo", $params, Message::class);
     }
 
     /**
@@ -323,7 +323,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("animation");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendAnimation", $params), Message::class);
+        return $this->callApi("sendAnimation", $params, Message::class);
     }
 
     /**
@@ -350,7 +350,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("voice");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendVoice", $params), Message::class);
+        return $this->callApi("sendVoice", $params, Message::class);
     }
 
     /**
@@ -375,7 +375,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("video_note");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendVideoNote", $params), Message::class);
+        return $this->callApi("sendVideoNote", $params, Message::class);
     }
 
     /**
@@ -395,7 +395,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("media");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendMediaGroup", $params), Message::class);
+        return $this->callApi("sendMediaGroup", $params, Message::class);
     }
 
     /**
@@ -416,7 +416,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("latitude", "longitude");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendLocation", $params), Message::class);
+        return $this->callApi("sendLocation", $params, Message::class);
     }
 
     /**
@@ -436,7 +436,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("latitude", "longitude");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("editMessageLiveLocation", $params), Message::class);
+        return $this->callApi("editMessageLiveLocation", $params, Message::class);
     }
 
     /**
@@ -451,7 +451,7 @@ trait TelegramTrait
     public function stopMessageLiveLocation(?array $opt = []): PromiseInterface
     {
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
-        return $this->wrapPromise($this->callApi("stopMessageLiveLocation", $opt), Message::class);
+        return $this->callApi("stopMessageLiveLocation", $opt, Message::class);
     }
 
     /**
@@ -474,7 +474,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("latitude", "longitude", "title", "address");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendVenue", $params), Message::class);
+        return $this->callApi("sendVenue", $params, Message::class);
     }
 
     /**
@@ -495,7 +495,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("phone_number", "first_name");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendContact", $params), Message::class);
+        return $this->callApi("sendContact", $params, Message::class);
     }
 
     /**
@@ -516,7 +516,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("question", "options");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendPoll", $params), Message::class);
+        return $this->callApi("sendPoll", $params, Message::class);
     }
 
     /**
@@ -535,7 +535,7 @@ trait TelegramTrait
     public function sendDice(?array $opt = []): PromiseInterface
     {
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
-        return $this->wrapPromise($this->callApi("sendDice", $opt), Message::class);
+        return $this->callApi("sendDice", $opt, Message::class);
     }
 
     /**
@@ -557,7 +557,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("action");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendChatAction", $params));
+        return $this->callApi("sendChatAction", $params);
     }
 
     /**
@@ -573,7 +573,7 @@ trait TelegramTrait
     {
         $required = compact("user_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("getUserProfilePhotos", $params), UserProfilePhotos::class);
+        return $this->callApi("getUserProfilePhotos", $params, UserProfilePhotos::class);
     }
 
     /**
@@ -593,7 +593,7 @@ trait TelegramTrait
     {
         $required = compact("file_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("getFile", $params), File::class);
+        return $this->callApi("getFile", $params, File::class);
     }
 
     /**
@@ -613,7 +613,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("kickChatMember", $params));
+        return $this->callApi("kickChatMember", $params);
     }
 
     /**
@@ -632,7 +632,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("unbanChatMember", $params));
+        return $this->callApi("unbanChatMember", $params);
     }
 
     /**
@@ -652,7 +652,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id", "permissions");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("restrictChatMember", $params));
+        return $this->callApi("restrictChatMember", $params);
     }
 
     /**
@@ -671,7 +671,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("promoteChatMember", $params));
+        return $this->callApi("promoteChatMember", $params);
     }
 
     /**
@@ -689,7 +689,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id", "custom_title");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("setChatAdministratorCustomTitle", $params));
+        return $this->callApi("setChatAdministratorCustomTitle", $params);
     }
 
     /**
@@ -707,7 +707,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "permissions");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("setChatPermissions", $params));
+        return $this->callApi("setChatPermissions", $params);
     }
 
     /**
@@ -725,7 +725,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("exportChatInviteLink", $params));
+        return $this->callApi("exportChatInviteLink", $params);
     }
 
     /**
@@ -743,7 +743,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "photo");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("setChatPhoto", $params)); //bool
+        return $this->callApi("setChatPhoto", $params); //bool
     }
 
     /**
@@ -760,7 +760,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("deleteChatPhoto", $params));
+        return $this->callApi("deleteChatPhoto", $params);
     }
 
     /**
@@ -778,7 +778,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "title");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("setChatTitle", $params));
+        return $this->callApi("setChatTitle", $params);
     }
 
     /**
@@ -795,7 +795,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("setChatDescription", $params));
+        return $this->callApi("setChatDescription", $params);
     }
 
     /**
@@ -814,7 +814,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("pinChatMessage", $params));
+        return $this->callApi("pinChatMessage", $params);
     }
 
     /**
@@ -832,7 +832,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("unpinChatMessage", $params));
+        return $this->callApi("unpinChatMessage", $params);
     }
 
     /**
@@ -848,7 +848,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("leaveChat", $params));
+        return $this->callApi("leaveChat", $params);
     }
 
     /**
@@ -865,7 +865,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("getChat", $params), Chat::class);
+        return $this->callApi("getChat", $params, Chat::class);
     }
 
     /**
@@ -883,7 +883,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("getChatAdministrators", $params), ChatMember::class);
+        return $this->callApi("getChatAdministrators", $params, ChatMember::class);
     }
 
     /**
@@ -899,7 +899,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("getChatMembersCount", $params)); //integer
+        return $this->callApi("getChatMembersCount", $params); //integer
     }
 
     /**
@@ -916,7 +916,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("getChatMember", $params), ChatMember::class);
+        return $this->callApi("getChatMember", $params, ChatMember::class);
     }
 
     /**
@@ -935,7 +935,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "sticker_set_name");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("setChatStickerSet", $params));
+        return $this->callApi("setChatStickerSet", $params);
     }
 
     /**
@@ -953,7 +953,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("deleteChatStickerSet", $params));
+        return $this->callApi("deleteChatStickerSet", $params);
     }
 
     /**
@@ -971,7 +971,7 @@ trait TelegramTrait
     public function answerCallbackQuery(?array $opt = []): PromiseInterface
     {
         $opt['callback_query_id'] = $opt['callback_query_id'] ?? $this->update->getCallbackQuery()->getId();
-        return $this->wrapPromise($this->callApi("answerCallbackQuery", $opt));
+        return $this->callApi("answerCallbackQuery", $opt);
     }
 
     /**
@@ -987,7 +987,7 @@ trait TelegramTrait
     {
         $required = compact("commands");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("setMyCommands", $params));
+        return $this->callApi("setMyCommands", $params);
     }
 
     /**
@@ -1016,7 +1016,7 @@ trait TelegramTrait
         $opt['message_id'] = $opt['message_id'] ?? $this->update->getCallbackQuery()->getMessage()->getMessageId();
         $required = compact("text");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("editMessageText", $params), Message::class);
+        return $this->callApi("editMessageText", $params, Message::class);
     }
 
     /**
@@ -1030,7 +1030,7 @@ trait TelegramTrait
      */
     public function editMessageCaption(?array $opt = []): PromiseInterface
     {
-        return $this->wrapPromise($this->callApi("editMessageCaption", $opt), Message::class);
+        return $this->callApi("editMessageCaption", $opt, Message::class);
     }
 
     /**
@@ -1050,7 +1050,7 @@ trait TelegramTrait
     {
         $required = compact("media");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("editMessageMedia", $params), Message::class);
+        return $this->callApi("editMessageMedia", $params, Message::class);
     }
 
     /**
@@ -1064,7 +1064,7 @@ trait TelegramTrait
      */
     public function editMessageReplyMarkup(?array $opt = []): PromiseInterface
     {
-        return $this->wrapPromise($this->callApi("editMessageReplyMarkup", $opt), Message::class);
+        return $this->callApi("editMessageReplyMarkup", $opt, Message::class);
     }
 
     /**
@@ -1082,7 +1082,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("stopPoll", $params), Poll::class);
+        return $this->callApi("stopPoll", $params, Poll::class);
     }
 
     /**
@@ -1105,7 +1105,7 @@ trait TelegramTrait
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("deleteMessage", $params));
+        return $this->callApi("deleteMessage", $params);
     }
 
     /**
@@ -1129,7 +1129,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("sticker");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendSticker", $params), Message::class);
+        return $this->callApi("sendSticker", $params, Message::class);
     }
 
     /**
@@ -1145,7 +1145,7 @@ trait TelegramTrait
     {
         $required = compact("name");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("getStickerSet", $params), StickerSet::class);
+        return $this->callApi("getStickerSet", $params, StickerSet::class);
     }
 
     /**
@@ -1163,7 +1163,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "png_sticker");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("uploadStickerFile", $params), File::class);
+        return $this->callApi("uploadStickerFile", $params, File::class);
     }
 
     /**
@@ -1187,7 +1187,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "name", "title", "emojis");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("createNewStickerSet", $params));
+        return $this->callApi("createNewStickerSet", $params);
     }
 
     /**
@@ -1212,7 +1212,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "name", "png_sticker", "emojis");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("addStickerToSet", $params));
+        return $this->callApi("addStickerToSet", $params);
     }
 
     /**
@@ -1229,7 +1229,7 @@ trait TelegramTrait
     {
         $required = compact("sticker", "position");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("setStickerPositionInSet", $params));
+        return $this->callApi("setStickerPositionInSet", $params);
     }
 
     /**
@@ -1245,7 +1245,7 @@ trait TelegramTrait
     {
         $required = compact("sticker");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("deleteStickerFromSet", $params));
+        return $this->callApi("deleteStickerFromSet", $params);
     }
 
     /**
@@ -1267,7 +1267,7 @@ trait TelegramTrait
     {
         $required = compact("name", "user_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("setStickerSetThumb", $params));
+        return $this->callApi("setStickerSetThumb", $params);
     }
 
     /**
@@ -1288,7 +1288,7 @@ trait TelegramTrait
         $opt['inline_query_id'] = $opt['inline_query_id'] ?? $this->update->getInlineQuery()->getId();
         $required = compact("results");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("answerInlineQuery", $params));
+        return $this->callApi("answerInlineQuery", $params);
     }
 
     /**
@@ -1314,7 +1314,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("title", "description", "payload", "provider_token", "start_parameter", "currency", "prices");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendInvoice", $params), Message::class);
+        return $this->callApi("sendInvoice", $params, Message::class);
     }
 
     /**
@@ -1324,7 +1324,7 @@ trait TelegramTrait
     public function doSendInvoice(array $params): PromiseInterface
     {
         $params['chat_id'] = $params['chat_id'] ?? $this->update->getEffectiveChat()->getId();
-        return $this->wrapPromise($this->callApi("sendInvoice", $params), Message::class);
+        return $this->callApi("sendInvoice", $params, Message::class);
     }
 
     /**
@@ -1346,7 +1346,7 @@ trait TelegramTrait
         $opt['shipping_query_id'] = $opt['shipping_query_id'] ?? $this->update->getShippingQuery()->getId();
         $required = compact("ok");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("answerShippingQuery", $params));
+        return $this->callApi("answerShippingQuery", $params);
     }
 
     /**
@@ -1369,7 +1369,7 @@ trait TelegramTrait
         $opt['pre_checkout_query_id'] = $opt['pre_checkout_query_id'] ?? $this->update->getPreCheckoutQuery()->getId();
         $required = compact("ok");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("answerPreCheckoutQuery", $params));
+        return $this->callApi("answerPreCheckoutQuery", $params);
     }
 
     /**
@@ -1388,7 +1388,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "errors");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("setPassportDataErrors", $params));
+        return $this->callApi("setPassportDataErrors", $params);
     }
 
     /**
@@ -1408,7 +1408,7 @@ trait TelegramTrait
         $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
         $required = compact("game_short_name");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("sendGame", $params), Message::class);
+        return $this->callApi("sendGame", $params, Message::class);
     }
 
     /**
@@ -1427,7 +1427,7 @@ trait TelegramTrait
     {
         $required = compact("user_id", "score");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("setGameScore", $params), Message::class);
+        return $this->callApi("setGameScore", $params, Message::class);
     }
 
     /**
@@ -1444,16 +1444,17 @@ trait TelegramTrait
     {
         $required = compact("user_id");
         $params = array_merge($required, $opt);
-        return $this->wrapPromise($this->callApi("getGameHighScores", $params), GameHighScore::class);
+        return $this->callApi("getGameHighScores", $params, GameHighScore::class);
     }
 
     /**
      * @param string $method
      * @param array $params
+     * @param string $class
      * @param string[] $headers
      * @return PromiseInterface
      */
-    public function callApi(string $method, array $params = [], $headers = ["Content-type" => "application/json"])
+    public function callApi(string $method, array $params = [], string $class = 'Scalar', $headers = ["Content-type" => "application/json"])
     {
         if ($this->container->get(Config::class)->getParseMode() && !isset($params['parse_mode'])) {
             $params['parse_mode'] = $this->container->get(Config::class)->getParseMode();
@@ -1475,7 +1476,7 @@ trait TelegramTrait
                 }
             }
         }
-        return $this->browser->post($method, $headers, json_encode($params));
+        return $this->wrapPromise($this->browser->post($method, $headers, json_encode($params)), $method, $params, $class);
     }
 
     /**
@@ -1554,10 +1555,12 @@ trait TelegramTrait
      * needs to manage the otherwise() promise callback to see the error.
      *
      * @param PromiseInterface $promise
+     * @param string $method
+     * @param array $params
      * @param string $class
      * @return PromiseInterface
      */
-    private function wrapPromise(PromiseInterface $promise, string $class = "Scalar"): PromiseInterface
+    private function wrapPromise(PromiseInterface $promise, string $method, array $params = [], string $class = "Scalar"): PromiseInterface
     {
         $mapper = $this->container->get(ZanzaraMapper::class);
         $logger = $this->container->get(ZanzaraLogger::class);
@@ -1572,12 +1575,12 @@ trait TelegramTrait
                 }
 
                 return $mapper->mapObject($object->result, $class);
-            }, function ($e) use ($logger, $mapper) {
+            }, function ($e) use ($method, $params, $logger, $mapper) {
                 if ($e instanceof ResponseException) {
                     $json = (string)$e->getResponse()->getBody();
                     $e = $mapper->mapJson($json, TelegramException::class);
                 }
-                $logger->errorTelegramApi($e);
+                $logger->errorTelegramApi($method, $params, $e);
                 throw $e;
             });
     }

@@ -8,7 +8,6 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Zanzara\Config;
-use Zanzara\Telegram\Type\Update;
 use Zanzara\Zanzara;
 
 /**
@@ -32,15 +31,11 @@ class TestLogger extends TestCase
         $config->setLogger($logger);
         $bot = new Zanzara($_ENV['BOT_TOKEN'], $config);
         $telegram = $bot->getTelegram();
-        $telegram->sendMessage('Hello', ['chat_id' => (int)$_ENV['CHAT_ID']])->then(
-            function (Update $update) {
-                // should never enter here
-            }
-        );
+        $telegram->sendMessage('Hello', ['chat_id' => 12345678]);
         $bot->getLoop()->run();
         $this->assertFileExists($logFile);
         $content = file_get_contents($logFile);
-        $regex = "/\[.*\] zanzara.ERROR: Type mismatch:.*/";
+        $regex = "/\[.*\] zanzara.ERROR: Failed to call Telegram Bot Api, .*/";
         $this->assertRegExp($regex, $content);
         unlink($logFile);
     }
