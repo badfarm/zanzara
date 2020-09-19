@@ -359,7 +359,9 @@ class Update implements \JsonSerializable
         } else if ($this->callback_query) {
             $this->updateType = CallbackQuery::class;
             $this->effectiveUser = $this->callback_query->getFrom();
-            $this->effectiveChat = $this->callback_query->getMessage()->getChat() ?? null;
+            $this->effectiveChat = $this->callback_query->getMessage()
+                ? $this->callback_query->getMessage()->getChat()
+                : null;
         } else if ($this->shipping_query) {
             $this->updateType = ShippingQuery::class;
             $this->effectiveUser = $this->shipping_query->getFrom();

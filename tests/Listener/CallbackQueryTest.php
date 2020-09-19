@@ -79,4 +79,29 @@ class CallbackQueryTest extends TestCase
         $this->assertSame('read', $inlineKeyboard[1][1]->getCallbackData());
     }
 
+    public function testCbQueryByInlineQuery()
+    {
+        $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateStream(__DIR__ . '/../update_types/cb_query_by_inline_query.json');
+        $bot = new Zanzara("test", $config);
+
+        $bot->onCbQueryData(['ok'], function (Context $ctx) {
+            $cbQuery = $ctx->getCallbackQuery();
+            $from = $ctx->getEffectiveUser();
+            $this->assertSame(620931104, $ctx->getUpdateId());
+            $this->assertSame('666728700704361038', $cbQuery->getId());
+            $this->assertSame(1111111111, $from->getId());
+            $this->assertSame(false, $from->isBot());
+            $this->assertSame('Michael', $from->getFirstName());
+            $this->assertSame('mscott', $from->getUsername());
+            $this->assertSame('it', $from->getLanguageCode());
+            $this->assertSame('BAAAAHbYAAA4skAJl8HevRCfRb8', $cbQuery->getInlineMessageId());
+            $this->assertSame('777777777777777777', $cbQuery->getChatInstance());
+            $this->assertSame('ok', $cbQuery->getData());
+        });
+
+        $bot->run();
+    }
+
 }

@@ -56,7 +56,7 @@ abstract class ListenerResolver extends ListenerCollector
 
             case CallbackQuery::class:
                 $callbackQuery = $update->getCallbackQuery();
-                $text = $callbackQuery->getMessage()->getText();
+                $text = $callbackQuery->getMessage() ? $callbackQuery->getMessage()->getText() : null;
                 if ($text) {
                     $this->findAndPush($listeners, 'cb_query_texts', $text);
                 }
