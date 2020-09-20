@@ -1013,12 +1013,21 @@ trait TelegramTrait
      */
     public function editMessageText(string $text, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update->getEffectiveChat()) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
-        if (!isset($opt['message_id']) && $this->update->getUpdateType() == CallbackQuery::class &&
-            $this->update->getCallbackQuery()->getMessage()) {
-            $opt['message_id'] = $this->update->getCallbackQuery()->getMessage()->getMessageId();
+        // if the user doesn't provide inline_message_id, chat_id or message_id the framework tries to resolve them
+        // based on the Update's type
+        if (!isset($opt['inline_message_id']) && !isset($opt['chat_id']) && !isset($opt['message_id'])) {
+            if ($this->update->getUpdateType() == CallbackQuery::class) {
+                $cbQuery = $this->update->getCallbackQuery();
+                if ($cbQuery->getInlineMessageId()) {
+                    $opt['inline_message_id'] = $cbQuery->getInlineMessageId();
+                } else if ($cbQuery->getMessage()) {
+                    $opt['message_id'] = $cbQuery->getMessage()->getMessageId();
+                }
+            }
+            // set chat_id only if inline_message_id wasn't set
+            if (!isset($opt['inline_message_id']) && $this->update->getEffectiveChat()) {
+                $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
+            }
         }
         $required = compact("text");
         $params = array_merge($required, $opt);
