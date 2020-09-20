@@ -101,9 +101,7 @@ trait TelegramTrait
      */
     public function sendMessage(string $text, ?array $opt = [])
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("text");
         $params = array_merge($required, $opt);
         return $this->doSendMessage($params);
@@ -219,9 +217,7 @@ trait TelegramTrait
      */
     public function sendPhoto($photo, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("photo");
         $params = array_merge($required, $opt);
         return $this->callApi("sendPhoto", $params, Message::class);
@@ -247,9 +243,7 @@ trait TelegramTrait
      */
     public function sendAudio($audio, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("audio");
         $params = array_merge($required, $opt);
         return $this->callApi("sendAudio", $params, Message::class);
@@ -274,9 +268,7 @@ trait TelegramTrait
      */
     public function sendDocument($document, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("document");
         $params = array_merge($required, $opt);
         return $this->callApi("sendDocument", $params, Message::class);
@@ -302,9 +294,7 @@ trait TelegramTrait
      */
     public function sendVideo($video, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("video");
         $params = array_merge($required, $opt);
         return $this->callApi("sendVideo", $params, Message::class);
@@ -330,9 +320,7 @@ trait TelegramTrait
      */
     public function sendAnimation($animation, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("animation");
         $params = array_merge($required, $opt);
         return $this->callApi("sendAnimation", $params, Message::class);
@@ -359,9 +347,7 @@ trait TelegramTrait
      */
     public function sendVoice($voice, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("voice");
         $params = array_merge($required, $opt);
         return $this->callApi("sendVoice", $params, Message::class);
@@ -386,9 +372,7 @@ trait TelegramTrait
      */
     public function sendVideoNote($video_note, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("video_note");
         $params = array_merge($required, $opt);
         return $this->callApi("sendVideoNote", $params, Message::class);
@@ -408,9 +392,7 @@ trait TelegramTrait
      */
     public function sendMediaGroup($media, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("media");
         $params = array_merge($required, $opt);
         return $this->callApi("sendMediaGroup", $params, Message::class);
@@ -431,9 +413,7 @@ trait TelegramTrait
      */
     public function sendLocation($latitude, $longitude, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("latitude", "longitude");
         $params = array_merge($required, $opt);
         return $this->callApi("sendLocation", $params, Message::class);
@@ -444,6 +424,15 @@ trait TelegramTrait
      * explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message was sent by the bot,
      * the edited @see Message is returned, otherwise True is returned.
      *
+     * By default the chat_id is taken from the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
+     * By default the message_id is taken from the context's update. Use $opt param to specify a different
+     * message_id. Eg. $opt = ['message_id' => 123456789];
+     *
+     * By default the inline_message_id is taken from the context's update. Use $opt param to specify a different
+     * inline_message_id. Eg. $opt = ['inline_message_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#editmessagelivelocation
      *
      * @param $latitude
@@ -453,9 +442,7 @@ trait TelegramTrait
      */
     public function editMessageLiveLocation($latitude, $longitude, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveMessageId($opt);
         $required = compact("latitude", "longitude");
         $params = array_merge($required, $opt);
         return $this->callApi("editMessageLiveLocation", $params, Message::class);
@@ -465,6 +452,15 @@ trait TelegramTrait
      * Use this method to stop updating a live location message before live_period expires. On success, if the message was
      * sent by the bot, the sent @see Message is returned, otherwise True is returned.
      *
+     * By default the chat_id is taken from the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
+     * By default the message_id is taken from the context's update. Use $opt param to specify a different
+     * message_id. Eg. $opt = ['message_id' => 123456789];
+     *
+     * By default the inline_message_id is taken from the context's update. Use $opt param to specify a different
+     * inline_message_id. Eg. $opt = ['inline_message_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#stopmessagelivelocation
      *
      * @param array|null $opt
@@ -472,9 +468,7 @@ trait TelegramTrait
      */
     public function stopMessageLiveLocation(?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveMessageId($opt);
         return $this->callApi("stopMessageLiveLocation", $opt, Message::class);
     }
 
@@ -495,9 +489,7 @@ trait TelegramTrait
      */
     public function sendVenue($latitude, $longitude, string $title, string $address, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("latitude", "longitude", "title", "address");
         $params = array_merge($required, $opt);
         return $this->callApi("sendVenue", $params, Message::class);
@@ -518,9 +510,7 @@ trait TelegramTrait
      */
     public function sendContact(string $phone_number, string $first_name, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("phone_number", "first_name");
         $params = array_merge($required, $opt);
         return $this->callApi("sendContact", $params, Message::class);
@@ -541,9 +531,7 @@ trait TelegramTrait
      */
     public function sendPoll(string $question, $options, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("question", "options");
         $params = array_merge($required, $opt);
         return $this->callApi("sendPoll", $params, Message::class);
@@ -564,9 +552,7 @@ trait TelegramTrait
      */
     public function sendDice(?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         return $this->callApi("sendDice", $opt, Message::class);
     }
 
@@ -586,9 +572,7 @@ trait TelegramTrait
      */
     public function sendChatAction(string $action, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("action");
         $params = array_merge($required, $opt);
         return $this->callApi("sendChatAction", $params);
@@ -1030,11 +1014,14 @@ trait TelegramTrait
      * Use this method to edit text and game messages. On success, if edited message is sent by the bot, the edited @see Message
      * is returned, otherwise True is returned.
      *
-     * By default the chat_id taken from the context's update. Use $opt param to specify a different
+     * By default the chat_id is taken from the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
      *
      * By default the message_id is taken from the context's update. Use $opt param to specify a different
      * message_id. Eg. $opt = ['message_id' => 123456789];
+     *
+     * By default the inline_message_id is taken from the context's update. Use $opt param to specify a different
+     * inline_message_id. Eg. $opt = ['inline_message_id' => 123456789];
      *
      * More on https://core.telegram.org/bots/api#editmessagetext
      *
@@ -1048,24 +1035,7 @@ trait TelegramTrait
      */
     public function editMessageText(string $text, ?array $opt = []): PromiseInterface
     {
-        // if the user doesn't provide inline_message_id, chat_id or message_id the framework tries to resolve them
-        // based on the Update's type
-        if ($this->update) {
-            if (!isset($opt['inline_message_id']) && !isset($opt['chat_id']) && !isset($opt['message_id'])) {
-                if ($this->update->getUpdateType() == CallbackQuery::class) {
-                    $cbQuery = $this->update->getCallbackQuery();
-                    if ($cbQuery->getInlineMessageId()) {
-                        $opt['inline_message_id'] = $cbQuery->getInlineMessageId();
-                    } else if ($cbQuery->getMessage()) {
-                        $opt['message_id'] = $cbQuery->getMessage()->getMessageId();
-                    }
-                }
-                // set chat_id only if inline_message_id wasn't set
-                if (!isset($opt['inline_message_id']) && $this->update->getEffectiveChat()) {
-                    $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-                }
-            }
-        }
+        $opt = $this->resolveMessageId($opt);
         $required = compact("text");
         $params = array_merge($required, $opt);
         return $this->callApi("editMessageText", $params, Message::class);
@@ -1075,6 +1045,15 @@ trait TelegramTrait
      * Use this method to edit captions of messages. On success, if edited message is sent by the bot, the edited @see Message is
      * returned, otherwise True is returned.
      *
+     * By default the chat_id is taken from the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
+     * By default the message_id is taken from the context's update. Use $opt param to specify a different
+     * message_id. Eg. $opt = ['message_id' => 123456789];
+     *
+     * By default the inline_message_id is taken from the context's update. Use $opt param to specify a different
+     * inline_message_id. Eg. $opt = ['inline_message_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#editmessagecaption
      *
      * @param array|null $opt
@@ -1082,6 +1061,7 @@ trait TelegramTrait
      */
     public function editMessageCaption(?array $opt = []): PromiseInterface
     {
+        $opt = $this->resolveMessageId($opt);
         return $this->callApi("editMessageCaption", $opt, Message::class);
     }
 
@@ -1092,6 +1072,15 @@ trait TelegramTrait
      * URL. On success, if the edited message was sent by the bot, the edited @see Message is returned, otherwise True is
      * returned.
      *
+     * By default the chat_id is taken from the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
+     * By default the message_id is taken from the context's update. Use $opt param to specify a different
+     * message_id. Eg. $opt = ['message_id' => 123456789];
+     *
+     * By default the inline_message_id is taken from the context's update. Use $opt param to specify a different
+     * inline_message_id. Eg. $opt = ['inline_message_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#editmessagemedia
      *
      * @param $media
@@ -1100,6 +1089,7 @@ trait TelegramTrait
      */
     public function editMessageMedia($media, ?array $opt = []): PromiseInterface
     {
+        $opt = $this->resolveMessageId($opt);
         $required = compact("media");
         $params = array_merge($required, $opt);
         return $this->callApi("editMessageMedia", $params, Message::class);
@@ -1109,6 +1099,15 @@ trait TelegramTrait
      * Use this method to edit only the reply markup of messages. On success, if edited message is sent by the bot, the
      * edited @see Message is returned, otherwise True is returned.
      *
+     * By default the chat_id is taken from the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
+     * By default the message_id is taken from the context's update. Use $opt param to specify a different
+     * message_id. Eg. $opt = ['message_id' => 123456789];
+     *
+     * By default the inline_message_id is taken from the context's update. Use $opt param to specify a different
+     * inline_message_id. Eg. $opt = ['inline_message_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#editmessagereplymarkup
      *
      * @param array|null $opt
@@ -1116,6 +1115,7 @@ trait TelegramTrait
      */
     public function editMessageReplyMarkup(?array $opt = []): PromiseInterface
     {
+        $opt = $this->resolveMessageId($opt);
         return $this->callApi("editMessageReplyMarkup", $opt, Message::class);
     }
 
@@ -1178,9 +1178,7 @@ trait TelegramTrait
      */
     public function sendSticker($sticker, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("sticker");
         $params = array_merge($required, $opt);
         return $this->callApi("sendSticker", $params, Message::class);
@@ -1367,9 +1365,7 @@ trait TelegramTrait
      */
     public function sendInvoice(string $title, string $description, string $payload, string $provider_token, string $start_parameter, string $currency, $prices, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("title", "description", "payload", "provider_token", "start_parameter", "currency", "prices");
         $params = array_merge($required, $opt);
         return $this->callApi("sendInvoice", $params, Message::class);
@@ -1469,9 +1465,7 @@ trait TelegramTrait
      */
     public function sendGame(string $game_short_name, ?array $opt = []): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
-            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
-        }
+        $opt = $this->resolveChatId($opt);
         $required = compact("game_short_name");
         $params = array_merge($required, $opt);
         return $this->callApi("sendGame", $params, Message::class);
@@ -1482,6 +1476,15 @@ trait TelegramTrait
      * returns the edited @see Message, otherwise returns True. Returns an error, if the new score is not greater than the
      * user's current score in the chat and force is False.
      *
+     * By default the chat_id is taken from the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
+     * By default the message_id is taken from the context's update. Use $opt param to specify a different
+     * message_id. Eg. $opt = ['message_id' => 123456789];
+     *
+     * By default the inline_message_id is taken from the context's update. Use $opt param to specify a different
+     * inline_message_id. Eg. $opt = ['inline_message_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#setgamescore
      *
      * @param int $user_id
@@ -1491,6 +1494,7 @@ trait TelegramTrait
      */
     public function setGameScore(int $user_id, int $score, ?array $opt = []): PromiseInterface
     {
+        $opt = $this->resolveMessageId($opt);
         $required = compact("user_id", "score");
         $params = array_merge($required, $opt);
         return $this->callApi("setGameScore", $params, Message::class);
@@ -1500,6 +1504,15 @@ trait TelegramTrait
      * Use this method to get data for high score tables. Will return the score of the specified user and several of his
      * neighbors in a game. On success, returns an Array of @see GameHighScore objects.
      *
+     * By default the chat_id is taken from the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
+     * By default the message_id is taken from the context's update. Use $opt param to specify a different
+     * message_id. Eg. $opt = ['message_id' => 123456789];
+     *
+     * By default the inline_message_id is taken from the context's update. Use $opt param to specify a different
+     * inline_message_id. Eg. $opt = ['inline_message_id' => 123456789];
+     *
      * More on https://core.telegram.org/bots/api#getgamehighscores
      *
      * @param int $user_id
@@ -1508,6 +1521,7 @@ trait TelegramTrait
      */
     public function getGameHighScores(int $user_id, ?array $opt = []): PromiseInterface
     {
+        $opt = $this->resolveMessageId($opt);
         $required = compact("user_id");
         $params = array_merge($required, $opt);
         return $this->callApi("getGameHighScores", $params, GameHighScore::class);
@@ -1649,6 +1663,45 @@ trait TelegramTrait
                 $logger->errorTelegramApi($method, $params, $e);
                 throw $e;
             });
+    }
+
+    /**
+     * @param array|null $opt
+     * @return array|null
+     */
+    public function resolveMessageId(?array $opt): ?array
+    {
+        // if the user doesn't provide inline_message_id, chat_id or message_id the framework tries to resolve them
+        // based on the Update's type
+        if ($this->update) {
+            if (!isset($opt['inline_message_id']) && !isset($opt['chat_id']) && !isset($opt['message_id'])) {
+                if ($this->update->getUpdateType() == CallbackQuery::class) {
+                    $cbQuery = $this->update->getCallbackQuery();
+                    if ($cbQuery->getInlineMessageId()) {
+                        $opt['inline_message_id'] = $cbQuery->getInlineMessageId();
+                    } else if ($cbQuery->getMessage()) {
+                        $opt['message_id'] = $cbQuery->getMessage()->getMessageId();
+                    }
+                }
+                // set chat_id only if inline_message_id wasn't set
+                if (!isset($opt['inline_message_id']) && $this->update->getEffectiveChat()) {
+                    $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
+                }
+            }
+        }
+        return $opt;
+    }
+
+    /**
+     * @param array|null $opt
+     * @return array|null
+     */
+    public function resolveChatId(?array $opt): ?array
+    {
+        if (!isset($opt['chat_id']) && $this->update) {
+            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
+        }
+        return $opt;
     }
 
 }
