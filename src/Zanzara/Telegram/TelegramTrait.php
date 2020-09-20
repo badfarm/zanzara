@@ -13,6 +13,7 @@ use React\Promise\PromiseInterface;
 use RingCentral\Psr7\MultipartStream;
 use Zanzara\Config;
 use Zanzara\MessageQueue;
+use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\Chat;
 use Zanzara\Telegram\Type\ChatMember;
 use Zanzara\Telegram\Type\File\File;
@@ -1012,8 +1013,13 @@ trait TelegramTrait
      */
     public function editMessageText(string $text, ?array $opt = []): PromiseInterface
     {
-        $opt['chat_id'] = $opt['chat_id'] ?? $this->update->getEffectiveChat()->getId();
-        $opt['message_id'] = $opt['message_id'] ?? $this->update->getCallbackQuery()->getMessage()->getMessageId();
+        if (!isset($opt['chat_id']) && $this->update->getEffectiveChat()) {
+            $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
+        }
+        if (!isset($opt['message_id']) && $this->update->getUpdateType() == CallbackQuery::class &&
+            $this->update->getCallbackQuery()->getMessage()) {
+            $opt['message_id'] = $this->update->getCallbackQuery()->getMessage()->getMessageId();
+        }
         $required = compact("text");
         $params = array_merge($required, $opt);
         return $this->callApi("editMessageText", $params, Message::class);
