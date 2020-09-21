@@ -13,6 +13,7 @@ use React\Promise\PromiseInterface;
 use RingCentral\Psr7\MultipartStream;
 use Zanzara\Config;
 use Zanzara\MessageQueue;
+use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\Chat;
 use Zanzara\Telegram\Type\ChatMember;
 use Zanzara\Telegram\Type\File\File;
