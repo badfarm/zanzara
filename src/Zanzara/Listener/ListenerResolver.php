@@ -30,7 +30,7 @@ abstract class ListenerResolver extends ListenerCollector
      * @param Update $update
      * @return Listener[]
      */
-    protected function resolve(Update $update): array
+    public function resolve(Update $update): array
     {
         $listeners = [];
         $updateType = $update->getUpdateType();

@@ -88,4 +88,14 @@ class ZanzaraLogger
         return "Not authorized, please provide a valid bot token";
     }
 
+    public function logIsListening()
+    {
+        $this->info($this->getIsListening());
+    }
+
+    public function getIsListening()
+    {
+        return 'Zanzara is listening...';
+    }
+
 }

@@ -9,22 +9,20 @@ use Psr\Log\LoggerInterface;
 use React\Cache\CacheInterface;
 use React\EventLoop\LoopInterface;
 use React\Socket\Connector;
+use Zanzara\UpdateMode\Polling;
+use Zanzara\UpdateMode\ReactPHPWebhook;
+use Zanzara\UpdateMode\UpdateMode;
+use Zanzara\UpdateMode\Webhook;
 
 /**
- * Configuration for Zanzara. Expected to be used as follow:
- *
- *  $config = new \Zanzara\Config();
- *  $config->setUpdateMode(self::WEBHOOK_MODE);
- *  $config->setParseMode(self::PARSE_MODE_HTML);
- *  $bot = new \Zanzara\Zanzara($config);
  *
  */
 class Config
 {
 
-    public const WEBHOOK_MODE = "WEBHOOK";
-    public const POLLING_MODE = "POLLING";
-    public const REACTPHP_WEBHOOK_MODE = "REACTPHP_WEBHOOK";
+    public const WEBHOOK_MODE = Webhook::class;
+    public const POLLING_MODE = Polling::class;
+    public const REACTPHP_WEBHOOK_MODE = ReactPHPWebhook::class;
 
     public const PARSE_MODE_HTML = "HTML";
     public const PARSE_MODE_MARKDOWN = "MarkdownV2";
@@ -56,7 +54,7 @@ class Config
     private $container;
 
     /**
-     * @var string
+     * @var string|UpdateMode
      */
     private $updateMode = self::POLLING_MODE;
 
@@ -161,7 +159,7 @@ class Config
     }
 
     /**
-     * @return string
+     * @return string|UpdateMode
      */
     public function getUpdateMode(): string
     {
