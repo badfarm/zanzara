@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zanzara\UpdateMode;
 
+use Zanzara\Context;
 use Zanzara\Telegram\Type\Response\TelegramException;
 use Zanzara\Telegram\Type\Update;
 use Zanzara\Telegram\Type\Webhook\WebhookInfo;
