@@ -17,7 +17,7 @@ use Zanzara\ZanzaraMapper;
 /**
  *
  */
-abstract class UpdateMode
+abstract class UpdateMode implements UpdateModeInterface
 {
 
     /**
@@ -75,8 +75,6 @@ abstract class UpdateMode
         $this->loop = $loop;
         $this->zanzaraMapper = $zanzaraMapper;
     }
-
-    public abstract function run();
 
     /**
      * @param Update $update

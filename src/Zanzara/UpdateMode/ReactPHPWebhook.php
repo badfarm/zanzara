@@ -39,7 +39,7 @@ class ReactPHPWebhook extends BaseWebhook
     private function init()
     {
         $processingUpdate = null;
-        $this->server = new Server($this->loop, function (ServerRequestInterface $request) use (&$processingUpdate) {
+        $server = new Server($this->loop, function (ServerRequestInterface $request) use (&$processingUpdate) {
             $token = $this->resolveTokenFromPath($request->getUri()->getPath());
             if (!$this->isWebhookAuthorized($token)) {
                 $this->logger->errorNotAuthorized();
@@ -51,15 +51,19 @@ class ReactPHPWebhook extends BaseWebhook
             $this->processUpdate($processingUpdate);
             return new Response();
         });
-        $this->server->on('error', function ($e) use (&$processingUpdate) {
+        $server->on('error', function ($e) use (&$processingUpdate) {
             $this->logger->errorUpdate($e, $processingUpdate);
             $errorHandler = $this->config->getErrorHandler();
             if ($errorHandler) {
                 $errorHandler($e, new Context($processingUpdate, $this->container));
             }
         });
+        $this->setServer($server);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function run()
     {
         $this->telegram->getWebhookInfo()->then(
@@ -88,6 +92,14 @@ class ReactPHPWebhook extends BaseWebhook
     public function getServer(): Server
     {
         return $this->server;
+    }
+
+    /**
+     * @param Server $server
+     */
+    public function setServer(Server $server): void
+    {
+        $this->server = $server;
     }
 
 }

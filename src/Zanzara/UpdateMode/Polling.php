@@ -15,6 +15,9 @@ use Zanzara\Telegram\Type\Webhook\WebhookInfo;
 class Polling extends UpdateMode
 {
 
+    /**
+     * @inheritDoc
+     */
     public function run()
     {
         $this->telegram->getWebhookInfo()->then(

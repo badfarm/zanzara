@@ -12,6 +12,9 @@ use Zanzara\Telegram\Type\Update;
 class Webhook extends BaseWebhook
 {
 
+    /**
+     * @inheritDoc
+     */
     public function run()
     {
         $token = $this->resolveTokenFromPath($_SERVER['REQUEST_URI'] ?? '');

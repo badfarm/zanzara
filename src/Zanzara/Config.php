@@ -11,7 +11,7 @@ use React\EventLoop\LoopInterface;
 use React\Socket\Connector;
 use Zanzara\UpdateMode\Polling;
 use Zanzara\UpdateMode\ReactPHPWebhook;
-use Zanzara\UpdateMode\UpdateMode;
+use Zanzara\UpdateMode\UpdateModeInterface;
 use Zanzara\UpdateMode\Webhook;
 
 /**
@@ -54,7 +54,7 @@ class Config
     private $container;
 
     /**
-     * @var string|UpdateMode
+     * @var string|UpdateModeInterface
      */
     private $updateMode = self::POLLING_MODE;
 
@@ -159,9 +159,9 @@ class Config
     }
 
     /**
-     * @return string|UpdateMode
+     * @return string|UpdateModeInterface
      */
-    public function getUpdateMode(): string
+    public function getUpdateMode()
     {
         return $this->updateMode;
     }
