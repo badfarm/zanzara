@@ -19,7 +19,7 @@ use React\Promise\PromiseInterface;
 class ZanzaraCache
 {
     /**
-     * @var CacheInterface|null
+     * @var CacheInterface
      */
     private $cache;
 
@@ -43,11 +43,11 @@ class ZanzaraCache
 
     /**
      * ZanzaraLogger constructor.
-     * @param CacheInterface|null $cache
+     * @param CacheInterface $cache
      * @param ZanzaraLogger $logger
      * @param Config $config
      */
-    public function __construct(?CacheInterface $cache, ZanzaraLogger $logger, Config $config)
+    public function __construct(CacheInterface $cache, ZanzaraLogger $logger, Config $config)
     {
         $this->logger = $logger;
         $this->cache = $cache;
@@ -366,12 +366,12 @@ class ZanzaraCache
      */
     public function callHandlerByChatId(int $chatId, $update, $container)
     {
-        return $this->cache->get($this->getConversationKey($chatId))->then(function ($conversation) use ($update, $chatId, $container) {
+        return $this->cache->get($this->getConversationKey($chatId))->then(function ($conversation) use ($update, $container) {
             if (!empty($conversation["state"])) {
                 $handler = $conversation["state"];
                 $handler(new Context($update, $container));
             }
-        }, function ($err) use ($container, $update) {
+        }, function ($err) use ($update) {
             $this->logger->errorUpdate($update, $err);
         })->otherwise(function ($err) use ($update, $chatId) {
             $this->logger->errorUpdate($err, $update);

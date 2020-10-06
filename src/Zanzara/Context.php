@@ -100,9 +100,9 @@ class Context
     }
 
     /**
-     * @return Update
+     * @return Update|null
      */
-    public function getUpdate(): Update
+    public function getUpdate(): ?Update
     {
         return $this->update;
     }
@@ -119,7 +119,8 @@ class Context
      */
     public function nextStep(callable $handler): PromiseInterface
     {
-        $chatId = $this->update->getEffectiveChat()->getId();
+        // update is not null when used within the Context
+        $chatId = $this->update->/** @scrutinizer ignore-call */getEffectiveChat()->getId();
         return $this->cache->setConversationHandler($chatId, $handler);
     }
 

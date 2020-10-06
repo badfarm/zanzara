@@ -100,7 +100,7 @@ trait TelegramTrait
      * ]
      * @return PromiseInterface
      */
-    public function sendMessage(string $text, ?array $opt = [])
+    public function sendMessage(string $text, array $opt = [])
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("text");
@@ -149,7 +149,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function setWebhook(string $url, ?array $opt = []): PromiseInterface
+    public function setWebhook(string $url, array $opt = []): PromiseInterface
     {
         $required = compact("url");
         $params = array_merge($required, $opt);
@@ -193,7 +193,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function forwardMessage(int $chat_id, int $from_chat_id, int $message_id, ?array $opt = []): PromiseInterface
+    public function forwardMessage(int $chat_id, int $from_chat_id, int $message_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "from_chat_id", "message_id");
         $params = array_merge($required, $opt);
@@ -216,7 +216,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendPhoto($photo, ?array $opt = []): PromiseInterface
+    public function sendPhoto($photo, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("photo");
@@ -242,7 +242,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendAudio($audio, ?array $opt = []): PromiseInterface
+    public function sendAudio($audio, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("audio");
@@ -267,7 +267,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendDocument($document, ?array $opt = []): PromiseInterface
+    public function sendDocument($document, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("document");
@@ -293,7 +293,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendVideo($video, ?array $opt = []): PromiseInterface
+    public function sendVideo($video, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("video");
@@ -319,7 +319,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendAnimation($animation, ?array $opt = []): PromiseInterface
+    public function sendAnimation($animation, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("animation");
@@ -346,7 +346,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendVoice($voice, ?array $opt = []): PromiseInterface
+    public function sendVoice($voice, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("voice");
@@ -371,7 +371,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendVideoNote($video_note, ?array $opt = []): PromiseInterface
+    public function sendVideoNote($video_note, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("video_note");
@@ -391,7 +391,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendMediaGroup($media, ?array $opt = []): PromiseInterface
+    public function sendMediaGroup($media, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("media");
@@ -412,7 +412,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendLocation($latitude, $longitude, ?array $opt = []): PromiseInterface
+    public function sendLocation($latitude, $longitude, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("latitude", "longitude");
@@ -441,7 +441,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function editMessageLiveLocation($latitude, $longitude, ?array $opt = []): PromiseInterface
+    public function editMessageLiveLocation($latitude, $longitude, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveMessageId($opt);
         $required = compact("latitude", "longitude");
@@ -467,7 +467,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function stopMessageLiveLocation(?array $opt = []): PromiseInterface
+    public function stopMessageLiveLocation(array $opt = []): PromiseInterface
     {
         $opt = $this->resolveMessageId($opt);
         return $this->callApi("stopMessageLiveLocation", $opt, Message::class);
@@ -488,7 +488,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendVenue($latitude, $longitude, string $title, string $address, ?array $opt = []): PromiseInterface
+    public function sendVenue($latitude, $longitude, string $title, string $address, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("latitude", "longitude", "title", "address");
@@ -509,7 +509,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendContact(string $phone_number, string $first_name, ?array $opt = []): PromiseInterface
+    public function sendContact(string $phone_number, string $first_name, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("phone_number", "first_name");
@@ -530,7 +530,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendPoll(string $question, $options, ?array $opt = []): PromiseInterface
+    public function sendPoll(string $question, $options, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("question", "options");
@@ -551,7 +551,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendDice(?array $opt = []): PromiseInterface
+    public function sendDice(array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         return $this->callApi("sendDice", $opt, Message::class);
@@ -571,7 +571,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendChatAction(string $action, ?array $opt = []): PromiseInterface
+    public function sendChatAction(string $action, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("action");
@@ -588,7 +588,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function getUserProfilePhotos(int $user_id, ?array $opt = []): PromiseInterface
+    public function getUserProfilePhotos(int $user_id, array $opt = []): PromiseInterface
     {
         $required = compact("user_id");
         $params = array_merge($required, $opt);
@@ -608,7 +608,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function getFile(string $file_id, ?array $opt = []): PromiseInterface
+    public function getFile(string $file_id, array $opt = []): PromiseInterface
     {
         $required = compact("file_id");
         $params = array_merge($required, $opt);
@@ -628,7 +628,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function kickChatMember(int $chat_id, int $user_id, ?array $opt = []): PromiseInterface
+    public function kickChatMember(int $chat_id, int $user_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
@@ -647,7 +647,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function unbanChatMember(int $chat_id, int $user_id, ?array $opt = []): PromiseInterface
+    public function unbanChatMember(int $chat_id, int $user_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
@@ -667,7 +667,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function restrictChatMember(int $chat_id, int $user_id, $permissions, ?array $opt = []): PromiseInterface
+    public function restrictChatMember(int $chat_id, int $user_id, $permissions, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "user_id", "permissions");
         $params = array_merge($required, $opt);
@@ -686,7 +686,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function promoteChatMember(int $chat_id, int $user_id, ?array $opt = []): PromiseInterface
+    public function promoteChatMember(int $chat_id, int $user_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
@@ -704,7 +704,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function setChatAdministratorCustomTitle(int $chat_id, int $user_id, string $custom_title, ?array $opt = []): PromiseInterface
+    public function setChatAdministratorCustomTitle(int $chat_id, int $user_id, string $custom_title, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "user_id", "custom_title");
         $params = array_merge($required, $opt);
@@ -722,7 +722,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function setChatPermissions(int $chat_id, $permissions, ?array $opt = []): PromiseInterface
+    public function setChatPermissions(int $chat_id, $permissions, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "permissions");
         $params = array_merge($required, $opt);
@@ -740,7 +740,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function exportChatInviteLink(int $chat_id, ?array $opt = []): PromiseInterface
+    public function exportChatInviteLink(int $chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -758,7 +758,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function setChatPhoto(int $chat_id, $photo, ?array $opt = []): PromiseInterface
+    public function setChatPhoto(int $chat_id, $photo, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "photo");
         $params = array_merge($required, $opt);
@@ -775,7 +775,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function deleteChatPhoto(int $chat_id, ?array $opt = []): PromiseInterface
+    public function deleteChatPhoto(int $chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -793,7 +793,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function setChatTitle(int $chat_id, string $title, ?array $opt = []): PromiseInterface
+    public function setChatTitle(int $chat_id, string $title, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "title");
         $params = array_merge($required, $opt);
@@ -810,7 +810,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function setChatDescription(int $chat_id, ?array $opt = []): PromiseInterface
+    public function setChatDescription(int $chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -829,7 +829,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function pinChatMessage(int $chat_id, int $message_id, ?array $opt = []): PromiseInterface
+    public function pinChatMessage(int $chat_id, int $message_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
@@ -847,7 +847,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function unpinChatMessage(int $chat_id, ?array $opt = []): PromiseInterface
+    public function unpinChatMessage(int $chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -863,7 +863,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function leaveChat(int $chat_id, ?array $opt = []): PromiseInterface
+    public function leaveChat(int $chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -880,7 +880,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function getChat(int $chat_id, ?array $opt = []): PromiseInterface
+    public function getChat(int $chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -898,7 +898,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function getChatAdministrators(int $chat_id, ?array $opt = []): PromiseInterface
+    public function getChatAdministrators(int $chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -914,7 +914,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function getChatMembersCount(int $chat_id, ?array $opt = []): PromiseInterface
+    public function getChatMembersCount(int $chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -931,7 +931,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function getChatMember(int $chat_id, int $user_id, ?array $opt = []): PromiseInterface
+    public function getChatMember(int $chat_id, int $user_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
@@ -950,7 +950,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function setChatStickerSet(int $chat_id, string $sticker_set_name, ?array $opt = []): PromiseInterface
+    public function setChatStickerSet(int $chat_id, string $sticker_set_name, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "sticker_set_name");
         $params = array_merge($required, $opt);
@@ -968,7 +968,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function deleteChatStickerSet(int $chat_id, ?array $opt = []): PromiseInterface
+    public function deleteChatStickerSet(int $chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -987,7 +987,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function answerCallbackQuery(?array $opt = []): PromiseInterface
+    public function answerCallbackQuery(array $opt = []): PromiseInterface
     {
         if (!isset($opt['callback_query_id']) && $this->update) {
             $opt['callback_query_id'] = $this->update->getCallbackQuery()->getId();
@@ -1004,7 +1004,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function setMyCommands($commands, ?array $opt = []): PromiseInterface
+    public function setMyCommands($commands, array $opt = []): PromiseInterface
     {
         $required = compact("commands");
         $params = array_merge($required, $opt);
@@ -1034,7 +1034,7 @@ trait TelegramTrait
      * ]
      * @return PromiseInterface
      */
-    public function editMessageText(string $text, ?array $opt = []): PromiseInterface
+    public function editMessageText(string $text, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveMessageId($opt);
         $required = compact("text");
@@ -1060,7 +1060,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function editMessageCaption(?array $opt = []): PromiseInterface
+    public function editMessageCaption(array $opt = []): PromiseInterface
     {
         $opt = $this->resolveMessageId($opt);
         return $this->callApi("editMessageCaption", $opt, Message::class);
@@ -1088,7 +1088,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function editMessageMedia($media, ?array $opt = []): PromiseInterface
+    public function editMessageMedia($media, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveMessageId($opt);
         $required = compact("media");
@@ -1114,7 +1114,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function editMessageReplyMarkup(?array $opt = []): PromiseInterface
+    public function editMessageReplyMarkup(array $opt = []): PromiseInterface
     {
         $opt = $this->resolveMessageId($opt);
         return $this->callApi("editMessageReplyMarkup", $opt, Message::class);
@@ -1131,7 +1131,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function stopPoll(int $chat_id, int $message_id, ?array $opt = []): PromiseInterface
+    public function stopPoll(int $chat_id, int $message_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
@@ -1154,7 +1154,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function deleteMessage(int $chat_id, int $message_id, ?array $opt = []): PromiseInterface
+    public function deleteMessage(int $chat_id, int $message_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
@@ -1177,7 +1177,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendSticker($sticker, ?array $opt = []): PromiseInterface
+    public function sendSticker($sticker, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("sticker");
@@ -1194,7 +1194,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function getStickerSet(string $name, ?array $opt = []): PromiseInterface
+    public function getStickerSet(string $name, array $opt = []): PromiseInterface
     {
         $required = compact("name");
         $params = array_merge($required, $opt);
@@ -1212,7 +1212,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function uploadStickerFile(int $user_id, $png_sticker, ?array $opt = []): PromiseInterface
+    public function uploadStickerFile(int $user_id, $png_sticker, array $opt = []): PromiseInterface
     {
         $required = compact("user_id", "png_sticker");
         $params = array_merge($required, $opt);
@@ -1236,7 +1236,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function createNewStickerSet(int $user_id, string $name, string $title, string $emojis, ?array $opt = []): PromiseInterface
+    public function createNewStickerSet(int $user_id, string $name, string $title, string $emojis, array $opt = []): PromiseInterface
     {
         $required = compact("user_id", "name", "title", "emojis");
         $params = array_merge($required, $opt);
@@ -1261,7 +1261,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function addStickerToSet(int $user_id, string $name, $png_sticker, string $emojis, ?array $opt = []): PromiseInterface
+    public function addStickerToSet(int $user_id, string $name, $png_sticker, string $emojis, array $opt = []): PromiseInterface
     {
         $required = compact("user_id", "name", "png_sticker", "emojis");
         $params = array_merge($required, $opt);
@@ -1278,7 +1278,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function setStickerPositionInSet(string $sticker, int $position, ?array $opt = []): PromiseInterface
+    public function setStickerPositionInSet(string $sticker, int $position, array $opt = []): PromiseInterface
     {
         $required = compact("sticker", "position");
         $params = array_merge($required, $opt);
@@ -1294,7 +1294,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function deleteStickerFromSet(string $sticker, ?array $opt = []): PromiseInterface
+    public function deleteStickerFromSet(string $sticker, array $opt = []): PromiseInterface
     {
         $required = compact("sticker");
         $params = array_merge($required, $opt);
@@ -1316,7 +1316,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function setStickerSetThumb(string $name, int $user_id, ?array $opt = []): PromiseInterface
+    public function setStickerSetThumb(string $name, int $user_id, array $opt = []): PromiseInterface
     {
         $required = compact("name", "user_id");
         $params = array_merge($required, $opt);
@@ -1336,7 +1336,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function answerInlineQuery($results, ?array $opt = []): PromiseInterface
+    public function answerInlineQuery($results, array $opt = []): PromiseInterface
     {
         if (!isset($opt['inline_query_id']) && $this->update) {
             $opt['inline_query_id'] = $this->update->getInlineQuery()->getId();
@@ -1364,7 +1364,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendInvoice(string $title, string $description, string $payload, string $provider_token, string $start_parameter, string $currency, $prices, ?array $opt = []): PromiseInterface
+    public function sendInvoice(string $title, string $description, string $payload, string $provider_token, string $start_parameter, string $currency, $prices, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("title", "description", "payload", "provider_token", "start_parameter", "currency", "prices");
@@ -1378,7 +1378,7 @@ trait TelegramTrait
      */
     public function doSendInvoice(array $params): PromiseInterface
     {
-        if (!isset($opt['chat_id']) && $this->update) {
+        if (!isset($params['chat_id']) && $this->update) {
             $params['chat_id'] = $this->update->getEffectiveChat()->getId();
         }
         return $this->callApi("sendInvoice", $params, Message::class);
@@ -1398,7 +1398,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function answerShippingQuery($ok, ?array $opt = []): PromiseInterface
+    public function answerShippingQuery($ok, array $opt = []): PromiseInterface
     {
         if (!isset($opt['shipping_query_id']) && $this->update) {
             $opt['shipping_query_id'] = $this->update->getShippingQuery()->getId();
@@ -1423,7 +1423,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function answerPreCheckoutQuery($ok, ?array $opt = []): PromiseInterface
+    public function answerPreCheckoutQuery($ok, array $opt = []): PromiseInterface
     {
         if (!isset($opt['pre_checkout_query_id']) && $this->update) {
             $opt['pre_checkout_query_id'] = $this->update->getPreCheckoutQuery()->getId();
@@ -1445,7 +1445,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function setPassportDataErrors(int $user_id, $errors, ?array $opt = []): PromiseInterface
+    public function setPassportDataErrors(int $user_id, $errors, array $opt = []): PromiseInterface
     {
         $required = compact("user_id", "errors");
         $params = array_merge($required, $opt);
@@ -1464,7 +1464,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function sendGame(string $game_short_name, ?array $opt = []): PromiseInterface
+    public function sendGame(string $game_short_name, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("game_short_name");
@@ -1493,7 +1493,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function setGameScore(int $user_id, int $score, ?array $opt = []): PromiseInterface
+    public function setGameScore(int $user_id, int $score, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveMessageId($opt);
         $required = compact("user_id", "score");
@@ -1520,7 +1520,7 @@ trait TelegramTrait
      * @param array|null $opt
      * @return PromiseInterface
      */
-    public function getGameHighScores(int $user_id, ?array $opt = []): PromiseInterface
+    public function getGameHighScores(int $user_id, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveMessageId($opt);
         $required = compact("user_id");
@@ -1575,7 +1575,7 @@ trait TelegramTrait
         foreach ($params as $key => $value) {
 
             if ($value instanceof InputFile) {
-                array_push($promises, $filesystem->getContents($value->getPath())->then(function ($contents) use ($value, $multipart_data, $key) {
+                array_push($promises, $filesystem->getContents($value->getPath())->then(function ($contents) use ($value, $key) {
                     $data = ['name' => $key];
                     $data['contents'] = $contents;
                     $data['filename'] = basename($value->getPath());
