@@ -84,7 +84,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#sendmessage
      *
      * @param string $text
-     * @param array|null $opt = [
+     * @param array $opt = [
      *     'chat_id' => 123456789,
      *     'parse_mode' => 'HTML',
      *     'disable_web_page_preview' => true,
@@ -146,7 +146,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#setwebhook
      *
      * @param string $url
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function setWebhook(string $url, array $opt = []): PromiseInterface
@@ -190,7 +190,7 @@ trait TelegramTrait
      * @param int $chat_id
      * @param int $from_chat_id
      * @param int $message_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function forwardMessage(int $chat_id, int $from_chat_id, int $message_id, array $opt = []): PromiseInterface
@@ -213,7 +213,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#sendphoto
      *
      * @param $photo
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendPhoto($photo, array $opt = []): PromiseInterface
@@ -239,7 +239,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#sendaudio
      *
      * @param $audio
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendAudio($audio, array $opt = []): PromiseInterface
@@ -264,7 +264,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#senddocument
      *
      * @param $document
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendDocument($document, array $opt = []): PromiseInterface
@@ -290,7 +290,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#sendvideo
      *
      * @param $video
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendVideo($video, array $opt = []): PromiseInterface
@@ -316,7 +316,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#sendanimation
      *
      * @param $animation
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendAnimation($animation, array $opt = []): PromiseInterface
@@ -343,7 +343,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#sendvoice
      *
      * @param $voice
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendVoice($voice, array $opt = []): PromiseInterface
@@ -368,7 +368,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#sendvideonote
      *
      * @param $video_note
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendVideoNote($video_note, array $opt = []): PromiseInterface
@@ -388,7 +388,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#sendmediagroup
      *
      * @param $media
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendMediaGroup($media, array $opt = []): PromiseInterface
@@ -409,7 +409,7 @@ trait TelegramTrait
      *
      * @param $latitude
      * @param $longitude
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendLocation($latitude, $longitude, array $opt = []): PromiseInterface
@@ -438,7 +438,7 @@ trait TelegramTrait
      *
      * @param $latitude
      * @param $longitude
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function editMessageLiveLocation($latitude, $longitude, array $opt = []): PromiseInterface
@@ -464,7 +464,7 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#stopmessagelivelocation
      *
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function stopMessageLiveLocation(array $opt = []): PromiseInterface
@@ -485,7 +485,7 @@ trait TelegramTrait
      * @param $longitude
      * @param string $title
      * @param string $address
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendVenue($latitude, $longitude, string $title, string $address, array $opt = []): PromiseInterface
@@ -506,7 +506,7 @@ trait TelegramTrait
      *
      * @param string $phone_number
      * @param string $first_name
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendContact(string $phone_number, string $first_name, array $opt = []): PromiseInterface
@@ -527,7 +527,7 @@ trait TelegramTrait
      *
      * @param string $question
      * @param $options
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendPoll(string $question, $options, array $opt = []): PromiseInterface
@@ -548,7 +548,7 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#senddice
      *
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendDice(array $opt = []): PromiseInterface
@@ -568,7 +568,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#sendchataction
      *
      * @param string $action
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendChatAction(string $action, array $opt = []): PromiseInterface
@@ -585,7 +585,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#getuserprofilephotos
      *
      * @param int $user_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function getUserProfilePhotos(int $user_id, array $opt = []): PromiseInterface
@@ -605,7 +605,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#getfile
      *
      * @param string $file_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function getFile(string $file_id, array $opt = []): PromiseInterface
@@ -625,7 +625,7 @@ trait TelegramTrait
      *
      * @param int $chat_id
      * @param int $user_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function kickChatMember(int $chat_id, int $user_id, array $opt = []): PromiseInterface
@@ -644,7 +644,7 @@ trait TelegramTrait
      *
      * @param int $chat_id
      * @param int $user_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function unbanChatMember(int $chat_id, int $user_id, array $opt = []): PromiseInterface
@@ -664,7 +664,7 @@ trait TelegramTrait
      * @param int $chat_id
      * @param int $user_id
      * @param $permissions
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function restrictChatMember(int $chat_id, int $user_id, $permissions, array $opt = []): PromiseInterface
@@ -683,7 +683,7 @@ trait TelegramTrait
      *
      * @param int $chat_id
      * @param int $user_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function promoteChatMember(int $chat_id, int $user_id, array $opt = []): PromiseInterface
@@ -701,7 +701,7 @@ trait TelegramTrait
      * @param int $chat_id
      * @param int $user_id
      * @param string $custom_title
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function setChatAdministratorCustomTitle(int $chat_id, int $user_id, string $custom_title, array $opt = []): PromiseInterface
@@ -719,7 +719,7 @@ trait TelegramTrait
      *
      * @param int $chat_id
      * @param $permissions
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function setChatPermissions(int $chat_id, $permissions, array $opt = []): PromiseInterface
@@ -737,7 +737,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#exportchatinvitelink
      *
      * @param int $chat_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function exportChatInviteLink(int $chat_id, array $opt = []): PromiseInterface
@@ -755,7 +755,7 @@ trait TelegramTrait
      *
      * @param int $chat_id
      * @param $photo
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function setChatPhoto(int $chat_id, $photo, array $opt = []): PromiseInterface
@@ -772,7 +772,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#deletechatphoto
      *
      * @param int $chat_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function deleteChatPhoto(int $chat_id, array $opt = []): PromiseInterface
@@ -790,7 +790,7 @@ trait TelegramTrait
      *
      * @param int $chat_id
      * @param string $title
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function setChatTitle(int $chat_id, string $title, array $opt = []): PromiseInterface
@@ -807,7 +807,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#setchatdescription
      *
      * @param int $chat_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function setChatDescription(int $chat_id, array $opt = []): PromiseInterface
@@ -826,7 +826,7 @@ trait TelegramTrait
      *
      * @param int $chat_id
      * @param int $message_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function pinChatMessage(int $chat_id, int $message_id, array $opt = []): PromiseInterface
@@ -844,7 +844,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#unpinchatmessage
      *
      * @param int $chat_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function unpinChatMessage(int $chat_id, array $opt = []): PromiseInterface
@@ -860,7 +860,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#leavechat
      *
      * @param int $chat_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function leaveChat(int $chat_id, array $opt = []): PromiseInterface
@@ -877,7 +877,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#getchat
      *
      * @param int $chat_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function getChat(int $chat_id, array $opt = []): PromiseInterface
@@ -895,7 +895,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#getchatadministrators
      *
      * @param int $chat_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function getChatAdministrators(int $chat_id, array $opt = []): PromiseInterface
@@ -911,7 +911,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#getchatmemberscount
      *
      * @param int $chat_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function getChatMembersCount(int $chat_id, array $opt = []): PromiseInterface
@@ -928,7 +928,7 @@ trait TelegramTrait
      *
      * @param int $chat_id
      * @param int $user_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function getChatMember(int $chat_id, int $user_id, array $opt = []): PromiseInterface
@@ -947,7 +947,7 @@ trait TelegramTrait
      *
      * @param int $chat_id
      * @param string $sticker_set_name
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function setChatStickerSet(int $chat_id, string $sticker_set_name, array $opt = []): PromiseInterface
@@ -965,7 +965,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#deletechatstickerset
      *
      * @param int $chat_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function deleteChatStickerSet(int $chat_id, array $opt = []): PromiseInterface
@@ -984,7 +984,7 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#answercallbackquery
      *
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function answerCallbackQuery(array $opt = []): PromiseInterface
@@ -1001,7 +1001,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#setmycommands
      *
      * @param $commands
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function setMyCommands($commands, array $opt = []): PromiseInterface
@@ -1027,7 +1027,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#editmessagetext
      *
      * @param string $text
-     * @param array|null $opt = [
+     * @param array $opt = [
      *     'reply_markup' => ['inline_keyboard' => [[
      *          ['callback_data' => 'data', 'text' => 'text']
      *      ]]]
@@ -1057,7 +1057,7 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#editmessagecaption
      *
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function editMessageCaption(array $opt = []): PromiseInterface
@@ -1085,7 +1085,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#editmessagemedia
      *
      * @param $media
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function editMessageMedia($media, array $opt = []): PromiseInterface
@@ -1111,7 +1111,7 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#editmessagereplymarkup
      *
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function editMessageReplyMarkup(array $opt = []): PromiseInterface
@@ -1128,7 +1128,7 @@ trait TelegramTrait
      *
      * @param int $chat_id
      * @param int $message_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function stopPoll(int $chat_id, int $message_id, array $opt = []): PromiseInterface
@@ -1151,7 +1151,7 @@ trait TelegramTrait
      *
      * @param int $chat_id
      * @param int $message_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function deleteMessage(int $chat_id, int $message_id, array $opt = []): PromiseInterface
@@ -1174,7 +1174,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#sendsticker
      *
      * @param $sticker
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendSticker($sticker, array $opt = []): PromiseInterface
@@ -1191,7 +1191,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#getstickerset
      *
      * @param string $name
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function getStickerSet(string $name, array $opt = []): PromiseInterface
@@ -1209,7 +1209,7 @@ trait TelegramTrait
      *
      * @param int $user_id
      * @param $png_sticker
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function uploadStickerFile(int $user_id, $png_sticker, array $opt = []): PromiseInterface
@@ -1233,7 +1233,7 @@ trait TelegramTrait
      * @param string $name
      * @param string $title
      * @param string $emojis
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function createNewStickerSet(int $user_id, string $name, string $title, string $emojis, array $opt = []): PromiseInterface
@@ -1258,7 +1258,7 @@ trait TelegramTrait
      * @param string $name
      * @param $png_sticker
      * @param string $emojis
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function addStickerToSet(int $user_id, string $name, $png_sticker, string $emojis, array $opt = []): PromiseInterface
@@ -1275,7 +1275,7 @@ trait TelegramTrait
      *
      * @param string $sticker
      * @param int $position
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function setStickerPositionInSet(string $sticker, int $position, array $opt = []): PromiseInterface
@@ -1291,7 +1291,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#deletestickerfromset
      *
      * @param string $sticker
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function deleteStickerFromSet(string $sticker, array $opt = []): PromiseInterface
@@ -1313,7 +1313,7 @@ trait TelegramTrait
      *
      * @param string $name
      * @param int $user_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function setStickerSetThumb(string $name, int $user_id, array $opt = []): PromiseInterface
@@ -1333,7 +1333,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#answerinlinequery
      *
      * @param $results
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function answerInlineQuery($results, array $opt = []): PromiseInterface
@@ -1361,7 +1361,7 @@ trait TelegramTrait
      * @param string $start_parameter
      * @param string $currency
      * @param $prices
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendInvoice(string $title, string $description, string $payload, string $provider_token, string $start_parameter, string $currency, $prices, array $opt = []): PromiseInterface
@@ -1395,7 +1395,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#answershippingquery
      *
      * @param $ok
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function answerShippingQuery($ok, array $opt = []): PromiseInterface
@@ -1420,7 +1420,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#answerprecheckoutquery
      *
      * @param $ok
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function answerPreCheckoutQuery($ok, array $opt = []): PromiseInterface
@@ -1442,7 +1442,7 @@ trait TelegramTrait
      *
      * @param int $user_id
      * @param $errors
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function setPassportDataErrors(int $user_id, $errors, array $opt = []): PromiseInterface
@@ -1461,7 +1461,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#sendgame
      *
      * @param string $game_short_name
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function sendGame(string $game_short_name, array $opt = []): PromiseInterface
@@ -1490,7 +1490,7 @@ trait TelegramTrait
      *
      * @param int $user_id
      * @param int $score
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function setGameScore(int $user_id, int $score, array $opt = []): PromiseInterface
@@ -1517,7 +1517,7 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#getgamehighscores
      *
      * @param int $user_id
-     * @param array|null $opt
+     * @param array $opt
      * @return PromiseInterface
      */
     public function getGameHighScores(int $user_id, array $opt = []): PromiseInterface
@@ -1667,10 +1667,10 @@ trait TelegramTrait
     }
 
     /**
-     * @param array|null $opt
-     * @return array|null
+     * @param array $opt
+     * @return array
      */
-    public function resolveMessageId(?array $opt): ?array
+    public function resolveMessageId(array $opt): array
     {
         // if the user doesn't provide inline_message_id, chat_id or message_id the framework tries to resolve them
         // based on the Update's type
@@ -1694,10 +1694,10 @@ trait TelegramTrait
     }
 
     /**
-     * @param array|null $opt
-     * @return array|null
+     * @param array $opt
+     * @return array
      */
-    public function resolveChatId(?array $opt): ?array
+    public function resolveChatId(array $opt): array
     {
         if (!isset($opt['chat_id']) && $this->update) {
             $opt['chat_id'] = $this->update->getEffectiveChat()->getId();

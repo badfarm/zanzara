@@ -134,7 +134,8 @@ class Context
      */
     public function endConversation(): PromiseInterface
     {
-        $chatId = $this->update->getEffectiveChat()->getId();
+        // update is not null when used within the Context
+        $chatId = $this->update->/** @scrutinizer ignore-call */getEffectiveChat()->getId();
         return $this->cache->deleteConversationCache($chatId);
     }
 

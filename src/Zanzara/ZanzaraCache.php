@@ -373,7 +373,7 @@ class ZanzaraCache
             }
         }, function ($err) use ($update) {
             $this->logger->errorUpdate($update, $err);
-        })->otherwise(function ($err) use ($update, $chatId) {
+        })->/** @scrutinizer ignore-call */otherwise(function ($err) use ($update, $chatId) {
             $this->logger->errorUpdate($err, $update);
             $this->deleteConversationCache($chatId);
         });
