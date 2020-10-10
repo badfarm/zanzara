@@ -4,3 +4,4 @@ vendor
 *.iml
 .env
 coverage
+target
