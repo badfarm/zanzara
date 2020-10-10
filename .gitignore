@@ -3,5 +3,4 @@ vendor
 .phpunit.result.cache
 *.iml
 .env
-coverage
 target
