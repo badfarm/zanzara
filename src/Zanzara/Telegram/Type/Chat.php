@@ -64,6 +64,15 @@ class Chat implements \JsonSerializable
     private $photo;
 
     /**
+     * Optional. Bio of the other party in a private chat. Returned only in getChat.
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @var string|null
+     */
+    private $bio;
+
+    /**
      * Optional. Description, for groups, supergroups and channel chats. Returned only in getChat.
      *
      * @var string|null
@@ -113,6 +122,27 @@ class Chat implements \JsonSerializable
      * @var bool|null
      */
     private $can_set_sticker_set;
+
+    /**
+     * Optional. Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice
+     * versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming
+     * languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64
+     * bit integer or double-precision float type are safe for storing this identifier. Returned only in getChat.
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @var int|null
+     */
+    private $linked_chat_id;
+
+    /**
+     * Optional. For supergroups, the location to which the supergroup is connected. Returned only in getChat.
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @var ChatLocation|null
+     */
+    private $location;
 
     /**
      * @return int
@@ -355,6 +385,54 @@ class Chat implements \JsonSerializable
             'first_name' => $this->first_name,
             'last_name' => $this->last_name
         ];
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBio(): ?string
+    {
+        return $this->bio;
+    }
+
+    /**
+     * @param string|null $bio
+     */
+    public function setBio(?string $bio): void
+    {
+        $this->bio = $bio;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLinkedChatId(): ?int
+    {
+        return $this->linked_chat_id;
+    }
+
+    /**
+     * @param int|null $linked_chat_id
+     */
+    public function setLinkedChatId(?int $linked_chat_id): void
+    {
+        $this->linked_chat_id = $linked_chat_id;
+    }
+
+    /**
+     * @return ChatLocation|null
+     */
+    public function getLocation(): ?ChatLocation
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param ChatLocation|null $location
+     */
+    public function setLocation(?ChatLocation $location): void
+    {
+        $this->location = $location;
     }
 
 }

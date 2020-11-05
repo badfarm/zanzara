@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Input;
+
 /**
  * Represents a general file to be sent.
  *
@@ -52,6 +53,23 @@ class InputMediaDocument
      * @var string|null
      */
     private $parse_mode;
+
+    /**
+     * Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+     *
+     * @var \Zanzara\Telegram\Type\MessageEntity[]
+     */
+    private $caption_entities;
+
+    /**
+     * Optional. Disables automatic server-side content type detection for files uploaded using multipart/form-data.
+     * Always true, if the document is sent as part of an album.
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @var bool|null
+     */
+    private $disable_content_type_detection;
 
     /**
      * @return string
@@ -131,6 +149,38 @@ class InputMediaDocument
     public function setParseMode(?string $parse_mode): void
     {
         $this->parse_mode = $parse_mode;
+    }
+
+    /**
+     * @return \Zanzara\Telegram\Type\MessageEntity[]
+     */
+    public function getCaptionEntities(): array
+    {
+        return $this->caption_entities;
+    }
+
+    /**
+     * @param \Zanzara\Telegram\Type\MessageEntity[] $caption_entities
+     */
+    public function setCaptionEntities(array $caption_entities): void
+    {
+        $this->caption_entities = $caption_entities;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getDisableContentTypeDetection(): ?bool
+    {
+        return $this->disable_content_type_detection;
+    }
+
+    /**
+     * @param bool|null $disable_content_type_detection
+     */
+    public function setDisableContentTypeDetection(?bool $disable_content_type_detection): void
+    {
+        $this->disable_content_type_detection = $disable_content_type_detection;
     }
 
 }

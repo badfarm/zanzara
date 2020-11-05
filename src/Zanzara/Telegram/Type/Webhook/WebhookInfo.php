@@ -34,6 +34,14 @@ class WebhookInfo
     private $pending_update_count;
 
     /**
+     * Optional. Currently used webhook IP address
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     * @var string|null
+     */
+    private $ip_address;
+
+    /**
      * Optional. Unix time for the most recent error that happened when trying to deliver an update via webhook
      *
      * @var int|null
@@ -170,6 +178,22 @@ class WebhookInfo
     public function setAllowedUpdates(array $allowed_updates): void
     {
         $this->allowed_updates = $allowed_updates;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getIpAddress(): ?string
+    {
+        return $this->ip_address;
+    }
+
+    /**
+     * @param string|null $ip_address
+     */
+    public function setIpAddress(?string $ip_address): void
+    {
+        $this->ip_address = $ip_address;
     }
 
 }

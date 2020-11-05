@@ -175,11 +175,12 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#deletewebhook
      *
+     * @param array $opt
      * @return PromiseInterface
      */
-    public function deleteWebhook(): PromiseInterface
+    public function deleteWebhook($opt = []): PromiseInterface
     {
-        return $this->callApi("deleteWebhook");
+        return $this->callApi("deleteWebhook", $opt);
     }
 
     /**
@@ -636,9 +637,11 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to unban a previously kicked user in a supergroup or channel. The user will not return to the group
-     * or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to
-     * work. Returns True on success.
+     * Use this method to unban a previously kicked user in a supergroup or channel. The user will not return to the
+     * group or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this
+     * to work. By default, this method guarantees that after the call the user is not a member of the chat, but will be
+     * able to join it. So if the user is a member of the chat they will also be removed from the chat. If you don't
+     * want this, use the parameter only_if_banned. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#unbanchatmember
      *
@@ -852,6 +855,25 @@ trait TelegramTrait
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
         return $this->callApi("unpinChatMessage", $params);
+    }
+
+    /**
+     * Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must
+     * be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup
+     * or 'can_edit_messages' admin right in a channel. Returns True on success.
+     *
+     * By default the chat_id is taken from the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function unpinAllChatMessages(array $opt = []): PromiseInterface
+    {
+        $opt = $this->resolveChatId($opt);
+        return $this->callApi("unpinAllChatMessages", $opt);
     }
 
     /**
@@ -1526,6 +1548,36 @@ trait TelegramTrait
         $required = compact("user_id");
         $params = array_merge($required, $opt);
         return $this->callApi("getGameHighScores", $params, GameHighScore::class);
+    }
+
+    /**
+     * Use this method to log out from the cloud Bot API server before launching the bot locally. You must log out the
+     * bot before running it locally, otherwise there is no guarantee that the bot will receive updates. After a
+     * successful call, you can immediately log in on a local server, but will not be able to log in back to the
+     * cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters.
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @return PromiseInterface
+     */
+    public function logOut(): PromiseInterface
+    {
+        return $this->callApi("logOut");
+    }
+
+    /**
+     * Use this method to close the bot instance before moving it from one local server to another. You need to delete
+     * the webhook before calling this method to ensure that the bot isn't launched again after server restart. The
+     * method will return error 429 in the first 10 minutes after the bot is launched. Returns True on success.
+     * Requires no parameters.
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @return PromiseInterface
+     */
+    public function close(): PromiseInterface
+    {
+        return $this->callApi("close");
     }
 
     /**
