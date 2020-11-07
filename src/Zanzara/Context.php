@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
-use Clue\React\Buzz\Browser;
 use Psr\Container\ContainerInterface;
 use React\EventLoop\LoopInterface;
+use React\Http\Browser;
 use React\Promise\PromiseInterface;
 use Zanzara\Telegram\TelegramTrait;
 use Zanzara\Telegram\Type\CallbackQuery;

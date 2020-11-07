@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram;
 
-use Clue\React\Buzz\Browser;
 use Psr\Container\ContainerInterface;
+use React\Http\Browser;
 
 /**
  *
