@@ -120,7 +120,7 @@ class Context
     public function nextStep(callable $handler): PromiseInterface
     {
         // update is not null when used within the Context
-        $chatId = $this->update->/** @scrutinizer ignore-call */getEffectiveChat()->getId();
+        $chatId = $this->update->/** @scrutinizer ignore-call */ getEffectiveChat()->getId();
         return $this->cache->setConversationHandler($chatId, $handler);
     }
 
@@ -135,7 +135,7 @@ class Context
     public function endConversation(): PromiseInterface
     {
         // update is not null when used within the Context
-        $chatId = $this->update->/** @scrutinizer ignore-call */getEffectiveChat()->getId();
+        $chatId = $this->update->/** @scrutinizer ignore-call */ getEffectiveChat()->getId();
         return $this->cache->deleteConversationCache($chatId);
     }
 
