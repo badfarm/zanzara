@@ -34,6 +34,15 @@ class ChatMember
     private $custom_title;
 
     /**
+     * Optional. Owner and administrators only. True, if the user's presence in the chat is hidden
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @var bool|null
+     */
+    private $is_anonymous;
+
+    /**
      * Optional. Restricted and kicked only. Date when restrictions will be lifted for this user; unix time
      *
      * @var int|null
@@ -452,6 +461,22 @@ class ChatMember
     public function setCanAddWebPagePreviews(?bool $can_add_web_page_previews): void
     {
         $this->can_add_web_page_previews = $can_add_web_page_previews;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getIsAnonymous(): ?bool
+    {
+        return $this->is_anonymous;
+    }
+
+    /**
+     * @param bool|null $is_anonymous
+     */
+    public function setIsAnonymous(?bool $is_anonymous): void
+    {
+        $this->is_anonymous = $is_anonymous;
     }
 
 }
