@@ -4,7 +4,7 @@
 
 Asynchronous PHP Telegram Bot Framework built on top of [ReactPHP](https://reactphp.org/)
 
-[![Bot API](https://img.shields.io/badge/Bot%20API-4.9%20(June%202020)-blue)](https://core.telegram.org/bots/api)
+[![Bot API](https://img.shields.io/badge/Bot%20API-5.0%20(November%202020)-blue)](https://core.telegram.org/bots/api)
 [![PHP](https://img.shields.io/badge/PHP-%3E%3D7.2-blue)](https://www.php.net/)
 [![Build Status](https://travis-ci.org/badfarm/zanzara.svg?branch=master)](https://travis-ci.org/badfarm/zanzara)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/badfarm/zanzara/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/badfarm/zanzara/?branch=develop)
@@ -29,7 +29,7 @@ composer require badfarm/zanzara
     
 ### Quickstart
 
-Create a file named ```main.php``` and paste the following code:
+Create a file named ```bot.php``` and paste the following code:
 
 ```php
 <?php
@@ -50,7 +50,7 @@ $bot->run();
 
 Then run it from command line as follows:
 
-    $ php main.php
+    $ php bot.php
 
 Enjoy your bot!
 

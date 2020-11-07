@@ -26,6 +26,7 @@ use Zanzara\Telegram\Type\MessageId;
 use Zanzara\Telegram\Type\Poll\Poll;
 use Zanzara\Telegram\Type\Response\TelegramException;
 use Zanzara\Telegram\Type\Update;
+use Zanzara\Telegram\Type\User;
 use Zanzara\Telegram\Type\Webhook\WebhookInfo;
 use Zanzara\ZanzaraLogger;
 use Zanzara\ZanzaraMapper;
@@ -74,6 +75,17 @@ trait TelegramTrait
         ));
 
         return $this->wrapPromise($browser->get("$method?$query"), $method, $opt, Update::class);
+    }
+
+    /**
+     * A simple method for testing your bot's auth token. Requires no parameters. Returns basic information about the
+     * bot in form of a User object.
+     *
+     * @return PromiseInterface
+     */
+    public function getMe(): PromiseInterface
+    {
+        return $this->callApi("getMe", [], User::class);
     }
 
     /**
@@ -205,6 +217,8 @@ trait TelegramTrait
     /**
      * Use this method to copy messages of any kind. The method is analogous to the method forwardMessages, but the
      * copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
+     *
+     * More on https://core.telegram.org/bots/api#copymessage
      *
      * @since zanzara 0.5.0, Telegram Bot Api 5.0
      *
@@ -886,6 +900,8 @@ trait TelegramTrait
      *
      * By default the chat_id is taken from the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
+     * More on https://core.telegram.org/bots/api#unpinallchatmessages
      *
      * @since zanzara 0.5.0, Telegram Bot Api 5.0
      *
@@ -1578,6 +1594,8 @@ trait TelegramTrait
      * successful call, you can immediately log in on a local server, but will not be able to log in back to the
      * cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters.
      *
+     * More on https://core.telegram.org/bots/api#logout
+     *
      * @since zanzara 0.5.0, Telegram Bot Api 5.0
      *
      * @return PromiseInterface
@@ -1592,6 +1610,8 @@ trait TelegramTrait
      * the webhook before calling this method to ensure that the bot isn't launched again after server restart. The
      * method will return error 429 in the first 10 minutes after the bot is launched. Returns True on success.
      * Requires no parameters.
+     *
+     * More on https://core.telegram.org/bots/api#close
      *
      * @since zanzara 0.5.0, Telegram Bot Api 5.0
      *
@@ -1732,8 +1752,15 @@ trait TelegramTrait
                 return $mapper->mapObject($object->result, $class);
             }, function ($e) use ($method, $params, $logger, $mapper) {
                 if ($e instanceof ResponseException) {
-                    $json = (string)$e->getResponse()->getBody();
-                    $e = $mapper->mapJson($json, TelegramException::class);
+                    // with the introduction of Local Api server (https://core.telegram.org/bots/api#using-a-local-bot-api-server)
+                    // we can no longer assume that the response is with the TelegramException format, so catch any mapping
+                    // exception
+                    try {
+                        $json = (string)$e->getResponse()->getBody();
+                        $e = $mapper->mapJson($json, TelegramException::class);
+                    } catch (\Exception $ignore) {
+                        // ignore
+                    }
                 }
                 $logger->errorTelegramApi($method, $params, $e);
                 throw $e;
