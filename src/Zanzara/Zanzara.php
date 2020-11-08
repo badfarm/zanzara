@@ -57,7 +57,7 @@ class Zanzara extends ListenerResolver
         $connectorOptions = $this->config->getConnectorOptions();
         $proxyUrl = $this->config->getProxyUrl();
         $proxyHttpHeaders = $this->config->getProxyHttpHeaders();
-        if (!$connector && ($connectorOptions || $proxyUrl || $proxyHttpHeaders)) {
+        if (!$connector && (!empty($connectorOptions) || $proxyUrl || !empty($proxyHttpHeaders))) {
             if ($proxyUrl) {
                 $proxy = new ProxyConnector($proxyUrl, new Connector($this->loop), $proxyHttpHeaders);
                 $connectorOptions['tcp'] = $proxy;

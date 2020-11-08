@@ -11,6 +11,7 @@ Sections:
 * [Error Handling](#error-handling)
 * [Polling or Webhook](#polling-or-webhook)
 * [Using a Local Bot API Server](#using-a-local-bot-api-server)
+* [Proxy and DNS](#proxy-and-dns)
 * [Examples](#examples)
 * [Built with Zanzara](#built-with-zanzara)
 
@@ -749,6 +750,52 @@ $config->setApiTelegramUrl('https://my-local-server.com');
 $bot = new Zanzara("YOUR-BOT-TOKEN", $config);
 
 $bot->onCommand('start', function (Context $ctx) {
+    // ...
+});
+
+$bot->run();
+```
+
+# Proxy and DNS
+#### Proxy
+If you are working behind a proxy you can configure it through the Config object:
+
+```php
+<?php
+
+use Zanzara\Config;
+use Zanzara\Context;
+use Zanzara\Zanzara;
+
+require __DIR__ . '/vendor/autoload.php';
+
+$config = new Config();
+$config->setProxyUrl('http://127.0.0.1:8080');
+$bot = new Zanzara("YOUR-BOT-TOKEN", $config);
+
+$bot->onUpdate(function (Context $ctx) {
+    // ...
+});
+
+$bot->run();
+```
+
+#### DNS
+You can also change the DNS address:
+```php
+<?php
+
+use Zanzara\Config;
+use Zanzara\Context;
+use Zanzara\Zanzara;
+
+require __DIR__ . '/vendor/autoload.php';
+
+$config = new Config();
+$config->setConnectorOptions(['dns' => '8.8.8.8']);
+$bot = new Zanzara("YOUR-BOT-TOKEN", $config);
+
+$bot->onUpdate(function (Context $ctx) {
     // ...
 });
 

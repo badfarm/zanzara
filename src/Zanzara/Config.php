@@ -143,16 +143,22 @@ class Config
     private $connector;
 
     /**
+     *
+     * @since 0.5.1
      * @var array
      */
     private $connectorOptions = [];
 
     /**
+     *
+     * @since 0.5.1
      * @var string|null
      */
     private $proxyUrl;
 
     /**
+     *
+     * @since 0.5.1
      * @var array
      */
     private $proxyHttpHeaders = [];
