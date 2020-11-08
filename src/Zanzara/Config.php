@@ -143,6 +143,21 @@ class Config
     private $connector;
 
     /**
+     * @var array
+     */
+    private $connectorOptions = [];
+
+    /**
+     * @var string|null
+     */
+    private $proxyUrl;
+
+    /**
+     * @var array
+     */
+    private $proxyHttpHeaders = [];
+
+    /**
      * @return LoopInterface|null
      */
     public function getLoop(): ?LoopInterface
@@ -460,6 +475,54 @@ class Config
     public function setConnector(?Connector $connector): void
     {
         $this->connector = $connector;
+    }
+
+    /**
+     * @return array
+     */
+    public function getConnectorOptions(): array
+    {
+        return $this->connectorOptions;
+    }
+
+    /**
+     * @param array $connectorOptions
+     */
+    public function setConnectorOptions(array $connectorOptions): void
+    {
+        $this->connectorOptions = $connectorOptions;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getProxyUrl(): ?string
+    {
+        return $this->proxyUrl;
+    }
+
+    /**
+     * @param string|null $proxyUrl
+     */
+    public function setProxyUrl(?string $proxyUrl): void
+    {
+        $this->proxyUrl = $proxyUrl;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProxyHttpHeaders(): array
+    {
+        return $this->proxyHttpHeaders;
+    }
+
+    /**
+     * @param array $proxyHttpHeaders
+     */
+    public function setProxyHttpHeaders(array $proxyHttpHeaders): void
+    {
+        $this->proxyHttpHeaders = $proxyHttpHeaders;
     }
 
 }

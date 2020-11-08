@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
+use Clue\React\HttpProxy\ProxyConnector;
 use DI\Container;
 use Psr\Log\LoggerInterface;
 use React\Cache\ArrayCache;
@@ -14,6 +15,7 @@ use React\EventLoop\LoopInterface;
 use React\Filesystem\Filesystem;
 use React\Http\Server;
 use React\Promise\PromiseInterface;
+use React\Socket\Connector;
 use Zanzara\Listener\ListenerResolver;
 use Zanzara\Telegram\Telegram;
 use Zanzara\UpdateMode\ReactPHPWebhook;
@@ -51,6 +53,18 @@ class Zanzara extends ListenerResolver
         $this->loop = $this->config->getLoop() ?? Factory::create();
         $this->container->set(LoopInterface::class, $this->loop); // loop cannot be created by container
         $this->container->set(LoggerInterface::class, $this->config->getLogger());
+        $connector = $this->config->getConnector();
+        $connectorOptions = $this->config->getConnectorOptions();
+        $proxyUrl = $this->config->getProxyUrl();
+        $proxyHttpHeaders = $this->config->getProxyHttpHeaders();
+        if (!$connector && ($connectorOptions || $proxyUrl || $proxyHttpHeaders)) {
+            if ($proxyUrl) {
+                $proxy = new ProxyConnector($proxyUrl, new Connector($this->loop), $proxyHttpHeaders);
+                $connectorOptions['tcp'] = $proxy;
+            }
+            $connector = new Connector($this->loop, $connectorOptions);
+            $this->config->setConnector($connector);
+        }
         $this->container->set(Browser::class, (new Browser($this->loop, $this->config->getConnector())) // browser cannot be created by container
         ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botToken}"));
         $this->telegram = $this->container->get(Telegram::class);
