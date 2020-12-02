@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zanzara\Listener;
 
+use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException;
 use InvalidArgumentException;
@@ -26,7 +27,7 @@ use Zanzara\Telegram\Type\Update;
 /**
  *
  */
-abstract class ListenerCollector extends ListenerResolver
+abstract class ListenerCollector
 {
 
     /**
@@ -52,6 +53,11 @@ abstract class ListenerCollector extends ListenerResolver
      * @var array
      */
     protected $listeners = [];
+
+    /**
+     * @var Container
+     */
+    protected $container;
 
     /**
      * @var array

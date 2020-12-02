@@ -16,14 +16,14 @@ use React\Filesystem\Filesystem;
 use React\Http\Server;
 use React\Promise\PromiseInterface;
 use React\Socket\Connector;
-use Zanzara\Listener\ListenerCollector;
+use Zanzara\Listener\ListenerResolver;
 use Zanzara\Telegram\Telegram;
 use Zanzara\UpdateMode\ReactPHPWebhook;
 
 /**
  *
  */
-class Zanzara extends ListenerCollector
+class Zanzara extends ListenerResolver
 {
 
     /**
