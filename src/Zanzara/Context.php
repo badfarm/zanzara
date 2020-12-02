@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zanzara;
 
 use Clue\React\Buzz\Browser;
+use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use React\EventLoop\LoopInterface;
 use React\Promise\PromiseInterface;
@@ -114,11 +115,16 @@ class Context
      * See https://github.com/badfarm/zanzara/wiki#conversations-and-user-data-cache.
      * Use the returned promise to know if the operation was successful.
      *
-     * @param callable $handler This callable must be take on parameter of type Context
+     * This callable must be take on parameter of type Context
+     * @param $handler
      * @return PromiseInterface
      */
-    public function nextStep(callable $handler): PromiseInterface
+    public function nextStep($handler): PromiseInterface
     {
+        if (!is_callable($handler)) {
+            throw new InvalidArgumentException('The handler parameter must be a valid callable.');
+        }
+
         // update is not null when used within the Context
         $chatId = $this->update->/** @scrutinizer ignore-call */ getEffectiveChat()->getId();
         return $this->cache->setConversationHandler($chatId, $handler);
