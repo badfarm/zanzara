@@ -13,7 +13,7 @@ use Zanzara\ZanzaraCache;
 /**
  *
  */
-abstract class ListenerResolver extends ListenerCollector
+abstract class ListenerResolver
 {
 
     /**

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Zanzara\Listener;
 
+use DI\DependencyException;
+use DI\NotFoundException;
+use InvalidArgumentException;
 use Zanzara\Middleware\MiddlewareCollector;
 use Zanzara\Middleware\MiddlewareInterface;
 use Zanzara\Telegram\Type\CallbackQuery;
@@ -23,7 +26,7 @@ use Zanzara\Telegram\Type\Update;
 /**
  *
  */
-abstract class ListenerCollector
+abstract class ListenerCollector extends ListenerResolver
 {
 
     /**
@@ -59,14 +62,16 @@ abstract class ListenerCollector
      * Listen for the specified command.
      * Eg. $bot->onCommand('start', function(Context $ctx) {});
      *
-     * @param string $command
-     * @param callable $callback
+     * @param  string  $command
+     * @param $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onCommand(string $command, callable $callback): MiddlewareCollector
+    public function onCommand(string $command, $callback): MiddlewareCollector
     {
         $command = "/^\/$command$/";
-        $listener = new Listener($callback, $command);
+        $listener = new Listener($this->getCallable($callback), $command);
         $this->listeners['messages'][$command] = $listener;
         return $listener;
     }
@@ -78,14 +83,16 @@ abstract class ListenerCollector
      * Text is a regex, so you could also do something like:
      * $bot->onText('[a-zA-Z]{15}?', function(Context $ctx) {});
      *
-     * @param string $text
-     * @param callable $callback
+     * @param  string  $text
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onText(string $text, callable $callback): MiddlewareCollector
+    public function onText(string $text, $callback): MiddlewareCollector
     {
         $text = "/$text/";
-        $listener = new Listener($callback, $text);
+        $listener = new Listener($this->getCallable($callback), $text);
         $this->listeners['messages'][$text] = $listener;
         return $listener;
     }
@@ -96,12 +103,14 @@ abstract class ListenerCollector
      *
      * Eg. $bot->onMessage(function(Context $ctx) {});
      *
-     * @param callable $callback
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onMessage(callable $callback): MiddlewareCollector
+    public function onMessage($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($this->getCallable($callback));
         $this->listeners[Message::class][] = $listener;
         return $listener;
     }
@@ -112,12 +121,14 @@ abstract class ListenerCollector
      *
      * Eg. $bot->onReplyToMessage(function(Context $ctx) {});
      *
-     * @param callable $callback
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onReplyToMessage(callable $callback): MiddlewareCollector
+    public function onReplyToMessage($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($this->getCallable($callback));
         $this->listeners[ReplyToMessage::class][] = $listener;
         return $listener;
     }
@@ -128,12 +139,14 @@ abstract class ListenerCollector
      *
      * Eg. $bot->onEditedMessage(function(Context $ctx) {});
      *
-     * @param callable $callback
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onEditedMessage(callable $callback): MiddlewareCollector
+    public function onEditedMessage($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($this->getCallable($callback));
         $this->listeners[EditedMessage::class][] = $listener;
         return $listener;
     }
@@ -146,14 +159,16 @@ abstract class ListenerCollector
      * Text is a regex, so you could also do something like:
      * $bot->onCbQueryText('[a-zA-Z]{27}?', function(Context $ctx) {});
      *
-     * @param string $text
-     * @param callable $callback
+     * @param  string  $text
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onCbQueryText(string $text, callable $callback): MiddlewareCollector
+    public function onCbQueryText(string $text, $callback): MiddlewareCollector
     {
         $text = "/$text/";
-        $listener = new Listener($callback, $text);
+        $listener = new Listener($this->getCallable($callback), $text);
         $this->listeners['cb_query_texts'][$text] = $listener;
         return $listener;
     }
@@ -166,16 +181,18 @@ abstract class ListenerCollector
      * Data values are a regex, so you could also do something like:
      * $bot->onCbQueryData(['acc.'], function(Context $ctx) {});
      *
-     * @param array $data
-     * @param callable $callback
+     * @param  array  $data
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onCbQueryData(array $data, callable $callback): MiddlewareCollector
+    public function onCbQueryData(array $data, $callback): MiddlewareCollector
     {
         // merge values with "|" (eg. "accept|refuse|later"), then ListenerResolver will check the callback data
         // against that regex.
-        $id = '/' . implode('|', $data) . '/';
-        $listener = new Listener($callback, $id);
+        $id = '/'.implode('|', $data).'/';
+        $listener = new Listener($this->getCallable($callback), $id);
         $this->listeners['cb_query_data'][$id] = $listener;
         return $listener;
     }
@@ -186,12 +203,14 @@ abstract class ListenerCollector
      *
      * Eg. $bot->onCbQuery(function(Context $ctx) {});
      *
-     * @param callable $callback
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onCbQuery(callable $callback): MiddlewareCollector
+    public function onCbQuery($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($this->getCallable($callback));
         $this->listeners[CallbackQuery::class][] = $listener;
         return $listener;
     }
@@ -202,12 +221,14 @@ abstract class ListenerCollector
      *
      * Eg. $bot->onShippingQuery(function(Context $ctx) {});
      *
-     * @param callable $callback
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onShippingQuery(callable $callback): MiddlewareCollector
+    public function onShippingQuery($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($this->getCallable($callback));
         $this->listeners[ShippingQuery::class][] = $listener;
         return $listener;
     }
@@ -218,12 +239,14 @@ abstract class ListenerCollector
      *
      * Eg. $bot->onPreCheckoutQuery(function(Context $ctx) {});
      *
-     * @param callable $callback
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onPreCheckoutQuery(callable $callback): MiddlewareCollector
+    public function onPreCheckoutQuery($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($this->getCallable($callback));
         $this->listeners[PreCheckoutQuery::class][] = $listener;
         return $listener;
     }
@@ -234,12 +257,14 @@ abstract class ListenerCollector
      *
      * Eg. $bot->onSuccessfulPayment(function(Context $ctx) {});
      *
-     * @param callable $callback
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onSuccessfulPayment(callable $callback): MiddlewareCollector
+    public function onSuccessfulPayment($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($this->getCallable($callback));
         $this->listeners[SuccessfulPayment::class][] = $listener;
         return $listener;
     }
@@ -250,12 +275,14 @@ abstract class ListenerCollector
      *
      * Eg. $bot->onPassportData(function(Context $ctx) {});
      *
-     * @param callable $callback
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onPassportData(callable $callback): MiddlewareCollector
+    public function onPassportData($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($this->getCallable($callback));
         $this->listeners[PassportData::class][] = $listener;
         return $listener;
     }
@@ -266,12 +293,14 @@ abstract class ListenerCollector
      *
      * Eg. $bot->onInlineQuery(function(Context $ctx) {});
      *
-     * @param callable $callback
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onInlineQuery(callable $callback): MiddlewareCollector
+    public function onInlineQuery($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($this->getCallable($callback));
         $this->listeners[InlineQuery::class][] = $listener;
         return $listener;
     }
@@ -282,12 +311,14 @@ abstract class ListenerCollector
      *
      * Eg. $bot->onChosenInlineResult(function(Context $ctx) {});
      *
-     * @param callable $callback
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onChosenInlineResult(callable $callback): MiddlewareCollector
+    public function onChosenInlineResult($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($this->getCallable($callback));
         $this->listeners[ChosenInlineResult::class][] = $listener;
         return $listener;
     }
@@ -298,12 +329,14 @@ abstract class ListenerCollector
      *
      * Eg. $bot->onChannelPost(function(Context $ctx) {});
      *
-     * @param callable $callback
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onChannelPost(callable $callback): MiddlewareCollector
+    public function onChannelPost($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($this->getCallable($callback));
         $this->listeners[ChannelPost::class][] = $listener;
         return $listener;
     }
@@ -314,12 +347,14 @@ abstract class ListenerCollector
      *
      * Eg. $bot->onEditedChannelPost(function(Context $ctx) {});
      *
-     * @param callable $callback
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onEditedChannelPost(callable $callback): MiddlewareCollector
+    public function onEditedChannelPost($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($this->getCallable($callback));
         $this->listeners[EditedChannelPost::class][] = $listener;
         return $listener;
     }
@@ -330,12 +365,14 @@ abstract class ListenerCollector
      *
      * Eg. $bot->onUpdate(function(Context $ctx) {});
      *
-     * @param callable $callback
+     * @param  $callback
      * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public function onUpdate(callable $callback): MiddlewareCollector
+    public function onUpdate($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($this->getCallable($callback));
         $this->listeners[Update::class][] = $listener;
         return $listener;
     }
@@ -353,7 +390,7 @@ abstract class ListenerCollector
      *
      * In this case GenericMiddleware will be executed before SpecificMiddleware.
      *
-     * @param MiddlewareInterface|callable $middleware
+     * @param  MiddlewareInterface|callable  $middleware
      * @return self
      */
     public function middleware($middleware): self
@@ -375,6 +412,27 @@ abstract class ListenerCollector
                 }
             }
         });
+    }
+
+    /**
+     * Check and resolve a callable.
+     * @param $callback
+     * @return array|callable
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    protected function getCallable($callback)
+    {
+        if (!is_callable($callback)) {
+            throw new InvalidArgumentException('The callback parameter must be a valid callable.');
+        }
+
+        // if is a class definition, resolve it to an instance through the container
+        if (is_array($callback) && count($callback) === 2 && is_string($callback[0])) {
+            $callback[0] = $this->container->make($callback[0]);
+        }
+
+        return $callback;
     }
 
 }

@@ -28,10 +28,10 @@ class Listener extends MiddlewareCollector implements MiddlewareInterface
     protected $callback;
 
     /**
-     * @param callable $callback
-     * @param string|null $id
+     * @param  $callback
+     * @param  string|null  $id
      */
-    public function __construct(callable $callback, ?string $id = null)
+    public function __construct($callback, ?string $id = null)
     {
         $this->id = $id;
         $this->callback = $callback;
@@ -43,8 +43,7 @@ class Listener extends MiddlewareCollector implements MiddlewareInterface
      */
     public function handle(Context $ctx, $next)
     {
-        $callback = $this->callback;
-        $callback($ctx);
+        call_user_func($this->callback, $ctx, $next);
     }
 
     /**
