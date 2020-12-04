@@ -109,7 +109,7 @@ class MessageTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
-        $config->setUpdateStream(__DIR__ . '/../update_types/poll.json');
+        $config->setUpdateStream(__DIR__ . '/../update_types/sent_poll.json');
         $bot = new Zanzara("test", $config);
 
         $bot->onMessage(function (Context $ctx) {

@@ -1800,7 +1800,7 @@ trait TelegramTrait
      */
     public function resolveChatId(array $opt): array
     {
-        if (!isset($opt['chat_id']) && $this->update) {
+        if (!isset($opt['chat_id']) && $this->update && $this->update->getEffectiveChat()) {
             $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
         }
         return $opt;

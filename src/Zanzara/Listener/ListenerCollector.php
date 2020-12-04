@@ -14,6 +14,8 @@ use Zanzara\Telegram\Type\EditedMessage;
 use Zanzara\Telegram\Type\InlineQuery;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Passport\PassportData;
+use Zanzara\Telegram\Type\Poll\Poll;
+use Zanzara\Telegram\Type\Poll\PollAnswer;
 use Zanzara\Telegram\Type\ReplyToMessage;
 use Zanzara\Telegram\Type\Shipping\PreCheckoutQuery;
 use Zanzara\Telegram\Type\Shipping\ShippingQuery;
@@ -321,6 +323,42 @@ abstract class ListenerCollector
     {
         $listener = new Listener($callback);
         $this->listeners[EditedChannelPost::class][] = $listener;
+        return $listener;
+    }
+
+    /**
+     * Listen for a poll.
+     * You can call this function more than once, every callback will be executed.
+     *
+     * Eg. $bot->onPoll(function(Context $ctx) {});
+     *
+     * @param  $callback
+     * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function onPoll($callback): MiddlewareCollector
+    {
+        $listener = new Listener($this->getCallable($callback));
+        $this->listeners[Poll::class][] = $listener;
+        return $listener;
+    }
+
+    /**
+     * Listen for a poll answer.
+     * You can call this function more than once, every callback will be executed.
+     *
+     * Eg. $bot->onPollAnswer(function(Context $ctx) {});
+     *
+     * @param  $callback
+     * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function onPollAnswer($callback): MiddlewareCollector
+    {
+        $listener = new Listener($this->getCallable($callback));
+        $this->listeners[PollAnswer::class][] = $listener;
         return $listener;
     }
 
