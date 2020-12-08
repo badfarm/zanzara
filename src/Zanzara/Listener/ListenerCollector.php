@@ -380,7 +380,7 @@ abstract class ListenerCollector
      */
     public function onPoll($callback): MiddlewareCollector
     {
-        $listener = new Listener($this->getCallable($callback));
+        $listener = new Listener($callback);
         $this->listeners[Poll::class][] = $listener;
         return $listener;
     }
@@ -398,7 +398,7 @@ abstract class ListenerCollector
      */
     public function onPollAnswer($callback): MiddlewareCollector
     {
-        $listener = new Listener($this->getCallable($callback));
+        $listener = new Listener($callback);
         $this->listeners[PollAnswer::class][] = $listener;
         return $listener;
     }
