@@ -1639,14 +1639,14 @@ trait TelegramTrait
                 $async = $this->container->get(Config::class)->isReactFileSystem();
 
                 if ($async) {
-                    return $this->prepareMultipartDataAsync($params)->then(function ($result) use ($method) {
+                    return $this->prepareMultipartDataAsync($params)->then(function ($result) use ($class, $params, $method) {
                         $headers = array("Content-Length" => $result->getSize(), "Content-Type" => "multipart/form-data; boundary={$result->getBoundary()}");
-                        return $this->browser->post($method, $headers, $result);
+                        return $this->wrapPromise($this->browser->post($method, $headers, $result), $method, $params, $class);
                     });
                 } else {
                     $multipart = $this->prepareMultipartData($params);
                     $headers = array("Content-Length" => $multipart->getSize(), "Content-Type" => "multipart/form-data; boundary={$multipart->getBoundary()}");
-                    return $this->browser->post($method, $headers, $multipart);
+                    return $this->wrapPromise($this->browser->post($method, $headers, $multipart), $method, $params, $class);
                 }
             }
         }
