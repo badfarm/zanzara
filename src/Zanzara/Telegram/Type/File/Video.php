@@ -56,6 +56,15 @@ class Video
     private $thumb;
 
     /**
+     * Optional. Original filename as defined by sender
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @var string|null
+     */
+    private $file_name;
+
+    /**
      * Optional. Mime type of a file as defined by sender
      *
      * @var string|null
@@ -195,6 +204,22 @@ class Video
     public function setFileSize(?int $file_size): void
     {
         $this->file_size = $file_size;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFileName(): ?string
+    {
+        return $this->file_name;
+    }
+
+    /**
+     * @param string|null $file_name
+     */
+    public function setFileName(?string $file_name): void
+    {
+        $this->file_name = $file_name;
     }
 
 }

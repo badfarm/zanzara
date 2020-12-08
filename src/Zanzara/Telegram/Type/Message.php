@@ -45,6 +45,17 @@ class Message
     private $from;
 
     /**
+     * Optional. Sender of the message, sent on behalf of a chat. The channel itself for channel messages. The
+     * supergroup itself for messages from anonymous group administrators. The linked channel for messages automatically
+     * forwarded to the discussion group
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @var Chat|null
+     */
+    private $sender_chat;
+
+    /**
      * Date the message was sent in Unix time
      *
      * @var int
@@ -124,7 +135,8 @@ class Message
     private $media_group_id;
 
     /**
-     * Optional. Signature of the post author for messages in channels
+     * Optional. Signature of the post author for messages in channels, or the custom title of an anonymous group
+     * administrator (@since zanzara 0.5.0, Telegram Bot Api 5.0)
      *
      * @var string|null
      */
@@ -373,6 +385,16 @@ class Message
      * @var PassportData|null
      */
     private $passport_data;
+
+    /**
+     * Optional. Service message. A user in the chat triggered another user's proximity alert while sharing Live
+     * Location.
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @var ProximityAlertTriggered|null
+     */
+    private $proximity_alert_triggered;
 
     /**
      * Optional. Inline keyboard attached to the message. login_url buttons are represented as ordinary url buttons.
@@ -1170,6 +1192,38 @@ class Message
     public function setViaBot(?User $via_bot): void
     {
         $this->via_bot = $via_bot;
+    }
+
+    /**
+     * @return ProximityAlertTriggered|null
+     */
+    public function getProximityAlertTriggered(): ?ProximityAlertTriggered
+    {
+        return $this->proximity_alert_triggered;
+    }
+
+    /**
+     * @param ProximityAlertTriggered|null $proximity_alert_triggered
+     */
+    public function setProximityAlertTriggered(?ProximityAlertTriggered $proximity_alert_triggered): void
+    {
+        $this->proximity_alert_triggered = $proximity_alert_triggered;
+    }
+
+    /**
+     * @return Chat|null
+     */
+    public function getSenderChat(): ?Chat
+    {
+        return $this->sender_chat;
+    }
+
+    /**
+     * @param Chat|null $sender_chat
+     */
+    public function setSenderChat(?Chat $sender_chat): void
+    {
+        $this->sender_chat = $sender_chat;
     }
 
 }

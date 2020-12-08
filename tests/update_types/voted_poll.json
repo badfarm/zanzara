@@ -1,0 +1,22 @@
+{
+    "update_id": 620931244,
+    "poll": {
+        "id": "5933718566074318869",
+        "question": "How are you?",
+        "options": [
+            {
+                "text": "Fine",
+                "voter_count": 1
+            },
+            {
+                "text": "Not bad",
+                "voter_count": 0
+            }
+        ],
+        "total_voter_count": 1,
+        "is_closed": false,
+        "is_anonymous": true,
+        "type": "regular",
+        "allows_multiple_answers": false
+    }
+}

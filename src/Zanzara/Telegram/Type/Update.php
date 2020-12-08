@@ -374,6 +374,11 @@ class Update implements \JsonSerializable
         } else if ($this->chosen_inline_result) {
             $this->updateType = ChosenInlineResult::class;
             $this->effectiveUser = $this->chosen_inline_result->getFrom();
+        } else if ($this->poll) {
+            $this->updateType = Poll::class;
+        } else if ($this->poll_answer) {
+            $this->updateType = PollAnswer::class;
+            $this->effectiveUser = $this->poll_answer->getUser();
         }
     }
 

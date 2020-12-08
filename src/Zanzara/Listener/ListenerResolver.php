@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara\Listener;
 
-use DI\Container;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Update;
@@ -15,11 +14,6 @@ use Zanzara\ZanzaraCache;
  */
 abstract class ListenerResolver extends ListenerCollector
 {
-
-    /**
-     * @var Container
-     */
-    protected $container;
 
     /**
      * @var ZanzaraCache

@@ -38,11 +38,40 @@ class InlineQueryResultLocation extends InlineQueryResult
     private $title;
 
     /**
+     * Optional. The radius of uncertainty for the location, measured in meters; 0-1500
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @var float|null
+     */
+    private $horizontal_accuracy;
+
+    /**
      * Optional. Period in seconds for which the location can be updated, should be between 60 and 86400.
      *
      * @var int|null
      */
     private $live_period;
+
+    /**
+     * Optional. For live locations, a direction in which the user is moving, in degrees. Must be between 1 and 360 if
+     * specified.
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @var int|null
+     */
+    private $heading;
+
+    /**
+     * Optional. For live locations, a maximum distance for proximity alerts about approaching another chat member, in
+     * meters. Must be between 1 and 100000 if specified.
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @var int|null
+     */
+    private $proximity_alert_distance;
 
     /**
      * Optional. Inline keyboard attached to the message
@@ -221,6 +250,54 @@ class InlineQueryResultLocation extends InlineQueryResult
     public function setThumbHeight(?int $thumb_height): void
     {
         $this->thumb_height = $thumb_height;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getHeading(): ?int
+    {
+        return $this->heading;
+    }
+
+    /**
+     * @param int|null $heading
+     */
+    public function setHeading(?int $heading): void
+    {
+        $this->heading = $heading;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getProximityAlertDistance(): ?int
+    {
+        return $this->proximity_alert_distance;
+    }
+
+    /**
+     * @param int|null $proximity_alert_distance
+     */
+    public function setProximityAlertDistance(?int $proximity_alert_distance): void
+    {
+        $this->proximity_alert_distance = $proximity_alert_distance;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getHorizontalAccuracy(): ?float
+    {
+        return $this->horizontal_accuracy;
+    }
+
+    /**
+     * @param float|null $horizontal_accuracy
+     */
+    public function setHorizontalAccuracy(?float $horizontal_accuracy): void
+    {
+        $this->horizontal_accuracy = $horizontal_accuracy;
     }
 
 }

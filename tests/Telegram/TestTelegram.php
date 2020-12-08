@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Zanzara\Config;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Response\TelegramException;
+use Zanzara\Telegram\Type\User;
 use Zanzara\Zanzara;
 
 /**
@@ -172,6 +173,20 @@ class TestTelegram extends TestCase
         $telegram->sendBulkMessage([$chatId, $chatId, $chatId], 'Hello');
         $bot->getLoop()->run();
         $this->assertFileDoesNotExist($logFile);
+    }
+
+    public function testGetMe()
+    {
+        $bot = new Zanzara($_ENV['BOT_TOKEN']);
+        $telegram = $bot->getTelegram();
+
+        $telegram->getMe()->then(
+            function (User $response) {
+                $this->assertSame(true, $response->isBot());
+            }
+        );
+
+        $bot->getLoop()->run();
     }
 
 }

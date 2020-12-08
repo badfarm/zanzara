@@ -83,7 +83,7 @@ class Polling extends UpdateMode
         }, function (TelegramException $error) use (&$offset) {
             $this->logger->error("Failed to fetch updates from Telegram: $error");
             $this->startPolling($offset); // consider place a delay before restarting to poll
-        })->/** @scrutinizer ignore-call */otherwise(function ($e) use (&$offset, &$processingUpdate) {
+        })->/** @scrutinizer ignore-call */ otherwise(function ($e) use (&$offset, &$processingUpdate) {
             $this->logger->errorUpdate($e);
             $errorHandler = $this->config->getErrorHandler();
             if ($errorHandler) {

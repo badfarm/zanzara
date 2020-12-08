@@ -22,9 +22,11 @@ use Zanzara\Telegram\Type\File\UserProfilePhotos;
 use Zanzara\Telegram\Type\Game\GameHighScore;
 use Zanzara\Telegram\Type\Input\InputFile;
 use Zanzara\Telegram\Type\Message;
+use Zanzara\Telegram\Type\MessageId;
 use Zanzara\Telegram\Type\Poll\Poll;
 use Zanzara\Telegram\Type\Response\TelegramException;
 use Zanzara\Telegram\Type\Update;
+use Zanzara\Telegram\Type\User;
 use Zanzara\Telegram\Type\Webhook\WebhookInfo;
 use Zanzara\ZanzaraLogger;
 use Zanzara\ZanzaraMapper;
@@ -72,6 +74,17 @@ trait TelegramTrait
         $browser = $this->browser->withTimeout($opt['timeout'] + 10);
 
         return $this->wrapPromise($browser->get("$method?$query"), $method, $opt, Update::class);
+    }
+
+    /**
+     * A simple method for testing your bot's auth token. Requires no parameters. Returns basic information about the
+     * bot in form of a User object.
+     *
+     * @return PromiseInterface
+     */
+    public function getMe(): PromiseInterface
+    {
+        return $this->callApi("getMe", [], User::class);
     }
 
     /**
@@ -174,11 +187,12 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#deletewebhook
      *
+     * @param array $opt
      * @return PromiseInterface
      */
-    public function deleteWebhook(): PromiseInterface
+    public function deleteWebhook($opt = []): PromiseInterface
     {
-        return $this->callApi("deleteWebhook");
+        return $this->callApi("deleteWebhook", $opt);
     }
 
     /**
@@ -186,17 +200,38 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#forwardmessage
      *
-     * @param int $chat_id
-     * @param int $from_chat_id
-     * @param int $message_id
+     * @param $chat_id
+     * @param $from_chat_id
+     * @param $message_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function forwardMessage(int $chat_id, int $from_chat_id, int $message_id, array $opt = []): PromiseInterface
+    public function forwardMessage($chat_id, $from_chat_id, $message_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "from_chat_id", "message_id");
         $params = array_merge($required, $opt);
         return $this->callApi("forwardMessage", $params, Message::class);
+    }
+
+    /**
+     * Use this method to copy messages of any kind. The method is analogous to the method forwardMessages, but the
+     * copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
+     *
+     * More on https://core.telegram.org/bots/api#copymessage
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @param $chat_id
+     * @param $from_chat_id
+     * @param $message_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function copyMessage($chat_id, $from_chat_id, $message_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "from_chat_id", "message_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("copyMessage", $params, MessageId::class);
     }
 
     /**
@@ -379,7 +414,9 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to send a group of photos or videos as an album. On success, an array of the sent @see Message 's is returned.
+     * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can
+     * be only group in an album with messages of the same type. On success, an array of @see Message 's that were sent
+     * is returned.
      *
      * By default the media group is sent to the chat_id of the context's update. Use $opt param to specify a different
      * chat_id. Eg. $opt = ['chat_id' => 123456789];
@@ -583,11 +620,11 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#getuserprofilephotos
      *
-     * @param int $user_id
+     * @param $user_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function getUserProfilePhotos(int $user_id, array $opt = []): PromiseInterface
+    public function getUserProfilePhotos($user_id, array $opt = []): PromiseInterface
     {
         $required = compact("user_id");
         $params = array_merge($required, $opt);
@@ -622,12 +659,12 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#kickchatmember
      *
-     * @param int $chat_id
-     * @param int $user_id
+     * @param $chat_id
+     * @param $user_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function kickChatMember(int $chat_id, int $user_id, array $opt = []): PromiseInterface
+    public function kickChatMember($chat_id, $user_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
@@ -635,18 +672,20 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to unban a previously kicked user in a supergroup or channel. The user will not return to the group
-     * or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to
-     * work. Returns True on success.
+     * Use this method to unban a previously kicked user in a supergroup or channel. The user will not return to the
+     * group or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this
+     * to work. By default, this method guarantees that after the call the user is not a member of the chat, but will be
+     * able to join it. So if the user is a member of the chat they will also be removed from the chat. If you don't
+     * want this, use the parameter only_if_banned. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#unbanchatmember
      *
-     * @param int $chat_id
-     * @param int $user_id
+     * @param $chat_id
+     * @param $user_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function unbanChatMember(int $chat_id, int $user_id, array $opt = []): PromiseInterface
+    public function unbanChatMember($chat_id, $user_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
@@ -660,13 +699,13 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#restrictchatmember
      *
-     * @param int $chat_id
-     * @param int $user_id
+     * @param $chat_id
+     * @param $user_id
      * @param $permissions
      * @param array $opt
      * @return PromiseInterface
      */
-    public function restrictChatMember(int $chat_id, int $user_id, $permissions, array $opt = []): PromiseInterface
+    public function restrictChatMember($chat_id, $user_id, $permissions, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "user_id", "permissions");
         $params = array_merge($required, $opt);
@@ -680,12 +719,12 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#promotechatmember
      *
-     * @param int $chat_id
-     * @param int $user_id
+     * @param $chat_id
+     * @param $user_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function promoteChatMember(int $chat_id, int $user_id, array $opt = []): PromiseInterface
+    public function promoteChatMember($chat_id, $user_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
@@ -697,13 +736,13 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#setchatadministratorcustomtitle
      *
-     * @param int $chat_id
-     * @param int $user_id
+     * @param $chat_id
+     * @param $user_id
      * @param string $custom_title
      * @param array $opt
      * @return PromiseInterface
      */
-    public function setChatAdministratorCustomTitle(int $chat_id, int $user_id, string $custom_title, array $opt = []): PromiseInterface
+    public function setChatAdministratorCustomTitle($chat_id, $user_id, string $custom_title, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "user_id", "custom_title");
         $params = array_merge($required, $opt);
@@ -716,12 +755,12 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#setchatpermissions
      *
-     * @param int $chat_id
+     * @param $chat_id
      * @param $permissions
      * @param array $opt
      * @return PromiseInterface
      */
-    public function setChatPermissions(int $chat_id, $permissions, array $opt = []): PromiseInterface
+    public function setChatPermissions($chat_id, $permissions, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "permissions");
         $params = array_merge($required, $opt);
@@ -735,11 +774,11 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#exportchatinvitelink
      *
-     * @param int $chat_id
+     * @param $chat_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function exportChatInviteLink(int $chat_id, array $opt = []): PromiseInterface
+    public function exportChatInviteLink($chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -752,12 +791,12 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#setchatphoto
      *
-     * @param int $chat_id
+     * @param $chat_id
      * @param $photo
      * @param array $opt
      * @return PromiseInterface
      */
-    public function setChatPhoto(int $chat_id, $photo, array $opt = []): PromiseInterface
+    public function setChatPhoto($chat_id, $photo, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "photo");
         $params = array_merge($required, $opt);
@@ -770,11 +809,11 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#deletechatphoto
      *
-     * @param int $chat_id
+     * @param $chat_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function deleteChatPhoto(int $chat_id, array $opt = []): PromiseInterface
+    public function deleteChatPhoto($chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -787,12 +826,12 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#setchattitle
      *
-     * @param int $chat_id
+     * @param $chat_id
      * @param string $title
      * @param array $opt
      * @return PromiseInterface
      */
-    public function setChatTitle(int $chat_id, string $title, array $opt = []): PromiseInterface
+    public function setChatTitle($chat_id, string $title, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "title");
         $params = array_merge($required, $opt);
@@ -805,11 +844,11 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#setchatdescription
      *
-     * @param int $chat_id
+     * @param $chat_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function setChatDescription(int $chat_id, array $opt = []): PromiseInterface
+    public function setChatDescription($chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -823,12 +862,12 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#pinchatmessage
      *
-     * @param int $chat_id
-     * @param int $message_id
+     * @param $chat_id
+     * @param $message_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function pinChatMessage(int $chat_id, int $message_id, array $opt = []): PromiseInterface
+    public function pinChatMessage($chat_id, $message_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
@@ -842,11 +881,11 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#unpinchatmessage
      *
-     * @param int $chat_id
+     * @param $chat_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function unpinChatMessage(int $chat_id, array $opt = []): PromiseInterface
+    public function unpinChatMessage($chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -854,15 +893,36 @@ trait TelegramTrait
     }
 
     /**
+     * Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must
+     * be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup
+     * or 'can_edit_messages' admin right in a channel. Returns True on success.
+     *
+     * By default the chat_id is taken from the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
+     * More on https://core.telegram.org/bots/api#unpinallchatmessages
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function unpinAllChatMessages(array $opt = []): PromiseInterface
+    {
+        $opt = $this->resolveChatId($opt);
+        return $this->callApi("unpinAllChatMessages", $opt);
+    }
+
+    /**
      * Use this method for your bot to leave a group, supergroup or channel. Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#leavechat
      *
-     * @param int $chat_id
+     * @param $chat_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function leaveChat(int $chat_id, array $opt = []): PromiseInterface
+    public function leaveChat($chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -875,11 +935,11 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#getchat
      *
-     * @param int $chat_id
+     * @param $chat_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function getChat(int $chat_id, array $opt = []): PromiseInterface
+    public function getChat($chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -893,11 +953,11 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#getchatadministrators
      *
-     * @param int $chat_id
+     * @param $chat_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function getChatAdministrators(int $chat_id, array $opt = []): PromiseInterface
+    public function getChatAdministrators($chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -909,11 +969,11 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#getchatmemberscount
      *
-     * @param int $chat_id
+     * @param $chat_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function getChatMembersCount(int $chat_id, array $opt = []): PromiseInterface
+    public function getChatMembersCount($chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -925,12 +985,12 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#getchatmember
      *
-     * @param int $chat_id
-     * @param int $user_id
+     * @param $chat_id
+     * @param $user_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function getChatMember(int $chat_id, int $user_id, array $opt = []): PromiseInterface
+    public function getChatMember($chat_id, $user_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "user_id");
         $params = array_merge($required, $opt);
@@ -944,12 +1004,12 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#setchatstickerset
      *
-     * @param int $chat_id
+     * @param $chat_id
      * @param string $sticker_set_name
      * @param array $opt
      * @return PromiseInterface
      */
-    public function setChatStickerSet(int $chat_id, string $sticker_set_name, array $opt = []): PromiseInterface
+    public function setChatStickerSet($chat_id, string $sticker_set_name, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "sticker_set_name");
         $params = array_merge($required, $opt);
@@ -963,11 +1023,11 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#deletechatstickerset
      *
-     * @param int $chat_id
+     * @param $chat_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function deleteChatStickerSet(int $chat_id, array $opt = []): PromiseInterface
+    public function deleteChatStickerSet($chat_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id");
         $params = array_merge($required, $opt);
@@ -1125,12 +1185,12 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#stoppoll
      *
-     * @param int $chat_id
-     * @param int $message_id
+     * @param $chat_id
+     * @param $message_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function stopPoll(int $chat_id, int $message_id, array $opt = []): PromiseInterface
+    public function stopPoll($chat_id, $message_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
@@ -1148,12 +1208,12 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#deletemessage
      *
-     * @param int $chat_id
-     * @param int $message_id
+     * @param $chat_id
+     * @param $message_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function deleteMessage(int $chat_id, int $message_id, array $opt = []): PromiseInterface
+    public function deleteMessage($chat_id, $message_id, array $opt = []): PromiseInterface
     {
         $required = compact("chat_id", "message_id");
         $params = array_merge($required, $opt);
@@ -1206,12 +1266,12 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#uploadstickerfile
      *
-     * @param int $user_id
+     * @param $user_id
      * @param $png_sticker
      * @param array $opt
      * @return PromiseInterface
      */
-    public function uploadStickerFile(int $user_id, $png_sticker, array $opt = []): PromiseInterface
+    public function uploadStickerFile($user_id, $png_sticker, array $opt = []): PromiseInterface
     {
         $required = compact("user_id", "png_sticker");
         $params = array_merge($required, $opt);
@@ -1228,14 +1288,14 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#createnewstickerset
      *
-     * @param int $user_id
+     * @param $user_id
      * @param string $name
      * @param string $title
      * @param string $emojis
      * @param array $opt
      * @return PromiseInterface
      */
-    public function createNewStickerSet(int $user_id, string $name, string $title, string $emojis, array $opt = []): PromiseInterface
+    public function createNewStickerSet($user_id, string $name, string $title, string $emojis, array $opt = []): PromiseInterface
     {
         $required = compact("user_id", "name", "title", "emojis");
         $params = array_merge($required, $opt);
@@ -1253,14 +1313,14 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#addstickertoset
      *
-     * @param int $user_id
+     * @param $user_id
      * @param string $name
      * @param $png_sticker
      * @param string $emojis
      * @param array $opt
      * @return PromiseInterface
      */
-    public function addStickerToSet(int $user_id, string $name, $png_sticker, string $emojis, array $opt = []): PromiseInterface
+    public function addStickerToSet($user_id, string $name, $png_sticker, string $emojis, array $opt = []): PromiseInterface
     {
         $required = compact("user_id", "name", "png_sticker", "emojis");
         $params = array_merge($required, $opt);
@@ -1311,11 +1371,11 @@ trait TelegramTrait
      * More on https://core.telegram.org/bots/api#setstickersetthumb
      *
      * @param string $name
-     * @param int $user_id
+     * @param $user_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function setStickerSetThumb(string $name, int $user_id, array $opt = []): PromiseInterface
+    public function setStickerSetThumb(string $name, $user_id, array $opt = []): PromiseInterface
     {
         $required = compact("name", "user_id");
         $params = array_merge($required, $opt);
@@ -1439,12 +1499,12 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#setpassportdataerrors
      *
-     * @param int $user_id
+     * @param $user_id
      * @param $errors
      * @param array $opt
      * @return PromiseInterface
      */
-    public function setPassportDataErrors(int $user_id, $errors, array $opt = []): PromiseInterface
+    public function setPassportDataErrors($user_id, $errors, array $opt = []): PromiseInterface
     {
         $required = compact("user_id", "errors");
         $params = array_merge($required, $opt);
@@ -1487,12 +1547,12 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#setgamescore
      *
-     * @param int $user_id
+     * @param $user_id
      * @param int $score
      * @param array $opt
      * @return PromiseInterface
      */
-    public function setGameScore(int $user_id, int $score, array $opt = []): PromiseInterface
+    public function setGameScore($user_id, int $score, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveMessageId($opt);
         $required = compact("user_id", "score");
@@ -1515,16 +1575,50 @@ trait TelegramTrait
      *
      * More on https://core.telegram.org/bots/api#getgamehighscores
      *
-     * @param int $user_id
+     * @param $user_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function getGameHighScores(int $user_id, array $opt = []): PromiseInterface
+    public function getGameHighScores($user_id, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveMessageId($opt);
         $required = compact("user_id");
         $params = array_merge($required, $opt);
         return $this->callApi("getGameHighScores", $params, GameHighScore::class);
+    }
+
+    /**
+     * Use this method to log out from the cloud Bot API server before launching the bot locally. You must log out the
+     * bot before running it locally, otherwise there is no guarantee that the bot will receive updates. After a
+     * successful call, you can immediately log in on a local server, but will not be able to log in back to the
+     * cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters.
+     *
+     * More on https://core.telegram.org/bots/api#logout
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @return PromiseInterface
+     */
+    public function logOut(): PromiseInterface
+    {
+        return $this->callApi("logOut");
+    }
+
+    /**
+     * Use this method to close the bot instance before moving it from one local server to another. You need to delete
+     * the webhook before calling this method to ensure that the bot isn't launched again after server restart. The
+     * method will return error 429 in the first 10 minutes after the bot is launched. Returns True on success.
+     * Requires no parameters.
+     *
+     * More on https://core.telegram.org/bots/api#close
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @return PromiseInterface
+     */
+    public function close(): PromiseInterface
+    {
+        return $this->callApi("close");
     }
 
     /**
@@ -1657,8 +1751,15 @@ trait TelegramTrait
                 return $mapper->mapObject($object->result, $class);
             }, function ($e) use ($method, $params, $logger, $mapper) {
                 if ($e instanceof ResponseException) {
-                    $json = (string)$e->getResponse()->getBody();
-                    $e = $mapper->mapJson($json, TelegramException::class);
+                    // with the introduction of Local Api server (https://core.telegram.org/bots/api#using-a-local-bot-api-server)
+                    // we can no longer assume that the response is with the TelegramException format, so catch any mapping
+                    // exception
+                    try {
+                        $json = (string)$e->getResponse()->getBody();
+                        $e = $mapper->mapJson($json, TelegramException::class);
+                    } catch (\Exception $ignore) {
+                        // ignore
+                    }
                 }
                 $logger->errorTelegramApi($method, $params, $e);
                 throw $e;
@@ -1698,7 +1799,7 @@ trait TelegramTrait
      */
     public function resolveChatId(array $opt): array
     {
-        if (!isset($opt['chat_id']) && $this->update) {
+        if (!isset($opt['chat_id']) && $this->update && $this->update->getEffectiveChat()) {
             $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
         }
         return $opt;

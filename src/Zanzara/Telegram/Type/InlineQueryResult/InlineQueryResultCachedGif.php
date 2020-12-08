@@ -47,6 +47,15 @@ class InlineQueryResultCachedGif extends InlineQueryResult
     private $parse_mode;
 
     /**
+     * Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+     *
+     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     *
+     * @var \Zanzara\Telegram\Type\MessageEntity[]|null
+     */
+    private $caption_entities;
+
+    /**
      * Optional. Inline keyboard attached to the message
      *
      * @var InlineKeyboardMarkup|null
@@ -154,6 +163,22 @@ class InlineQueryResultCachedGif extends InlineQueryResult
     public function setInputMessageContent(?InputMessageContent $input_message_content): void
     {
         $this->input_message_content = $input_message_content;
+    }
+
+    /**
+     * @return \Zanzara\Telegram\Type\MessageEntity[]|null
+     */
+    public function getCaptionEntities(): ?array
+    {
+        return $this->caption_entities;
+    }
+
+    /**
+     * @param \Zanzara\Telegram\Type\MessageEntity[]|null $caption_entities
+     */
+    public function setCaptionEntities(?array $caption_entities): void
+    {
+        $this->caption_entities = $caption_entities;
     }
 
 }
