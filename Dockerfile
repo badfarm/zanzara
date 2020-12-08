@@ -1,9 +1,8 @@
-FROM php:8.0-rc
+FROM php:8.0-fpm
 
 COPY --from=composer:2.0.4 /usr/bin/composer /usr/bin/composer
 
 COPY . .
-COPY bot.php bot.php
 
 RUN apt-get update && \
     apt-get upgrade -y && \
