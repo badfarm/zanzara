@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.3",
         "ext-json": "*",
         "ext-readline": "*",
         "react/event-loop": "^1.1",
@@ -30,7 +30,8 @@
         "react/cache": "^1.1",
         "php-http/multipart-stream-builder": "^1.1",
         "netresearch/jsonmapper": "^4.0",
-        "clue/http-proxy-react": "^1.6"
+        "clue/http-proxy-react": "^1.6",
+        "opis/closure": "^3.6"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",

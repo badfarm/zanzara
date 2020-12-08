@@ -19,20 +19,19 @@ $bot = new Zanzara($_ENV['BOT_TOKEN'], $config);
 $bot->onCommand("start", function (Context $ctx) {
     $ctx->sendMessage("Hi, what's your name?");
 
-    $ctx->nextStep("checkName");
-});
+    $checkName = function (Context $ctx) {
+        $name = $ctx->getMessage()->getText();
+        if (strlen($name) < 5) {
+            $ctx->sendMessage("Il nome deve essere più di 5 caratteri");
+        } else {
+            $ctx->setChatData("name", $name);
+            $ctx->sendMessage("{$name}, what is your age?");
+            $ctx->nextStep("checkAge");
+        }
+    };
 
-function checkName(Context $ctx)
-{
-    $name = $ctx->getMessage()->getText();
-    if (strlen($name) < 5) {
-        $ctx->sendMessage("Il nome deve essere più di 5 caratteri ignorante");
-    } else {
-        $ctx->setChatData("name", $name);
-        $ctx->sendMessage("{$name}, what is your age?");
-        $ctx->nextStep("checkAge");
-    }
-}
+    $ctx->nextStep($checkName);
+});
 
 function checkAge(Context $ctx)
 {
