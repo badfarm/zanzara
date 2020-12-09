@@ -35,7 +35,7 @@ class ZanzaraCache
 
     private const CONVERSATION = "CONVERSATION";
 
-    private const CHATDATA = " CHATDATA";
+    private const CHATDATA = "CHATDATA";
 
     private const USERDATA = "USERDATA";
 
