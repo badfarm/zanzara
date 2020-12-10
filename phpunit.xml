@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- "vendor/bin/phpunit" to run unit tests -->
-<phpunit bootstrap="tests/bootstrap.php">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="tests/bootstrap.php"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+    <coverage>
+        <include>
+            <directory>src/Zanzara</directory>
+        </include>
+    </coverage>
     <testsuites>
         <testsuite name="zanzara">
             <directory suffix="Test.php">tests</directory>
         </testsuite>
     </testsuites>
     <!-- for code coverage, xdebug extension required -->
-    <filter>
-        <whitelist>
-            <directory>src/Zanzara</directory>
-        </whitelist>
-    </filter>
 </phpunit>
