@@ -14,4 +14,4 @@ RUN docker-php-ext-install zip
 
 RUN composer install
 
-CMD php tests/zen-circus/php8/bot.php
+CMD php tests/zen-circus/php8/polling.php
