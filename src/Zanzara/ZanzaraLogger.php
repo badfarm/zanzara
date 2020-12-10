@@ -54,21 +54,21 @@ class ZanzaraLogger
         $this->error($message);
     }
 
-    public function errorGetCache($error)
+    public function errorGetCache()
     {
-        $message = "Failed to get data from cache, reason: {$error}";
+        $message = "Failed to get data from cache";
         $this->error($message);
     }
 
-    public function errorClearCache($error)
+    public function errorClearCache()
     {
-        $message = "Failed to clear conversation state from cache, reason: {$error}";
+        $message = "Failed to clear conversation state from cache";
         $this->error($message);
     }
 
-    public function errorWriteCache($error)
+    public function errorWriteCache()
     {
-        $message = "Failed to write into cache, reason: {$error}";
+        $message = "Failed to write into cache";
         $this->error($message);
     }
 

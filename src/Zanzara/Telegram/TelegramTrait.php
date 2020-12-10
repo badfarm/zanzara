@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram;
 
-use Clue\React\Buzz\Browser;
-use Clue\React\Buzz\Message\ResponseException;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use React\Filesystem\Filesystem;
+use React\Http\Browser;
+use React\Http\Message\ResponseException;
 use React\Promise\PromiseInterface;
 use RingCentral\Psr7\MultipartStream;
 use Zanzara\Config;
@@ -70,9 +70,8 @@ trait TelegramTrait
         $method = "getUpdates";
         $query = http_build_query($opt);
 
-        $browser = $this->browser->withOptions(array(
-            "timeout" => $opt['timeout'] + 10 //timout browser necessary bigger than telegram timeout. They can't be equal
-        ));
+        // timeout browser necessary bigger than telegram timeout. They can't be equal
+        $browser = $this->browser->withTimeout($opt['timeout'] + 10);
 
         return $this->wrapPromise($browser->get("$method?$query"), $method, $opt, Update::class);
     }

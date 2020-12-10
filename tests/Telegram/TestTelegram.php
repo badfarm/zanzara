@@ -172,7 +172,7 @@ class TestTelegram extends TestCase
         $chatId = (int)$_ENV['CHAT_ID'];
         $telegram->sendBulkMessage([$chatId, $chatId, $chatId], 'Hello');
         $bot->getLoop()->run();
-        $this->assertFileNotExists($logFile);
+        $this->assertFileDoesNotExist($logFile);
     }
 
     public function testGetMe()

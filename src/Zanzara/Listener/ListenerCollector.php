@@ -467,13 +467,13 @@ abstract class ListenerCollector
      */
     protected function getCallable($callback)
     {
-        if (!is_callable($callback)) {
-            throw new InvalidArgumentException('The callback parameter must be a valid callable.');
+        // if is a class definition, resolve it to an instance through the container
+        if (is_array($callback) && count($callback) === 2 && is_string($callback[0]) && class_exists($callback[0])) {
+            $callback[0] = $this->container->make($callback[0]);
         }
 
-        // if is a class definition, resolve it to an instance through the container
-        if (is_array($callback) && count($callback) === 2 && is_string($callback[0])) {
-            $callback[0] = $this->container->make($callback[0]);
+        if (!is_callable($callback)) {
+            throw new InvalidArgumentException('The callback parameter must be a valid callable.');
         }
 
         return $callback;
