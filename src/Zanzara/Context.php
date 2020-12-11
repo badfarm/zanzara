@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
-use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use React\EventLoop\LoopInterface;
 use React\Http\Browser;
 use React\Promise\PromiseInterface;
+use Zanzara\Support\CallableResolver;
 use Zanzara\Telegram\TelegramTrait;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\ChannelPost;
@@ -46,7 +46,7 @@ use Zanzara\Telegram\Type\User;
  */
 class Context
 {
-    use TelegramTrait;
+    use TelegramTrait, CallableResolver;
 
     /**
      * Array used to pass data between middleware.
@@ -61,8 +61,8 @@ class Context
     private $cache;
 
     /**
-     * @param Update $update
-     * @param ContainerInterface $container
+     * @param  Update  $update
+     * @param  ContainerInterface  $container
      */
     public function __construct(Update $update, ContainerInterface $container)
     {
@@ -73,7 +73,7 @@ class Context
     }
 
     /**
-     * @param string $key
+     * @param  string  $key
      * @param $value
      */
     public function set(string $key, $value): void
@@ -82,7 +82,7 @@ class Context
     }
 
     /**
-     * @param string $key
+     * @param  string  $key
      * @return mixed|null
      */
     public function get(string $key)
@@ -118,16 +118,14 @@ class Context
      * This callable must be take on parameter of type Context
      * @param $handler
      * @return PromiseInterface
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function nextStep($handler): PromiseInterface
     {
-        if (!is_callable($handler)) {
-            throw new InvalidArgumentException('The handler parameter must be a valid callable.');
-        }
-
         // update is not null when used within the Context
         $chatId = $this->update->/** @scrutinizer ignore-call */ getEffectiveChat()->getId();
-        return $this->cache->setConversationHandler($chatId, $handler);
+        return $this->cache->setConversationHandler($chatId, $this->getCallable($handler));
     }
 
     /**

@@ -7,9 +7,9 @@ namespace Zanzara\Listener;
 use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException;
-use InvalidArgumentException;
 use Zanzara\Middleware\MiddlewareCollector;
 use Zanzara\Middleware\MiddlewareInterface;
+use Zanzara\Support\CallableResolver;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\ChannelPost;
 use Zanzara\Telegram\Type\ChosenInlineResult;
@@ -27,10 +27,12 @@ use Zanzara\Telegram\Type\Shipping\SuccessfulPayment;
 use Zanzara\Telegram\Type\Update;
 
 /**
- *
+ * Class ListenerCollector
+ * @package Zanzara\Listener
  */
 abstract class ListenerCollector
 {
+    use CallableResolver;
 
     /**
      * Associative array for listeners.
@@ -457,26 +459,4 @@ abstract class ListenerCollector
             }
         });
     }
-
-    /**
-     * Check and resolve a callable.
-     * @param $callback
-     * @return array|callable
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    protected function getCallable($callback)
-    {
-        // if is a class definition, resolve it to an instance through the container
-        if (is_array($callback) && count($callback) === 2 && is_string($callback[0]) && class_exists($callback[0])) {
-            $callback[0] = $this->container->make($callback[0]);
-        }
-
-        if (!is_callable($callback)) {
-            throw new InvalidArgumentException('The callback parameter must be a valid callable.');
-        }
-
-        return $callback;
-    }
-
 }
