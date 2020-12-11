@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
+use Closure;
+use Opis\Closure\SerializableClosure;
 use React\Cache\CacheInterface;
 use React\Promise\PromiseInterface;
 
@@ -35,7 +37,7 @@ class ZanzaraCache
 
     private const CONVERSATION = "CONVERSATION";
 
-    private const CHATDATA = " CHATDATA";
+    private const CHATDATA = "CHATDATA";
 
     private const USERDATA = "USERDATA";
 
@@ -192,11 +194,14 @@ class ZanzaraCache
         return ZanzaraCache::CONVERSATION . strval($chatId);
     }
 
-    public function setConversationHandler(int $chatId, $data)
+    public function setConversationHandler(int $chatId, $handler)
     {
         $key = "state";
         $cacheKey = $this->getConversationKey($chatId);
-        return $this->doSet($cacheKey, $key, $data);
+        if ($handler instanceof Closure) {
+            $handler = new SerializableClosure($handler);
+        }
+        return $this->doSet($cacheKey, $key, serialize($handler));
     }
 
     /**
@@ -237,7 +242,7 @@ class ZanzaraCache
 
             return $this->cache->set($cacheKey, $arrayData)->then(function ($result) {
                 if ($result !== true) {
-                    $this->logger->errorWriteCache($result);
+                    $this->logger->errorWriteCache();
                 }
                 return $result;
             });
@@ -253,7 +258,7 @@ class ZanzaraCache
     {
         return $this->cache->deleteMultiple($keys)->then(function ($result) {
             if ($result !== true) {
-                $this->logger->errorClearCache($result);
+                $this->logger->errorClearCache();
             }
             return $result;
         });
@@ -325,7 +330,7 @@ class ZanzaraCache
 
             return $this->cache->set($cacheKey, $arrayData, $ttl)->then(function ($result) {
                 if ($result !== true) {
-                    $this->logger->errorWriteCache($result);
+                    $this->logger->errorWriteCache();
                 }
                 return $result;
             });
@@ -350,7 +355,7 @@ class ZanzaraCache
 
             return $this->cache->set($cacheKey, $arrayData, $ttl)->then(function ($result) {
                 if ($result !== true) {
-                    $this->logger->errorWriteCache($result);
+                    $this->logger->errorWriteCache();
                 }
                 return $result;
             });
@@ -369,6 +374,10 @@ class ZanzaraCache
         return $this->cache->get($this->getConversationKey($chatId))->then(function ($conversation) use ($update, $container) {
             if (!empty($conversation["state"])) {
                 $handler = $conversation["state"];
+                $handler = unserialize($handler);
+                if ($handler instanceof SerializableClosure) {
+                    $handler = $handler->getClosure();
+                }
                 $handler(new Context($update, $container));
             }
         }, function ($err) use ($update) {

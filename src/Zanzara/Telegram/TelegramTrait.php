@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram;
 
-use Clue\React\Buzz\Browser;
-use Clue\React\Buzz\Message\ResponseException;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use React\Filesystem\Filesystem;
+use React\Http\Browser;
+use React\Http\Message\ResponseException;
 use React\Promise\PromiseInterface;
 use RingCentral\Psr7\MultipartStream;
 use Zanzara\Config;
@@ -70,9 +70,8 @@ trait TelegramTrait
         $method = "getUpdates";
         $query = http_build_query($opt);
 
-        $browser = $this->browser->withOptions(array(
-            "timeout" => $opt['timeout'] + 10 //timout browser necessary bigger than telegram timeout. They can't be equal
-        ));
+        // timeout browser necessary bigger than telegram timeout. They can't be equal
+        $browser = $this->browser->withTimeout($opt['timeout'] + 10);
 
         return $this->wrapPromise($browser->get("$method?$query"), $method, $opt, Update::class);
     }
@@ -1640,14 +1639,14 @@ trait TelegramTrait
                 $async = $this->container->get(Config::class)->isReactFileSystem();
 
                 if ($async) {
-                    return $this->prepareMultipartDataAsync($params)->then(function ($result) use ($method) {
+                    return $this->prepareMultipartDataAsync($params)->then(function ($result) use ($class, $params, $method) {
                         $headers = array("Content-Length" => $result->getSize(), "Content-Type" => "multipart/form-data; boundary={$result->getBoundary()}");
-                        return $this->browser->post($method, $headers, $result);
+                        return $this->wrapPromise($this->browser->post($method, $headers, $result), $method, $params, $class);
                     });
                 } else {
                     $multipart = $this->prepareMultipartData($params);
                     $headers = array("Content-Length" => $multipart->getSize(), "Content-Type" => "multipart/form-data; boundary={$multipart->getBoundary()}");
-                    return $this->browser->post($method, $headers, $multipart);
+                    return $this->wrapPromise($this->browser->post($method, $headers, $multipart), $method, $params, $class);
                 }
             }
         }
@@ -1800,7 +1799,7 @@ trait TelegramTrait
      */
     public function resolveChatId(array $opt): array
     {
-        if (!isset($opt['chat_id']) && $this->update) {
+        if (!isset($opt['chat_id']) && $this->update && $this->update->getEffectiveChat()) {
             $opt['chat_id'] = $this->update->getEffectiveChat()->getId();
         }
         return $opt;

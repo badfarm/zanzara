@@ -18,6 +18,8 @@ use Zanzara\Telegram\Type\EditedMessage;
 use Zanzara\Telegram\Type\InlineQuery;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Passport\PassportData;
+use Zanzara\Telegram\Type\Poll\Poll;
+use Zanzara\Telegram\Type\Poll\PollAnswer;
 use Zanzara\Telegram\Type\ReplyToMessage;
 use Zanzara\Telegram\Type\Shipping\PreCheckoutQuery;
 use Zanzara\Telegram\Type\Shipping\ShippingQuery;
@@ -366,6 +368,42 @@ abstract class ListenerCollector
     }
 
     /**
+     * Listen for a poll.
+     * You can call this function more than once, every callback will be executed.
+     *
+     * Eg. $bot->onPoll(function(Context $ctx) {});
+     *
+     * @param  $callback
+     * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function onPoll($callback): MiddlewareCollector
+    {
+        $listener = new Listener($callback);
+        $this->listeners[Poll::class][] = $listener;
+        return $listener;
+    }
+
+    /**
+     * Listen for a poll answer.
+     * You can call this function more than once, every callback will be executed.
+     *
+     * Eg. $bot->onPollAnswer(function(Context $ctx) {});
+     *
+     * @param  $callback
+     * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function onPollAnswer($callback): MiddlewareCollector
+    {
+        $listener = new Listener($callback);
+        $this->listeners[PollAnswer::class][] = $listener;
+        return $listener;
+    }
+
+    /**
      * Listen for a generic update.
      * You can call this function more than once, every callback will be executed.
      *
@@ -429,13 +467,13 @@ abstract class ListenerCollector
      */
     protected function getCallable($callback)
     {
-        if (!is_callable($callback)) {
-            throw new InvalidArgumentException('The callback parameter must be a valid callable.');
+        // if is a class definition, resolve it to an instance through the container
+        if (is_array($callback) && count($callback) === 2 && is_string($callback[0]) && class_exists($callback[0])) {
+            $callback[0] = $this->container->make($callback[0]);
         }
 
-        // if is a class definition, resolve it to an instance through the container
-        if (is_array($callback) && count($callback) === 2 && is_string($callback[0])) {
-            $callback[0] = $this->container->make($callback[0]);
+        if (!is_callable($callback)) {
+            throw new InvalidArgumentException('The callback parameter must be a valid callable.');
         }
 
         return $callback;

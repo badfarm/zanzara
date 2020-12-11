@@ -80,7 +80,7 @@ class ListenerCallbackTest extends TestCase
         $bot = new Zanzara("test", $config);
 
         $bot->onCommand('start', [TestCommandClassNoConstructor::class, 'start']);
-        $bot->onCommand('start', [TestCommandClassWithConstructor::class, 'start']);
+        $bot->onUpdate([TestCommandClassWithConstructor::class, 'start']);
 
         $bot->run();
     }
