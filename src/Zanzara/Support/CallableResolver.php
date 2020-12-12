@@ -31,6 +31,11 @@ trait CallableResolver
             $callback[0] = $this->container->make($callback[0]);
         }
 
+        // if passing a class, we probably want resolve that and call the __invoke method
+        if (is_string($callback) && class_exists($callback)) {
+            $callback = $this->container->make($callback);
+        }
+
         if (!is_callable($callback)) {
             throw new InvalidArgumentException('The callback parameter must be a valid callable.');
         }

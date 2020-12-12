@@ -39,11 +39,10 @@ class MiddlewareNode
      */
     public function __invoke(Context $ctx)
     {
-        $current = $this->current;
-        if (is_callable($current)) {
-            $current($ctx, $this->next);
+        if ($this->current instanceof MiddlewareInterface) {
+            $this->current->handle($ctx, $this->next);
         } else {
-            $current->handle($ctx, $this->next);
+            call_user_func($this->current, $ctx, $this->next);
         }
     }
 

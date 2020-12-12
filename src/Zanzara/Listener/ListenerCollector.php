@@ -382,7 +382,7 @@ abstract class ListenerCollector
      */
     public function onPoll($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($this->getCallable($callback));
         $this->listeners[Poll::class][] = $listener;
         return $listener;
     }
@@ -400,7 +400,7 @@ abstract class ListenerCollector
      */
     public function onPollAnswer($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($this->getCallable($callback));
         $this->listeners[PollAnswer::class][] = $listener;
         return $listener;
     }
@@ -438,9 +438,15 @@ abstract class ListenerCollector
      *
      * @param  MiddlewareInterface|callable  $middleware
      * @return self
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function middleware($middleware): self
     {
+        // if not an instance implementing middleware interface, try to resolve the callable
+        if (!($middleware instanceof MiddlewareInterface)) {
+            $middleware = $this->getCallable($middleware);
+        }
         array_unshift($this->middleware, $middleware);
         return $this;
     }
