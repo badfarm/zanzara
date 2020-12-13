@@ -378,7 +378,7 @@ class ZanzaraCache
                 if ($handler instanceof SerializableClosure) {
                     $handler = $handler->getClosure();
                 }
-                $handler(new Context($update, $container));
+                call_user_func($handler, new Context($update, $container));
             }
         }, function ($err) use ($update) {
             $this->logger->errorUpdate($update, $err);

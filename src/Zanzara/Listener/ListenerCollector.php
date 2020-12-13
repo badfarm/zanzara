@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Zanzara\Listener;
 
-use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException;
-use InvalidArgumentException;
+use Psr\Container\ContainerInterface;
 use Zanzara\Middleware\MiddlewareCollector;
 use Zanzara\Middleware\MiddlewareInterface;
+use Zanzara\Support\CallableResolver;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\ChannelPost;
 use Zanzara\Telegram\Type\ChosenInlineResult;
@@ -27,10 +27,12 @@ use Zanzara\Telegram\Type\Shipping\SuccessfulPayment;
 use Zanzara\Telegram\Type\Update;
 
 /**
- *
+ * Class ListenerCollector
+ * @package Zanzara\Listener
  */
 abstract class ListenerCollector
 {
+    use CallableResolver;
 
     /**
      * Associative array for listeners.
@@ -57,7 +59,7 @@ abstract class ListenerCollector
     protected $listeners = [];
 
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     protected $container;
 
@@ -79,7 +81,7 @@ abstract class ListenerCollector
     public function onCommand(string $command, $callback): MiddlewareCollector
     {
         $command = "/^\/$command$/";
-        $listener = new Listener($this->getCallable($callback), $command);
+        $listener = new Listener($callback, $this->container, $command);
         $this->listeners['messages'][$command] = $listener;
         return $listener;
     }
@@ -100,7 +102,7 @@ abstract class ListenerCollector
     public function onText(string $text, $callback): MiddlewareCollector
     {
         $text = "/$text/";
-        $listener = new Listener($this->getCallable($callback), $text);
+        $listener = new Listener($callback, $this->container, $text);
         $this->listeners['messages'][$text] = $listener;
         return $listener;
     }
@@ -118,7 +120,7 @@ abstract class ListenerCollector
      */
     public function onMessage($callback): MiddlewareCollector
     {
-        $listener = new Listener($this->getCallable($callback));
+        $listener = new Listener($callback, $this->container);
         $this->listeners[Message::class][] = $listener;
         return $listener;
     }
@@ -136,7 +138,7 @@ abstract class ListenerCollector
      */
     public function onReplyToMessage($callback): MiddlewareCollector
     {
-        $listener = new Listener($this->getCallable($callback));
+        $listener = new Listener($callback, $this->container);
         $this->listeners[ReplyToMessage::class][] = $listener;
         return $listener;
     }
@@ -154,7 +156,7 @@ abstract class ListenerCollector
      */
     public function onEditedMessage($callback): MiddlewareCollector
     {
-        $listener = new Listener($this->getCallable($callback));
+        $listener = new Listener($callback, $this->container);
         $this->listeners[EditedMessage::class][] = $listener;
         return $listener;
     }
@@ -176,7 +178,7 @@ abstract class ListenerCollector
     public function onCbQueryText(string $text, $callback): MiddlewareCollector
     {
         $text = "/$text/";
-        $listener = new Listener($this->getCallable($callback), $text);
+        $listener = new Listener($callback, $this->container, $text);
         $this->listeners['cb_query_texts'][$text] = $listener;
         return $listener;
     }
@@ -200,7 +202,7 @@ abstract class ListenerCollector
         // merge values with "|" (eg. "accept|refuse|later"), then ListenerResolver will check the callback data
         // against that regex.
         $id = '/'.implode('|', $data).'/';
-        $listener = new Listener($this->getCallable($callback), $id);
+        $listener = new Listener($callback, $this->container, $id);
         $this->listeners['cb_query_data'][$id] = $listener;
         return $listener;
     }
@@ -218,7 +220,7 @@ abstract class ListenerCollector
      */
     public function onCbQuery($callback): MiddlewareCollector
     {
-        $listener = new Listener($this->getCallable($callback));
+        $listener = new Listener($callback, $this->container);
         $this->listeners[CallbackQuery::class][] = $listener;
         return $listener;
     }
@@ -236,7 +238,7 @@ abstract class ListenerCollector
      */
     public function onShippingQuery($callback): MiddlewareCollector
     {
-        $listener = new Listener($this->getCallable($callback));
+        $listener = new Listener($callback, $this->container);
         $this->listeners[ShippingQuery::class][] = $listener;
         return $listener;
     }
@@ -254,7 +256,7 @@ abstract class ListenerCollector
      */
     public function onPreCheckoutQuery($callback): MiddlewareCollector
     {
-        $listener = new Listener($this->getCallable($callback));
+        $listener = new Listener($callback, $this->container);
         $this->listeners[PreCheckoutQuery::class][] = $listener;
         return $listener;
     }
@@ -272,7 +274,7 @@ abstract class ListenerCollector
      */
     public function onSuccessfulPayment($callback): MiddlewareCollector
     {
-        $listener = new Listener($this->getCallable($callback));
+        $listener = new Listener($callback, $this->container);
         $this->listeners[SuccessfulPayment::class][] = $listener;
         return $listener;
     }
@@ -290,7 +292,7 @@ abstract class ListenerCollector
      */
     public function onPassportData($callback): MiddlewareCollector
     {
-        $listener = new Listener($this->getCallable($callback));
+        $listener = new Listener($callback, $this->container);
         $this->listeners[PassportData::class][] = $listener;
         return $listener;
     }
@@ -308,7 +310,7 @@ abstract class ListenerCollector
      */
     public function onInlineQuery($callback): MiddlewareCollector
     {
-        $listener = new Listener($this->getCallable($callback));
+        $listener = new Listener($callback, $this->container);
         $this->listeners[InlineQuery::class][] = $listener;
         return $listener;
     }
@@ -326,7 +328,7 @@ abstract class ListenerCollector
      */
     public function onChosenInlineResult($callback): MiddlewareCollector
     {
-        $listener = new Listener($this->getCallable($callback));
+        $listener = new Listener($callback, $this->container);
         $this->listeners[ChosenInlineResult::class][] = $listener;
         return $listener;
     }
@@ -344,7 +346,7 @@ abstract class ListenerCollector
      */
     public function onChannelPost($callback): MiddlewareCollector
     {
-        $listener = new Listener($this->getCallable($callback));
+        $listener = new Listener($callback, $this->container);
         $this->listeners[ChannelPost::class][] = $listener;
         return $listener;
     }
@@ -362,7 +364,7 @@ abstract class ListenerCollector
      */
     public function onEditedChannelPost($callback): MiddlewareCollector
     {
-        $listener = new Listener($this->getCallable($callback));
+        $listener = new Listener($callback, $this->container);
         $this->listeners[EditedChannelPost::class][] = $listener;
         return $listener;
     }
@@ -380,7 +382,7 @@ abstract class ListenerCollector
      */
     public function onPoll($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($callback, $this->container);
         $this->listeners[Poll::class][] = $listener;
         return $listener;
     }
@@ -398,7 +400,7 @@ abstract class ListenerCollector
      */
     public function onPollAnswer($callback): MiddlewareCollector
     {
-        $listener = new Listener($callback);
+        $listener = new Listener($callback, $this->container);
         $this->listeners[PollAnswer::class][] = $listener;
         return $listener;
     }
@@ -416,7 +418,7 @@ abstract class ListenerCollector
      */
     public function onUpdate($callback): MiddlewareCollector
     {
-        $listener = new Listener($this->getCallable($callback));
+        $listener = new Listener($callback, $this->container);
         $this->listeners[Update::class][] = $listener;
         return $listener;
     }
@@ -436,6 +438,8 @@ abstract class ListenerCollector
      *
      * @param  MiddlewareInterface|callable  $middleware
      * @return self
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function middleware($middleware): self
     {
@@ -457,26 +461,4 @@ abstract class ListenerCollector
             }
         });
     }
-
-    /**
-     * Check and resolve a callable.
-     * @param $callback
-     * @return array|callable
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    protected function getCallable($callback)
-    {
-        // if is a class definition, resolve it to an instance through the container
-        if (is_array($callback) && count($callback) === 2 && is_string($callback[0]) && class_exists($callback[0])) {
-            $callback[0] = $this->container->make($callback[0]);
-        }
-
-        if (!is_callable($callback)) {
-            throw new InvalidArgumentException('The callback parameter must be a valid callable.');
-        }
-
-        return $callback;
-    }
-
 }
