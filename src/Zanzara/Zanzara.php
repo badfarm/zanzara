@@ -69,6 +69,9 @@ class Zanzara extends ListenerResolver
         $this->telegram = $this->container->get(Telegram::class);
         $this->container->set(CacheInterface::class, $this->config->getCache() ?? new ArrayCache());
         $this->container->set(Config::class, $this->config);
+        if ($this->config->isReactFileSystem()) {
+            $this->container->set(\React\Filesystem\Filesystem::class, \React\Filesystem\Filesystem::create($this->loop));
+        }
         $this->cache = $this->container->get(ZanzaraCache::class);
         $this->container->set(Zanzara::class, $this);
     }
