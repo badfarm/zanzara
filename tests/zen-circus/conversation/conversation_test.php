@@ -5,10 +5,10 @@ use Zanzara\Config;
 use Zanzara\Context;
 use Zanzara\Zanzara;
 
-require "../../vendor/autoload.php";
+require "../../../vendor/autoload.php";
 
 $dotenv = new Dotenv();
-$dotenv->load("../../.env");
+$dotenv->load("../../../.env");
 
 $config = new Config();
 $config->setCache(new \React\Cache\ArrayCache());

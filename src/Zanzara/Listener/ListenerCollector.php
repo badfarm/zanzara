@@ -9,7 +9,6 @@ use DI\NotFoundException;
 use Psr\Container\ContainerInterface;
 use Zanzara\Middleware\MiddlewareCollector;
 use Zanzara\Middleware\MiddlewareInterface;
-use Zanzara\Support\CallableResolver;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\ChannelPost;
 use Zanzara\Telegram\Type\ChosenInlineResult;
@@ -32,7 +31,6 @@ use Zanzara\Telegram\Type\Update;
  */
 abstract class ListenerCollector
 {
-    use CallableResolver;
 
     /**
      * Associative array for listeners.
@@ -438,8 +436,6 @@ abstract class ListenerCollector
      *
      * @param  MiddlewareInterface|callable  $middleware
      * @return self
-     * @throws DependencyException
-     * @throws NotFoundException
      */
     public function middleware($middleware): self
     {
