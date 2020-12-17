@@ -46,13 +46,8 @@ abstract class MiddlewareCollector
      */
     public function middleware($middleware): self
     {
-        // if not an instance implementing middleware interface, try to resolve the callable
-        if (!($middleware instanceof MiddlewareInterface)) {
-            $middleware = $this->getCallable($middleware);
-        }
-
         $next = $this->tip;
-        $node = new MiddlewareNode($middleware, $next);
+        $node = new MiddlewareNode($this->getCallable($middleware), $next);
         $this->tip = $node;
         return $this;
     }

@@ -8,6 +8,7 @@ use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException;
 use InvalidArgumentException;
+use Zanzara\Middleware\MiddlewareInterface;
 
 /**
  * Trait CallableResolver
@@ -36,7 +37,7 @@ trait CallableResolver
             $callback = $this->container->make($callback);
         }
 
-        if (!is_callable($callback)) {
+        if (!is_callable($callback) && !($callback instanceof MiddlewareInterface)) {
             throw new InvalidArgumentException('The callback parameter must be a valid callable.');
         }
 
