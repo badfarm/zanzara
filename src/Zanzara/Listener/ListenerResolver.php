@@ -21,7 +21,7 @@ abstract class ListenerResolver extends ListenerCollector
     protected $cache;
 
     /**
-     * @param Update $update
+     * @param  Update  $update
      * @return Listener[]
      */
     public function resolve(Update $update): array
@@ -51,11 +51,21 @@ abstract class ListenerResolver extends ListenerCollector
             case CallbackQuery::class:
                 $callbackQuery = $update->getCallbackQuery();
                 $text = $callbackQuery->getMessage() ? $callbackQuery->getMessage()->getText() : null;
+                $textListener = $dataListener = null;
                 if ($text) {
-                    $this->findAndPush($listeners, 'cb_query_texts', $text);
+                    $textListener = $this->findAndPush($listeners, 'cb_query_texts', $text);
                 }
                 if ($callbackQuery->getData()) {
-                    $this->findAndPush($listeners, 'cb_query_data', $callbackQuery->getData());
+                    $dataListener = $this->findAndPush($listeners, 'cb_query_data', $callbackQuery->getData());
+                }
+
+                $chatId = $update->getEffectiveChat() ? $update->getEffectiveChat()->getId() : null;
+                if ($chatId) {
+                    if (!$textListener && !$dataListener) {
+                        $this->cache->callHandlerByChatId($chatId, $update, $this->container);
+                        break;
+                    }
+                    $this->cache->deleteConversationCache($chatId);
                 }
                 break;
         }
@@ -67,9 +77,9 @@ abstract class ListenerResolver extends ListenerCollector
     }
 
     /**
-     * @param Listener[] $listeners
-     * @param string $listenerType
-     * @param string $listenerId
+     * @param  Listener[]  $listeners
+     * @param  string  $listenerType
+     * @param  string  $listenerId
      * @return Listener|null
      */
     private function findAndPush(array &$listeners, string $listenerType, string $listenerId): ?Listener
@@ -85,8 +95,8 @@ abstract class ListenerResolver extends ListenerCollector
     }
 
     /**
-     * @param Listener[] $listeners
-     * @param string $listenerType
+     * @param  Listener[]  $listeners
+     * @param  string  $listenerType
      */
     private function merge(array &$listeners, string $listenerType)
     {
