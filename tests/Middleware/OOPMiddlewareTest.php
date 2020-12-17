@@ -7,6 +7,7 @@ namespace Zanzara\Test\Middleware;
 use PHPUnit\Framework\TestCase;
 use Zanzara\Config;
 use Zanzara\Context;
+use Zanzara\Middleware\MiddlewareInterface;
 use Zanzara\Zanzara;
 
 /**
@@ -24,11 +25,12 @@ class OOPMiddlewareTest extends TestCase
 
         $bot->middleware([GlobalMiddleware::class, 'doHandle']);
         $bot->middleware(InvokeGlobalMiddleware::class);
+        $bot->middleware(InvokeGlobalMiddlewareInterface::class);
 
         $specificMiddleware = new class extends TestCase {
             public function doHandle(Context $ctx, $next)
             {
-                $this->assertEquals('value changed', $ctx->get('key'));
+                $this->assertEquals('value changed 2', $ctx->get('key'));
                 $ctx->set('key', 'value changed again');
                 $next($ctx);
             }
@@ -92,6 +94,23 @@ class InvokeGlobalMiddleware extends TestCase
     {
         $this->assertEquals('value', $ctx->get('key'));
         $ctx->set('key', 'value changed');
+        $next($ctx);
+    }
+
+}
+
+class InvokeGlobalMiddlewareInterface extends TestCase implements MiddlewareInterface
+{
+    public function __construct(Config $config)
+    {
+        parent::__construct();
+        $this->assertNotNull($config);
+    }
+
+    public function handle(Context $ctx, $next)
+    {
+        $this->assertEquals('value changed', $ctx->get('key'));
+        $ctx->set('key', 'value changed 2');
         $next($ctx);
     }
 
