@@ -51,21 +51,15 @@ abstract class ListenerResolver extends ListenerCollector
             case CallbackQuery::class:
                 $callbackQuery = $update->getCallbackQuery();
                 $text = $callbackQuery->getMessage() ? $callbackQuery->getMessage()->getText() : null;
-                $textListener = $dataListener = null;
                 if ($text) {
-                    $textListener = $this->findAndPush($listeners, 'cb_query_texts', $text);
+                    $this->findAndPush($listeners, 'cb_query_texts', $text);
                 }
                 if ($callbackQuery->getData()) {
-                    $dataListener = $this->findAndPush($listeners, 'cb_query_data', $callbackQuery->getData());
+                    $this->findAndPush($listeners, 'cb_query_data', $callbackQuery->getData());
                 }
-
                 $chatId = $update->getEffectiveChat() ? $update->getEffectiveChat()->getId() : null;
                 if ($chatId) {
-                    if (!$textListener && !$dataListener) {
-                        $this->cache->callHandlerByChatId($chatId, $update, $this->container);
-                        break;
-                    }
-                    $this->cache->deleteConversationCache($chatId);
+                    $this->cache->callHandlerByChatId($chatId, $update, $this->container);
                 }
                 break;
         }
