@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Zanzara\Listener;
 
+use React\Promise\Deferred;
+use React\Promise\PromiseInterface;
+use Zanzara\ConversationManager;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\Update;
-use Zanzara\ZanzaraCache;
 
 /**
  *
@@ -16,67 +18,94 @@ abstract class ListenerResolver extends ListenerCollector
 {
 
     /**
-     * @var ZanzaraCache
+     * @var ConversationManager
      */
-    protected $cache;
+    protected $conversationManager;
 
     /**
-     * @param  Update  $update
-     * @return Listener[]
+     * @param Update $update
+     * @return PromiseInterface
      */
-    public function resolve(Update $update): array
+    public function resolveListeners(Update $update): PromiseInterface
     {
+        $deferred = new Deferred();
         $listeners = [];
         $updateType = $update->getUpdateType();
+        $this->mergeListenersByType($listeners, $updateType);
+        $this->mergeListenersByType($listeners, Update::class);
 
         switch ($updateType) {
-
-            case Message::class:
-                $text = $update->getMessage()->getText();
-                if ($text) {
-                    $listener = $this->findAndPush($listeners, 'messages', $text);
-
-                    if ($listener) {
-                        //clean the state because a listener has been found
-                        $chatId = $update->getEffectiveChat()->getId();
-                        $this->cache->deleteConversationCache($chatId);
-                    } else {
-                        //there is no listener so we look for the state
-                        $chatId = $update->getEffectiveChat()->getId();
-                        $this->cache->callHandlerByChatId($chatId, $update, $this->container);
-                    }
-                }
-                break;
 
             case CallbackQuery::class:
                 $callbackQuery = $update->getCallbackQuery();
                 $text = $callbackQuery->getMessage() ? $callbackQuery->getMessage()->getText() : null;
                 if ($text) {
-                    $this->findAndPush($listeners, 'cb_query_texts', $text);
+                    $this->findListenerAndPush($listeners, 'cb_query_texts', $text);
                 }
                 if ($callbackQuery->getData()) {
-                    $this->findAndPush($listeners, 'cb_query_data', $callbackQuery->getData());
+                    $this->findListenerAndPush($listeners, 'cb_query_data', $callbackQuery->getData());
                 }
                 $chatId = $update->getEffectiveChat() ? $update->getEffectiveChat()->getId() : null;
                 if ($chatId) {
-                    $this->cache->callHandlerByChatId($chatId, $update, $this->container);
+                    $this->conversationManager->getConversationHandler($chatId)
+                        ->then(function ($handler) use ($deferred, &$listeners) {
+                            if ($handler) {
+                                $listeners[] = new Listener($handler, $this->container);
+                            }
+                            $deferred->resolve($listeners);
+                        });
+                } else {
+                    $deferred->resolve($listeners);
                 }
                 break;
+
+            case Message::class:
+                $text = $update->getMessage()->getText();
+                if ($text) {
+                    $chatId = $update->getEffectiveChat()->getId();
+                    $this->conversationManager->getConversationHandler($chatId)
+                        ->then(function ($handlerInfo) use ($chatId, $text, $deferred, &$listeners) {
+                            if (!$handlerInfo) {
+                                $this->findListenerAndPush($listeners, 'messages', $text);
+                                $deferred->resolve($listeners);
+                                return;
+                            }
+
+                            $skipListeners = $handlerInfo[1];
+                            if ($skipListeners) {
+                                $listeners[] = new Listener($handlerInfo[0], $this->container);
+                            } else {
+                                $listener = $this->findListenerAndPush($listeners, 'messages', $text);
+                                if (!$listener) {
+                                    $listeners[] = new Listener($handlerInfo[0], $this->container);
+                                } else {
+                                    $this->conversationManager->deleteConversationCache($chatId);
+                                }
+                            }
+
+                            $deferred->resolve($listeners);
+                        });
+
+                } else {
+                    $deferred->resolve($listeners);
+                }
+                break;
+
+            default:
+                $deferred->resolve($listeners);
+
         }
 
-        $this->merge($listeners, $updateType);
-        $this->merge($listeners, Update::class);
-
-        return $listeners;
+        return $deferred->promise();
     }
 
     /**
-     * @param  Listener[]  $listeners
-     * @param  string  $listenerType
-     * @param  string  $listenerId
+     * @param Listener[] $listeners
+     * @param string $listenerType
+     * @param string $listenerId
      * @return Listener|null
      */
-    private function findAndPush(array &$listeners, string $listenerType, string $listenerId): ?Listener
+    private function findListenerAndPush(array &$listeners, string $listenerType, string $listenerId): ?Listener
     {
         $typedListeners = $this->listeners[$listenerType] ?? [];
         foreach ($typedListeners as $regex => $listener) {
@@ -89,10 +118,10 @@ abstract class ListenerResolver extends ListenerCollector
     }
 
     /**
-     * @param  Listener[]  $listeners
-     * @param  string  $listenerType
+     * @param Listener[] $listeners
+     * @param string $listenerType
      */
-    private function merge(array &$listeners, string $listenerType)
+    private function mergeListenersByType(array &$listeners, string $listenerType)
     {
         $toMerge = $this->listeners[$listenerType] ?? null;
         if ($toMerge) {

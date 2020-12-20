@@ -41,6 +41,11 @@ class Zanzara extends ListenerResolver
     private $loop;
 
     /**
+     * @var ZanzaraCache
+     */
+    private $cache;
+
+    /**
      * @param string $botToken
      * @param Config|null $config
      */
@@ -73,6 +78,7 @@ class Zanzara extends ListenerResolver
             $this->container->set(\React\Filesystem\Filesystem::class, \React\Filesystem\Filesystem::create($this->loop));
         }
         $this->cache = $this->container->get(ZanzaraCache::class);
+        $this->conversationManager = $this->container->get(ConversationManager::class);
         $this->container->set(Zanzara::class, $this);
     }
 

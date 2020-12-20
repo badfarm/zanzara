@@ -61,8 +61,13 @@ class Context
     private $cache;
 
     /**
-     * @param  Update  $update
-     * @param  ContainerInterface  $container
+     * @var ConversationManager
+     */
+    private $conversationManager;
+
+    /**
+     * @param Update $update
+     * @param ContainerInterface $container
      */
     public function __construct(Update $update, ContainerInterface $container)
     {
@@ -70,10 +75,11 @@ class Context
         $this->container = $container;
         $this->browser = $container->get(Browser::class);
         $this->cache = $container->get(ZanzaraCache::class);
+        $this->conversationManager = $container->get(ConversationManager::class);
     }
 
     /**
-     * @param  string  $key
+     * @param string $key
      * @param $value
      */
     public function set(string $key, $value): void
@@ -82,7 +88,7 @@ class Context
     }
 
     /**
-     * @param  string  $key
+     * @param string $key
      * @return mixed|null
      */
     public function get(string $key)
@@ -117,15 +123,16 @@ class Context
      *
      * This callable must be take on parameter of type Context
      * @param $handler
+     * @param bool $skipListeners
      * @return PromiseInterface
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public function nextStep($handler): PromiseInterface
+    public function nextStep($handler, bool $skipListeners = false): PromiseInterface
     {
         // update is not null when used within the Context
         $chatId = $this->update->/** @scrutinizer ignore-call */ getEffectiveChat()->getId();
-        return $this->cache->setConversationHandler($chatId, $this->getCallable($handler));
+        return $this->conversationManager->setConversationHandler($chatId, $this->getCallable($handler), $skipListeners);
     }
 
     /**
@@ -140,7 +147,7 @@ class Context
     {
         // update is not null when used within the Context
         $chatId = $this->update->/** @scrutinizer ignore-call */ getEffectiveChat()->getId();
-        return $this->cache->deleteConversationCache($chatId);
+        return $this->conversationManager->deleteConversationCache($chatId);
     }
 
     /**

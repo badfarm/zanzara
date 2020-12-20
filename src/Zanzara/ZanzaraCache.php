@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
-use Closure;
-use Opis\Closure\SerializableClosure;
 use React\Cache\CacheInterface;
 use React\Promise\PromiseInterface;
 
@@ -34,8 +32,6 @@ class ZanzaraCache
      * @var Config
      */
     private $config;
-
-    private const CONVERSATION = "CONVERSATION";
 
     private const CHATDATA = "CHATDATA";
 
@@ -185,36 +181,6 @@ class ZanzaraCache
     }
 
     /**
-     * Get key of the conversation by chatId
-     * @param $chatId
-     * @return string
-     */
-    private function getConversationKey(int $chatId)
-    {
-        return ZanzaraCache::CONVERSATION . strval($chatId);
-    }
-
-    public function setConversationHandler(int $chatId, $handler)
-    {
-        $key = "state";
-        $cacheKey = $this->getConversationKey($chatId);
-        if ($handler instanceof Closure) {
-            $handler = new SerializableClosure($handler);
-        }
-        return $this->doSet($cacheKey, $key, serialize($handler));
-    }
-
-    /**
-     * delete a cache iteam and return the promise
-     * @param $chatId
-     * @return PromiseInterface
-     */
-    public function deleteConversationCache(int $chatId)
-    {
-        return $this->deleteCache([$this->getConversationKey($chatId)]);
-    }
-
-    /**
      * Use only to call native method of CacheInterface
      * @param $name
      * @param $arguments
@@ -359,32 +325,6 @@ class ZanzaraCache
                 }
                 return $result;
             });
-        });
-    }
-
-    /**
-     * Used by ListenerResolver to call the correct handler stored inside cache
-     * @param $chatId
-     * @param $update
-     * @param $container
-     * @return PromiseInterface
-     */
-    public function callHandlerByChatId(int $chatId, $update, $container)
-    {
-        return $this->cache->get($this->getConversationKey($chatId))->then(function ($conversation) use ($update, $container) {
-            if (!empty($conversation["state"])) {
-                $handler = $conversation["state"];
-                $handler = unserialize($handler);
-                if ($handler instanceof SerializableClosure) {
-                    $handler = $handler->getClosure();
-                }
-                call_user_func($handler, new Context($update, $container));
-            }
-        }, function ($err) use ($update) {
-            $this->logger->errorUpdate($update, $err);
-        })->/** @scrutinizer ignore-call */ otherwise(function ($err) use ($update, $chatId) {
-            $this->logger->errorUpdate($err, $update);
-            $this->deleteConversationCache($chatId);
         });
     }
 
