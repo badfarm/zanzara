@@ -8,6 +8,7 @@ use Psr\Container\ContainerInterface;
 use React\EventLoop\LoopInterface;
 use Zanzara\Config;
 use Zanzara\Context;
+use Zanzara\Listener\Listener;
 use Zanzara\Telegram\Telegram;
 use Zanzara\Telegram\Type\Update;
 use Zanzara\Zanzara;
@@ -82,12 +83,15 @@ abstract class UpdateMode implements UpdateModeInterface
     protected function processUpdate(Update $update)
     {
         $update->detectUpdateType();
-        $context = new Context($update, $this->container);
-        $listeners = $this->zanzara->resolve($update);
-        foreach ($listeners as $listener) {
-            $middlewareTip = $listener->getTip();
-            $middlewareTip($context);
-        }
+        $this->zanzara->resolveListeners($update)
+            ->then(function ($listeners) use ($update) {
+                /** @var Listener[] $listeners */
+                foreach ($listeners as $listener) {
+                    $context = new Context($update, $this->container);
+                    $middlewareTip = $listener->getTip();
+                    $middlewareTip($context);
+                }
+            });
     }
 
 }
