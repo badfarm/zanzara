@@ -91,6 +91,8 @@ abstract class UpdateMode implements UpdateModeInterface
                     $middlewareTip = $listener->getTip();
                     $middlewareTip($context);
                 }
+            })->otherwise(function ($e) use ($update) {
+                $this->logger->error("Unable to resolve listeners for update $update, reason: $e");
             });
     }
 

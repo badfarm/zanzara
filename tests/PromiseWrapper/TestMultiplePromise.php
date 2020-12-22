@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PromiseWrapper;
+namespace Zanzara\Test\PromiseWrapper;
 
-use Clue\React\Buzz\Browser;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use React\EventLoop\Factory;
+use React\Http\Browser;
 
 /**
  * Test case for https://github.com/reactphp/promise/issues/167.

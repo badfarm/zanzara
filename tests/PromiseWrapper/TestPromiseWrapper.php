@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Zanzara\Test\PromiseWrapper;
 
-use Clue\React\Buzz\Browser;
 use PHPUnit\Framework\TestCase;
+use React\Http\Browser;
 use React\Promise\PromiseInterface;
 use Zanzara\Telegram\Type\Update;
 

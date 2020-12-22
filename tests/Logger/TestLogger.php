@@ -36,7 +36,7 @@ class TestLogger extends TestCase
         $this->assertFileExists($logFile);
         $content = file_get_contents($logFile);
         $regex = "/\[.*\] zanzara.ERROR: Failed to call Telegram Bot Api, .*/";
-        $this->assertRegExp($regex, $content);
+        $this->assertMatchesRegularExpression($regex, $content);
         unlink($logFile);
     }
 

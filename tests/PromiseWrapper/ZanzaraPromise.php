@@ -33,7 +33,7 @@ class ZanzaraPromise implements PromiseInterface
     {
         $this->promise = $promise;
         $this->class = $class;
-        $this->zanzaraMapper = new ZanzaraMapper();
+        $this->zanzaraMapper = new ZanzaraMapper(new \JsonMapper());
     }
 
     /**

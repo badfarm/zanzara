@@ -6,7 +6,6 @@ namespace Zanzara\Telegram;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
-use React\Filesystem\Filesystem;
 use React\Http\Browser;
 use React\Http\Message\ResponseException;
 use React\Promise\PromiseInterface;
@@ -1662,7 +1661,7 @@ trait TelegramTrait
      */
     private function prepareMultipartDataAsync($params)
     {
-        $filesystem = $this->container->get(Filesystem::class);
+        $filesystem = $this->container->get(\React\Filesystem\Filesystem::class);
         $multipart_data = [];
         $promises = [];
         foreach ($params as $key => $value) {

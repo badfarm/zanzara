@@ -53,6 +53,9 @@ abstract class ListenerResolver extends ListenerCollector
                                 $listeners[] = new Listener($handler, $this->container);
                             }
                             $deferred->resolve($listeners);
+                        })->otherwise(function ($e) use ($deferred) {
+                            // if something goes wrong, reject the promise
+                            $deferred->reject($e);
                         });
                 } else {
                     $deferred->resolve($listeners);
@@ -84,6 +87,9 @@ abstract class ListenerResolver extends ListenerCollector
                             }
 
                             $deferred->resolve($listeners);
+                        })->otherwise(function ($e) use ($deferred) {
+                            // if something goes wrong, reject the promise
+                            $deferred->reject($e);
                         });
 
                 } else {
