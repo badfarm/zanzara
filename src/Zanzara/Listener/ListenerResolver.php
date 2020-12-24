@@ -48,9 +48,9 @@ abstract class ListenerResolver extends ListenerCollector
                 $chatId = $update->getEffectiveChat() ? $update->getEffectiveChat()->getId() : null;
                 if ($chatId) {
                     $this->conversationManager->getConversationHandler($chatId)
-                        ->then(function ($handler) use ($deferred, &$listeners) {
-                            if ($handler) {
-                                $listeners[] = new Listener($handler, $this->container);
+                        ->then(function ($handlerInfo) use ($deferred, &$listeners) {
+                            if ($handlerInfo) {
+                                $listeners[] = new Listener($handlerInfo[0], $this->container);
                             }
                             $deferred->resolve($listeners);
                         })->otherwise(function ($e) use ($deferred) {
