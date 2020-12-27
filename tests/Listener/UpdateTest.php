@@ -33,4 +33,24 @@ class UpdateTest extends TestCase
         $bot->run();
     }
 
+    /**
+     *
+     */
+    public function testFallback()
+    {
+        $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
+        $bot = new Zanzara("test", $config);
+
+        $bot->onText('testCommand', function (Context $ctx){});
+
+        $bot->fallback(function (Context $ctx) {
+            $update = $ctx->getUpdate();
+            $this->assertSame(52259544, $update->getUpdateId());
+        });
+
+        $bot->run();
+    }
+
 }
