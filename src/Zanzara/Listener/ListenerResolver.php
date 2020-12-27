@@ -120,6 +120,12 @@ abstract class ListenerResolver extends ListenerCollector
                 return $listener;
             }
         }
+
+        if ($this->fallbackListener !== null) {
+            $listeners[] = $this->fallbackListener;
+            return $this->fallbackListener;
+        }
+
         return null;
     }
 

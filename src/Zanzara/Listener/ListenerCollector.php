@@ -57,6 +57,11 @@ abstract class ListenerCollector
     protected $listeners = [];
 
     /**
+     * @var Listener
+     */
+    protected $fallbackListener;
+
+    /**
      * @var ContainerInterface
      */
     protected $container;
@@ -418,6 +423,21 @@ abstract class ListenerCollector
     {
         $listener = new Listener($callback, $this->container);
         $this->listeners[Update::class][] = $listener;
+        return $listener;
+    }
+
+    /**
+     * If no listener matches the current update, this listener will be called if specified.
+     *
+     * @param $callback
+     * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function fallback($callback): MiddlewareCollector
+    {
+        $listener = new Listener($callback, $this->container);
+        $this->fallbackListener = $listener;
         return $listener;
     }
 
