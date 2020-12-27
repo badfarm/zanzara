@@ -64,42 +64,41 @@ abstract class ListenerResolver extends ListenerCollector
 
             case Message::class:
                 $text = $update->getMessage()->getText();
-                if ($text) {
-                    $chatId = $update->getEffectiveChat()->getId();
-                    $this->conversationManager->getConversationHandler($chatId)
-                        ->then(function ($handlerInfo) use ($chatId, $text, $deferred, &$listeners) {
-                            if (!$handlerInfo) {
+                $chatId = $update->getEffectiveChat()->getId();
+                $this->conversationManager->getConversationHandler($chatId)
+                    ->then(function ($handlerInfo) use ($chatId, $text, $deferred, &$listeners) {
+                        if (!$handlerInfo) {
+                            if ($text) {
                                 $this->findListenerAndPush($listeners, 'messages', $text);
-                                $deferred->resolve($listeners);
-                                return;
+                            } elseif ($this->fallbackListener) {
+                                $listeners[] = $this->fallbackListener;
                             }
+                            $deferred->resolve($listeners);
+                            return;
+                        }
 
-                            $skipListeners = $handlerInfo[1];
-                            if ($skipListeners) {
+                        $skipListeners = $handlerInfo[1];
+
+                        if (!$skipListeners && $text) {
+                            $listener = $this->findListenerAndPush($listeners, 'messages', $text);
+                            if (!$listener) {
                                 $listeners[] = new Listener($handlerInfo[0], $this->container);
                             } else {
-                                $listener = $this->findListenerAndPush($listeners, 'messages', $text);
-                                if (!$listener) {
-                                    $listeners[] = new Listener($handlerInfo[0], $this->container);
-                                } else {
-                                    $this->conversationManager->deleteConversationCache($chatId);
-                                }
+                                $this->conversationManager->deleteConversationCache($chatId);
                             }
+                        } else {
+                            $listeners[] = new Listener($handlerInfo[0], $this->container);
+                        }
 
-                            $deferred->resolve($listeners);
-                        })->otherwise(function ($e) use ($deferred) {
-                            // if something goes wrong, reject the promise
-                            $deferred->reject($e);
-                        });
-
-                } else {
-                    $deferred->resolve($listeners);
-                }
+                        $deferred->resolve($listeners);
+                    })->otherwise(function ($e) use ($deferred) {
+                        // if something goes wrong, reject the promise
+                        $deferred->reject($e);
+                    });
                 break;
 
             default:
                 $deferred->resolve($listeners);
-
         }
 
         return $deferred->promise();
