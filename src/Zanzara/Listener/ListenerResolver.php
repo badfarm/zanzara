@@ -40,10 +40,10 @@ abstract class ListenerResolver extends ListenerCollector
                 $callbackQuery = $update->getCallbackQuery();
                 $text = $callbackQuery->getMessage() ? $callbackQuery->getMessage()->getText() : null;
                 if ($text) {
-                    $this->findListenerAndPush($listeners, 'cb_query_texts', $text);
+                    $this->findListenerAndPush($listeners, 'cb_query_texts', $text, true);
                 }
                 if ($callbackQuery->getData()) {
-                    $this->findListenerAndPush($listeners, 'cb_query_data', $callbackQuery->getData());
+                    $this->findListenerAndPush($listeners, 'cb_query_data', $callbackQuery->getData(), true);
                 }
                 $chatId = $update->getEffectiveChat() ? $update->getEffectiveChat()->getId() : null;
                 if ($chatId) {
@@ -80,7 +80,7 @@ abstract class ListenerResolver extends ListenerCollector
                         $skipListeners = $handlerInfo[1];
 
                         if (!$skipListeners && $text) {
-                            $listener = $this->findListenerAndPush($listeners, 'messages', $text);
+                            $listener = $this->findListenerAndPush($listeners, 'messages', $text, true);
                             if (!$listener) {
                                 $listeners[] = new Listener($handlerInfo[0], $this->container);
                             } else {
@@ -108,9 +108,10 @@ abstract class ListenerResolver extends ListenerCollector
      * @param Listener[] $listeners
      * @param string $listenerType
      * @param string $listenerId
+     * @param bool $skipFallback
      * @return Listener|null
      */
-    private function findListenerAndPush(array &$listeners, string $listenerType, string $listenerId): ?Listener
+    private function findListenerAndPush(array &$listeners, string $listenerType, string $listenerId, bool $skipFallback = false): ?Listener
     {
         $typedListeners = $this->listeners[$listenerType] ?? [];
         foreach ($typedListeners as $regex => $listener) {
@@ -120,7 +121,7 @@ abstract class ListenerResolver extends ListenerCollector
             }
         }
 
-        if ($this->fallbackListener !== null) {
+        if ($this->fallbackListener !== null && !$skipFallback) {
             $listeners[] = $this->fallbackListener;
             return $this->fallbackListener;
         }
