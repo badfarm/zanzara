@@ -57,11 +57,6 @@ abstract class ListenerCollector
     protected $listeners = [];
 
     /**
-     * @var Listener
-     */
-    protected $fallbackListener;
-
-    /**
      * @var ContainerInterface
      */
     protected $container;
@@ -437,7 +432,7 @@ abstract class ListenerCollector
     public function fallback($callback): MiddlewareCollector
     {
         $listener = new Listener($callback, $this->container);
-        $this->fallbackListener = $listener;
+        $this->listeners['fallback'] = $listener;
         return $listener;
     }
 

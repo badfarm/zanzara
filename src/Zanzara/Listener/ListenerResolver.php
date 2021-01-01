@@ -68,11 +68,7 @@ abstract class ListenerResolver extends ListenerCollector
                 $this->conversationManager->getConversationHandler($chatId)
                     ->then(function ($handlerInfo) use ($chatId, $text, $deferred, &$listeners) {
                         if (!$handlerInfo) {
-                            if ($text) {
-                                $this->findListenerAndPush($listeners, 'messages', $text);
-                            } elseif ($this->fallbackListener) {
-                                $listeners[] = $this->fallbackListener;
-                            }
+                            $this->findListenerAndPush($listeners, 'messages', $text);
                             $deferred->resolve($listeners);
                             return;
                         }
@@ -107,23 +103,25 @@ abstract class ListenerResolver extends ListenerCollector
     /**
      * @param Listener[] $listeners
      * @param string $listenerType
-     * @param string $listenerId
+     * @param string|null $listenerId
      * @param bool $skipFallback
      * @return Listener|null
      */
-    private function findListenerAndPush(array &$listeners, string $listenerType, string $listenerId, bool $skipFallback = false): ?Listener
+    private function findListenerAndPush(array &$listeners, string $listenerType, ?string $listenerId = null, bool $skipFallback = false): ?Listener
     {
-        $typedListeners = $this->listeners[$listenerType] ?? [];
-        foreach ($typedListeners as $regex => $listener) {
-            if (preg_match($regex, $listenerId)) {
-                $listeners[] = $listener;
-                return $listener;
+        if ($listenerId !== null) {
+            $typedListeners = $this->listeners[$listenerType] ?? [];
+            foreach ($typedListeners as $regex => $listener) {
+                if (preg_match($regex, $listenerId)) {
+                    $listeners[] = $listener;
+                    return $listener;
+                }
             }
         }
 
-        if ($this->fallbackListener !== null && !$skipFallback) {
-            $listeners[] = $this->fallbackListener;
-            return $this->fallbackListener;
+        if (isset($this->listeners['fallback']) && !$skipFallback) {
+            $listeners[] = $this->listeners['fallback'];
+            return $this->listeners['fallback'];
         }
 
         return null;

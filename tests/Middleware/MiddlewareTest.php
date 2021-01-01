@@ -44,4 +44,23 @@ class MiddlewareTest extends TestCase
         $bot->run();
     }
 
+    public function testMiddlewareOnFallback()
+    {
+        $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
+        $bot = new Zanzara("test", $config);
+
+        $bot->middleware(function (Context $ctx, $next) {
+            $ctx->set('exec', true);
+            $next($ctx);
+        });
+
+        $bot->fallback(function (Context $ctx) {
+            $this->assertNotNull($ctx->get('exec'));
+        });
+
+        $bot->run();
+    }
+
 }
