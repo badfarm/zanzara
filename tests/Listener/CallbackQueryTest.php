@@ -99,9 +99,9 @@ class CallbackQueryTest extends TestCase
             $this->assertSame('BAAAAHbYAAA4skAJl8HevRCfRb8', $cbQuery->getInlineMessageId());
             $this->assertSame('777777777777777777', $cbQuery->getChatInstance());
             $this->assertSame('ok', $cbQuery->getData());
+            $this->assertTrue($ctx->isCallbackQuery());
         });
 
         $bot->run();
     }
-
 }
