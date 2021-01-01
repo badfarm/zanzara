@@ -488,4 +488,11 @@ class Context
         return $this->container->get(LoopInterface::class);
     }
 
+    /**
+     * @return bool
+     */
+    public function isCallbackQuery(): bool
+    {
+        return $this->getCallbackQuery() !== null;
+    }
 }
