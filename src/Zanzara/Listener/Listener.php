@@ -53,8 +53,7 @@ class Listener extends MiddlewareCollector implements MiddlewareInterface
      */
     public function handle(Context $ctx, $next)
     {
-        $parameters = array_merge([$ctx], $this->parameters, [$next]);
-        call_user_func_array($this->callback, $parameters);
+        call_user_func($this->callback, $ctx, ...array_merge($this->parameters, [$next]));
     }
 
     /**
