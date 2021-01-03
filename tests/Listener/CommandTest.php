@@ -83,4 +83,40 @@ class CommandTest extends TestCase
         $bot->run();
     }
 
+    public function testCommandWithParameters()
+    {
+        $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateStream(__DIR__ . '/../update_types/command_parameters.json');
+        $bot = new Zanzara("test", $config);
+
+        $bot->onCommand('start {param} {otherParam}', function (Context $ctx, $param, $otherParam) {
+            $update = $ctx->getUpdate();
+            $message = $update->getMessage();
+            $this->assertSame(52259544, $update->getUpdateId());
+            $this->assertSame(23756, $message->getMessageId());
+            $this->assertSame(222222222, $message->getFrom()->getId());
+            $this->assertSame(false, $message->getFrom()->isBot());
+            $this->assertSame('Michael', $message->getFrom()->getFirstName());
+            $this->assertSame('mscott', $message->getFrom()->getUsername());
+            $this->assertSame('it', $message->getFrom()->getLanguageCode());
+            $this->assertSame(222222222, $message->getChat()->getId());
+            $this->assertSame('Michael', $message->getChat()->getFirstName());
+            $this->assertSame('mscott', $message->getChat()->getUsername());
+            $this->assertSame('private', $message->getChat()->getType());
+            $this->assertSame(1584984664, $message->getDate());
+            $this->assertSame('/start ciao hello', $message->getText());
+            $this->assertSame('ciao', $param);
+            $this->assertSame('hello', $otherParam);
+            $this->assertCount(1, $message->getEntities());
+            $entity = $message->getEntities()[0];
+            $this->assertInstanceOf(MessageEntity::class, $entity);
+            $this->assertEquals(0, $entity->getOffset());
+            $this->assertEquals(6, $entity->getLength());
+            $this->assertEquals('bot_command', $entity->getType());
+        });
+
+        $bot->run();
+    }
+
 }

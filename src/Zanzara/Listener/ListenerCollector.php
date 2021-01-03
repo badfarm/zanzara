@@ -78,7 +78,9 @@ abstract class ListenerCollector
      */
     public function onCommand(string $command, $callback): MiddlewareCollector
     {
-        $command = "/^\/$command$/";
+        $pattern = str_replace('/', '\/', "/{$command}");
+        $command = '/^'.preg_replace('/\{((?:(?!\d+,?\d+?)\w)+?)\}/', '(?<$1>.*)', $pattern).' ?$/miu';
+
         $listener = new Listener($callback, $this->container, $command);
         $this->listeners['messages'][$command] = $listener;
         return $listener;

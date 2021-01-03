@@ -77,6 +77,34 @@ class RegexTest extends TestCase
         $bot->run();
     }
 
+    public function testTextWithParameters()
+    {
+        $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateStream(__DIR__ . '/../update_types/message.json');
+        $bot = new Zanzara('test', $config);
+
+        $bot->onText('(?<param>[a-zA-Z]{5})', function (Context $ctx, $param) {
+            $message = $ctx->getMessage();
+            $this->assertSame(52259544, $ctx->getUpdateId());
+            $this->assertSame(23756, $message->getMessageId());
+            $this->assertSame(222222222, $message->getFrom()->getId());
+            $this->assertSame(false, $message->getFrom()->isBot());
+            $this->assertSame('Michael', $message->getFrom()->getFirstName());
+            $this->assertSame('mscott', $message->getFrom()->getUsername());
+            $this->assertSame('it', $message->getFrom()->getLanguageCode());
+            $this->assertSame(222222222, $message->getChat()->getId());
+            $this->assertSame('Michael', $message->getChat()->getFirstName());
+            $this->assertSame('mscott', $message->getChat()->getUsername());
+            $this->assertSame('private', $message->getChat()->getType());
+            $this->assertSame(1584984664, $message->getDate());
+            $this->assertSame('Hello', $message->getText());
+            $this->assertSame('Hello', $param);
+        });
+
+        $bot->run();
+    }
+
     public function testCallbackQuery()
     {
         $config = new Config();

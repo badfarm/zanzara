@@ -29,9 +29,14 @@ class Listener extends MiddlewareCollector implements MiddlewareInterface
     protected $callback;
 
     /**
+     * @var array
+     */
+    protected $parameters = [];
+
+    /**
      * @param  $callback
-     * @param  ContainerInterface  $container
-     * @param  string|null  $id
+     * @param ContainerInterface $container
+     * @param string|null $id
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
@@ -48,7 +53,8 @@ class Listener extends MiddlewareCollector implements MiddlewareInterface
      */
     public function handle(Context $ctx, $next)
     {
-        call_user_func($this->callback, $ctx, $next);
+        $parameters = array_merge([$ctx], $this->parameters, [$next]);
+        call_user_func_array($this->callback, $parameters);
     }
 
     /**
@@ -57,6 +63,16 @@ class Listener extends MiddlewareCollector implements MiddlewareInterface
     public function getTip(): MiddlewareNode
     {
         return $this->tip;
+    }
+
+    /**
+     * @param array $parameters
+     * @return Listener
+     */
+    public function setParameters(array $parameters)
+    {
+        $this->parameters = $parameters;
+        return $this;
     }
 
 }
