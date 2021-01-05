@@ -177,7 +177,7 @@ abstract class ListenerCollector
      */
     public function onCbQueryText(string $text, $callback): MiddlewareCollector
     {
-        $text = "/$text/";
+        $text = '/^'.preg_replace('/\{((?:(?!\d+,?\d+?)\w)+?)\}/miu', '(?<$1>.*)', $text).' ?$/miu';
         $listener = new Listener($callback, $this->container, $text);
         $this->listeners['cb_query_texts'][$text] = $listener;
         return $listener;
