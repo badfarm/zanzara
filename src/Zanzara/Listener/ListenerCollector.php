@@ -31,6 +31,13 @@ use Zanzara\Telegram\Type\Update;
  */
 abstract class ListenerCollector
 {
+    /**
+     * Match every parameter in the form of: {param}
+     * Doesn't match number parameters, like {12},
+     * to keep allow regex with quantifiers as command/text
+     * listeners.
+     */
+    protected const PARAMETER_REGEX = '/\{((?:(?!\d+,?\d+?)\w)+?)\}/miu';
 
     /**
      * Associative array for listeners.
@@ -70,6 +77,9 @@ abstract class ListenerCollector
      * Listen for the specified command.
      * Eg. $bot->onCommand('start', function(Context $ctx) {});
      *
+     * You can also parameterized the command, eg:
+     * Eg. $bot->onCommand('start {myParam}', function(Context $ctx, $myParam) {});
+     *
      * @param  string  $command
      * @param $callback
      * @return MiddlewareCollector
@@ -78,7 +88,9 @@ abstract class ListenerCollector
      */
     public function onCommand(string $command, $callback): MiddlewareCollector
     {
-        $command = "/^\/$command$/";
+        $pattern = str_replace('/', '\/', "/{$command}");
+        $command = '/^'.preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $pattern).' ?$/miu';
+
         $listener = new Listener($callback, $this->container, $command);
         $this->listeners['messages'][$command] = $listener;
         return $listener;
@@ -91,6 +103,9 @@ abstract class ListenerCollector
      * Text is a regex, so you could also do something like:
      * $bot->onText('[a-zA-Z]{15}?', function(Context $ctx) {});
      *
+     * You can also parameterized the text, eg:
+     * Eg. $bot->onText('Hello {name}', function(Context $ctx, $name) {});
+     *
      * @param  string  $text
      * @param  $callback
      * @return MiddlewareCollector
@@ -99,7 +114,7 @@ abstract class ListenerCollector
      */
     public function onText(string $text, $callback): MiddlewareCollector
     {
-        $text = "/$text/";
+        $text = '/^'.preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $text).' ?$/miu';
         $listener = new Listener($callback, $this->container, $text);
         $this->listeners['messages'][$text] = $listener;
         return $listener;
@@ -167,6 +182,9 @@ abstract class ListenerCollector
      * Text is a regex, so you could also do something like:
      * $bot->onCbQueryText('[a-zA-Z]{27}?', function(Context $ctx) {});
      *
+     * You can also parameterized the text, eg:
+     * Eg. $bot->onCbQueryText('Hello {name}', function(Context $ctx, $name) {});
+     *
      * @param  string  $text
      * @param  $callback
      * @return MiddlewareCollector
@@ -175,7 +193,7 @@ abstract class ListenerCollector
      */
     public function onCbQueryText(string $text, $callback): MiddlewareCollector
     {
-        $text = "/$text/";
+        $text = '/^'.preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $text).' ?$/miu';
         $listener = new Listener($callback, $this->container, $text);
         $this->listeners['cb_query_texts'][$text] = $listener;
         return $listener;

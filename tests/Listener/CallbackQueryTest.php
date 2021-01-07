@@ -104,4 +104,19 @@ class CallbackQueryTest extends TestCase
 
         $bot->run();
     }
+
+    public function testCbQueryTextWithParameters()
+    {
+        $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateStream(__DIR__ . '/../update_types/callback_query.json');
+        $bot = new Zanzara("test", $config);
+
+        $bot->onCbQueryText("Manage your {param}", function (Context $ctx, $param) {
+            $this->assertSame('data', $param);
+        });
+
+        $bot->run();
+    }
+
 }
