@@ -31,6 +31,13 @@ use Zanzara\Telegram\Type\Update;
  */
 abstract class ListenerCollector
 {
+    /**
+     * Match every parameter in the form of: {param}
+     * Doesn't match number paramenters, like {12},
+     * to keep allow regex with quantifiers as command/text
+     * listeners.
+     */
+    protected const PARAMETER_REGEX = '/\{((?:(?!\d+,?\d+?)\w)+?)\}/miu';
 
     /**
      * Associative array for listeners.
@@ -79,7 +86,7 @@ abstract class ListenerCollector
     public function onCommand(string $command, $callback): MiddlewareCollector
     {
         $pattern = str_replace('/', '\/', "/{$command}");
-        $command = '/^'.preg_replace('/\{((?:(?!\d+,?\d+?)\w)+?)\}/miu', '(?<$1>.*)', $pattern).' ?$/miu';
+        $command = '/^'.preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $pattern).' ?$/miu';
 
         $listener = new Listener($callback, $this->container, $command);
         $this->listeners['messages'][$command] = $listener;
@@ -101,7 +108,7 @@ abstract class ListenerCollector
      */
     public function onText(string $text, $callback): MiddlewareCollector
     {
-        $text = '/^'.preg_replace('/\{((?:(?!\d+,?\d+?)\w)+?)\}/miu', '(?<$1>.*)', $text).' ?$/miu';
+        $text = '/^'.preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $text).' ?$/miu';
         $listener = new Listener($callback, $this->container, $text);
         $this->listeners['messages'][$text] = $listener;
         return $listener;
@@ -177,7 +184,7 @@ abstract class ListenerCollector
      */
     public function onCbQueryText(string $text, $callback): MiddlewareCollector
     {
-        $text = '/^'.preg_replace('/\{((?:(?!\d+,?\d+?)\w)+?)\}/miu', '(?<$1>.*)', $text).' ?$/miu';
+        $text = '/^'.preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $text).' ?$/miu';
         $listener = new Listener($callback, $this->container, $text);
         $this->listeners['cb_query_texts'][$text] = $listener;
         return $listener;
