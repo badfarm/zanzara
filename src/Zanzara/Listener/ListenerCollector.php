@@ -33,7 +33,7 @@ abstract class ListenerCollector
 {
     /**
      * Match every parameter in the form of: {param}
-     * Doesn't match number paramenters, like {12},
+     * Doesn't match number parameters, like {12},
      * to keep allow regex with quantifiers as command/text
      * listeners.
      */
@@ -77,6 +77,9 @@ abstract class ListenerCollector
      * Listen for the specified command.
      * Eg. $bot->onCommand('start', function(Context $ctx) {});
      *
+     * You can also parameterized the command, eg:
+     * Eg. $bot->onCommand('start {myParam}', function(Context $ctx, $myParam) {});
+     *
      * @param  string  $command
      * @param $callback
      * @return MiddlewareCollector
@@ -99,6 +102,9 @@ abstract class ListenerCollector
      *
      * Text is a regex, so you could also do something like:
      * $bot->onText('[a-zA-Z]{15}?', function(Context $ctx) {});
+     *
+     * You can also parameterized the text, eg:
+     * Eg. $bot->onText('Hello {name}', function(Context $ctx, $name) {});
      *
      * @param  string  $text
      * @param  $callback
@@ -175,6 +181,9 @@ abstract class ListenerCollector
      *
      * Text is a regex, so you could also do something like:
      * $bot->onCbQueryText('[a-zA-Z]{27}?', function(Context $ctx) {});
+     *
+     * You can also parameterized the text, eg:
+     * Eg. $bot->onCbQueryText('Hello {name}', function(Context $ctx, $name) {});
      *
      * @param  string  $text
      * @param  $callback
