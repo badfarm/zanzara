@@ -142,7 +142,7 @@ class RegexTest extends TestCase
         $config->setUpdateStream(__DIR__ . '/../update_types/callback_query.json');
         $bot = new Zanzara('test', $config);
 
-        $bot->onCbQueryText('.y.', function (Context $ctx) {
+        $bot->onCbQueryText('.+y.+', function (Context $ctx) {
             $callbackQuery = $ctx->getCallbackQuery();
             $message = $callbackQuery->getMessage();
             $this->assertSame('666728699048485871', $callbackQuery->getId());
