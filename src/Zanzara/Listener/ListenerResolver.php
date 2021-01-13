@@ -23,7 +23,7 @@ abstract class ListenerResolver extends ListenerCollector
     protected $conversationManager;
 
     /**
-     * @param Update $update
+     * @param  Update  $update
      * @return PromiseInterface
      */
     public function resolveListeners(Update $update): PromiseInterface
@@ -31,76 +31,73 @@ abstract class ListenerResolver extends ListenerCollector
         $deferred = new Deferred();
         $listeners = [];
         $updateType = $update->getUpdateType();
-        $this->mergeListenersByType($listeners, $updateType);
-        $this->mergeListenersByType($listeners, Update::class);
 
-        switch ($updateType) {
-
-            case CallbackQuery::class:
-                $chatId = $update->getEffectiveChat() ? $update->getEffectiveChat()->getId() : null;
-                $callbackQuery = $update->getCallbackQuery();
-                $text = $callbackQuery->getMessage() ? $callbackQuery->getMessage()->getText() : null;
-                $this->conversationManager->getConversationHandler($chatId)
-                    ->then(function ($handlerInfo) use ($deferred, $callbackQuery, $text, &$listeners) {
-                        if (!$handlerInfo) { // if we are not in a conversation, call the listeners as usual
-                            if ($text) {
-                                $this->findListenerAndPush($listeners, 'cb_query_texts', $text);
-                            }
-                            if ($callbackQuery->getData()) {
-                                $this->findListenerAndPush($listeners, 'cb_query_data', $callbackQuery->getData());
-                            }
-                        } else { // if we are in a conversation, redirect it only to the conversation step
-                            $listeners[] = new Listener($handlerInfo[0], $this->container);
+        if ($updateType === CallbackQuery::class) {
+            $chatId = $update->getEffectiveChat() ? $update->getEffectiveChat()->getId() : null;
+            $callbackQuery = $update->getCallbackQuery();
+            $text = $callbackQuery->getMessage() ? $callbackQuery->getMessage()->getText() : null;
+            $this->conversationManager->getConversationHandler($chatId)
+                ->then(function ($handlerInfo) use ($updateType, $deferred, $callbackQuery, $text, &$listeners) {
+                    // if we are not in a conversation, call the listeners as usual
+                    if (!$handlerInfo) {
+                        $this->mergeListenersByType($listeners, $updateType);
+                        $this->mergeListenersByType($listeners, Update::class);
+                        if ($callbackQuery->getData()) {
+                            $this->findListenerAndPush($listeners, 'cb_query_data', $callbackQuery->getData(), true);
                         }
-                        $deferred->resolve($listeners);
-                    })->otherwise(function ($e) use ($deferred) {
-                        // if something goes wrong, reject the promise
-                        $deferred->reject($e);
-                    });
-                break;
-
-            case Message::class:
-                $text = $update->getMessage()->getText();
-                $chatId = $update->getEffectiveChat()->getId();
-                $this->conversationManager->getConversationHandler($chatId)
-                    ->then(function ($handlerInfo) use ($chatId, $text, $deferred, &$listeners) {
-                        if (!$handlerInfo) { // if we are not in a conversation, call the listeners as usual
-                            $this->findListenerAndPush($listeners, 'messages', $text);
-                        } elseif (!$handlerInfo[1] && $text) {
-                            // if we are in a conversation, and listeners are not skipped by the step call,
-                            // try to call the matching listeners
-                            $listener = $this->findListenerAndPush($listeners, 'messages', $text, true);
-                            if (!$listener) {
-                                // if no listeners are found, call the next conversation step
-                                $listeners[] = new Listener($handlerInfo[0], $this->container);
-                            } else {
-                                // if listener is found, escape the conversation
-                                $this->conversationManager->deleteConversationCache($chatId);
-                            }
-                        } else {
-                            // if the coversation is forcing only the conversation handlers,
-                            // skip the other listeners
-                            $listeners[] = new Listener($handlerInfo[0], $this->container);
+                        if ($text) {
+                            $this->findListenerAndPush($listeners, 'cb_query_texts', $text, true);
                         }
-                        $deferred->resolve($listeners);
-                    })->otherwise(function ($e) use ($deferred) {
-                        // if something goes wrong, reject the promise
-                        $deferred->reject($e);
-                    });
-                break;
-
-            default:
-                $deferred->resolve($listeners);
+                    } else { // if we are in a conversation, redirect it only to the conversation step
+                        $listeners[] = new Listener($handlerInfo[0], $this->container);
+                    }
+                    $deferred->resolve($listeners);
+                })->otherwise(function ($e) use ($deferred) {
+                    // if something goes wrong, reject the promise
+                    $deferred->reject($e);
+                });
+        } elseif ($updateType === Message::class) {
+            $text = $update->getMessage()->getText();
+            $chatId = $update->getEffectiveChat()->getId();
+            $this->conversationManager->getConversationHandler($chatId)
+                ->then(function ($handlerInfo) use ($updateType, $chatId, $text, $deferred, &$listeners) {
+                    [$callback, $skipListeners] = $handlerInfo;
+                    // if we are not in a conversation, or we are not skipping the listeners
+                    if (!$callback || !$skipListeners) {
+                        // call the listeners by the update type
+                        $this->mergeListenersByType($listeners, $updateType);
+                        $this->mergeListenersByType($listeners, Update::class);
+                        // find a listener for the type, and call the fallback only
+                        // when we are not in a conversation, so the callback will be null
+                        $listener = $this->findListenerAndPush($listeners, 'messages', $text, $callback !== null);
+                        // if the conversation is not skipping listeners, escape the conversation
+                        if ($listener && $callback && !$skipListeners) {
+                            $this->conversationManager->deleteConversationCache($chatId);
+                            $callback = null;
+                        }
+                    }
+                    if ($callback) {
+                        $listeners[] = new Listener($callback, $this->container);
+                    }
+                    $deferred->resolve($listeners);
+                })->otherwise(function ($e) use ($deferred) {
+                    // if something goes wrong, reject the promise
+                    $deferred->reject($e);
+                });
+        } else {
+            $this->mergeListenersByType($listeners, $updateType);
+            $this->mergeListenersByType($listeners, Update::class);
+            $deferred->resolve($listeners);
         }
 
         return $deferred->promise();
     }
 
     /**
-     * @param Listener[] $listeners
-     * @param string $listenerType
-     * @param string|null $listenerId
-     * @param bool $skipFallback
+     * @param  Listener[]  $listeners
+     * @param  string  $listenerType
+     * @param  string|null  $listenerId
+     * @param  bool  $skipFallback
      * @return Listener|null
      */
     private function findListenerAndPush(array &$listeners, string $listenerType, ?string $listenerId = null, bool $skipFallback = false): ?Listener
@@ -126,8 +123,8 @@ abstract class ListenerResolver extends ListenerCollector
     }
 
     /**
-     * @param Listener[] $listeners
-     * @param string $listenerType
+     * @param  Listener[]  $listeners
+     * @param  string  $listenerType
      */
     private function mergeListenersByType(array &$listeners, string $listenerType)
     {
