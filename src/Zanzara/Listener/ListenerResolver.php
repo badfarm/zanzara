@@ -49,7 +49,7 @@ abstract class ListenerResolver extends ListenerCollector
                             $this->findListenerAndPush($listeners, 'cb_query_texts', $text, true);
                         }
                     } else { // if we are in a conversation, redirect it only to the conversation step
-                        $listeners[] = new Listener($handlerInfo[0], $this->container);
+                        $listeners[] = $this->applyMiddlewareStack(new Listener($handlerInfo[0], $this->container));
                     }
                     $deferred->resolve($listeners);
                 })->otherwise(function ($e) use ($deferred) {
@@ -77,7 +77,7 @@ abstract class ListenerResolver extends ListenerCollector
                         }
                     }
                     if ($callback) {
-                        $listeners[] = new Listener($callback, $this->container);
+                        $listeners[] = $this->applyMiddlewareStack(new Listener($callback, $this->container));
                     }
                     $deferred->resolve($listeners);
                 })->otherwise(function ($e) use ($deferred) {
