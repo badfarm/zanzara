@@ -84,7 +84,7 @@ class Zanzara extends ListenerResolver
 
     public function run(): void
     {
-        $this->applyMiddlewareStack();
+        $this->feedMiddlewareStack();
         // we set "string|UpdateModeInterface" as return type just to have IDE suggestions, actually it is always a string
         $this->container->get(/** @scrutinizer ignore-type */ $this->config->getUpdateMode())->run();
         $this->loop->run();

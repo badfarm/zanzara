@@ -480,11 +480,11 @@ abstract class ListenerCollector
      * Add cross-request middleware to each listener middleware chain.
      *
      */
-    protected function applyMiddlewareStack()
+    protected function feedMiddlewareStack()
     {
         array_walk_recursive($this->listeners, function ($value) {
             if ($value instanceof Listener) {
-                $this->feedMiddlewareStack($value);
+                $this->applyMiddlewareStack($value);
             }
         });
     }
@@ -496,7 +496,7 @@ abstract class ListenerCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    protected function feedMiddlewareStack(Listener $listener): Listener
+    protected function applyMiddlewareStack(Listener $listener): Listener
     {
         foreach ($this->middleware as $m) {
             $listener->middleware($m);
