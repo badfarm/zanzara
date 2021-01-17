@@ -123,17 +123,18 @@ class Context
      *
      * This callable must be take on parameter of type Context
      * @param $handler
-     * @param bool $skipListeners if true the conversation handler has precedence over the listeners, so the listener
+     * @param  bool  $skipListeners  if true the conversation handler has precedence over the listeners, so the listener
      * callbacks are not executed.
+     * @param  bool  $skipMiddlewares if true, the next conversation handler will be called without apply middlewares
      * @return PromiseInterface
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public function nextStep($handler, bool $skipListeners = false): PromiseInterface
+    public function nextStep($handler, bool $skipListeners = false, bool $skipMiddlewares = false): PromiseInterface
     {
         // update is not null when used within the Context
         $chatId = $this->update->/** @scrutinizer ignore-call */ getEffectiveChat()->getId();
-        return $this->conversationManager->setConversationHandler($chatId, $this->getCallable($handler), $skipListeners);
+        return $this->conversationManager->setConversationHandler($chatId, $this->getCallable($handler), $skipListeners, $skipMiddlewares);
     }
 
     /**

@@ -49,7 +49,8 @@ abstract class ListenerResolver extends ListenerCollector
                             $this->findListenerAndPush($listeners, 'cb_query_texts', $text, true);
                         }
                     } else { // if we are in a conversation, redirect it only to the conversation step
-                        $listeners[] = $this->applyMiddlewareStack(new Listener($handlerInfo[0], $this->container));
+                        $listener = new Listener($handlerInfo[0], $this->container);
+                        $listeners[] = $handlerInfo[2] ? $listener : $this->applyMiddlewareStack($listener);
                     }
                     $deferred->resolve($listeners);
                 })->otherwise(function ($e) use ($deferred) {
@@ -61,7 +62,7 @@ abstract class ListenerResolver extends ListenerCollector
             $chatId = $update->getEffectiveChat()->getId();
             $this->conversationManager->getConversationHandler($chatId)
                 ->then(function ($handlerInfo) use ($updateType, $chatId, $text, $deferred, &$listeners) {
-                    [$callback, $skipListeners] = $handlerInfo;
+                    [$callback, $skipListeners, $skipMiddlewares] = $handlerInfo;
                     // if we are not in a conversation, or we are not skipping the listeners
                     if (!$callback || !$skipListeners) {
                         // call the listeners by the update type
@@ -77,7 +78,8 @@ abstract class ListenerResolver extends ListenerCollector
                         }
                     }
                     if ($callback) {
-                        $listeners[] = $this->applyMiddlewareStack(new Listener($callback, $this->container));
+                        $listener = new Listener($callback, $this->container);
+                        $listeners[] = $skipMiddlewares ? $listener : $this->applyMiddlewareStack($listener);
                     }
                     $deferred->resolve($listeners);
                 })->otherwise(function ($e) use ($deferred) {
