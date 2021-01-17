@@ -65,8 +65,7 @@ class UpdateTest extends TestCase
         });
 
         $bot->onException(function (Context $ctx, $exception) {
-            $this->assertInstanceOf(Context::class, $ctx);
-            $this->assertInstanceOf(\Exception::class, $exception);
+            $this->assertSame('/start', $ctx->getMessage()->getText());
             $this->assertSame('error!', $exception->getMessage());
         });
 
