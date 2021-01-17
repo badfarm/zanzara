@@ -53,4 +53,24 @@ class UpdateTest extends TestCase
         $bot->run();
     }
 
+    public function testOnExceptionIsCalled()
+    {
+        $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
+        $bot = new Zanzara("test", $config);
+
+        $bot->onCommand('start', function (Context $ctx){
+            throw new \Exception('error!');
+        });
+
+        $bot->onException(function (Context $ctx, $exception) {
+            $this->assertInstanceOf(Context::class, $ctx);
+            $this->assertInstanceOf(\Exception::class, $exception);
+            $this->assertSame('error!', $exception->getMessage());
+        });
+
+        $bot->run();
+    }
+
 }

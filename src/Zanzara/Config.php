@@ -109,6 +109,13 @@ class Config
     private $pollingLimit = 100;
 
     /**
+     * Defines when we have to retry after the processing of an update has given error.
+     *
+     * @var float
+     */
+    private $pollingRetry = 2.0;
+
+    /**
      * A JSON-serialized list of the update types you want your bot to receive. For example, specify
      * [“message”, “edited_channel_post”, “callback_query”] to only receive updates of these types. See Update for a
      * complete list of available update types. Specify an empty list to receive all updates regardless of type
@@ -529,6 +536,22 @@ class Config
     public function setProxyHttpHeaders(array $proxyHttpHeaders): void
     {
         $this->proxyHttpHeaders = $proxyHttpHeaders;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPollingRetry(): float
+    {
+        return $this->pollingRetry;
+    }
+
+    /**
+     * @param  float  $pollingRetry
+     */
+    public function setPollingRetry(float $pollingRetry): void
+    {
+        $this->pollingRetry = $pollingRetry;
     }
 
 }

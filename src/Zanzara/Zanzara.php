@@ -17,6 +17,7 @@ use React\Promise\PromiseInterface;
 use React\Socket\Connector;
 use Zanzara\Listener\ListenerResolver;
 use Zanzara\Telegram\Telegram;
+use Zanzara\Telegram\Type\Update;
 use Zanzara\UpdateMode\ReactPHPWebhook;
 
 /**
@@ -46,8 +47,8 @@ class Zanzara extends ListenerResolver
     private $cache;
 
     /**
-     * @param string $botToken
-     * @param Config|null $config
+     * @param  string  $botToken
+     * @param  Config|null  $config
      */
     public function __construct(string $botToken, ?Config $config = null)
     {
@@ -232,6 +233,22 @@ class Zanzara extends ListenerResolver
     public function wipeCache()
     {
         return $this->cache->wipeCache();
+    }
+
+    /**
+     * @param $exception
+     * @param  Context  $ctx
+     * @return bool|void
+     */
+    public function callOnException(Context $ctx, $exception)
+    {
+        if ($this->onException === null) {
+            return false;
+        }
+        $this->onException->setParameters([$exception]);
+        $this->onException->getTip()($ctx);
+
+        return true;
     }
 
 }
