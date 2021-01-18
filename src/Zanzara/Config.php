@@ -138,6 +138,11 @@ class Config
     private $cacheTtl = 180;
 
     /**
+     * @var float|null
+     */
+    private $conversationTtl = 60 * 60 * 24;
+
+    /**
      * @var Connector|null
      */
     private $connector;
@@ -529,6 +534,22 @@ class Config
     public function setProxyHttpHeaders(array $proxyHttpHeaders): void
     {
         $this->proxyHttpHeaders = $proxyHttpHeaders;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getConversationTtl(): ?float
+    {
+        return $this->conversationTtl;
+    }
+
+    /**
+     * @param float|null $conversationTtl
+     */
+    public function setConversationTtl(?float $conversationTtl): void
+    {
+        $this->conversationTtl = $conversationTtl;
     }
 
 }

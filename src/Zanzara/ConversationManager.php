@@ -16,16 +16,20 @@ class ConversationManager
 
     private const CONVERSATION = 'CONVERSATION';
 
-    private const CONVERSATION_CACHE_TIME = 60 * 60 * 24;
-
     /**
      * @var ZanzaraCache
      */
     private $cache;
 
-    public function __construct(ZanzaraCache $cache)
+    /**
+     * @var Config
+     */
+    private $config;
+
+    public function __construct(ZanzaraCache $cache, Config $config)
     {
         $this->cache = $cache;
+        $this->config = $config;
     }
 
     /**
@@ -45,7 +49,7 @@ class ConversationManager
         if ($handler instanceof Closure) {
             $handler = new SerializableClosure($handler);
         }
-        return $this->cache->doSet($cacheKey, $key, [serialize($handler), $skipListeners, $skipMiddlewares], self::CONVERSATION_CACHE_TIME);
+        return $this->cache->doSet($cacheKey, $key, [serialize($handler), $skipListeners, $skipMiddlewares], $this->config->getConversationTtl());
     }
 
     public function getConversationHandler($chatId): PromiseInterface
