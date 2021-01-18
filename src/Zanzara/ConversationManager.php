@@ -14,7 +14,9 @@ use React\Promise\PromiseInterface;
 class ConversationManager
 {
 
-    private const CONVERSATION = 'CONVERSATION_';
+    private const CONVERSATION = 'CONVERSATION';
+
+    private const CONVERSATION_CACHE_TIME = 60 * 60 * 24;
 
     /**
      * @var ZanzaraCache
@@ -33,7 +35,7 @@ class ConversationManager
      */
     private function getConversationKey($chatId): string
     {
-        return self::CONVERSATION . strval($chatId);
+        return self::CONVERSATION . '_' . strval($chatId);
     }
 
     public function setConversationHandler($chatId, $handler, bool $skipListeners, bool $skipMiddlewares): PromiseInterface
@@ -43,7 +45,7 @@ class ConversationManager
         if ($handler instanceof Closure) {
             $handler = new SerializableClosure($handler);
         }
-        return $this->cache->doSet($cacheKey, $key, [serialize($handler), $skipListeners, $skipMiddlewares]);
+        return $this->cache->doSet($cacheKey, $key, [serialize($handler), $skipListeners, $skipMiddlewares], self::CONVERSATION_CACHE_TIME);
     }
 
     public function getConversationHandler($chatId): PromiseInterface

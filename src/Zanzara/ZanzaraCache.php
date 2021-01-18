@@ -33,11 +33,11 @@ class ZanzaraCache
      */
     private $config;
 
-    private const CHATDATA = "CHATDATA";
+    private const CHATDATA = 'CHATDATA';
 
-    private const USERDATA = "USERDATA";
+    private const USERDATA = 'USERDATA';
 
-    private const GLOBALDATA = "GLOBALDATA";
+    private const GLOBALDATA = 'GLOBALDATA';
 
     /**
      * ZanzaraLogger constructor.
@@ -95,7 +95,7 @@ class ZanzaraCache
      */
     private function getChatIdKey(int $chatId)
     {
-        return ZanzaraCache::CHATDATA . strval($chatId);
+        return ZanzaraCache::CHATDATA . '_' . strval($chatId);
     }
 
     public function getCacheChatData(int $chatId)
@@ -141,7 +141,7 @@ class ZanzaraCache
      */
     private function getUserIdKey(int $userId)
     {
-        return ZanzaraCache::USERDATA . strval($userId);
+        return ZanzaraCache::USERDATA . '_' . strval($userId);
     }
 
     public function getCacheUserData(int $userId)
