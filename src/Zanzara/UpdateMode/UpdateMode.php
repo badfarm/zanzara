@@ -83,16 +83,18 @@ abstract class UpdateMode implements UpdateModeInterface
     protected function processUpdate(Update $update)
     {
         $update->detectUpdateType();
+        $context = new Context($update, $this->container);
         $this->zanzara->resolveListeners($update)
-            ->then(function ($listeners) use ($update) {
+            ->then(function ($listeners) use ($context, $update) {
                 /** @var Listener[] $listeners */
                 foreach ($listeners as $listener) {
-                    $context = new Context($update, $this->container);
                     $middlewareTip = $listener->getTip();
                     $middlewareTip($context);
                 }
-            })->otherwise(function ($e) use ($update) {
-                $this->logger->error("Unable to resolve listeners for update $update, reason: $e");
+            })->otherwise(function ($e) use ($context, $update) {
+                if (!$this->zanzara->callOnException($context, $e)){
+                    $this->logger->error("Unable to resolve listeners for update $update, reason: $e");
+                }
             });
     }
 
