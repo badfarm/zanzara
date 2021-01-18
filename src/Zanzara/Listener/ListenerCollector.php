@@ -74,6 +74,11 @@ abstract class ListenerCollector
     protected $middleware = [];
 
     /**
+     * @var Listener
+     */
+    protected $onException;
+
+    /**
      * Listen for the specified command.
      * Eg. $bot->onCommand('start', function(Context $ctx) {});
      *
@@ -436,6 +441,22 @@ abstract class ListenerCollector
     {
         $listener = new Listener($callback, $this->container);
         $this->listeners[Update::class][] = $listener;
+        return $listener;
+    }
+
+
+    /**
+     * If the processing of the current update gives an error, this listener will be called.
+     *
+     * @param $callback
+     * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function onException($callback): MiddlewareCollector
+    {
+        $listener = new Listener($callback, $this->container);
+        $this->onException = $listener;
         return $listener;
     }
 
