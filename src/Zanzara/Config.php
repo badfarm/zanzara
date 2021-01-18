@@ -444,6 +444,8 @@ class Config
 
     /**
      * @return callable|null
+     * @deprecated
+     * @see Zanzara::callOnException()
      */
     public function getErrorHandler(): ?callable
     {
@@ -453,6 +455,7 @@ class Config
     /**
      * @param callable|null $errorHandler
      * @deprecated use Zanzara::onException() instead.
+     * @see Zanzara::onException()
      */
     public function setErrorHandler(?callable $errorHandler): void
     {
