@@ -1632,24 +1632,28 @@ trait TelegramTrait
         if ($this->container->get(Config::class)->getParseMode() && !isset($params['parse_mode'])) {
             $params['parse_mode'] = $this->container->get(Config::class)->getParseMode();
         }
+        $browser = $this->browser;
+        if (isset($params['request_timeout'])) {
+            $browser = $browser->withTimeout($params['request_timeout']);
+        }
         foreach ($params as $param) {
             if ($param instanceof InputFile) {
 
                 $async = $this->container->get(Config::class)->isReactFileSystem();
 
                 if ($async) {
-                    return $this->prepareMultipartDataAsync($params)->then(function ($result) use ($class, $params, $method) {
+                    return $this->prepareMultipartDataAsync($params)->then(function ($result) use ($browser, $class, $params, $method) {
                         $headers = array("Content-Length" => $result->getSize(), "Content-Type" => "multipart/form-data; boundary={$result->getBoundary()}");
-                        return $this->wrapPromise($this->browser->post($method, $headers, $result), $method, $params, $class);
+                        return $this->wrapPromise($browser->post($method, $headers, $result), $method, $params, $class);
                     });
                 } else {
                     $multipart = $this->prepareMultipartData($params);
                     $headers = array("Content-Length" => $multipart->getSize(), "Content-Type" => "multipart/form-data; boundary={$multipart->getBoundary()}");
-                    return $this->wrapPromise($this->browser->post($method, $headers, $multipart), $method, $params, $class);
+                    return $this->wrapPromise($browser->post($method, $headers, $multipart), $method, $params, $class);
                 }
             }
         }
-        return $this->wrapPromise($this->browser->post($method, $headers, json_encode($params)), $method, $params, $class);
+        return $this->wrapPromise($browser->post($method, $headers, json_encode($params)), $method, $params, $class);
     }
 
     /**
