@@ -46,15 +46,15 @@ $bot = new Zanzara($_ENV['BOT_TOKEN'], $config);
 
 $bot->onCommand("chatdata", function (Context $ctx) {
 
-    $ctx->setChatData("eta", 22);
-    $ctx->setChatData("name", "mattia");
-    $ctx->setChatData("address", "piscine di Brebbia, n 6");
+    $ctx->setChatDataItem("eta", 22);
+    $ctx->setChatDataItem("name", "mattia");
+    $ctx->setChatDataItem("address", "piscine di Brebbia, n 6");
 
     //return the assoc array of all the chat data of the chatId context
-    $ctx->getChatData()->then(function ($arrayData) use ($ctx) {
-        //I can send it back to the user creating a list of the items
-        $ctx->sendMessage(implode(",", $arrayData));
-    });
+//    $ctx->getChatData()->then(function ($arrayData) use ($ctx) {
+//        //I can send it back to the user creating a list of the items
+//        $ctx->sendMessage(implode(",", $arrayData));
+//    });
 
     //return the value of the key name
     $ctx->getChatDataItem("name")->then(function ($data) use ($ctx) {
@@ -68,40 +68,40 @@ $bot->onCommand("chatdata", function (Context $ctx) {
         }
     });
 
-    $ctx->getChatData()->then(function ($arrayData) use ($ctx) {
-        //I can send it back to the user creating a list of the items
-        $ctx->sendMessage(implode(",", $arrayData));
-    });
-
-    $ctx->deleteChatData()->then(function ($result) use ($ctx) {
-        if ($result) {
-            $ctx->sendMessage("all chat data deleted");
-        }
-    });
+//    $ctx->getChatData()->then(function ($arrayData) use ($ctx) {
+//        //I can send it back to the user creating a list of the items
+//        $ctx->sendMessage(implode(",", $arrayData));
+//    });
+//
+//    $ctx->deleteChatData()->then(function ($result) use ($ctx) {
+//        if ($result) {
+//            $ctx->sendMessage("all chat data deleted");
+//        }
+//    });
 
     //return the assoc array of all the chat data of the chatId context
-    $ctx->getChatData()->then(function ($arrayData) use ($ctx) {
-        //I can send it back to the user creating a list of the items
-
-        if ($arrayData) {
-            $ctx->sendMessage(implode(",", $arrayData));
-        } else {
-            $ctx->sendMessage("empty");
-        }
-    });
+//    $ctx->getChatData()->then(function ($arrayData) use ($ctx) {
+//        //I can send it back to the user creating a list of the items
+//
+//        if ($arrayData) {
+//            $ctx->sendMessage(implode(",", $arrayData));
+//        } else {
+//            $ctx->sendMessage("empty");
+//        }
+//    });
 });
 
 $bot->onCommand("userdata", function (Context $ctx) {
 
-    $ctx->setUserData("eta", 22);
-    $ctx->setUserData("name", "mattia");
-    $ctx->setUserData("address", "piscine di Brebbia, n 6");
+    $ctx->setUserDataItem("eta", 22);
+    $ctx->setUserDataItem("name", "mattia");
+    $ctx->setUserDataItem("address", "piscine di Brebbia, n 6");
 
     //return the assoc array of all the chat data of the chatId context
-    $ctx->getUserData()->then(function ($arrayData) use ($ctx) {
-        //I can send it back to the user creating a list of the items
-        $ctx->sendMessage(implode(",", $arrayData));
-    });
+//    $ctx->getUserData()->then(function ($arrayData) use ($ctx) {
+//        //I can send it back to the user creating a list of the items
+//        $ctx->sendMessage(implode(",", $arrayData));
+//    });
 
     //return the value of the key name
     $ctx->getUserDataItem("name")->then(function ($data) use ($ctx) {
@@ -115,44 +115,44 @@ $bot->onCommand("userdata", function (Context $ctx) {
         }
     });
 
-    $ctx->getChatData()->then(function ($arrayData) use ($ctx) {
-        //I can send it back to the user creating a list of the items
-        if ($arrayData) {
-            $ctx->sendMessage(implode(",", $arrayData));
-        } else {
-            $ctx->sendMessage("empty");
-        }
-    });
+//    $ctx->getChatData()->then(function ($arrayData) use ($ctx) {
+//        //I can send it back to the user creating a list of the items
+//        if ($arrayData) {
+//            $ctx->sendMessage(implode(",", $arrayData));
+//        } else {
+//            $ctx->sendMessage("empty");
+//        }
+//    });
 
-    $ctx->deleteUserData()->then(function ($result) use ($ctx) {
-        if ($result) {
-            $ctx->sendMessage("all chat data deleted");
-        }
-    });
+//    $ctx->deleteUserData()->then(function ($result) use ($ctx) {
+//        if ($result) {
+//            $ctx->sendMessage("all chat data deleted");
+//        }
+//    });
 
     //return the assoc array of all the chat data of the chatId context
-    $ctx->getUserData()->then(function ($arrayData) use ($ctx) {
-        //I can send it back to the user creating a list of the items
-
-        if ($arrayData) {
-            $ctx->sendMessage(implode(",", $arrayData));
-        } else {
-            $ctx->sendMessage("empty");
-        }
-    });
+//    $ctx->getUserData()->then(function ($arrayData) use ($ctx) {
+//        //I can send it back to the user creating a list of the items
+//
+//        if ($arrayData) {
+//            $ctx->sendMessage(implode(",", $arrayData));
+//        } else {
+//            $ctx->sendMessage("empty");
+//        }
+//    });
 });
 
 $bot->onCommand("globaldata", function (Context $ctx) {
 
-    $ctx->setGlobalData("eta", 22);
-    $ctx->setGlobalData("name", "mattia");
-    $ctx->setGlobalData("address", "piscine di Brebbia, n 6");
+    $ctx->setGlobalDataItem("eta", 22);
+    $ctx->setGlobalDataItem("name", "mattia");
+    $ctx->setGlobalDataItem("address", "piscine di Brebbia, n 6");
 
     //return the assoc array of all the chat data of the chatId context
-    $ctx->getGlobalData()->then(function ($arrayData) use ($ctx) {
-        //I can send it back to the user creating a list of the items
-        $ctx->sendMessage(implode(",", $arrayData));
-    });
+//    $ctx->getGlobalData()->then(function ($arrayData) use ($ctx) {
+//        //I can send it back to the user creating a list of the items
+//        $ctx->sendMessage(implode(",", $arrayData));
+//    });
 
     //return the value of the key name
     $ctx->getGlobalDataItem("name")->then(function ($data) use ($ctx) {
@@ -166,20 +166,20 @@ $bot->onCommand("globaldata", function (Context $ctx) {
         }
     });
 
-    $ctx->getGlobalData()->then(function ($arrayData) use ($ctx) {
-        //I can send it back to the user creating a list of the items
-        if ($arrayData) {
-            $ctx->sendMessage(implode(",", $arrayData));
-        } else {
-            $ctx->sendMessage("empty");
-        }
-    });
+//    $ctx->getGlobalData()->then(function ($arrayData) use ($ctx) {
+//        //I can send it back to the user creating a list of the items
+//        if ($arrayData) {
+//            $ctx->sendMessage(implode(",", $arrayData));
+//        } else {
+//            $ctx->sendMessage("empty");
+//        }
+//    });
 
-    $ctx->deleteGlobalData()->then(function ($result) use ($ctx) {
-        if ($result) {
-            $ctx->sendMessage("all chat data deleted");
-        }
-    });
+//    $ctx->deleteGlobalData()->then(function ($result) use ($ctx) {
+//        if ($result) {
+//            $ctx->sendMessage("all chat data deleted");
+//        }
+//    });
 
     //return the assoc array of all the chat data of the chatId context
     $ctx->getGlobalData()->then(function ($arrayData) use ($ctx) {
@@ -195,33 +195,33 @@ $bot->onCommand("globaldata", function (Context $ctx) {
 
 $bot->onCommand('appendUser', function (Context $ctx) {
     $random = rand(1000, 9999);
-    $ctx->appendUserData('myData', $random)->then(function ($res) use ($ctx) {
-        $ctx->getUserDataItem('myData')->then(function ($data) use ($ctx) {
-            $ctx->sendMessage(json_encode($data));
-        });
-    });
+//    $ctx->appendUserData('myData', $random)->then(function ($res) use ($ctx) {
+//        $ctx->getUserDataItem('myData')->then(function ($data) use ($ctx) {
+//            $ctx->sendMessage(json_encode($data));
+//        });
+//    });
 });
 
 $bot->onCommand('appendChat', function (Context $ctx) {
     $random = rand(1000, 9999);
-    $ctx->appendChatData('myData', $random)->then(function ($res) use ($ctx) {
-        $ctx->getChatDataItem('myData')->then(function ($data) use ($ctx) {
-            $ctx->sendMessage(json_encode($data));
-        });
-    });
+//    $ctx->appendChatData('myData', $random)->then(function ($res) use ($ctx) {
+//        $ctx->getChatDataItem('myData')->then(function ($data) use ($ctx) {
+//            $ctx->sendMessage(json_encode($data));
+//        });
+//    });
 });
 
 $bot->onCommand('appendGlobal', function (Context $ctx) {
     $random = rand(1000, 9999);
-    $ctx->appendGlobalData('myData', $random)->then(function ($res) use ($ctx) {
-        $ctx->getGlobalDataItem('myData')->then(function ($data) use ($ctx) {
-            $ctx->sendMessage(json_encode($data));
-        });
-    });
+//    $ctx->appendGlobalData('myData', $random)->then(function ($res) use ($ctx) {
+//        $ctx->getGlobalDataItem('myData')->then(function ($data) use ($ctx) {
+//            $ctx->sendMessage(json_encode($data));
+//        });
+//    });
 });
 
 $bot->onCommand('ttlSet', function (Context $ctx) {
-    $ctx->setUserData('key1', 'data1', 10);
+    $ctx->setUserDataItem('key1', 'data1', 10);
 });
 
 $bot->onCommand('ttlGet', function (Context $ctx) {

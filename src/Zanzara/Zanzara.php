@@ -17,7 +17,6 @@ use React\Promise\PromiseInterface;
 use React\Socket\Connector;
 use Zanzara\Listener\ListenerResolver;
 use Zanzara\Telegram\Telegram;
-use Zanzara\Telegram\Type\Update;
 use Zanzara\UpdateMode\ReactPHPWebhook;
 
 /**
@@ -137,43 +136,9 @@ class Zanzara extends ListenerResolver
      * @param $ttl
      * @return PromiseInterface
      */
-    public function setGlobalData($key, $data, $ttl = false)
+    public function setGlobalDataItem($key, $data, $ttl = false): PromiseInterface
     {
-        return $this->cache->setGlobalCacheData($key, $data, $ttl);
-    }
-
-    /**
-     * Append data to an existing global cache item. The item value is always an array.
-     *
-     * Eg:
-     * $ctx->appendGlobalData('users', ['Mike', 'John'])->then(function($result) {
-     *
-     * });
-     *
-     * @param $key
-     * @param $data
-     * @param $ttl
-     * @return PromiseInterface
-     */
-    public function appendGlobalData($key, $data, $ttl = false): PromiseInterface
-    {
-        return $this->cache->appendGlobalCacheData($key, $data, $ttl);
-    }
-
-    /**
-     * Returns all the global data.
-     * This cache is not related to any chat or user.
-     *
-     * Eg:
-     * $ctx->getGlobalData()->then(function($data) {
-     *      $age = $data['age'];
-     * });
-     *
-     * @return PromiseInterface
-     */
-    public function getGlobalData()
-    {
-        return $this->cache->getGlobalCacheData();
+        return $this->cache->setGlobalDataItem($key, $data, $ttl);
     }
 
     /**
@@ -188,9 +153,9 @@ class Zanzara extends ListenerResolver
      * @param $key
      * @return PromiseInterface
      */
-    public function getGlobalDataItem($key)
+    public function getGlobalDataItem($key): PromiseInterface
     {
-        return $this->cache->getCacheGlobalDataItem($key);
+        return $this->cache->getGlobalDataItem($key);
     }
 
     /**
@@ -205,24 +170,9 @@ class Zanzara extends ListenerResolver
      * @param $key
      * @return PromiseInterface
      */
-    public function deleteGlobalDataItem($key)
+    public function deleteGlobalDataItem($key): PromiseInterface
     {
-        return $this->cache->deleteCacheItemGlobalData($key);
-    }
-
-    /**
-     * Deletes all global data.
-     *
-     * Eg:
-     * $ctx->deleteGlobalData()->then(function($result) {
-     *
-     * });
-     *
-     * @return PromiseInterface
-     */
-    public function deleteGlobalData()
-    {
-        return $this->cache->deleteCacheGlobalData();
+        return $this->cache->deleteGlobalDataItem($key);
     }
 
     /**
@@ -230,9 +180,9 @@ class Zanzara extends ListenerResolver
      *
      * @return PromiseInterface
      */
-    public function wipeCache()
+    public function wipeCache(): PromiseInterface
     {
-        return $this->cache->wipeCache();
+        return $this->cache->clear();
     }
 
     /**

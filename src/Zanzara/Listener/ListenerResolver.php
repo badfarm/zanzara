@@ -73,7 +73,7 @@ abstract class ListenerResolver extends ListenerCollector
                         $listener = $this->findListenerAndPush($listeners, 'messages', $text, $callback !== null);
                         // if the conversation is not skipping listeners, escape the conversation
                         if ($listener && $callback && !$skipListeners) {
-                            $this->conversationManager->deleteConversationCache($chatId);
+                            $this->conversationManager->deleteConversationHandler($chatId);
                             $callback = null;
                         }
                     }

@@ -33,11 +33,22 @@ class ZanzaraCache
      */
     private $config;
 
-    private const CHATDATA = 'CHATDATA';
+    private const CHAT_DATA = 'CHAT_DATA';
 
-    private const USERDATA = 'USERDATA';
+    private const USER_DATA = 'USER_DATA';
 
-    private const GLOBALDATA = 'GLOBALDATA';
+    private const GLOBAL_DATA = 'GLOBAL_DATA';
+
+    /**
+     * Use only to call native method of CacheInterface
+     * @param $name
+     * @param $arguments
+     * @return PromiseInterface
+     */
+    public function __call($name, $arguments): ?PromiseInterface
+    {
+        return call_user_func_array([$this->cache, $name], $arguments);
+    }
 
     /**
      * ZanzaraLogger constructor.
@@ -52,213 +63,16 @@ class ZanzaraCache
         $this->config = $config;
     }
 
-    public function getGlobalCacheData()
+    private function resolveKey($dataType, $id, $key): string
     {
-        $cacheKey = self::GLOBALDATA;
-        return $this->doGet($cacheKey);
-    }
-
-    public function setGlobalCacheData(string $key, $data, $ttl = false)
-    {
-        $cacheKey = self::GLOBALDATA;
-        return $this->doSet($cacheKey, $key, $data, $ttl);
-    }
-
-    public function appendGlobalCacheData(string $key, $data, $ttl = false)
-    {
-        $cacheKey = self::GLOBALDATA;
-        return $this->appendCacheData($cacheKey, $key, $data, $ttl);
-    }
-
-    public function getCacheGlobalDataItem(string $key)
-    {
-        $cacheKey = self::GLOBALDATA;
-        return $this->getCacheItem($cacheKey, $key);
-    }
-
-    public function deleteCacheGlobalData()
-    {
-        $cacheKey = self::GLOBALDATA;
-        return $this->deleteCache([$cacheKey]);
-    }
-
-    public function deleteCacheItemGlobalData(string $key)
-    {
-        $cacheKey = self::GLOBALDATA;
-        return $this->deleteCacheItem($cacheKey, $key);
-    }
-
-    /**
-     * Get the correct key value for chatId data stored in cache
-     * @param $chatId
-     * @return string
-     */
-    private function getChatIdKey(int $chatId)
-    {
-        return ZanzaraCache::CHATDATA . '_' . strval($chatId);
-    }
-
-    public function getCacheChatData(int $chatId)
-    {
-        $cacheKey = $this->getChatIdKey($chatId);
-        return $this->doGet($cacheKey);
-    }
-
-    public function getCacheChatDataItem(int $chatId, string $key)
-    {
-        $cacheKey = $this->getChatIdKey($chatId);
-        return $this->getCacheItem($cacheKey, $key);
-    }
-
-    public function setCacheChatData(int $chatId, string $key, $data, $ttl = false)
-    {
-        $cacheKey = $this->getChatIdKey($chatId);
-        return $this->doSet($cacheKey, $key, $data, $ttl);
-    }
-
-    public function appendCacheChatData(int $chatId, string $key, $data, $ttl = false)
-    {
-        $cacheKey = $this->getChatIdKey($chatId);
-        return $this->appendCacheData($cacheKey, $key, $data, $ttl);
-    }
-
-    public function deleteAllCacheChatData(int $chatId)
-    {
-        $cacheKey = $this->getChatIdKey($chatId);
-        return $this->deleteCache([$cacheKey]);
-    }
-
-    public function deleteCacheChatDataItem(int $chatId, string $key)
-    {
-        $cacheKey = $this->getChatIdKey($chatId);
-        return $this->deleteCacheItem($cacheKey, $key);
-    }
-
-    /**
-     * Get the correct key value for userId data stored in cache
-     * @param $userId
-     * @return string
-     */
-    private function getUserIdKey(int $userId)
-    {
-        return ZanzaraCache::USERDATA . '_' . strval($userId);
-    }
-
-    public function getCacheUserData(int $userId)
-    {
-        $cacheKey = $this->getUserIdKey($userId);
-        return $this->doGet($cacheKey);
-    }
-
-    public function getCacheUserDataItem(int $userId, string $key)
-    {
-        $cacheKey = $this->getUserIdKey($userId);
-        return $this->getCacheItem($cacheKey, $key);
-    }
-
-    public function setCacheUserData(int $userId, string $key, $data, $ttl = false)
-    {
-        $cacheKey = $this->getUserIdKey($userId);
-        return $this->doSet($cacheKey, $key, $data, $ttl);
-    }
-
-    public function appendCacheUserData(int $userId, string $key, $data, $ttl = false)
-    {
-        $cacheKey = $this->getUserIdKey($userId);
-        return $this->appendCacheData($cacheKey, $key, $data, $ttl);
-    }
-
-    public function deleteAllCacheUserData(int $userId)
-    {
-        $cacheKey = $this->getUserIdKey($userId);
-        return $this->deleteCache([$cacheKey]);
-    }
-
-    public function deleteCacheItemUserData(int $userId, string $key)
-    {
-        $cacheKey = $this->getUserIdKey($userId);
-        return $this->deleteCacheItem($cacheKey, $key);
-    }
-
-    /**
-     * Use only to call native method of CacheInterface
-     * @param $name
-     * @param $arguments
-     * @return PromiseInterface
-     */
-    public function __call($name, $arguments): ?PromiseInterface
-    {
-        return call_user_func_array([$this->cache, $name], $arguments);
-    }
-
-    /**
-     * Delete a key inside array stored in cacheKey
-     * @param $cacheKey
-     * @param $key
-     * @return PromiseInterface
-     */
-    public function deleteCacheItem(string $cacheKey, $key)
-    {
-        return $this->cache->get($cacheKey)->then(function ($arrayData) use ($cacheKey, $key) {
-            if (!$arrayData) {
-                return true; //there isn't anything so it's deleted
-            } else {
-                unset($arrayData[$key]);
-            }
-
-            return $this->cache->set($cacheKey, $arrayData)->then(function ($result) {
-                if ($result !== true) {
-                    $this->logger->errorWriteCache();
-                }
-                return $result;
-            });
-        });
-    }
-
-    /**
-     * delete a cache iteam and return the promise
-     * @param array $keys
-     * @return PromiseInterface
-     */
-    public function deleteCache(array $keys)
-    {
-        return $this->cache->deleteMultiple($keys)->then(function ($result) {
-            if ($result !== true) {
-                $this->logger->errorClearCache();
-            }
-            return $result;
-        });
-    }
-
-    /**
-     * Get cache item inside array stored in cacheKey
-     * @param $cacheKey
-     * @param $key
-     * @return PromiseInterface
-     */
-    public function getCacheItem(string $cacheKey, $key)
-    {
-        return $this->cache->get($cacheKey)->then(function ($arrayData) use ($key) {
-            if ($arrayData && array_key_exists($key, $arrayData)) {
-                return $arrayData[$key];
-            } else {
-                return null;
-            }
-        });
-    }
-
-    public function doGet(string $cacheKey)
-    {
-        return $this->cache->get($cacheKey);
-    }
-
-    /**
-     * Wipe entire cache.
-     * @return PromiseInterface
-     */
-    public function wipeCache()
-    {
-        return $this->cache->clear();
+        $res = "$dataType";
+        if ($id) {
+            $res .= "@$id";
+        }
+        if ($key) {
+            $res .= "@$key";
+        }
+        return $res;
     }
 
     /**
@@ -267,7 +81,7 @@ class ZanzaraCache
      * @param $ttl
      * @return float|null
      */
-    private function checkTtl($ttl)
+    private function checkTtl($ttl): ?float
     {
         if ($ttl === false) {
             $ttl = $this->config->getCacheTtl();
@@ -275,57 +89,52 @@ class ZanzaraCache
         return $ttl;
     }
 
-    /**
-     * set a cache value and return the promise
-     * @param string $cacheKey
-     * @param string $key
-     * @param $data
-     * @param $ttl
-     * @return PromiseInterface
-     */
-    public function doSet(string $cacheKey, string $key, $data, $ttl = false)
+    // ************************************************** GLOBAL DATA **********************************************
+    public function setGlobalDataItem(string $key, $data, $ttl = false): PromiseInterface
     {
-        $ttl = $this->checkTtl($ttl);
-        return $this->cache->get($cacheKey)->then(function ($arrayData) use ($ttl, $key, $data, $cacheKey) {
-            if (!$arrayData) {
-                $arrayData = array();
-                $arrayData[$key] = $data;
-            } else {
-                $arrayData[$key] = $data;
-            }
-
-            return $this->cache->set($cacheKey, $arrayData, $ttl)->then(function ($result) {
-                if ($result !== true) {
-                    $this->logger->errorWriteCache();
-                }
-                return $result;
-            });
-        });
+        return $this->cache->set($this->resolveKey(self::GLOBAL_DATA, null, $key), $data, $this->checkTtl($ttl));
     }
 
-    /**
-     * Append data to an existing cache item. The item value is always an array.
-     *
-     * @param string $cacheKey
-     * @param string $key
-     * @param $data
-     * @param $ttl
-     * @return PromiseInterface
-     */
-    public function appendCacheData(string $cacheKey, string $key, $data, $ttl = false)
+    public function getGlobalDataItem(string $key): PromiseInterface
     {
+        return $this->cache->get($this->resolveKey(self::GLOBAL_DATA, null, $key));
+    }
 
-        $ttl = $this->checkTtl($ttl);
-        return $this->cache->get($cacheKey)->then(function ($arrayData) use ($ttl, $key, $data, $cacheKey) {
-            $arrayData[$key][] = $data;
+    public function deleteGlobalDataItem(string $key): PromiseInterface
+    {
+        return $this->cache->delete($this->resolveKey(self::GLOBAL_DATA, null, $key));
+    }
 
-            return $this->cache->set($cacheKey, $arrayData, $ttl)->then(function ($result) {
-                if ($result !== true) {
-                    $this->logger->errorWriteCache();
-                }
-                return $result;
-            });
-        });
+    // ************************************************** CHAT DATA **********************************************
+    public function getChatDataItem(int $chatId, string $key): PromiseInterface
+    {
+        return $this->cache->get($this->resolveKey(self::CHAT_DATA, $chatId, $key));
+    }
+
+    public function setChatDataItem(int $chatId, string $key, $data, $ttl = false): PromiseInterface
+    {
+        return $this->cache->set($this->resolveKey(self::CHAT_DATA, $chatId, $key), $data, $this->checkTtl($ttl));
+    }
+
+    public function deleteChatDataItem(int $chatId, string $key): PromiseInterface
+    {
+        return $this->cache->delete($this->resolveKey(self::CHAT_DATA, $chatId, $key));
+    }
+
+    // ************************************************** USER DATA **********************************************
+    public function getUserDataItem(int $userId, string $key): PromiseInterface
+    {
+        return $this->cache->get($this->resolveKey(self::USER_DATA, $userId, $key));
+    }
+
+    public function setUserDataItem(int $userId, string $key, $data, $ttl = false): PromiseInterface
+    {
+        return $this->cache->set($this->resolveKey(self::USER_DATA, $userId, $key), $data, $this->checkTtl($ttl));
+    }
+
+    public function deleteUserDataItem(int $userId, string $key): PromiseInterface
+    {
+        return $this->cache->delete($this->resolveKey(self::USER_DATA, $userId, $key));
     }
 
 }
