@@ -39,7 +39,7 @@ class ZanzaraLogger
     {
         $message = $arguments[0];
         if ($name === 'error') {
-            fwrite(STDERR, $message . PHP_EOL);
+            file_put_contents('php://stderr', $message . PHP_EOL);
         } else {
             echo $message . PHP_EOL;
         }
