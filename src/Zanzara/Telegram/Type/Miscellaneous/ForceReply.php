@@ -31,6 +31,13 @@ class ForceReply
     private $selective;
 
     /**
+     * Optional. The placeholder to be shown in the input field when the reply is active; 1-64 characters
+     *
+     * @var string|null
+     */
+    private $input_field_placeholder;
+
+    /**
      * @return bool
      */
     public function isForceReply(): bool
@@ -60,6 +67,22 @@ class ForceReply
     public function setSelective(?bool $selective): void
     {
         $this->selective = $selective;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getInputFieldPlaceholder(): ?string
+    {
+        return $this->input_field_placeholder;
+    }
+
+    /**
+     * @param string|null $input_field_placeholder
+     */
+    public function setInputFieldPlaceholder(?string $input_field_placeholder): void
+    {
+        $this->input_field_placeholder = $input_field_placeholder;
     }
 
 }

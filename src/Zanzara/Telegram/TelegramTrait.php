@@ -671,6 +671,26 @@ trait TelegramTrait
     }
 
     /**
+     * Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels,
+     * the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first.
+     * The bot must be an administrator in the chat for this to work and must have the appropriate admin rights.
+     * Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#banchatmember
+     *
+     * @param $chat_id
+     * @param $user_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function banChatMember($chat_id, $user_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "user_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("banChatMember", $params);
+    }
+
+    /**
      * Use this method to unban a previously kicked user in a supergroup or channel. The user will not return to the
      * group or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this
      * to work. By default, this method guarantees that after the call the user is not a member of the chat, but will be
@@ -979,6 +999,23 @@ trait TelegramTrait
         return $this->callApi("getChatMembersCount", $params); //integer
     }
 
+
+    /**
+     * Use this method to get the number of members in a chat. Returns Int on success.
+     *
+     * More on https://core.telegram.org/bots/api#getchatmembercount
+     *
+     * @param $chat_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function getChatMemberCount($chat_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("getChatMemberCount", $params); //integer
+    }
+
     /**
      * Use this method to get information about a member of a chat. Returns a @see ChatMember object on success.
      *
@@ -1067,6 +1104,34 @@ trait TelegramTrait
         $required = compact("commands");
         $params = array_merge($required, $opt);
         return $this->callApi("setMyCommands", $params);
+    }
+
+    /**
+     * Use this method to get the current list of the bot's commands for the given scope and user language. Returns
+     * Array of BotCommand on success. If commands aren't set, an empty list is returned.
+     *
+     * More on https://core.telegram.org/bots/api#getmycommands
+     *
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function getMyCommands(array $opt = []): PromiseInterface
+    {
+        return $this->callApi("getMyCommands", $opt);
+    }
+
+    /**
+     * Use this method to delete the list of the bot's commands for the given scope and user language. After deletion,
+     * higher level commands will be shown to affected users. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#deletemycommands
+     *
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function deleteMyCommands(array $opt = []): PromiseInterface
+    {
+        return $this->callApi("deleteMyCommands", $opt);
     }
 
     /**

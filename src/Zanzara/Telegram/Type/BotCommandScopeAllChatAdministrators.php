@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Zanzara\Telegram\Type;
+
+/**
+ * Represents the scope of bot commands, covering all group and supergroup chat administrators.
+ *
+ * More on https://core.telegram.org/bots/api#botcommandscopeallchatadministrators
+ *
+ */
+class BotCommandScopeAllChatAdministrators
+{
+
+    /**
+     * Scope type, must be all_chat_administrators
+     *
+     * @var string
+     */
+    private $type;
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+}
