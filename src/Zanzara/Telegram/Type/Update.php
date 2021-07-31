@@ -124,6 +124,16 @@ class Update implements \JsonSerializable
     private $effectiveChat;
 
     /**
+     * @var ChatMember|null
+     */
+    private $my_chat_member;
+
+    /**
+     * @var ChatMember|null
+     */
+    private $chat_member;
+
+    /**
      * @return int
      */
     public function getUpdateId(): int
@@ -412,6 +422,38 @@ class Update implements \JsonSerializable
     public function setEffectiveChat(?Chat $effectiveChat): void
     {
         $this->effectiveChat = $effectiveChat;
+    }
+
+    /**
+     * @return ChatMember|null
+     */
+    public function getMyChatMember(): ?ChatMember
+    {
+        return $this->my_chat_member;
+    }
+
+    /**
+     * @param ChatMember|null $my_chat_member
+     */
+    public function setMyChatMember(?ChatMember $my_chat_member): void
+    {
+        $this->my_chat_member = $my_chat_member;
+    }
+
+    /**
+     * @return ChatMember|null
+     */
+    public function getChatMember(): ?ChatMember
+    {
+        return $this->chat_member;
+    }
+
+    /**
+     * @param ChatMember|null $chat_member
+     */
+    public function setChatMember(?ChatMember $chat_member): void
+    {
+        $this->chat_member = $chat_member;
     }
 
     public function __toString()

@@ -411,6 +411,27 @@ class Message
     private $via_bot;
 
     /**
+     * Optional. Service message: voice chat started
+     *
+     * @var VoiceChatStarted|null
+     */
+    private $voice_chat_started;
+
+    /**
+     * Optional. Service message: voice chat ended
+     *
+     * @var VoiceChatEnded|null
+     */
+    private $voice_chat_ended;
+
+    /**
+     * Optional. Service message: voice chat ended
+     *
+     * @var VoiceChatParticipantsInvited|null
+     */
+    private $voice_chat_participants_invited;
+
+    /**
      * @return int
      */
     public function getMessageId(): int

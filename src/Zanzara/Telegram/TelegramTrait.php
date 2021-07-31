@@ -1621,6 +1621,60 @@ trait TelegramTrait
     }
 
     /**
+     * Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for
+     * this to work and must have the appropriate admin rights. The link can be revoked using the method
+     * revokeChatInviteLink. Returns the new invite link as ChatInviteLink object.
+     *
+     * More on https://core.telegram.org/bots/api#createchatinvitelink
+     *
+     * @param $chat_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function createChatInviteLink($chat_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("createChatInviteLink", $params, ChatInviteLink::class);
+    }
+
+    /**
+     * Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for
+     * this to work and must have the appropriate admin rights. The link can be revoked using the method
+     * revokeChatInviteLink. Returns the new invite link as ChatInviteLink object.
+     *
+     * More on https://core.telegram.org/bots/api#createchatinvitelink
+     *
+     * @param $chat_id
+     * @param $invite_link
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function editChatInviteLink($chat_id, $invite_link, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "invite_link");
+        $params = array_merge($required, $opt);
+        return $this->callApi("editChatInviteLink", $params, ChatInviteLink::class);
+    }
+
+    /**
+     * Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for
+     * this to work and must have the appropriate admin rights. The link can be revoked using the method
+     * revokeChatInviteLink. Returns the new invite link as ChatInviteLink object.
+     *
+     * More on https://core.telegram.org/bots/api#createchatinvitelink
+     *
+     * @param $chat_id
+     * @param $invite_link
+     * @return PromiseInterface
+     */
+    public function revokeChatInviteLink($chat_id, $invite_link): PromiseInterface
+    {
+        $required = compact("chat_id", "invite_link");
+        return $this->callApi("revokeChatInviteLink", $required, ChatInviteLink::class);
+    }
+
+    /**
      * @param string $method
      * @param array $params
      * @param string $class

@@ -160,6 +160,64 @@ class ChatMember
     private $can_add_web_page_previews;
 
     /**
+     * Chat the user belongs to
+     *
+     * @var Chat
+     */
+    private $chat;
+
+    /**
+     * Performer of the action, which resulted in the change.
+     *
+     * @var User
+     */
+    private $from;
+
+    /**
+     * Date the change was done in Unix time.
+     *
+     * @var integer
+     */
+    private $date;
+
+    /**
+     * Previous information about the chat member.
+     *
+     * @var ChatMember
+     */
+    private $old_chat_member;
+
+    /**
+     * New information about the chat member
+     *
+     * @var ChatMember
+     */
+    private $new_chat_member;
+
+    /**
+     * Optional. Chat invite link, which was used by the user to join the chat; for joining by invite link events only.
+     *
+     * @var ChatInviteLink|null
+     */
+    private $invite_link;
+
+    /**
+     * True, if the administrator can manage voice chats
+     *
+     * @var bool
+     */
+    private $can_manage_voice_chats;
+
+    /**
+     * True, if the administrator can access the chat event log, chat statistics, message statistics in channels, see
+     * channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other
+     * administrator privilege
+     *
+     * @var bool
+     */
+    private $can_manage_chat;
+
+    /**
      * @return User
      */
     public function getUser(): User
@@ -477,6 +535,134 @@ class ChatMember
     public function setIsAnonymous(?bool $is_anonymous): void
     {
         $this->is_anonymous = $is_anonymous;
+    }
+
+    /**
+     * @return Chat
+     */
+    public function getChat(): Chat
+    {
+        return $this->chat;
+    }
+
+    /**
+     * @param Chat $chat
+     */
+    public function setChat(Chat $chat): void
+    {
+        $this->chat = $chat;
+    }
+
+    /**
+     * @return User
+     */
+    public function getFrom(): User
+    {
+        return $this->from;
+    }
+
+    /**
+     * @param User $from
+     */
+    public function setFrom(User $from): void
+    {
+        $this->from = $from;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDate(): int
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param int $date
+     */
+    public function setDate(int $date): void
+    {
+        $this->date = $date;
+    }
+
+    /**
+     * @return ChatMember
+     */
+    public function getOldChatMember(): ChatMember
+    {
+        return $this->old_chat_member;
+    }
+
+    /**
+     * @param ChatMember $old_chat_member
+     */
+    public function setOldChatMember(ChatMember $old_chat_member): void
+    {
+        $this->old_chat_member = $old_chat_member;
+    }
+
+    /**
+     * @return ChatMember
+     */
+    public function getNewChatMember(): ChatMember
+    {
+        return $this->new_chat_member;
+    }
+
+    /**
+     * @param ChatMember $new_chat_member
+     */
+    public function setNewChatMember(ChatMember $new_chat_member): void
+    {
+        $this->new_chat_member = $new_chat_member;
+    }
+
+    /**
+     * @return ChatInviteLink|null
+     */
+    public function getInviteLink(): ?ChatInviteLink
+    {
+        return $this->invite_link;
+    }
+
+    /**
+     * @param ChatInviteLink|null $invite_link
+     */
+    public function setInviteLink(?ChatInviteLink $invite_link): void
+    {
+        $this->invite_link = $invite_link;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCanManageVoiceChats(): bool
+    {
+        return $this->can_manage_voice_chats;
+    }
+
+    /**
+     * @param bool $can_manage_voice_chats
+     */
+    public function setCanManageVoiceChats(bool $can_manage_voice_chats): void
+    {
+        $this->can_manage_voice_chats = $can_manage_voice_chats;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCanManageChat(): bool
+    {
+        return $this->can_manage_chat;
+    }
+
+    /**
+     * @param bool $can_manage_chat
+     */
+    public function setCanManageChat(bool $can_manage_chat): void
+    {
+        $this->can_manage_chat = $can_manage_chat;
     }
 
 }
