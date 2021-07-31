@@ -87,16 +87,17 @@ abstract class ListenerCollector
      *
      * @param  string  $command
      * @param $callback
+     * @param array $filters eg. ['chat_type' => 'group']
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onCommand(string $command, $callback): MiddlewareCollector
+    public function onCommand(string $command, $callback, array $filters = []): MiddlewareCollector
     {
         $pattern = str_replace('/', '\/', "/{$command}");
         $command = '/^'.preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $pattern).' ?$/miu';
 
-        $listener = new Listener($callback, $this->container, $command);
+        $listener = new Listener($callback, $this->container, $command, $filters);
         $this->listeners['messages'][$command] = $listener;
         return $listener;
     }
@@ -113,14 +114,15 @@ abstract class ListenerCollector
      *
      * @param  string  $text
      * @param  $callback
+     * @param array $filters eg. ['chat_type' => 'group']
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onText(string $text, $callback): MiddlewareCollector
+    public function onText(string $text, $callback, array $filters = []): MiddlewareCollector
     {
         $text = '/^'.preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $text).' ?$/miu';
-        $listener = new Listener($callback, $this->container, $text);
+        $listener = new Listener($callback, $this->container, $text, $filters);
         $this->listeners['messages'][$text] = $listener;
         return $listener;
     }
@@ -132,13 +134,15 @@ abstract class ListenerCollector
      * Eg. $bot->onMessage(function(Context $ctx) {});
      *
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onMessage($callback): MiddlewareCollector
+    public function onMessage($callback, array $filters = []): MiddlewareCollector
     {
-        $listener = new Listener($callback, $this->container);
+        $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[Message::class][] = $listener;
         return $listener;
     }
@@ -150,13 +154,15 @@ abstract class ListenerCollector
      * Eg. $bot->onReplyToMessage(function(Context $ctx) {});
      *
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onReplyToMessage($callback): MiddlewareCollector
+    public function onReplyToMessage($callback, array $filters = []): MiddlewareCollector
     {
-        $listener = new Listener($callback, $this->container);
+        $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[ReplyToMessage::class][] = $listener;
         return $listener;
     }
@@ -168,13 +174,15 @@ abstract class ListenerCollector
      * Eg. $bot->onEditedMessage(function(Context $ctx) {});
      *
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onEditedMessage($callback): MiddlewareCollector
+    public function onEditedMessage($callback, array $filters = []): MiddlewareCollector
     {
-        $listener = new Listener($callback, $this->container);
+        $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[EditedMessage::class][] = $listener;
         return $listener;
     }
@@ -192,14 +200,16 @@ abstract class ListenerCollector
      *
      * @param  string  $text
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onCbQueryText(string $text, $callback): MiddlewareCollector
+    public function onCbQueryText(string $text, $callback, array $filters = []): MiddlewareCollector
     {
         $text = '/^'.preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $text).' ?$/miu';
-        $listener = new Listener($callback, $this->container, $text);
+        $listener = new Listener($callback, $this->container, $text, $filters);
         $this->listeners['cb_query_texts'][$text] = $listener;
         return $listener;
     }
@@ -214,16 +224,18 @@ abstract class ListenerCollector
      *
      * @param  array  $data
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onCbQueryData(array $data, $callback): MiddlewareCollector
+    public function onCbQueryData(array $data, $callback, array $filters = []): MiddlewareCollector
     {
         // merge values with "|" (eg. "accept|refuse|later"), then ListenerResolver will check the callback data
         // against that regex.
         $id = '/'.implode('|', $data).'/';
-        $listener = new Listener($callback, $this->container, $id);
+        $listener = new Listener($callback, $this->container, $id, $filters);
         $this->listeners['cb_query_data'][$id] = $listener;
         return $listener;
     }
@@ -235,13 +247,15 @@ abstract class ListenerCollector
      * Eg. $bot->onCbQuery(function(Context $ctx) {});
      *
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onCbQuery($callback): MiddlewareCollector
+    public function onCbQuery($callback, array $filters = []): MiddlewareCollector
     {
-        $listener = new Listener($callback, $this->container);
+        $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[CallbackQuery::class][] = $listener;
         return $listener;
     }
@@ -253,13 +267,15 @@ abstract class ListenerCollector
      * Eg. $bot->onShippingQuery(function(Context $ctx) {});
      *
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onShippingQuery($callback): MiddlewareCollector
+    public function onShippingQuery($callback, array $filters = []): MiddlewareCollector
     {
-        $listener = new Listener($callback, $this->container);
+        $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[ShippingQuery::class][] = $listener;
         return $listener;
     }
@@ -271,13 +287,15 @@ abstract class ListenerCollector
      * Eg. $bot->onPreCheckoutQuery(function(Context $ctx) {});
      *
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onPreCheckoutQuery($callback): MiddlewareCollector
+    public function onPreCheckoutQuery($callback, array $filters = []): MiddlewareCollector
     {
-        $listener = new Listener($callback, $this->container);
+        $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[PreCheckoutQuery::class][] = $listener;
         return $listener;
     }
@@ -289,13 +307,15 @@ abstract class ListenerCollector
      * Eg. $bot->onSuccessfulPayment(function(Context $ctx) {});
      *
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onSuccessfulPayment($callback): MiddlewareCollector
+    public function onSuccessfulPayment($callback, array $filters = []): MiddlewareCollector
     {
-        $listener = new Listener($callback, $this->container);
+        $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[SuccessfulPayment::class][] = $listener;
         return $listener;
     }
@@ -307,13 +327,15 @@ abstract class ListenerCollector
      * Eg. $bot->onPassportData(function(Context $ctx) {});
      *
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onPassportData($callback): MiddlewareCollector
+    public function onPassportData($callback, array $filters = []): MiddlewareCollector
     {
-        $listener = new Listener($callback, $this->container);
+        $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[PassportData::class][] = $listener;
         return $listener;
     }
@@ -325,13 +347,15 @@ abstract class ListenerCollector
      * Eg. $bot->onInlineQuery(function(Context $ctx) {});
      *
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onInlineQuery($callback): MiddlewareCollector
+    public function onInlineQuery($callback, array $filters = []): MiddlewareCollector
     {
-        $listener = new Listener($callback, $this->container);
+        $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[InlineQuery::class][] = $listener;
         return $listener;
     }
@@ -343,13 +367,15 @@ abstract class ListenerCollector
      * Eg. $bot->onChosenInlineResult(function(Context $ctx) {});
      *
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onChosenInlineResult($callback): MiddlewareCollector
+    public function onChosenInlineResult($callback, array $filters = []): MiddlewareCollector
     {
-        $listener = new Listener($callback, $this->container);
+        $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[ChosenInlineResult::class][] = $listener;
         return $listener;
     }
@@ -361,13 +387,15 @@ abstract class ListenerCollector
      * Eg. $bot->onChannelPost(function(Context $ctx) {});
      *
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onChannelPost($callback): MiddlewareCollector
+    public function onChannelPost($callback, array $filters = []): MiddlewareCollector
     {
-        $listener = new Listener($callback, $this->container);
+        $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[ChannelPost::class][] = $listener;
         return $listener;
     }
@@ -379,13 +407,15 @@ abstract class ListenerCollector
      * Eg. $bot->onEditedChannelPost(function(Context $ctx) {});
      *
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onEditedChannelPost($callback): MiddlewareCollector
+    public function onEditedChannelPost($callback, array $filters = []): MiddlewareCollector
     {
-        $listener = new Listener($callback, $this->container);
+        $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[EditedChannelPost::class][] = $listener;
         return $listener;
     }
@@ -397,13 +427,15 @@ abstract class ListenerCollector
      * Eg. $bot->onPoll(function(Context $ctx) {});
      *
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onPoll($callback): MiddlewareCollector
+    public function onPoll($callback, array $filters = []): MiddlewareCollector
     {
-        $listener = new Listener($callback, $this->container);
+        $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[Poll::class][] = $listener;
         return $listener;
     }
@@ -415,13 +447,15 @@ abstract class ListenerCollector
      * Eg. $bot->onPollAnswer(function(Context $ctx) {});
      *
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onPollAnswer($callback): MiddlewareCollector
+    public function onPollAnswer($callback, array $filters = []): MiddlewareCollector
     {
-        $listener = new Listener($callback, $this->container);
+        $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[PollAnswer::class][] = $listener;
         return $listener;
     }
@@ -433,13 +467,15 @@ abstract class ListenerCollector
      * Eg. $bot->onUpdate(function(Context $ctx) {});
      *
      * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
      * @return MiddlewareCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onUpdate($callback): MiddlewareCollector
+    public function onUpdate($callback, array $filters = []): MiddlewareCollector
     {
-        $listener = new Listener($callback, $this->container);
+        $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[Update::class][] = $listener;
         return $listener;
     }

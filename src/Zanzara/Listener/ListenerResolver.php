@@ -37,16 +37,16 @@ abstract class ListenerResolver extends ListenerCollector
             $callbackQuery = $update->getCallbackQuery();
             $text = $callbackQuery->getMessage() ? $callbackQuery->getMessage()->getText() : null;
             $this->conversationManager->getConversationHandler($chatId)
-                ->then(function ($handlerInfo) use ($updateType, $deferred, $callbackQuery, $text, &$listeners) {
+                ->then(function ($handlerInfo) use ($update, $updateType, $deferred, $callbackQuery, $text, &$listeners) {
                     // if we are not in a conversation, call the listeners as usual
                     if (!$handlerInfo) {
-                        $this->mergeListenersByType($listeners, $updateType);
-                        $this->mergeListenersByType($listeners, Update::class);
+                        $this->mergeListenersByType($update, $listeners, $updateType);
+                        $this->mergeListenersByType($update, $listeners, Update::class);
                         if ($callbackQuery->getData()) {
-                            $this->findListenerAndPush($listeners, 'cb_query_data', $callbackQuery->getData(), true);
+                            $this->findListenerAndPush($update, $listeners, 'cb_query_data', $callbackQuery->getData(), true);
                         }
                         if ($text) {
-                            $this->findListenerAndPush($listeners, 'cb_query_texts', $text, true);
+                            $this->findListenerAndPush($update, $listeners, 'cb_query_texts', $text, true);
                         }
                     } else { // if we are in a conversation, redirect it only to the conversation step
                         $listener = new Listener($handlerInfo[0], $this->container);
@@ -61,16 +61,16 @@ abstract class ListenerResolver extends ListenerCollector
             $text = $update->getMessage()->getText();
             $chatId = $update->getEffectiveChat()->getId();
             $this->conversationManager->getConversationHandler($chatId)
-                ->then(function ($handlerInfo) use ($updateType, $chatId, $text, $deferred, &$listeners) {
+                ->then(function ($handlerInfo) use ($update, $updateType, $chatId, $text, $deferred, &$listeners) {
                     [$callback, $skipListeners, $skipMiddlewares] = $handlerInfo;
                     // if we are not in a conversation, or we are not skipping the listeners
                     if (!$callback || !$skipListeners) {
                         // call the listeners by the update type
-                        $this->mergeListenersByType($listeners, $updateType);
-                        $this->mergeListenersByType($listeners, Update::class);
+                        $this->mergeListenersByType($update, $listeners, $updateType);
+                        $this->mergeListenersByType($update, $listeners, Update::class);
                         // find a listener for the type, and call the fallback only
                         // when we are not in a conversation, so the callback will be null
-                        $listener = $this->findListenerAndPush($listeners, 'messages', $text, $callback !== null);
+                        $listener = $this->findListenerAndPush($update, $listeners, 'messages', $text, $callback !== null);
                         // if the conversation is not skipping listeners, escape the conversation
                         if ($listener && $callback && !$skipListeners) {
                             $this->conversationManager->deleteConversationHandler($chatId);
@@ -87,8 +87,8 @@ abstract class ListenerResolver extends ListenerCollector
                     $deferred->reject($e);
                 });
         } else {
-            $this->mergeListenersByType($listeners, $updateType);
-            $this->mergeListenersByType($listeners, Update::class);
+            $this->mergeListenersByType($update, $listeners, $updateType);
+            $this->mergeListenersByType($update, $listeners, Update::class);
             $deferred->resolve($listeners);
         }
 
@@ -96,19 +96,21 @@ abstract class ListenerResolver extends ListenerCollector
     }
 
     /**
+     * @param  Update  $update
      * @param  Listener[]  $listeners
      * @param  string  $listenerType
      * @param  string|null  $listenerId
      * @param  bool  $skipFallback
      * @return Listener|null
      */
-    private function findListenerAndPush(array &$listeners, string $listenerType, ?string $listenerId = null, bool $skipFallback = false): ?Listener
+    private function findListenerAndPush(Update $update, array &$listeners, string $listenerType, ?string $listenerId = null, bool $skipFallback = false): ?Listener
     {
         if ($listenerId !== null) {
             $typedListeners = $this->listeners[$listenerType] ?? [];
             foreach ($typedListeners as $regex => $listener) {
                 $regexMatched = (bool) preg_match($regex, $listenerId, $matches, PREG_UNMATCHED_AS_NULL);
-                if ($regexMatched) {
+                $filterPassed = $this->filterListener($update, $listener->getFilters());
+                if ($regexMatched && $filterPassed) {
                     $parameters = array_unique(array_values(array_slice($matches, 1)));
                     $listeners[] = $listener->setParameters($parameters);
                     return $listener;
@@ -125,15 +127,31 @@ abstract class ListenerResolver extends ListenerCollector
     }
 
     /**
+     * @param  Update  $update
      * @param  Listener[]  $listeners
      * @param  string  $listenerType
      */
-    private function mergeListenersByType(array &$listeners, string $listenerType)
+    private function mergeListenersByType(Update $update, array &$listeners, string $listenerType)
     {
         $toMerge = $this->listeners[$listenerType] ?? null;
         if ($toMerge) {
+            $toMerge = array_filter($toMerge, function (Listener $listener) use ($update) {
+                return $this->filterListener($update, $listener->getFilters());
+            });
             $listeners = array_merge($listeners, $toMerge);
         }
+    }
+
+    private function filterListener(Update $update, array $filters): bool
+    {
+        if (isset($filters['chat_type'])) {
+            $chat_type = $filters['chat_type'];
+            if ($update->getEffectiveChat() === null || $update->getEffectiveChat()->getType() != $chat_type) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }

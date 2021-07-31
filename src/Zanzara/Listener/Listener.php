@@ -34,18 +34,25 @@ class Listener extends MiddlewareCollector implements MiddlewareInterface
     protected $parameters = [];
 
     /**
+     * @var array
+     */
+    protected $filters = [];
+
+    /**
      * @param  $callback
      * @param ContainerInterface $container
      * @param string|null $id
+     * @param array $filters
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public function __construct($callback, ContainerInterface $container, ?string $id = null)
+    public function __construct($callback, ContainerInterface $container, ?string $id = null, array $filters = [])
     {
         parent::__construct($container);
         $this->id = $id;
         $this->callback = $this->getCallable($callback);
         $this->tip = new MiddlewareNode($this);
+        $this->filters = $filters;
     }
 
     /**
@@ -72,6 +79,14 @@ class Listener extends MiddlewareCollector implements MiddlewareInterface
     {
         $this->parameters = $parameters;
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilters(): array
+    {
+        return $this->filters;
     }
 
 }
