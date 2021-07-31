@@ -14,6 +14,8 @@ class VoiceChatEnded
 {
 
     /**
+     * Voice chat duration; in seconds
+     *
      * @var int
      */
     private $duration;

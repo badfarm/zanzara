@@ -432,6 +432,13 @@ class Message
     private $voice_chat_participants_invited;
 
     /**
+     * Optional. Service message: voice chat scheduled
+     *
+     * @var VoiceChatScheduled|null
+     */
+    private $voice_chat_scheduled;
+
+    /**
      * @return int
      */
     public function getMessageId(): int
@@ -1245,6 +1252,70 @@ class Message
     public function setSenderChat(?Chat $sender_chat): void
     {
         $this->sender_chat = $sender_chat;
+    }
+
+    /**
+     * @return VoiceChatStarted|null
+     */
+    public function getVoiceChatStarted(): ?VoiceChatStarted
+    {
+        return $this->voice_chat_started;
+    }
+
+    /**
+     * @param VoiceChatStarted|null $voice_chat_started
+     */
+    public function setVoiceChatStarted(?VoiceChatStarted $voice_chat_started): void
+    {
+        $this->voice_chat_started = $voice_chat_started;
+    }
+
+    /**
+     * @return VoiceChatEnded|null
+     */
+    public function getVoiceChatEnded(): ?VoiceChatEnded
+    {
+        return $this->voice_chat_ended;
+    }
+
+    /**
+     * @param VoiceChatEnded|null $voice_chat_ended
+     */
+    public function setVoiceChatEnded(?VoiceChatEnded $voice_chat_ended): void
+    {
+        $this->voice_chat_ended = $voice_chat_ended;
+    }
+
+    /**
+     * @return VoiceChatParticipantsInvited|null
+     */
+    public function getVoiceChatParticipantsInvited(): ?VoiceChatParticipantsInvited
+    {
+        return $this->voice_chat_participants_invited;
+    }
+
+    /**
+     * @param VoiceChatParticipantsInvited|null $voice_chat_participants_invited
+     */
+    public function setVoiceChatParticipantsInvited(?VoiceChatParticipantsInvited $voice_chat_participants_invited): void
+    {
+        $this->voice_chat_participants_invited = $voice_chat_participants_invited;
+    }
+
+    /**
+     * @return VoiceChatScheduled|null
+     */
+    public function getVoiceChatScheduled(): ?VoiceChatScheduled
+    {
+        return $this->voice_chat_scheduled;
+    }
+
+    /**
+     * @param VoiceChatScheduled|null $voice_chat_scheduled
+     */
+    public function setVoiceChatScheduled(?VoiceChatScheduled $voice_chat_scheduled): void
+    {
+        $this->voice_chat_scheduled = $voice_chat_scheduled;
     }
 
 }

@@ -1416,13 +1416,13 @@ trait TelegramTrait
      * @param string $description
      * @param string $payload
      * @param string $provider_token
-     * @param string $start_parameter
+     * @param string|null $start_parameter optional
      * @param string $currency
      * @param $prices
      * @param array $opt
      * @return PromiseInterface
      */
-    public function sendInvoice(string $title, string $description, string $payload, string $provider_token, string $start_parameter, string $currency, $prices, array $opt = []): PromiseInterface
+    public function sendInvoice(string $title, string $description, string $payload, string $provider_token, ?string $start_parameter, string $currency, $prices, array $opt = []): PromiseInterface
     {
         $opt = $this->resolveChatId($opt);
         $required = compact("title", "description", "payload", "provider_token", "start_parameter", "currency", "prices");

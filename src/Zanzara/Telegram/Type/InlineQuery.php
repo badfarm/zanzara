@@ -51,6 +51,15 @@ class InlineQuery
     private $offset;
 
     /**
+     * Optional. Type of the chat, from which the inline query was sent. Can be either “sender” for a private chat with
+     * the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should be always known for
+     * requests sent from official clients and most third-party clients, unless the request was sent from a secret chat
+     *
+     * @var string|null
+     */
+    private $chat_type;
+
+    /**
      * @return string
      */
     public function getId(): string
@@ -128,6 +137,22 @@ class InlineQuery
     public function setOffset(string $offset): void
     {
         $this->offset = $offset;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getChatType(): ?string
+    {
+        return $this->chat_type;
+    }
+
+    /**
+     * @param string|null $chat_type
+     */
+    public function setChatType(?string $chat_type): void
+    {
+        $this->chat_type = $chat_type;
     }
 
 }
