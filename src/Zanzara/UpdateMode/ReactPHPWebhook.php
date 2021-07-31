@@ -52,7 +52,9 @@ class ReactPHPWebhook extends BaseWebhook
             return new Response();
         });
         $server->on('error', function ($e) use (&$processingUpdate) {
-            if (!$this->zanzara->callOnException(new Context($processingUpdate, $this->container), $e)) {
+            $contextClass = $this->config->getContextClass();
+            $context = new $contextClass($processingUpdate, $this->container);
+            if (!$this->zanzara->callOnException($context, $e)) {
                 $this->logger->errorUpdate($e, $processingUpdate);
             }
         });

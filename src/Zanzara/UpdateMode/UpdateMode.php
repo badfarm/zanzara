@@ -83,7 +83,8 @@ abstract class UpdateMode implements UpdateModeInterface
     protected function processUpdate(Update $update)
     {
         $update->detectUpdateType();
-        $context = new Context($update, $this->container);
+        $contextClass = $this->config->getContextClass();
+        $context = new $contextClass($update, $this->container);
         $this->zanzara->resolveListeners($update)
             ->then(function ($listeners) use ($context, $update) {
                 /** @var Listener[] $listeners */

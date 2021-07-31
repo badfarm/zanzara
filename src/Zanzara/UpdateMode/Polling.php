@@ -83,7 +83,9 @@ class Polling extends UpdateMode
             $this->logger->error("Failed to fetch updates from Telegram: $error");
             $this->loop->addTimer($this->config->getPollingRetry(), [$this, 'startPolling']);
         })->/** @scrutinizer ignore-call */ otherwise(function ($e) use (&$offset, &$processingUpdate) {
-            if (!$this->zanzara->callOnException(new Context($processingUpdate, $this->container), $e)) {
+            $contextClass = $this->config->getContextClass();
+            $context = new $contextClass($processingUpdate, $this->container);
+            if (!$this->zanzara->callOnException($context, $e)) {
                 $this->logger->errorUpdate($e);
             }
             $this->loop->addTimer($this->config->getPollingRetry(), [$this, 'startPolling']);

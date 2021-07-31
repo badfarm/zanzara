@@ -53,17 +53,17 @@ class Context
      *
      * @var array
      */
-    private $data = [];
+    protected $data = [];
 
     /**
      * @var ZanzaraCache
      */
-    private $cache;
+    protected $cache;
 
     /**
      * @var ConversationManager
      */
-    private $conversationManager;
+    protected $conversationManager;
 
     /**
      * @param Update $update

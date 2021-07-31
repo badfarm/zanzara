@@ -176,6 +176,11 @@ class Config
     private $proxyHttpHeaders = [];
 
     /**
+     * @var string
+     */
+    private $contextClass = Context::class;
+
+    /**
      * @return LoopInterface|null
      */
     public function getLoop(): ?LoopInterface
@@ -577,6 +582,22 @@ class Config
     public function setPollingRetry(float $pollingRetry): void
     {
         $this->pollingRetry = $pollingRetry;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContextClass(): string
+    {
+        return $this->contextClass;
+    }
+
+    /**
+     * @param string $contextClass
+     */
+    public function setContextClass(string $contextClass): void
+    {
+        $this->contextClass = $contextClass;
     }
 
 }
