@@ -11,7 +11,7 @@ namespace Zanzara\Telegram\Type;
  * More on https://core.telegram.org/bots/api#botcommandscopedefault
  *
  */
-class BotCommandScopeDefault
+class BotCommandScopeDefault extends BotCommandScope
 {
 
     /**

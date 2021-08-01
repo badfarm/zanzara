@@ -10,7 +10,7 @@ namespace Zanzara\Telegram\Type;
  * More on https://core.telegram.org/bots/api#botcommandscopeallgroupchats
  *
  */
-class BotCommandScopeAllGroupChats
+class BotCommandScopeAllGroupChats extends BotCommandScope
 {
 
     /**
