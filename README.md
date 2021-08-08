@@ -54,4 +54,4 @@ Then run it from command line as follows:
 
 Enjoy your bot!
 
-Check [Wiki](https://github.com/badfarm/zanzara/wiki) for documentation.
+Check out [Wiki](https://github.com/badfarm/zanzara/wiki) for documentation.
