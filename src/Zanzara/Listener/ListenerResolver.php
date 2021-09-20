@@ -57,11 +57,10 @@ abstract class ListenerResolver extends ListenerCollector
                     // if something goes wrong, reject the promise
                     $deferred->reject($e);
                 });
-        } elseif ($updateType === Message::class) {
-            $text = $update->getMessage()->getText();
+        } elseif (is_a($updateType, Message::class, true)) {
             $chatId = $update->getEffectiveChat()->getId();
             $this->conversationManager->getConversationHandler($chatId)
-                ->then(function ($handlerInfo) use ($update, $updateType, $chatId, $text, $deferred, &$listeners) {
+                ->then(function ($handlerInfo) use ($update, $updateType, $chatId, $deferred, &$listeners) {
                     [$callback, $skipListeners, $skipMiddlewares] = $handlerInfo;
                     // if we are not in a conversation, or we are not skipping the listeners
                     if (!$callback || !$skipListeners) {
@@ -70,7 +69,10 @@ abstract class ListenerResolver extends ListenerCollector
                         $this->mergeListenersByType($update, $listeners, Update::class);
                         // find a listener for the type, and call the fallback only
                         // when we are not in a conversation, so the callback will be null
-                        $listener = $this->findListenerAndPush($update, $listeners, 'messages', $text, $callback !== null);
+                        $listener = null;
+                        if ($update->getMessage() && $update->getMessage()->getText()) {
+                            $listener = $this->findListenerAndPush($update, $listeners, 'messages', $update->getMessage()->getText(), $callback !== null);
+                        }
                         // if the conversation is not skipping listeners, escape the conversation
                         if ($listener && $callback && !$skipListeners) {
                             $this->conversationManager->deleteConversationHandler($chatId);
