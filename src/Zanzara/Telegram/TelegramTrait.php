@@ -22,6 +22,7 @@ use Zanzara\Telegram\Type\Game\GameHighScore;
 use Zanzara\Telegram\Type\Input\InputFile;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\MessageId;
+use Zanzara\Telegram\Type\Miscellaneous\BotCommand;
 use Zanzara\Telegram\Type\Poll\Poll;
 use Zanzara\Telegram\Type\Response\TelegramException;
 use Zanzara\Telegram\Type\Update;
@@ -1117,7 +1118,7 @@ trait TelegramTrait
      */
     public function getMyCommands(array $opt = []): PromiseInterface
     {
-        return $this->callApi("getMyCommands", $opt);
+        return $this->callApi("getMyCommands", $opt, BotCommand::class);
     }
 
     /**
