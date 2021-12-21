@@ -18,6 +18,9 @@
             "name": "Mattia Corradi"
         }
     ],
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
     "require": {
         "php": ">=7.3",
         "ext-json": "*",
