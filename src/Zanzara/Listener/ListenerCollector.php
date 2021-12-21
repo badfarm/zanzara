@@ -11,6 +11,7 @@ use Zanzara\Middleware\MiddlewareCollector;
 use Zanzara\Middleware\MiddlewareInterface;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\ChannelPost;
+use Zanzara\Telegram\Type\ChatJoinRequest;
 use Zanzara\Telegram\Type\ChosenInlineResult;
 use Zanzara\Telegram\Type\EditedChannelPost;
 use Zanzara\Telegram\Type\EditedMessage;
@@ -457,6 +458,26 @@ abstract class ListenerCollector
     {
         $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[PollAnswer::class][] = $listener;
+        return $listener;
+    }
+
+    /**
+     * Listen for a chat join request.
+     * You can call this function more than once, every callback will be executed.
+     *
+     * Eg. $bot->onChatJoinRequest(function(Context $ctx) {});
+     *
+     * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
+     * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function onChatJoinRequest($callback, array $filters = []): MiddlewareCollector
+    {
+        $listener = new Listener($callback, $this->container, null, $filters);
+        $this->listeners[ChatJoinRequest::class][] = $listener;
         return $listener;
     }
 

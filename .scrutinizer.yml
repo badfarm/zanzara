@@ -1,9 +1,0 @@
-build:
-  nodes:
-    coverage:
-      tests:
-        override:
-          - command: ./vendor/bin/phpunit --coverage-html target/coverage
-            coverage:
-              file: target/coverage
-              format: clover

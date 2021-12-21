@@ -113,6 +113,13 @@ class Message
     private $forward_date;
 
     /**
+     * Optional. True, if the message is a channel post that was automatically forwarded to the connected discussion group
+     *
+     * @var bool|null
+     */
+    private $is_automatic_forward;
+
+    /**
      * Optional. For replies, the original message. Note that the Message object in this field will not contain further
      * reply_to_message fields even if it itself is a reply.
      *
@@ -126,6 +133,13 @@ class Message
      * @var int|null
      */
     private $edit_date;
+
+    /**
+     * Optional. True, if the message can't be forwarded
+     *
+     * @var bool|null
+     */
+    private $has_protected_content;
 
     /**
      * Optional. The unique identifier of a media message group this message belongs to
@@ -330,6 +344,13 @@ class Message
      * @var bool|null
      */
     private $channel_chat_created;
+
+    /**
+     * Optional. Service message: auto-delete timer settings changed in the chat
+     *
+     * @var MessageAutoDeleteTimerChanged|null
+     */
+    private $message_auto_delete_timer_changed;
 
     /**
      * Optional. The group has been migrated to a supergroup with the specified identifier. This number may be greater than
@@ -1316,6 +1337,54 @@ class Message
     public function setVoiceChatScheduled(?VoiceChatScheduled $voice_chat_scheduled): void
     {
         $this->voice_chat_scheduled = $voice_chat_scheduled;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getIsAutomaticForward(): ?bool
+    {
+        return $this->is_automatic_forward;
+    }
+
+    /**
+     * @param bool|null $is_automatic_forward
+     */
+    public function setIsAutomaticForward(?bool $is_automatic_forward): void
+    {
+        $this->is_automatic_forward = $is_automatic_forward;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getHasProtectedContent(): ?bool
+    {
+        return $this->has_protected_content;
+    }
+
+    /**
+     * @param bool|null $has_protected_content
+     */
+    public function setHasProtectedContent(?bool $has_protected_content): void
+    {
+        $this->has_protected_content = $has_protected_content;
+    }
+
+    /**
+     * @return MessageAutoDeleteTimerChanged|null
+     */
+    public function getMessageAutoDeleteTimerChanged(): ?MessageAutoDeleteTimerChanged
+    {
+        return $this->message_auto_delete_timer_changed;
+    }
+
+    /**
+     * @param MessageAutoDeleteTimerChanged|null $message_auto_delete_timer_changed
+     */
+    public function setMessageAutoDeleteTimerChanged(?MessageAutoDeleteTimerChanged $message_auto_delete_timer_changed): void
+    {
+        $this->message_auto_delete_timer_changed = $message_auto_delete_timer_changed;
     }
 
 }

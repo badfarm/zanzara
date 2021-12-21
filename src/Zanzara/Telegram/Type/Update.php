@@ -140,6 +140,14 @@ class Update implements \JsonSerializable
     private $chat_member;
 
     /**
+     * Optional. A request to join the chat has been sent. The bot must have the can_invite_users administrator right in
+     * the chat to receive these updates.
+     *
+     * @var ChatJoinRequest|null
+     */
+    private $chat_join_request;
+
+    /**
      * @return int
      */
     public function getUpdateId(): int
@@ -395,6 +403,10 @@ class Update implements \JsonSerializable
         } else if ($this->poll_answer) {
             $this->updateType = PollAnswer::class;
             $this->effectiveUser = $this->poll_answer->getUser();
+        } else if ($this->chat_join_request) {
+            $this->updateType = ChatJoinRequest::class;
+            $this->effectiveUser = $this->chat_join_request->getFrom();
+            $this->effectiveChat = $this->chat_join_request->getChat();
         }
     }
 
@@ -460,6 +472,22 @@ class Update implements \JsonSerializable
     public function setChatMember(?ChatMember $chat_member): void
     {
         $this->chat_member = $chat_member;
+    }
+
+    /**
+     * @return ChatJoinRequest|null
+     */
+    public function getChatJoinRequest(): ?ChatJoinRequest
+    {
+        return $this->chat_join_request;
+    }
+
+    /**
+     * @param ChatJoinRequest|null $chat_join_request
+     */
+    public function setChatJoinRequest(?ChatJoinRequest $chat_join_request): void
+    {
+        $this->chat_join_request = $chat_join_request;
     }
 
     public function __toString()

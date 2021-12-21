@@ -1741,6 +1741,71 @@ trait TelegramTrait
     }
 
     /**
+     * Use this method to approve a chat join request. The bot must be an administrator in the chat for this to work and
+     * must have the can_invite_users administrator right. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#approvechatjoinrequest
+     *
+     * @param $chat_id mixed Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+     * @param $user_id mixed Unique identifier of the target user
+     * @return PromiseInterface
+     */
+    public function approveChatJoinRequest($chat_id, $user_id): PromiseInterface
+    {
+        $required = compact("chat_id", "user_id");
+        return $this->callApi("approveChatJoinRequest", $required);
+    }
+
+    /**
+     * Use this method to decline a chat join request. The bot must be an administrator in the chat for this to work and
+     * must have the can_invite_users administrator right. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#declinechatjoinrequest
+     *
+     * @param $chat_id mixed Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+     * @param $user_id mixed Unique identifier of the target user
+     * @return PromiseInterface
+     */
+    public function declineChatJoinRequest($chat_id, $user_id): PromiseInterface
+    {
+        $required = compact("chat_id", "user_id");
+        return $this->callApi("declineChatJoinRequest", $required);
+    }
+
+    /**
+     * Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the
+     * banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator
+     * in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#declinechatjoinrequest
+     *
+     * @param $chat_id mixed Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+     * @param $sender_chat_id mixed Unique identifier of the target sender chat
+     * @return PromiseInterface
+     */
+    public function banChatSenderChat($chat_id, $sender_chat_id): PromiseInterface
+    {
+        $required = compact("chat_id", "sender_chat_id");
+        return $this->callApi("banChatSenderChat", $required);
+    }
+
+    /**
+     * Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator
+     * for this to work and must have the appropriate administrator rights. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#declinechatjoinrequest
+     *
+     * @param $chat_id mixed Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+     * @param $sender_chat_id mixed Unique identifier of the target sender chat
+     * @return PromiseInterface
+     */
+    public function unbanChatSenderChat($chat_id, $sender_chat_id): PromiseInterface
+    {
+        $required = compact("chat_id", "sender_chat_id");
+        return $this->callApi("unbanChatSenderChat", $required);
+    }
+
+    /**
      * @param string $method
      * @param array $params
      * @param string $class

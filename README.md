@@ -4,10 +4,9 @@
 
 Asynchronous PHP Telegram Bot Framework built on top of [ReactPHP](https://reactphp.org/)
 
-[![Bot API](https://img.shields.io/badge/Bot%20API-5.3%20(June%202021)-blue)](https://core.telegram.org/bots/api)
+[![Bot API](https://img.shields.io/badge/Bot%20API-5.5%20(December%202021)-blue)](https://core.telegram.org/bots/api)
 [![PHP](https://img.shields.io/badge/PHP-%3E%3D7.3-blue)](https://www.php.net/)
-[![Build Status](https://travis-ci.org/badfarm/zanzara.svg?branch=master)](https://travis-ci.org/badfarm/zanzara)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/badfarm/zanzara/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/badfarm/zanzara/?branch=develop)
+[![Build](https://github.com/badfarm/zanzara/actions/workflows/build.yml/badge.svg)](https://github.com/badfarm/zanzara/actions/workflows/build.yml)
 [![Code style](https://img.shields.io/badge/code%20style-standard-green)](https://www.php-fig.org/psr/psr-2/)
 [![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/badfarm/zanzara/blob/develop/LICENSE.md)
 
@@ -20,7 +19,6 @@ Asynchronous PHP Telegram Bot Framework built on top of [ReactPHP](https://react
 * Based on [ReactPHP](https://reactphp.org/) asynchronous non-blocking I/O model
 * Scheduled functions/timers provided by ReactPHP
 * Bulk message sending (no more 429 annoying errors)
-* Full [Telegram Bot Api 5.3](https://core.telegram.org/bots/api) support (June 2021)
 
 ### Installation
 ```
@@ -54,4 +52,4 @@ Then run it from command line as follows:
 
 Enjoy your bot!
 
-Check out [Wiki](https://github.com/badfarm/zanzara/wiki) for documentation.
+Check out the [Wiki](https://github.com/badfarm/zanzara/wiki) for documentation.

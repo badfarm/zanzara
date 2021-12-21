@@ -73,6 +73,14 @@ class Chat implements \JsonSerializable
     private $bio;
 
     /**
+     * Optional. True, if privacy settings of the other party in the private chat allows to use tg://user?id=<user_id>
+     * links only in chats with the user. Returned only in getChat.
+     *
+     * @var bool|null
+     */
+    private $has_private_forwards;
+
+    /**
      * Optional. Description, for groups, supergroups and channel chats. Returned only in getChat.
      *
      * @var string|null
@@ -108,6 +116,21 @@ class Chat implements \JsonSerializable
      * @var int|null
      */
     private $slow_mode_delay;
+
+    /**
+     * Optional. The time after which all messages sent to the chat will be automatically deleted; in seconds. Returned
+     * only in getChat.
+     *
+     * @var int|null
+     */
+    private $message_auto_delete_time;
+
+    /**
+     * Optional. True, if messages from the chat can't be forwarded to other chats. Returned only in getChat.
+     *
+     * @var bool|null
+     */
+    private $has_protected_content;
 
     /**
      * Optional. For supergroups, name of group sticker set. Returned only in getChat.
@@ -433,6 +456,54 @@ class Chat implements \JsonSerializable
     public function setLocation(?ChatLocation $location): void
     {
         $this->location = $location;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getHasPrivateForwards(): ?bool
+    {
+        return $this->has_private_forwards;
+    }
+
+    /**
+     * @param bool|null $has_private_forwards
+     */
+    public function setHasPrivateForwards(?bool $has_private_forwards): void
+    {
+        $this->has_private_forwards = $has_private_forwards;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMessageAutoDeleteTime(): ?int
+    {
+        return $this->message_auto_delete_time;
+    }
+
+    /**
+     * @param int|null $message_auto_delete_time
+     */
+    public function setMessageAutoDeleteTime(?int $message_auto_delete_time): void
+    {
+        $this->message_auto_delete_time = $message_auto_delete_time;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getHasProtectedContent(): ?bool
+    {
+        return $this->has_protected_content;
+    }
+
+    /**
+     * @param bool|null $has_protected_content
+     */
+    public function setHasProtectedContent(?bool $has_protected_content): void
+    {
+        $this->has_protected_content = $has_protected_content;
     }
 
 }

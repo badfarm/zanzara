@@ -65,6 +65,27 @@ class ChatInviteLink
     private $member_limit;
 
     /**
+     * True, if users joining the chat via the link need to be approved by chat administrators
+     *
+     * @var bool
+     */
+    private $creates_join_request;
+
+    /**
+     * Optional. Number of pending join requests created using this link
+     *
+     * @var int|null
+     */
+    private $pending_join_request_count;
+
+    /**
+     * Optional. Invite link name
+     *
+     * @var string|null
+     */
+    private $name;
+
+    /**
      * @return string
      */
     public function getInviteLink(): string
@@ -174,6 +195,54 @@ class ChatInviteLink
     public function setMemberLimit(?int $member_limit): void
     {
         $this->member_limit = $member_limit;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCreatesJoinRequest(): bool
+    {
+        return $this->creates_join_request;
+    }
+
+    /**
+     * @param bool $creates_join_request
+     */
+    public function setCreatesJoinRequest(bool $creates_join_request): void
+    {
+        $this->creates_join_request = $creates_join_request;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPendingJoinRequestCount(): ?int
+    {
+        return $this->pending_join_request_count;
+    }
+
+    /**
+     * @param int|null $pending_join_request_count
+     */
+    public function setPendingJoinRequestCount(?int $pending_join_request_count): void
+    {
+        $this->pending_join_request_count = $pending_join_request_count;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string|null $name
+     */
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
     }
 
 }
