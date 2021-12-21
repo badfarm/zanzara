@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['7.3', '7.4', '8.0', '8.1']
+        php: ['8.1']
 
     steps:
     - uses: actions/checkout@v2
@@ -35,7 +35,7 @@ jobs:
           ${{ runner.os }}-php-
 
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --no-fund
+      run: composer install --prefer-dist --no-progress
       
     - name: Run test suite
       run: composer run-script test
