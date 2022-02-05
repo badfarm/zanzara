@@ -498,7 +498,7 @@ class Update implements \JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
             'update_id' => $this->update_id,

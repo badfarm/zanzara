@@ -57,7 +57,7 @@ class TelegramException extends Exception implements \JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
             'error_code' => $this->errorCode,
