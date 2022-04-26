@@ -89,7 +89,9 @@ abstract class ListenerResolver extends ListenerCollector
                     $deferred->reject($e);
                 });
         } else {
-            $this->mergeListenersByType($update, $listeners, $updateType);
+            if (is_string($updateType)){
+                $this->mergeListenersByType($update, $listeners, $updateType);
+            }
             $this->mergeListenersByType($update, $listeners, Update::class);
             $deferred->resolve($listeners);
         }
