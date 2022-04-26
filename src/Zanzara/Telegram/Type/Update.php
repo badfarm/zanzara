@@ -342,7 +342,7 @@ class Update implements \JsonSerializable
     /**
      * @return string
      */
-    public function getUpdateType(): string
+    public function getUpdateType(): ?string
     {
         return $this->updateType;
     }
