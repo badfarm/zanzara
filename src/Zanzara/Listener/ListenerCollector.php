@@ -83,9 +83,6 @@ abstract class ListenerCollector
      * Listen for the specified command.
      * Eg. $bot->onCommand('start', function(Context $ctx) {});
      *
-     * You can also parameterized the command, eg:
-     * Eg. $bot->onCommand('start {myParam}', function(Context $ctx, $myParam) {});
-     *
      * @param  string  $command
      * @param $callback
      * @param array $filters eg. ['chat_type' => 'group']
@@ -95,8 +92,7 @@ abstract class ListenerCollector
      */
     public function onCommand(string $command, $callback, array $filters = []): MiddlewareCollector
     {
-        $pattern = str_replace('/', '\/', "/{$command}");
-        $command = '/^'.preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $pattern).' ?$/miu';
+        $command = "/^\/". $command ."(?:\b)(?:\s.*)?$/s";
 
         $listener = new Listener($callback, $this->container, $command, $filters);
         $this->listeners['messages'][$command] = $listener;
