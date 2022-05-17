@@ -110,7 +110,10 @@ abstract class ListenerResolver extends ListenerCollector
         if ($listenerId !== null) {
             $typedListeners = $this->listeners[$listenerType] ?? [];
             foreach ($typedListeners as $regex => $listener) {
-                $regexMatched = (bool) preg_match($regex, \preg_replace('/[\/,.\-;?!$]/', '/', $listenerId, 1), $matches, PREG_UNMATCHED_AS_NULL);
+                if (\preg_match('/^[\/,.\-;?!$]/', $listenerId) === 1) {
+                    $listenerId = \preg_replace('/[\/,.\-;?!$]/', '/', $listenerId, 1);
+                }
+                $regexMatched = (bool) preg_match($regex, $listenerId, $matches, PREG_UNMATCHED_AS_NULL);
                 $filterPassed = $this->filterListener($update, $listener->getFilters());
                 if ($regexMatched && $filterPassed) {
                     $parameters = array_unique(array_values(array_slice($matches, 1)));
