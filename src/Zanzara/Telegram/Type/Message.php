@@ -157,6 +157,13 @@ class Message
     private $author_signature;
 
     /**
+     * Optional. For command messages
+     *
+     * @var string|null
+     */
+    private $command;
+
+    /**
      * Optional. For text messages, the actual UTF-8 text of the message, 0-4096 characters
      *
      * @var string|null
@@ -681,6 +688,26 @@ class Message
     public function setAuthorSignature(?string $author_signature): void
     {
         $this->author_signature = $author_signature;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCommand(): ?string
+    {
+        return $this->command;
+    }
+
+    /**
+     * @return string
+     */
+    public function getParsedCommand(): string
+    {
+        if (\preg_match('/^[\/,.\-;?!$]/', $this->text) === 1) {
+            $this->text = \preg_replace('/[\/,.\-;?!$]/', '/', $this->text, 1);
+            $this->command = explode(' ', $this->text, 2)[0];
+        }
+        return $this->text;
     }
 
     /**
@@ -1386,5 +1413,4 @@ class Message
     {
         $this->message_auto_delete_timer_changed = $message_auto_delete_timer_changed;
     }
-
 }

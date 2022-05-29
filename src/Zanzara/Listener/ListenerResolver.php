@@ -33,9 +33,9 @@ abstract class ListenerResolver extends ListenerCollector
         $updateType = $update->getUpdateType();
 
         if ($updateType === CallbackQuery::class) {
-            $chatId = $update->getEffectiveChat() ? $update->getEffectiveChat()->getId() : null;
+            $chatId = $update->getEffectiveChat() ?? $update->getEffectiveChat()->getId();
             $callbackQuery = $update->getCallbackQuery();
-            $text = $callbackQuery->getMessage() ? $callbackQuery->getMessage()->getText() : null;
+            $text = $callbackQuery->getMessage() ?? $callbackQuery->getMessage()->getText();
             $this->conversationManager->getConversationHandler($chatId)
                 ->then(function ($handlerInfo) use ($update, $updateType, $deferred, $callbackQuery, $text, &$listeners) {
                     // if we are not in a conversation, call the listeners as usual
@@ -71,7 +71,7 @@ abstract class ListenerResolver extends ListenerCollector
                         // when we are not in a conversation, so the callback will be null
                         $listener = null;
                         if ($update->getMessage() && $update->getMessage()->getText()) {
-                            $listener = $this->findListenerAndPush($update, $listeners, 'messages', $update->getMessage()->getText(), $callback !== null);
+                            $listener = $this->findListenerAndPush($update, $listeners, 'messages', $update->getMessage()->getParsedCommand(), $callback !== null);
                         }
                         // if the conversation is not skipping listeners, escape the conversation
                         if ($listener && $callback && !$skipListeners) {
@@ -110,9 +110,6 @@ abstract class ListenerResolver extends ListenerCollector
         if ($listenerId !== null) {
             $typedListeners = $this->listeners[$listenerType] ?? [];
             foreach ($typedListeners as $regex => $listener) {
-                if (\preg_match('/^[\/,.\-;?!$]/', $listenerId) === 1) {
-                    $listenerId = \preg_replace('/[\/,.\-;?!$]/', '/', $listenerId, 1);
-                }
                 $regexMatched = (bool) preg_match($regex, $listenerId, $matches, PREG_UNMATCHED_AS_NULL);
                 $filterPassed = $this->filterListener($update, $listener->getFilters());
                 if ($regexMatched && $filterPassed) {
@@ -158,5 +155,4 @@ abstract class ListenerResolver extends ListenerCollector
 
         return true;
     }
-
 }
