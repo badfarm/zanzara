@@ -33,9 +33,9 @@ abstract class ListenerResolver extends ListenerCollector
         $updateType = $update->getUpdateType();
 
         if ($updateType === CallbackQuery::class) {
-            $chatId = $update->getEffectiveChat() ?? $update->getEffectiveChat()->getId();
+            $chatId = $update->getEffectiveChat() ? $update->getEffectiveChat()->getId() : null;
             $callbackQuery = $update->getCallbackQuery();
-            $text = $callbackQuery->getMessage() ?? $callbackQuery->getMessage()->getText();
+            $text = $callbackQuery->getMessage() ? $callbackQuery->getMessage()->getText() : null;
             $this->conversationManager->getConversationHandler($chatId)
                 ->then(function ($handlerInfo) use ($update, $updateType, $deferred, $callbackQuery, $text, &$listeners) {
                     // if we are not in a conversation, call the listeners as usual
