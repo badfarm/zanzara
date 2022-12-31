@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Zanzara\Telegram\Type;
 
 /**
- * This object represents a service message about a voice chat scheduled in the chat.
+ * This object represents a service message about a video chat scheduled in the chat.
  *
- * More on https://core.telegram.org/bots/api#voicechatscheduled
+ * More on https://core.telegram.org/bots/api#videochatscheduled
  *
  */
-class VoiceChatScheduled
+class VideoChatScheduled
 {
 
     /**
-     * Point in time (Unix timestamp) when the voice chat is supposed to be started by a chat administrator
+     * Point in time (Unix timestamp) when the video chat is supposed to be started by a chat administrator
      *
      * @var int
      */

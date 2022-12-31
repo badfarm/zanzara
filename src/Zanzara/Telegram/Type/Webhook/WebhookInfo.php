@@ -36,7 +36,6 @@ class WebhookInfo
     /**
      * Optional. Currently used webhook IP address
      *
-     * @since zanzara 0.5.0, Telegram Bot Api 5.0
      * @var string|null
      */
     private $ip_address;
@@ -55,6 +54,14 @@ class WebhookInfo
      * @var string|null
      */
     private $last_error_message;
+
+    /**
+     * Optional. Unix time of the most recent error that happened when trying to
+     * synchronize available updates with Telegram datacenters
+     *
+     * @var int|null
+     */
+    private $last_synchronization_error_date;
 
     /**
      * Optional. Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery
@@ -146,6 +153,22 @@ class WebhookInfo
     public function setLastErrorMessage(?string $last_error_message): void
     {
         $this->last_error_message = $last_error_message;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLastSynchronizationErrorDate(): ?int
+    {
+        return $this->last_synchronization_error_date;
+    }
+
+    /**
+     * @param int|null $last_synchronization_error_date
+     */
+    public function setLastSynchronizationErrorDate(?int $last_synchronization_error_date): void
+    {
+        $this->last_synchronization_error_date = $last_synchronization_error_date;
     }
 
     /**

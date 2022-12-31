@@ -14,12 +14,15 @@ use Zanzara\Config;
 use Zanzara\MessageQueue;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\Chat;
+use Zanzara\Telegram\Type\ChatInviteLink;
 use Zanzara\Telegram\Type\ChatMember;
+use Zanzara\Telegram\Type\ChatAdministratorRights;
 use Zanzara\Telegram\Type\File\File;
 use Zanzara\Telegram\Type\File\StickerSet;
 use Zanzara\Telegram\Type\File\UserProfilePhotos;
 use Zanzara\Telegram\Type\Game\GameHighScore;
 use Zanzara\Telegram\Type\Input\InputFile;
+use Zanzara\Telegram\Type\MenuButton;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\MessageId;
 use Zanzara\Telegram\Type\Miscellaneous\BotCommand;
@@ -27,6 +30,7 @@ use Zanzara\Telegram\Type\Poll\Poll;
 use Zanzara\Telegram\Type\Response\TelegramException;
 use Zanzara\Telegram\Type\Update;
 use Zanzara\Telegram\Type\User;
+use Zanzara\Telegram\Type\WebApp\SentWebAppMessage;
 use Zanzara\Telegram\Type\Webhook\WebhookInfo;
 use Zanzara\ZanzaraLogger;
 use Zanzara\ZanzaraMapper;
@@ -101,14 +105,17 @@ trait TelegramTrait
      *     'parse_mode' => 'HTML',
      *     'disable_web_page_preview' => true,
      *     'disable_notification' => true,
+     *     'protect_content' => true,
      *     'reply_to_message_id' => 123456789,
+     *     'allow_sending_without_reply' => true,
      *     'reply_markup' => ['force_reply' => true],
      *     'reply_markup' => ['inline_keyboard' => [[
-     *          ['callback_data' => 'data', 'text' => 'text']
+     *          ['text' => 'text', 'callback_data' => 'data', 'url' => 'HTTPS or tg:// URL']
      *      ]]],
      *      'reply_markup' => ['resize_keyboard' => true, 'one_time_keyboard' => true, 'selective' => true, 'keyboard' => [[
      *          ['text' => 'text', 'request_contact' => true, 'request_location' => true, 'request_poll' => ['type' => 'quiz']]
-     *      ]]]
+     *      ]]],
+     *     'reply_markup' => ['remove_keyboard' => true, 'selective' => true]
      * ]
      * @return PromiseInterface
      */
@@ -1108,6 +1115,20 @@ trait TelegramTrait
     }
 
     /**
+     * Use this method to delete the list of the bot's commands for the given scope and user language. After deletion,
+     * higher level commands will be shown to affected users. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#deletemycommands
+     *
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function deleteMyCommands(array $opt = []): PromiseInterface
+    {
+        return $this->callApi("deleteMyCommands", $opt);
+    }
+
+    /**
      * Use this method to get the current list of the bot's commands for the given scope and user language. Returns
      * Array of BotCommand on success. If commands aren't set, an empty list is returned.
      *
@@ -1122,17 +1143,77 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to delete the list of the bot's commands for the given scope and user language. After deletion,
-     * higher level commands will be shown to affected users. Returns True on success.
+     * Use this method to change the bot's menu button in a private chat, or the default menu button.
      *
-     * More on https://core.telegram.org/bots/api#deletemycommands
+     * Returns True on success.
      *
-     * @param array $opt
+     * @see https://core.telegram.org/bots/api#setchatmenubutton
+     * @param array $opt = [
+     *     'chat_id' => 123456789, // If not specified, default bot's menu button will be changed
+     *     'menu_button' => ['type' => 'commands'],
+     *     'menu_button' => ['type' => 'web_app', 'text' => 'Text on the button', 'web_app' => ['url' => 'https://']]
+     * ]
      * @return PromiseInterface
      */
-    public function deleteMyCommands(array $opt = []): PromiseInterface
+    public function setChatMenuButton(array $opt = []): PromiseInterface
     {
-        return $this->callApi("deleteMyCommands", $opt);
+        return $this->callApi("setChatMenuButton", $opt);
+    }
+
+    /**
+     * Use this method to get the current value of the bot's menu button in a private chat, or the default menu button.
+     *
+     * Returns @see MenuButton on success.
+     *
+     * @see https://core.telegram.org/bots/api#setchatmenubutton
+     * @param array $opt = [
+     *     'chat_id' => 123456789, // If not specified, default bot's menu button will be returned
+     * ]
+     * @return PromiseInterface
+     */
+    public function getChatMenuButton(array $opt = []): PromiseInterface
+    {
+        return $this->callApi("getChatMenuButton", $opt, MenuButton::class);
+    }
+
+    /**
+     * Use this method to change the default administrator rights requested by the bot
+     * when it's added as an administrator to groups or channels.
+     * These rights will be suggested to users, but they are free to modify the list before adding the bot.
+     *
+     * Returns True on success.
+     *
+     * @see https://core.telegram.org/bots/api#setmydefaultadministratorrights
+     * @param array $opt = [
+     *     'rights' => [ // If not specified, the default administrator rights will be cleared.
+     *       'is_anonymous' => true, 'can_manage_chat' => true, 'can_delete_messages' => true,
+     *       'can_manage_video_chats' => true, 'can_restrict_members' => true, 'can_promote_members' => true,
+     *       'can_change_info' => true, 'can_invite_users' => true, 'can_post_messages' => true,
+     *       'can_edit_messages' => true, 'can_pin_messages' => true, 'can_manage_topics' => true
+     *     ],
+     *     'for_channels' => false
+     * ]
+     * @return PromiseInterface
+     */
+    public function setMyDefaultAdministratorRights(array $opt = []): PromiseInterface
+    {
+        return $this->callApi("setMyDefaultAdministratorRights", $opt);
+    }
+
+    /**
+     * Use this method to get the current default administrator rights of the bot.
+     *
+     * Returns @see ChatAdministratorRights on success.
+     *
+     * @see https://core.telegram.org/bots/api#getmydefaultadministratorrights
+     * @param array $opt = [
+     *     'for_channels' => true, // Pass True to get default administrator rights of the bot in channels.
+     * ]
+     * @return PromiseInterface
+     */
+    public function getMyDefaultAdministratorRights(array $opt = []): PromiseInterface
+    {
+        return $this->callApi("getMyDefaultAdministratorRights", $opt, ChatAdministratorRights::class);
     }
 
     /**
@@ -1345,10 +1426,10 @@ trait TelegramTrait
 
     /**
      * Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus
-     * created. You must use exactly one of the fields png_sticker or tgs_sticker. Returns True on success.
+     * created. You must use exactly one of the fields png_sticker, tgs_sticker, or webm_sticker. Returns True on success.
      *
-     * The png_sticker param can be either a string or a @see InputFile. Note that if you use the latter the file reading
-     * operation is synchronous, so the main thread is blocked.
+     * The sticker param value in $opt can be either a string or a @see InputFile. Note that if you use the latter the
+     * file reading operation is synchronous, so the main thread is blocked.
      * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
      * More on https://core.telegram.org/bots/api#createnewstickerset
@@ -1467,6 +1548,25 @@ trait TelegramTrait
         $required = compact("results");
         $params = array_merge($required, $opt);
         return $this->callApi("answerInlineQuery", $params);
+    }
+
+    /**
+     * Use this method to set the result of an interaction with a Web App and send a corresponding message
+     * on behalf of the user to the chat from which the query originated.
+     *
+     * On success, a {@see SentWebAppMessage} object is returned.
+     *
+     * @see https://core.telegram.org/bots/api#answerwebappquery
+     * @param String $web_app_query_id Unique identifier for the query to be answered
+     * @param array $result A JSON-serialized object describing the message to be sent
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function answerWebAppQuery(string $web_app_query_id, array $result, array $opt = []): PromiseInterface
+    {
+        $required = compact("web_app_query_id","result");
+        $params = array_merge($required, $opt);
+        return $this->callApi("answerWebAppQuery", $params, SentWebAppMessage::class);
     }
 
     /**

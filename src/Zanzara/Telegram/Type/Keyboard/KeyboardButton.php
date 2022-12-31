@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Keyboard;
 
+use Zanzara\Telegram\Type\WebApp\WebAppInfo;
+
 /**
  * This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this
  * object to specify text of the button. Optional fields request_contact, request_location, and request_poll are
@@ -43,6 +45,15 @@ class KeyboardButton
      * @var KeyboardButtonPollType|null
      */
     private $request_poll;
+
+    /**
+     * Optional. If specified, the described Web App will be launched when the button is pressed.
+     * The Web App will be able to send a “web_app_data” service message.
+     * Available in private chats only
+     *
+     * @var WebAppInfo|null
+     */
+    private $web_app;
 
     /**
      * @return string
@@ -106,6 +117,22 @@ class KeyboardButton
     public function setRequestPoll(?KeyboardButtonPollType $request_poll): void
     {
         $this->request_poll = $request_poll;
+    }
+
+    /**
+     * @return WebAppInfo|null
+     */
+    public function getWebApp(): ?WebAppInfo
+    {
+        return $this->web_app;
+    }
+
+    /**
+     * @param WebAppInfo|null $web_app
+     */
+    public function setWebApp(?WebAppInfo $web_app): void
+    {
+        $this->web_app = $web_app;
     }
 
 }

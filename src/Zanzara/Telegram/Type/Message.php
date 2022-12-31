@@ -21,6 +21,7 @@ use Zanzara\Telegram\Type\Passport\PassportData;
 use Zanzara\Telegram\Type\Poll\Poll;
 use Zanzara\Telegram\Type\Shipping\Invoice;
 use Zanzara\Telegram\Type\Shipping\SuccessfulPayment;
+use Zanzara\Telegram\Type\WebApp\WebAppData;
 
 /**
  * This object represents a message.
@@ -38,18 +39,19 @@ class Message
     private $message_id;
 
     /**
-     * Optional. Sender, empty for messages sent to channels
+     * Optional. Sender of the message; empty for messages sent to channels.
+     * For backward compatibility, the field contains a fake sender user in non-channel chats,
+     * if the message was sent on behalf of a chat.
      *
      * @var User|null
      */
     private $from;
 
     /**
-     * Optional. Sender of the message, sent on behalf of a chat. The channel itself for channel messages. The
-     * supergroup itself for messages from anonymous group administrators. The linked channel for messages automatically
-     * forwarded to the discussion group
-     *
-     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     * Optional. Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts,
+     * the supergroup itself for messages from anonymous group administrators, the linked channel for messages
+     * automatically forwarded to the discussion group. For backward compatibility, the field from contains
+     * a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
      *
      * @var Chat|null
      */
@@ -77,7 +79,7 @@ class Message
     private $forward_from;
 
     /**
-     * Optional. For messages forwarded from channels, information about the original channel
+     * Optional. For messages forwarded from channels or from anonymous administrators, information about the original sender chat
      *
      * @var Chat|null
      */
@@ -91,15 +93,16 @@ class Message
     private $forward_from_message_id;
 
     /**
-     * Optional. For messages forwarded from channels, signature of the post author if present
+     * Optional. For forwarded messages that were originally sent in channels or by an anonymous chat administrator,
+     * signature of the message sender if present
      *
      * @var string|null
      */
     private $forward_signature;
 
     /**
-     * Optional. Sender's name for messages forwarded from users who disallow adding a link to their account in forwarded
-     * messages
+     * Optional. Sender's name for messages forwarded from users who disallow adding a link
+     * to their account in forwarded messages
      *
      * @var string|null
      */
@@ -121,11 +124,18 @@ class Message
 
     /**
      * Optional. For replies, the original message. Note that the Message object in this field will not contain further
-     * reply_to_message fields even if it itself is a reply.
+     * reply_to_message fields even if it itself is a reply
      *
      * @var Message|null
      */
     private $reply_to_message;
+
+    /**
+     * Optional. Bot through which the message was sent
+     *
+     * @var User|null
+     */
+    private $via_bot;
 
     /**
      * Optional. Date the message was last edited in Unix time
@@ -149,15 +159,15 @@ class Message
     private $media_group_id;
 
     /**
-     * Optional. Signature of the post author for messages in channels, or the custom title of an anonymous group
-     * administrator (@since zanzara 0.5.0, Telegram Bot Api 5.0)
+     * Optional. Signature of the post author for messages in channels, or the custom title
+     * of an anonymous group administrator
      *
      * @var string|null
      */
     private $author_signature;
 
     /**
-     * Optional. For text messages, the actual UTF-8 text of the message, 0-4096 characters
+     * Optional. For text messages, the actual UTF-8 text of the message
      *
      * @var string|null
      */
@@ -171,12 +181,12 @@ class Message
     private $entities;
 
     /**
-     * Optional. For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the
-     * caption
+     * Optional. Message is an animation, information about the animation. For backward compatibility,
+     * when this field is set, the document field will also be set
      *
-     * @var MessageEntity[]|null
+     * @var Animation|null
      */
-    private $caption_entities;
+    private $animation;
 
     /**
      * Optional. Message is an audio file, information about the file
@@ -191,21 +201,6 @@ class Message
      * @var Document|null
      */
     private $document;
-
-    /**
-     * Optional. Message is an animation, information about the animation. For backward compatibility, when this field is
-     * set, the document field will also be set
-     *
-     * @var Animation|null
-     */
-    private $animation;
-
-    /**
-     * Optional. Message is a game, information about the game. More about games >>
-     *
-     * @var Game|null
-     */
-    private $game;
 
     /**
      * Optional. Message is a photo, available sizes of the photo
@@ -229,13 +224,6 @@ class Message
     private $video;
 
     /**
-     * Optional. Message is a voice message, information about the file
-     *
-     * @var Voice|null
-     */
-    private $voice;
-
-    /**
      * Optional. Message is a video note, information about the video message
      *
      * @var VideoNote|null
@@ -243,11 +231,26 @@ class Message
     private $video_note;
 
     /**
-     * Optional. Caption for the animation, audio, document, photo, video or voice, 0-1024 characters
+     * Optional. Message is a voice message, information about the file
+     *
+     * @var Voice|null
+     */
+    private $voice;
+
+    /**
+     * Optional. Caption for the animation, audio, document, photo, video or voice
      *
      * @var string|null
      */
     private $caption;
+
+    /**
+     * Optional. For messages with a caption, special entities like usernames, URLs, bot commands, etc.
+     * that appear in the caption
+     *
+     * @var MessageEntity[]|null
+     */
+    private $caption_entities;
 
     /**
      * Optional. Message is a shared contact, information about the contact
@@ -257,18 +260,18 @@ class Message
     private $contact;
 
     /**
-     * Optional. Message is a shared location, information about the location
+     * Optional. Message is a dice with random value
      *
-     * @var Location|null
+     * @var Dice|null
      */
-    private $location;
+    private $dice;
 
     /**
-     * Optional. Message is a venue, information about the venue
+     * Optional. Message is a game, information about the game
      *
-     * @var Venue|null
+     * @var Game|null
      */
-    private $venue;
+    private $game;
 
     /**
      * Optional. Message is a native poll, information about the poll
@@ -278,15 +281,23 @@ class Message
     private $poll;
 
     /**
-     * Optional. Message is a dice with random value from 1 to 6
+     * Optional. Message is a venue, information about the venue.
+     * For backward compatibility, when this field is set, the location field will also be set
      *
-     * @var Dice|null
+     * @var Venue|null
      */
-    private $dice;
+    private $venue;
 
     /**
-     * Optional. New members that were added to the group or supergroup and information about them (the bot itself may be
-     * one of these members)
+     * Optional. Message is a shared location, information about the location
+     *
+     * @var Location|null
+     */
+    private $location;
+
+    /**
+     * Optional. New members that were added to the group or supergroup
+     * and information about them (the bot itself may be one of these members)
      *
      * @var User[]|null
      */
@@ -328,18 +339,18 @@ class Message
     private $group_chat_created;
 
     /**
-     * Optional. Service message: the supergroup has been created. This field can't be received in a message coming through
-     * updates, because bot can't be a member of a supergroup when it is created. It can only be found in
-     * reply_to_message if someone replies to a very first message in a directly created supergroup.
+     * Optional. Service message: the supergroup has been created. This field can't be received in a message coming
+     * through updates, because bot can't be a member of a supergroup when it is created.
+     * It can only be found in reply_to_message if someone replies to a very first message in a directly created supergroup.
      *
      * @var bool|null
      */
     private $supergroup_chat_created;
 
     /**
-     * Optional. Service message: the channel has been created. This field can't be received in a message coming through
-     * updates, because bot can't be a member of a channel when it is created. It can only be found in reply_to_message
-     * if someone replies to a very first message in a channel.
+     * Optional. Service message: the channel has been created. This field can't be received in a message coming
+     * through updates, because bot can't be a member of a channel when it is created.
+     * It can only be found in reply_to_message if someone replies to a very first message in a channel.
      *
      * @var bool|null
      */
@@ -380,21 +391,21 @@ class Message
     private $pinned_message;
 
     /**
-     * Optional. Message is an invoice for a payment, information about the invoice. More about payments >>
+     * Optional. Message is an invoice for a payment, information about the invoice.
      *
      * @var Invoice|null
      */
     private $invoice;
 
     /**
-     * Optional. Message is a service message about a successful payment, information about the payment. More about payments >>
+     * Optional. Message is a service message about a successful payment, information about the payment
      *
      * @var SuccessfulPayment|null
      */
     private $successful_payment;
 
     /**
-     * Optional. The domain name of the website on which the user has logged in. More about Telegram Login >>
+     * Optional. The domain name of the website on which the user has logged in
      *
      * @var string|null
      */
@@ -408,14 +419,46 @@ class Message
     private $passport_data;
 
     /**
-     * Optional. Service message. A user in the chat triggered another user's proximity alert while sharing Live
-     * Location.
-     *
-     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     * Optional. Service message. A user in the chat triggered another user's proximity alert while sharing Live Location.
      *
      * @var ProximityAlertTriggered|null
      */
     private $proximity_alert_triggered;
+
+    /**
+     * Optional. Service message: video chat scheduled
+     *
+     * @var VideoChatScheduled|null
+     */
+    private $video_chat_scheduled;
+
+    /**
+     * Optional. Service message: video chat started
+     *
+     * @var VideoChatStarted|null
+     */
+    private $video_chat_started;
+
+    /**
+     * Optional. Service message: video chat ended
+     *
+     * @var VideoChatEnded|null
+     */
+    private $video_chat_ended;
+
+    /**
+     * Optional. Service message: new participants invited to a video chat
+     *
+     * @var VideoChatParticipantsInvited|null
+     */
+    private $video_chat_participants_invited;
+
+    /**
+     * Optional. Service message: data sent by a Web App
+     *
+     * @var WebAppData|null
+     */
+    private $web_app_data;
 
     /**
      * Optional. Inline keyboard attached to the message. login_url buttons are represented as ordinary url buttons.
@@ -423,41 +466,6 @@ class Message
      * @var InlineKeyboardMarkup|null
      */
     private $reply_markup;
-
-    /**
-     * Optional. Bot through which the message was sent.
-     *
-     * @var User|null
-     */
-    private $via_bot;
-
-    /**
-     * Optional. Service message: voice chat started
-     *
-     * @var VoiceChatStarted|null
-     */
-    private $voice_chat_started;
-
-    /**
-     * Optional. Service message: voice chat ended
-     *
-     * @var VoiceChatEnded|null
-     */
-    private $voice_chat_ended;
-
-    /**
-     * Optional. Service message: voice chat ended
-     *
-     * @var VoiceChatParticipantsInvited|null
-     */
-    private $voice_chat_participants_invited;
-
-    /**
-     * Optional. Service message: voice chat scheduled
-     *
-     * @var VoiceChatScheduled|null
-     */
-    private $voice_chat_scheduled;
 
     /**
      * @return int
@@ -489,6 +497,22 @@ class Message
     public function setFrom(?User $from): void
     {
         $this->from = $from;
+    }
+
+    /**
+     * @return Chat|null
+     */
+    public function getSenderChat(): ?Chat
+    {
+        return $this->sender_chat;
+    }
+
+    /**
+     * @param Chat|null $sender_chat
+     */
+    public function setSenderChat(?Chat $sender_chat): void
+    {
+        $this->sender_chat = $sender_chat;
     }
 
     /**
@@ -620,6 +644,22 @@ class Message
     }
 
     /**
+     * @return bool|null
+     */
+    public function isAutomaticForward(): ?bool
+    {
+        return $this->is_automatic_forward;
+    }
+
+    /**
+     * @param bool|null $is_automatic_forward
+     */
+    public function setIsAutomaticForward(?bool $is_automatic_forward): void
+    {
+        $this->is_automatic_forward = $is_automatic_forward;
+    }
+
+    /**
      * @return Message|null
      */
     public function getReplyToMessage(): ?Message
@@ -636,6 +676,22 @@ class Message
     }
 
     /**
+     * @return User|null
+     */
+    public function getViaBot(): ?User
+    {
+        return $this->via_bot;
+    }
+
+    /**
+     * @param User|null $via_bot
+     */
+    public function setViaBot(?User $via_bot): void
+    {
+        $this->via_bot = $via_bot;
+    }
+
+    /**
      * @return int|null
      */
     public function getEditDate(): ?int
@@ -649,6 +705,22 @@ class Message
     public function setEditDate(?int $edit_date): void
     {
         $this->edit_date = $edit_date;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function hasProtectedContent(): ?bool
+    {
+        return $this->has_protected_content;
+    }
+
+    /**
+     * @param bool|null $has_protected_content
+     */
+    public function setHasProtectedContent(?bool $has_protected_content): void
+    {
+        $this->has_protected_content = $has_protected_content;
     }
 
     /**
@@ -716,19 +788,19 @@ class Message
     }
 
     /**
-     * @return MessageEntity[]|null
+     * @return Animation|null
      */
-    public function getCaptionEntities(): ?array
+    public function getAnimation(): ?Animation
     {
-        return $this->caption_entities;
+        return $this->animation;
     }
 
     /**
-     * @param MessageEntity[]|null $caption_entities
+     * @param Animation|null $animation
      */
-    public function setCaptionEntities(?array $caption_entities): void
+    public function setAnimation(?Animation $animation): void
     {
-        $this->caption_entities = $caption_entities;
+        $this->animation = $animation;
     }
 
     /**
@@ -761,38 +833,6 @@ class Message
     public function setDocument(?Document $document): void
     {
         $this->document = $document;
-    }
-
-    /**
-     * @return Animation|null
-     */
-    public function getAnimation(): ?Animation
-    {
-        return $this->animation;
-    }
-
-    /**
-     * @param Animation|null $animation
-     */
-    public function setAnimation(?Animation $animation): void
-    {
-        $this->animation = $animation;
-    }
-
-    /**
-     * @return Game|null
-     */
-    public function getGame(): ?Game
-    {
-        return $this->game;
-    }
-
-    /**
-     * @param Game|null $game
-     */
-    public function setGame(?Game $game): void
-    {
-        $this->game = $game;
     }
 
     /**
@@ -844,22 +884,6 @@ class Message
     }
 
     /**
-     * @return Voice|null
-     */
-    public function getVoice(): ?Voice
-    {
-        return $this->voice;
-    }
-
-    /**
-     * @param Voice|null $voice
-     */
-    public function setVoice(?Voice $voice): void
-    {
-        $this->voice = $voice;
-    }
-
-    /**
      * @return VideoNote|null
      */
     public function getVideoNote(): ?VideoNote
@@ -873,6 +897,22 @@ class Message
     public function setVideoNote(?VideoNote $video_note): void
     {
         $this->video_note = $video_note;
+    }
+
+    /**
+     * @return Voice|null
+     */
+    public function getVoice(): ?Voice
+    {
+        return $this->voice;
+    }
+
+    /**
+     * @param Voice|null $voice
+     */
+    public function setVoice(?Voice $voice): void
+    {
+        $this->voice = $voice;
     }
 
     /**
@@ -892,6 +932,22 @@ class Message
     }
 
     /**
+     * @return MessageEntity[]|null
+     */
+    public function getCaptionEntities(): ?array
+    {
+        return $this->caption_entities;
+    }
+
+    /**
+     * @param MessageEntity[]|null $caption_entities
+     */
+    public function setCaptionEntities(?array $caption_entities): void
+    {
+        $this->caption_entities = $caption_entities;
+    }
+
+    /**
      * @return Contact|null
      */
     public function getContact(): ?Contact
@@ -908,35 +964,35 @@ class Message
     }
 
     /**
-     * @return Location|null
+     * @return Dice|null
      */
-    public function getLocation(): ?Location
+    public function getDice(): ?Dice
     {
-        return $this->location;
+        return $this->dice;
     }
 
     /**
-     * @param Location|null $location
+     * @param Dice|null $dice
      */
-    public function setLocation(?Location $location): void
+    public function setDice(?Dice $dice): void
     {
-        $this->location = $location;
+        $this->dice = $dice;
     }
 
     /**
-     * @return Venue|null
+     * @return Game|null
      */
-    public function getVenue(): ?Venue
+    public function getGame(): ?Game
     {
-        return $this->venue;
+        return $this->game;
     }
 
     /**
-     * @param Venue|null $venue
+     * @param Game|null $game
      */
-    public function setVenue(?Venue $venue): void
+    public function setGame(?Game $game): void
     {
-        $this->venue = $venue;
+        $this->game = $game;
     }
 
     /**
@@ -956,19 +1012,35 @@ class Message
     }
 
     /**
-     * @return Dice|null
+     * @return Venue|null
      */
-    public function getDice(): ?Dice
+    public function getVenue(): ?Venue
     {
-        return $this->dice;
+        return $this->venue;
     }
 
     /**
-     * @param Dice|null $dice
+     * @param Venue|null $venue
      */
-    public function setDice(?Dice $dice): void
+    public function setVenue(?Venue $venue): void
     {
-        $this->dice = $dice;
+        $this->venue = $venue;
+    }
+
+    /**
+     * @return Location|null
+     */
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param Location|null $location
+     */
+    public function setLocation(?Location $location): void
+    {
+        $this->location = $location;
     }
 
     /**
@@ -1100,6 +1172,22 @@ class Message
     }
 
     /**
+     * @return MessageAutoDeleteTimerChanged|null
+     */
+    public function getMessageAutoDeleteTimerChanged(): ?MessageAutoDeleteTimerChanged
+    {
+        return $this->message_auto_delete_timer_changed;
+    }
+
+    /**
+     * @param MessageAutoDeleteTimerChanged|null $message_auto_delete_timer_changed
+     */
+    public function setMessageAutoDeleteTimerChanged(?MessageAutoDeleteTimerChanged $message_auto_delete_timer_changed): void
+    {
+        $this->message_auto_delete_timer_changed = $message_auto_delete_timer_changed;
+    }
+
+    /**
      * @return int|null
      */
     public function getMigrateToChatId(): ?int
@@ -1212,38 +1300,6 @@ class Message
     }
 
     /**
-     * @return InlineKeyboardMarkup|null
-     */
-    public function getReplyMarkup(): ?InlineKeyboardMarkup
-    {
-        return $this->reply_markup;
-    }
-
-    /**
-     * @param InlineKeyboardMarkup|null $reply_markup
-     */
-    public function setReplyMarkup(?InlineKeyboardMarkup $reply_markup): void
-    {
-        $this->reply_markup = $reply_markup;
-    }
-
-    /**
-     * @return User|null
-     */
-    public function getViaBot(): ?User
-    {
-        return $this->via_bot;
-    }
-
-    /**
-     * @param User|null $via_bot
-     */
-    public function setViaBot(?User $via_bot): void
-    {
-        $this->via_bot = $via_bot;
-    }
-
-    /**
      * @return ProximityAlertTriggered|null
      */
     public function getProximityAlertTriggered(): ?ProximityAlertTriggered
@@ -1260,131 +1316,99 @@ class Message
     }
 
     /**
-     * @return Chat|null
+     * @return VideoChatScheduled|null
      */
-    public function getSenderChat(): ?Chat
+    public function getVideoChatScheduled(): ?VideoChatScheduled
     {
-        return $this->sender_chat;
+        return $this->video_chat_scheduled;
     }
 
     /**
-     * @param Chat|null $sender_chat
+     * @param VideoChatScheduled|null $video_chat_scheduled
      */
-    public function setSenderChat(?Chat $sender_chat): void
+    public function setVideoChatScheduled(?VideoChatScheduled $video_chat_scheduled): void
     {
-        $this->sender_chat = $sender_chat;
+        $this->video_chat_scheduled = $video_chat_scheduled;
     }
 
     /**
-     * @return VoiceChatStarted|null
+     * @return VideoChatStarted|null
      */
-    public function getVoiceChatStarted(): ?VoiceChatStarted
+    public function getVideoChatStarted(): ?VideoChatStarted
     {
-        return $this->voice_chat_started;
+        return $this->video_chat_started;
     }
 
     /**
-     * @param VoiceChatStarted|null $voice_chat_started
+     * @param VideoChatStarted|null $video_chat_started
      */
-    public function setVoiceChatStarted(?VoiceChatStarted $voice_chat_started): void
+    public function setVideoChatStarted(?VideoChatStarted $video_chat_started): void
     {
-        $this->voice_chat_started = $voice_chat_started;
+        $this->video_chat_started = $video_chat_started;
     }
 
     /**
-     * @return VoiceChatEnded|null
+     * @return VideoChatEnded|null
      */
-    public function getVoiceChatEnded(): ?VoiceChatEnded
+    public function getVideoChatEnded(): ?VideoChatEnded
     {
-        return $this->voice_chat_ended;
+        return $this->video_chat_ended;
     }
 
     /**
-     * @param VoiceChatEnded|null $voice_chat_ended
+     * @param VideoChatEnded|null $video_chat_ended
      */
-    public function setVoiceChatEnded(?VoiceChatEnded $voice_chat_ended): void
+    public function setVideoChatEnded(?VideoChatEnded $video_chat_ended): void
     {
-        $this->voice_chat_ended = $voice_chat_ended;
+        $this->video_chat_ended = $video_chat_ended;
     }
 
     /**
-     * @return VoiceChatParticipantsInvited|null
+     * @return VideoChatParticipantsInvited|null
      */
-    public function getVoiceChatParticipantsInvited(): ?VoiceChatParticipantsInvited
+    public function getVideoChatParticipantsInvited(): ?VideoChatParticipantsInvited
     {
-        return $this->voice_chat_participants_invited;
+        return $this->video_chat_participants_invited;
     }
 
     /**
-     * @param VoiceChatParticipantsInvited|null $voice_chat_participants_invited
+     * @param VideoChatParticipantsInvited|null $video_chat_participants_invited
      */
-    public function setVoiceChatParticipantsInvited(?VoiceChatParticipantsInvited $voice_chat_participants_invited): void
+    public function setVideoChatParticipantsInvited(?VideoChatParticipantsInvited $video_chat_participants_invited): void
     {
-        $this->voice_chat_participants_invited = $voice_chat_participants_invited;
+        $this->video_chat_participants_invited = $video_chat_participants_invited;
     }
 
     /**
-     * @return VoiceChatScheduled|null
+     * @return WebAppData|null
      */
-    public function getVoiceChatScheduled(): ?VoiceChatScheduled
+    public function getWebAppData(): ?WebAppData
     {
-        return $this->voice_chat_scheduled;
+        return $this->web_app_data;
     }
 
     /**
-     * @param VoiceChatScheduled|null $voice_chat_scheduled
+     * @param WebAppData|null $web_app_data
      */
-    public function setVoiceChatScheduled(?VoiceChatScheduled $voice_chat_scheduled): void
+    public function setWebAppData(?WebAppData $web_app_data): void
     {
-        $this->voice_chat_scheduled = $voice_chat_scheduled;
+        $this->web_app_data = $web_app_data;
     }
 
     /**
-     * @return bool|null
+     * @return InlineKeyboardMarkup|null
      */
-    public function getIsAutomaticForward(): ?bool
+    public function getReplyMarkup(): ?InlineKeyboardMarkup
     {
-        return $this->is_automatic_forward;
+        return $this->reply_markup;
     }
 
     /**
-     * @param bool|null $is_automatic_forward
+     * @param InlineKeyboardMarkup|null $reply_markup
      */
-    public function setIsAutomaticForward(?bool $is_automatic_forward): void
+    public function setReplyMarkup(?InlineKeyboardMarkup $reply_markup): void
     {
-        $this->is_automatic_forward = $is_automatic_forward;
-    }
-
-    /**
-     * @return bool|null
-     */
-    public function getHasProtectedContent(): ?bool
-    {
-        return $this->has_protected_content;
-    }
-
-    /**
-     * @param bool|null $has_protected_content
-     */
-    public function setHasProtectedContent(?bool $has_protected_content): void
-    {
-        $this->has_protected_content = $has_protected_content;
-    }
-
-    /**
-     * @return MessageAutoDeleteTimerChanged|null
-     */
-    public function getMessageAutoDeleteTimerChanged(): ?MessageAutoDeleteTimerChanged
-    {
-        return $this->message_auto_delete_timer_changed;
-    }
-
-    /**
-     * @param MessageAutoDeleteTimerChanged|null $message_auto_delete_timer_changed
-     */
-    public function setMessageAutoDeleteTimerChanged(?MessageAutoDeleteTimerChanged $message_auto_delete_timer_changed): void
-    {
-        $this->message_auto_delete_timer_changed = $message_auto_delete_timer_changed;
+        $this->reply_markup = $reply_markup;
     }
 
 }

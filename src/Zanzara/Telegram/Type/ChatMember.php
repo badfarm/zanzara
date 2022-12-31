@@ -202,11 +202,11 @@ class ChatMember
     private $invite_link;
 
     /**
-     * True, if the administrator can manage voice chats
+     * True, if the administrator can manage video chats
      *
      * @var bool
      */
-    private $can_manage_voice_chats;
+    private $can_manage_video_chats;
 
     /**
      * True, if the administrator can access the chat event log, chat statistics, message statistics in channels, see
@@ -284,7 +284,7 @@ class ChatMember
     /**
      * @return bool|null
      */
-    public function getCanBeEdited(): ?bool
+    public function canBeEdited(): ?bool
     {
         return $this->can_be_edited;
     }
@@ -300,7 +300,7 @@ class ChatMember
     /**
      * @return bool|null
      */
-    public function getCanPostMessages(): ?bool
+    public function canPostMessages(): ?bool
     {
         return $this->can_post_messages;
     }
@@ -316,7 +316,7 @@ class ChatMember
     /**
      * @return bool|null
      */
-    public function getCanEditMessages(): ?bool
+    public function canEditMessages(): ?bool
     {
         return $this->can_edit_messages;
     }
@@ -332,7 +332,7 @@ class ChatMember
     /**
      * @return bool|null
      */
-    public function getCanDeleteMessages(): ?bool
+    public function canDeleteMessages(): ?bool
     {
         return $this->can_delete_messages;
     }
@@ -348,7 +348,7 @@ class ChatMember
     /**
      * @return bool|null
      */
-    public function getCanRestrictMembers(): ?bool
+    public function canRestrictMembers(): ?bool
     {
         return $this->can_restrict_members;
     }
@@ -364,7 +364,7 @@ class ChatMember
     /**
      * @return bool|null
      */
-    public function getCanPromoteMembers(): ?bool
+    public function canPromoteMembers(): ?bool
     {
         return $this->can_promote_members;
     }
@@ -380,7 +380,7 @@ class ChatMember
     /**
      * @return bool|null
      */
-    public function getCanChangeInfo(): ?bool
+    public function canChangeInfo(): ?bool
     {
         return $this->can_change_info;
     }
@@ -396,7 +396,7 @@ class ChatMember
     /**
      * @return bool|null
      */
-    public function getCanInviteUsers(): ?bool
+    public function canInviteUsers(): ?bool
     {
         return $this->can_invite_users;
     }
@@ -412,7 +412,7 @@ class ChatMember
     /**
      * @return bool|null
      */
-    public function getCanPinMessages(): ?bool
+    public function canPinMessages(): ?bool
     {
         return $this->can_pin_messages;
     }
@@ -444,7 +444,7 @@ class ChatMember
     /**
      * @return bool|null
      */
-    public function getCanSendMessages(): ?bool
+    public function canSendMessages(): ?bool
     {
         return $this->can_send_messages;
     }
@@ -460,7 +460,7 @@ class ChatMember
     /**
      * @return bool|null
      */
-    public function getCanSendMediaMessages(): ?bool
+    public function canSendMediaMessages(): ?bool
     {
         return $this->can_send_media_messages;
     }
@@ -476,7 +476,7 @@ class ChatMember
     /**
      * @return bool|null
      */
-    public function getCanSendPolls(): ?bool
+    public function canSendPolls(): ?bool
     {
         return $this->can_send_polls;
     }
@@ -492,7 +492,7 @@ class ChatMember
     /**
      * @return bool|null
      */
-    public function getCanSendOtherMessages(): ?bool
+    public function canSendOtherMessages(): ?bool
     {
         return $this->can_send_other_messages;
     }
@@ -508,7 +508,7 @@ class ChatMember
     /**
      * @return bool|null
      */
-    public function getCanAddWebPagePreviews(): ?bool
+    public function canAddWebPagePreviews(): ?bool
     {
         return $this->can_add_web_page_previews;
     }
@@ -524,7 +524,7 @@ class ChatMember
     /**
      * @return bool|null
      */
-    public function getIsAnonymous(): ?bool
+    public function isAnonymous(): ?bool
     {
         return $this->is_anonymous;
     }
@@ -636,23 +636,23 @@ class ChatMember
     /**
      * @return bool
      */
-    public function isCanManageVoiceChats(): bool
+    public function canManageVoiceChats(): bool
     {
-        return $this->can_manage_voice_chats;
+        return $this->can_manage_video_chats;
     }
 
     /**
-     * @param bool $can_manage_voice_chats
+     * @param bool $can_manage_video_chats
      */
-    public function setCanManageVoiceChats(bool $can_manage_voice_chats): void
+    public function setCanManageVoiceChats(bool $can_manage_video_chats): void
     {
-        $this->can_manage_voice_chats = $can_manage_voice_chats;
+        $this->can_manage_video_chats = $can_manage_video_chats;
     }
 
     /**
      * @return bool
      */
-    public function isCanManageChat(): bool
+    public function canManageChat(): bool
     {
         return $this->can_manage_chat;
     }
