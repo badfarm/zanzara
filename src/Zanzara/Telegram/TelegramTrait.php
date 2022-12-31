@@ -1868,7 +1868,7 @@ trait TelegramTrait
 
             } else {
                 $data = ['name' => $key];
-                $data['contents'] = strval($value);
+                $data['contents'] = is_array($value) ? json_encode($value) : strval($value);
                 array_push($multipart_data, $data);
             }
         }
@@ -1899,7 +1899,7 @@ trait TelegramTrait
                 }
 
             } else {
-                $data['contents'] = strval($value);
+                $data['contents'] = is_array($value) ? json_encode($value) : strval($value);
             }
             array_push($multipart_data, $data);
         }
