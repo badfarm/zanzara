@@ -1369,25 +1369,24 @@ trait TelegramTrait
 
     /**
      * Use this method to add a new sticker to a set created by the bot. You must use exactly one of the fields png_sticker
-     * or tgs_sticker. Animated stickers can be added to animated sticker sets and only to them. Animated sticker sets
+     * or tgs_sticker, or webm_sticker. Animated stickers can be added to animated sticker sets and only to them. Animated sticker sets
      * can have up to 50 stickers. Static sticker sets can have up to 120 stickers. Returns True on success.
      *
-     * The png_sticker param can be either a string or a @see InputFile. Note that if you use the latter the file reading
-     * operation is synchronous, so the main thread is blocked.
+     * The sticker param value in $opt can be either a string or a @see InputFile. Note that if you use the latter the
+     * file reading operation is synchronous, so the main thread is blocked.
      * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
      * More on https://core.telegram.org/bots/api#addstickertoset
      *
      * @param $user_id
      * @param string $name
-     * @param $png_sticker
      * @param string $emojis
      * @param array $opt
      * @return PromiseInterface
      */
-    public function addStickerToSet($user_id, string $name, $png_sticker, string $emojis, array $opt = []): PromiseInterface
+    public function addStickerToSet($user_id, string $name, string $emojis, array $opt = []): PromiseInterface
     {
-        $required = compact("user_id", "name", "png_sticker", "emojis");
+        $required = compact("user_id", "name", "emojis");
         $params = array_merge($required, $opt);
         return $this->callApi("addStickerToSet", $params);
     }

@@ -20,12 +20,21 @@ class Sticker
     private $file_id;
 
     /**
-     * Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to
-     * download or reuse the file.
+     * Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used
+     * to download or reuse the file.
      *
      * @var string
      */
     private $file_unique_id;
+
+    /**
+     * Type of the sticker, currently one of “regular”, “mask”, “custom_emoji”.
+     * The type of the sticker is independent from its format, which
+     * is determined by the fields is_animated and is_video.
+     * 
+     * @var string
+     */
+    private $type;
 
     /**
      * Sticker width
@@ -47,6 +56,13 @@ class Sticker
      * @var bool
      */
     private $is_animated;
+
+    /**
+     * True, if the sticker is a video sticker
+     *
+     * @var bool
+     */
+    private $is_video;
 
     /**
      * Optional. Sticker thumbnail in the .WEBP or .JPG format
@@ -116,6 +132,22 @@ class Sticker
     }
 
     /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
      * @return int
      */
     public function getWidth(): int
@@ -161,6 +193,22 @@ class Sticker
     public function setIsAnimated(bool $is_animated): void
     {
         $this->is_animated = $is_animated;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVideo(): bool
+    {
+        return $this->is_video;
+    }
+
+    /**
+     * @param bool $is_video
+     */
+    public function setIsVideo(bool $is_video): void
+    {
+        $this->is_video = $is_video;
     }
 
     /**

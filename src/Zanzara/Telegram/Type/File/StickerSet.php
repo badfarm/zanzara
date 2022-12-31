@@ -27,11 +27,25 @@ class StickerSet
     private $title;
 
     /**
+     * Type of stickers in the set, currently one of “regular”, “mask”, “custom_emoji”
+     *
+     * @var string
+     */
+    private $sticker_type;
+
+    /**
      * True, if the sticker set contains animated stickers
      *
      * @var bool
      */
     private $is_animated;
+
+    /**
+     * True, if the sticker set contains video stickers
+     *
+     * @var bool
+     */
+    private $is_video;
 
     /**
      * True, if the sticker set contains masks
@@ -73,6 +87,22 @@ class StickerSet
     /**
      * @return string
      */
+    public function getStickerType(): string
+    {
+        return $this->sticker_type;
+    }
+
+    /**
+     * @param string $sticker_type
+     */
+    public function setStickerType(string $sticker_type): void
+    {
+        $this->sticker_type = $sticker_type;
+    }
+
+    /**
+     * @return string
+     */
     public function getTitle(): string
     {
         return $this->title;
@@ -89,7 +119,7 @@ class StickerSet
     /**
      * @return bool
      */
-    public function isIsAnimated(): bool
+    public function isAnimated(): bool
     {
         return $this->is_animated;
     }
@@ -100,6 +130,22 @@ class StickerSet
     public function setIsAnimated(bool $is_animated): void
     {
         $this->is_animated = $is_animated;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVideo(): bool
+    {
+        return $this->is_video;
+    }
+
+    /**
+     * @param bool $is_video
+     */
+    public function setIsVideo(bool $is_video): void
+    {
+        $this->is_video = $is_video;
     }
 
     /**
