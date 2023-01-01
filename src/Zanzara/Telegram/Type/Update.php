@@ -10,6 +10,7 @@ use Zanzara\Telegram\Type\Poll\PollAnswer;
 use Zanzara\Telegram\Type\Shipping\PreCheckoutQuery;
 use Zanzara\Telegram\Type\Shipping\ShippingQuery;
 use Zanzara\Telegram\Type\Shipping\SuccessfulPayment;
+use Zanzara\Telegram\Type\WebApp\WebAppData;
 
 /**
  * This object represents an incoming update.At most one of the optional parameters can be present in any given update.
@@ -362,6 +363,10 @@ class Update implements \JsonSerializable
             $this->effectiveChat = $this->message->getChat();
         } else if ($this->message && $this->message->getPassportData()) {
             $this->updateType = PassportData::class;
+            $this->effectiveUser = $this->message->getFrom();
+            $this->effectiveChat = $this->message->getChat();
+        } else if ($this->message && $this->message->getWebAppData()) {
+            $this->updateType = WebAppData::class;
             $this->effectiveUser = $this->message->getFrom();
             $this->effectiveChat = $this->message->getChat();
         } else if ($this->message) {
