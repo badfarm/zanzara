@@ -86,11 +86,25 @@ class Sticker
     private $set_name;
 
     /**
+     * Optional. For premium regular stickers, premium animation for the sticker
+     *
+     * @var File|null
+     */
+    private $premium_animation;
+
+    /**
      * Optional. For mask stickers, the position where the mask should be placed
      *
      * @var MaskPosition|null
      */
     private $mask_position;
+
+    /**
+     * Optional. For custom emoji stickers, unique identifier of the custom emoji
+     *
+     * @var string|null
+     */
+    private $custom_emoji_id;
 
     /**
      * Optional. File size
@@ -260,6 +274,22 @@ class Sticker
     }
 
     /**
+     * @return File|null
+     */
+    public function getPremiumAnimation(): ?File
+    {
+        return $this->premium_animation;
+    }
+
+    /**
+     * @param File|null $premium_animation
+     */
+    public function setPremiumAnimation(?File $premium_animation): void
+    {
+        $this->premium_animation = $premium_animation;
+    }
+
+    /**
      * @return MaskPosition|null
      */
     public function getMaskPosition(): ?MaskPosition
@@ -273,6 +303,22 @@ class Sticker
     public function setMaskPosition(?MaskPosition $mask_position): void
     {
         $this->mask_position = $mask_position;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCustomEmojiId(): ?string
+    {
+        return $this->custom_emoji_id;
+    }
+
+    /**
+     * @param string|null $custom_emoji_id
+     */
+    public function setCustomEmojiId(?string $custom_emoji_id): void
+    {
+        $this->custom_emoji_id = $custom_emoji_id;
     }
 
     /**

@@ -48,13 +48,6 @@ class StickerSet
     private $is_video;
 
     /**
-     * True, if the sticker set contains masks
-     *
-     * @var bool
-     */
-    private $contains_masks;
-
-    /**
      * List of all set stickers
      *
      * @var Sticker[]
@@ -146,22 +139,6 @@ class StickerSet
     public function setIsVideo(bool $is_video): void
     {
         $this->is_video = $is_video;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isContainsMasks(): bool
-    {
-        return $this->contains_masks;
-    }
-
-    /**
-     * @param bool $contains_masks
-     */
-    public function setContainsMasks(bool $contains_masks): void
-    {
-        $this->contains_masks = $contains_masks;
     }
 
     /**

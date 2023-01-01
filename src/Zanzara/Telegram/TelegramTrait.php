@@ -18,6 +18,7 @@ use Zanzara\Telegram\Type\ChatInviteLink;
 use Zanzara\Telegram\Type\ChatMember;
 use Zanzara\Telegram\Type\ChatAdministratorRights;
 use Zanzara\Telegram\Type\File\File;
+use Zanzara\Telegram\Type\File\Sticker;
 use Zanzara\Telegram\Type\File\StickerSet;
 use Zanzara\Telegram\Type\File\UserProfilePhotos;
 use Zanzara\Telegram\Type\Game\GameHighScore;
@@ -1130,7 +1131,7 @@ trait TelegramTrait
 
     /**
      * Use this method to get the current list of the bot's commands for the given scope and user language. Returns
-     * Array of BotCommand on success. If commands aren't set, an empty list is returned.
+     * Array of @see BotCommand on success. If commands aren't set, an empty list is returned.
      *
      * More on https://core.telegram.org/bots/api#getmycommands
      *
@@ -1407,6 +1408,22 @@ trait TelegramTrait
     }
 
     /**
+     * Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of @see Sticker objects.
+     *
+     * More on https://core.telegram.org/bots/api#getcustomemojistickers
+     *
+     * @param string[] $custom_emoji_ids
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function getCustomEmojiStickers(array $custom_emoji_ids, array $opt = []): PromiseInterface
+    {
+        $required = compact("custom_emoji_ids");
+        $params = array_merge($required, $opt);
+        return $this->callApi("getCustomEmojiStickers", $params, Sticker::class);
+    }
+
+    /**
      * Use this method to upload a .PNG file with a sticker for later use in createNewStickerSet and addStickerToSet methods
      * (can be used multiple times). Returns the uploaded @see File on success.
      *
@@ -1605,6 +1622,28 @@ trait TelegramTrait
             $params['chat_id'] = $this->update->getEffectiveChat()->getId();
         }
         return $this->callApi("sendInvoice", $params, Message::class);
+    }
+
+    /**
+     * Use this method to create a link for an invoice. Returns the created invoice link as String on success.
+     *
+     * More on https://core.telegram.org/bots/api#createinvoicelink
+     *
+     * @param string $title
+     * @param string $description
+     * @param string $payload
+     * @param string $provider_token
+     * @param string $currency
+     * @param $prices
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function createInvoiceLink(string $title, string $description, string $payload, string $provider_token, string $currency, $prices, array $opt = []): PromiseInterface
+    {
+        $opt = $this->resolveChatId($opt);
+        $required = compact("title", "description", "payload", "provider_token", "currency", "prices");
+        $params = array_merge($required, $opt);
+        return $this->callApi("createInvoiceLink", $params);
     }
 
     /**

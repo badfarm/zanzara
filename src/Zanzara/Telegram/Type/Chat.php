@@ -81,6 +81,29 @@ class Chat implements \JsonSerializable
     private $has_private_forwards;
 
     /**
+     * Optional. True, if the privacy settings of the other party restrict sending voice and video note messages in
+     * the private chat. Returned only in getChat.
+     *
+     * @var bool|null
+     */
+    private $has_restricted_voice_and_video_messages;
+
+    /**
+     * Optional. True, if users need to join the supergroup before they can send messages. Returned only in getChat.
+     *
+     * @var bool|null
+     */
+    private $join_to_send_messages;
+
+    /**
+     * Optional. True, if all users directly joining the supergroup need to be approved by supergroup administrators.
+     * Returned only in getChat.
+     *
+     * @var bool|null
+     */
+    private $join_by_request;
+
+    /**
      * Optional. Description, for groups, supergroups and channel chats. Returned only in getChat.
      *
      * @var string|null
@@ -277,6 +300,54 @@ class Chat implements \JsonSerializable
     public function setPhoto(?ChatPhoto $photo): void
     {
         $this->photo = $photo;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getHasRestrictedVoiceAndVideoMessages(): ?bool
+    {
+        return $this->has_restricted_voice_and_video_messages;
+    }
+
+    /**
+     * @param bool|null $has_restricted_voice_and_video_messages
+     */
+    public function setHasRestrictedVoiceAndVideoMessages(?bool $has_restricted_voice_and_video_messages): void
+    {
+        $this->has_restricted_voice_and_video_messages = $has_restricted_voice_and_video_messages;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getJoinToSendMessages(): ?bool
+    {
+        return $this->join_to_send_messages;
+    }
+
+    /**
+     * @param bool|null $join_to_send_messages
+     */
+    public function setJoinToSendMessages(?bool $join_to_send_messages): void
+    {
+        $this->join_to_send_messages = $join_to_send_messages;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getJoinByRequest(): ?bool
+    {
+        return $this->join_by_request;
+    }
+
+    /**
+     * @param bool|null $join_by_request
+     */
+    public function setJoinByRequest(?bool $join_by_request): void
+    {
+        $this->join_by_request = $join_by_request;
     }
 
     /**

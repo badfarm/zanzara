@@ -18,6 +18,7 @@ class MessageEntity
      * "phone_number" (+1-212-555-0123), "bold" (bold text), "italic" (italic text), "underline" (underlined text),
      * "strikethrough" (strikethrough text), "spoiler" (spoiler message), "code" (monowidth string),
      * "pre" (monowidth block), "text_link" (for clickable text URLs), "text_mention" (for users without usernames)
+     * "custom_emoji" (for inline custom emoji stickers)
      *
      * @var string
      */
@@ -57,6 +58,14 @@ class MessageEntity
      * @var string|null
      */
     private $language;
+
+    /**
+     * Optional. For “custom_emoji” only, unique identifier of the custom emoji.
+     * Use getCustomEmojiStickers to get full information about the sticker
+     *
+     * @var string|null
+     */
+    private $custom_emoji_id;
 
     /**
      * @return string
@@ -152,6 +161,22 @@ class MessageEntity
     public function setLanguage(?string $language): void
     {
         $this->language = $language;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCustomEmojiId(): ?string
+    {
+        return $this->custom_emoji_id;
+    }
+
+    /**
+     * @param string|null $custom_emoji_id
+     */
+    public function setCustomEmojiId(?string $custom_emoji_id): void
+    {
+        $this->custom_emoji_id = $custom_emoji_id;
     }
 
 }
