@@ -46,8 +46,8 @@ class Zanzara extends ListenerResolver
     private $cache;
 
     /**
-     * @param  string  $botToken
-     * @param  Config|null  $config
+     * @param string $botToken
+     * @param Config|null $config
      */
     public function __construct(string $botToken, ?Config $config = null)
     {
@@ -69,7 +69,7 @@ class Zanzara extends ListenerResolver
             $connector = new Connector($this->loop, $connectorOptions);
             $this->config->setConnector($connector);
         }
-        $this->container->set(Browser::class, (new Browser($this->loop, $this->config->getConnector())) // browser cannot be created by container
+        $this->container->set(Browser::class, $this->config->getBrowser() ?? (new Browser($this->loop, $this->config->getConnector())) // browser cannot be created by container
         ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botToken}/"));
         $this->telegram = $this->container->get(Telegram::class);
         $this->container->set(CacheInterface::class, $this->config->getCache() ?? new ArrayCache());
@@ -187,7 +187,7 @@ class Zanzara extends ListenerResolver
 
     /**
      * @param $exception
-     * @param  Context  $ctx
+     * @param Context $ctx
      * @return bool|void
      */
     public function callOnException(Context $ctx, $exception)
