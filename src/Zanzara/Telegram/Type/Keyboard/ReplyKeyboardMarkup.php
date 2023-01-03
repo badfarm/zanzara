@@ -20,6 +20,14 @@ class ReplyKeyboardMarkup
     private $keyboard;
 
     /**
+     * Optional. Requests clients to always show the keyboard when the regular keyboard is hidden.
+     * Defaults to false, in which case the custom keyboard can be hidden and opened with a keyboard icon.
+     *
+     * @var bool|null
+     */
+    private $is_persistent;
+
+    /**
      * Optional. Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if
      * there are just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same
      * height as the app's standard keyboard.
@@ -68,6 +76,22 @@ class ReplyKeyboardMarkup
     public function setKeyboard(array $keyboard): void
     {
         $this->keyboard = $keyboard;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isPersistent(): ?bool
+    {
+        return $this->is_persistent;
+    }
+
+    /**
+     * @param bool|null $is_persistent
+     */
+    public function setIsPersistent(?bool $is_persistent): void
+    {
+        $this->is_persistent = $is_persistent;
     }
 
     /**

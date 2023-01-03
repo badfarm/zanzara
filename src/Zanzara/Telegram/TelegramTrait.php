@@ -21,6 +21,7 @@ use Zanzara\Telegram\Type\File\File;
 use Zanzara\Telegram\Type\File\Sticker;
 use Zanzara\Telegram\Type\File\StickerSet;
 use Zanzara\Telegram\Type\File\UserProfilePhotos;
+use Zanzara\Telegram\Type\Forum\ForumTopic;
 use Zanzara\Telegram\Type\Game\GameHighScore;
 use Zanzara\Telegram\Type\Input\InputFile;
 use Zanzara\Telegram\Type\MenuButton;
@@ -1080,6 +1081,222 @@ trait TelegramTrait
     }
 
     /**
+     * Use this method to get custom emoji stickers, which can be used as a forum topic icon by any user.
+     * Requires no parameters. Returns an Array of Sticker objects.
+     *
+     * More on https://core.telegram.org/bots/api#getforumtopiciconstickers
+     *
+     * @return PromiseInterface
+     */
+    public function getForumTopicIconStickers(): PromiseInterface
+    {
+        return $this->callApi("getForumTopicIconStickers", [], Sticker::class);
+    }
+
+    /**
+     * Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for
+     * this to work and must have the can_manage_topics administrator rights.
+     * Returns information about the created topic as a @see ForumTopic object.
+     *
+     * More on https://core.telegram.org/bots/api#createforumtopic
+     *
+     * @param $chat_id
+     * @param string $name
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function createForumTopic($chat_id, string $name, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "name");
+        $params = array_merge($required, $opt);
+        return $this->callApi("createForumTopic", $params, ForumTopic::class);
+    }
+
+    /**
+     * Use this method to edit name and icon of a topic in a forum supergroup chat.The bot must be an administrator
+     * in the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator
+     * of the topic. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#editforumtopic
+     *
+     * @param $chat_id
+     * @param $message_thread_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function editForumTopic($chat_id, $message_thread_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "message_thread_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("editForumTopic", $params);
+    }
+
+    /**
+     * Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat
+     * for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic.
+     * Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#closeforumtopic
+     *
+     * @param $chat_id
+     * @param $message_thread_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function closeForumTopic($chat_id, $message_thread_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "message_thread_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("closeForumTopic", $params);
+    }
+
+    /**
+     * Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator
+     * in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator
+     * of the topic. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#reopenforumtopic
+     *
+     * @param $chat_id
+     * @param $message_thread_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function reopenForumTopic($chat_id, $message_thread_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "message_thread_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("reopenForumTopic", $params);
+    }
+
+    /**
+     * Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be
+     * an administrator in the chat for this to work and must have the can_delete_messages administrator rights.
+     * Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#deleteforumtopic
+     *
+     * @param $chat_id
+     * @param $message_thread_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function deleteForumTopic($chat_id, $message_thread_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "message_thread_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("deleteForumTopic", $params);
+    }
+
+    /**
+     * Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in
+     * the chat for this to work and must have the can_pin_messages administrator right in the supergroup.
+     * Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#unpinallforumtopicmessages
+     *
+     * @param $chat_id
+     * @param $message_thread_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function unpinAllForumTopicMessages($chat_id, $message_thread_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "message_thread_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("unpinAllForumTopicMessages", $params);
+    }
+
+    /**
+     * Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be
+     * an administrator in the chat for this to work and must have can_manage_topics administrator rights.
+     * Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#editgeneralforumtopic
+     *
+     * @param $chat_id
+     * @param string $name
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function editGeneralForumTopic($chat_id, string $name, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "name");
+        $params = array_merge($required, $opt);
+        return $this->callApi("editGeneralForumTopic", $params);
+    }
+
+    /**
+     * Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in
+     * the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#closegeneralforumtopic
+     *
+     * @param $chat_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function closeGeneralForumTopic($chat_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("closeGeneralForumTopic", $params);
+    }
+
+    /**
+     * Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in
+     * the chat for this to work and must have the can_manage_topics administrator rights.
+     * The topic will be automatically unhidden if it was hidden. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#reopengeneralforumtopic
+     *
+     * @param $chat_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function reopenGeneralForumTopic($chat_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("reopenGeneralForumTopic", $params);
+    }
+
+    /**
+     * Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in
+     * the chat for this to work and must have the can_manage_topics administrator rights.
+     * The topic will be automatically closed if it was open. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#hidegeneralforumtopic
+     *
+     * @param $chat_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function hideGeneralForumTopic($chat_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("hideGeneralForumTopic", $params);
+    }
+
+    /**
+     * Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in
+     * the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#unhidegeneralforumtopic
+     *
+     * @param $chat_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function unhideGeneralForumTopic($chat_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("unhideGeneralForumTopic", $params);
+    }
+
+    /**
      * Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the
      * user as a notification at the top of the chat screen or as an alert. On success, True is returned.
      *
@@ -1994,7 +2211,7 @@ trait TelegramTrait
         foreach ($params as $key => $value) {
 
             if ($value instanceof InputFile) {
-                array_push($promises, $filesystem->getContents($value->getPath())->then(function ($contents) use ($value, $key) {
+                $promises[] = $filesystem->getContents($value->getPath())->then(function ($contents) use ($value, $key) {
                     $data = ['name' => $key];
                     $data['contents'] = $contents;
                     $data['filename'] = basename($value->getPath());
@@ -2002,7 +2219,7 @@ trait TelegramTrait
                 }, function ($error) {
                     $this->container->get(ZanzaraLogger::class)->error($error);
                     return $error;
-                }));
+                });
 
             } else {
                 $data = ['name' => $key];

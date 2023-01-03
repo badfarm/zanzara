@@ -71,6 +71,13 @@ class ChatPermissions
     private $can_pin_messages;
 
     /**
+     * Optional. True, if the user is allowed to create forum topics. If omitted defaults to the value of can_pin_messages
+     *
+     * @var bool|null
+     */
+    private $can_manage_topics;
+
+    /**
      * @return bool|null
      */
     public function getCanSendMessages(): ?bool
@@ -196,6 +203,22 @@ class ChatPermissions
     public function setCanPinMessages(?bool $can_pin_messages): void
     {
         $this->can_pin_messages = $can_pin_messages;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function canManageTopics(): ?bool
+    {
+        return $this->can_manage_topics;
+    }
+
+    /**
+     * @param bool|null $can_manage_topics
+     */
+    public function setCanManageTopics(?bool $can_manage_topics): void
+    {
+        $this->can_manage_topics = $can_manage_topics;
     }
 
 }

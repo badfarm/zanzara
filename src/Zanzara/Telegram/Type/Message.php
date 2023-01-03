@@ -14,6 +14,13 @@ use Zanzara\Telegram\Type\File\Venue;
 use Zanzara\Telegram\Type\File\Video;
 use Zanzara\Telegram\Type\File\VideoNote;
 use Zanzara\Telegram\Type\File\Voice;
+use Zanzara\Telegram\Type\Forum\ForumTopicClosed;
+use Zanzara\Telegram\Type\Forum\ForumTopicCreated;
+use Zanzara\Telegram\Type\Forum\ForumTopicEdited;
+use Zanzara\Telegram\Type\Forum\ForumTopicReopened;
+use Zanzara\Telegram\Type\Forum\GeneralForumTopicHidden;
+use Zanzara\Telegram\Type\Forum\GeneralForumTopicUnhidden;
+use Zanzara\Telegram\Type\Forum\WriteAccessAllowed;
 use Zanzara\Telegram\Type\Game\Game;
 use Zanzara\Telegram\Type\Keyboard\InlineKeyboardMarkup;
 use Zanzara\Telegram\Type\Miscellaneous\Dice;
@@ -37,6 +44,13 @@ class Message
      * @var int
      */
     private $message_id;
+
+    /**
+     * Optional. Unique identifier of a message thread to which the message belongs; for supergroups only
+     *
+     * @var int|null
+     */
+    private $message_thread_id;
 
     /**
      * Optional. Sender of the message; empty for messages sent to channels.
@@ -114,6 +128,13 @@ class Message
      * @var int|null
      */
     private $forward_date;
+
+    /**
+     * Optional. True, if the message is sent to a forum topic
+     *
+     * @var bool|null
+     */
+    private $is_topic_message;
 
     /**
      * Optional. True, if the message is a channel post that was automatically forwarded to the connected discussion group
@@ -251,6 +272,13 @@ class Message
      * @var MessageEntity[]|null
      */
     private $caption_entities;
+
+    /**
+     * Optional. True, if the message media is covered by a spoiler animation
+     *
+     * @var bool|null
+     */
+    private $has_media_spoiler;
 
     /**
      * Optional. Message is a shared contact, information about the contact
@@ -412,6 +440,13 @@ class Message
     private $connected_website;
 
     /**
+     * Optional. Service message: the user allowed the bot added to the attachment menu to write messages
+     *
+     * @var WriteAccessAllowed|null
+     */
+    private $write_access_allowed;
+
+    /**
      * Optional. Telegram Passport data
      *
      * @var PassportData|null
@@ -424,6 +459,48 @@ class Message
      * @var ProximityAlertTriggered|null
      */
     private $proximity_alert_triggered;
+
+    /**
+     * Optional. Service message: forum topic created
+     *
+     * @var ForumTopicCreated|null
+     */
+    private $forum_topic_created;
+
+    /**
+     * Optional. Service message: forum topic edited
+     *
+     * @var ForumTopicEdited|null
+     */
+    private $forum_topic_edited;
+
+    /**
+     * Optional. Service message: forum topic closed
+     *
+     * @var ForumTopicClosed|null
+     */
+    private $forum_topic_closed;
+
+    /**
+     * Optional. Service message: forum topic reopened
+     *
+     * @var ForumTopicReopened|null
+     */
+    private $forum_topic_reopened;
+
+    /**
+     * Optional. Service message: the 'General' forum topic hidden
+     *
+     * @var GeneralForumTopicHidden|null
+     */
+    private $general_forum_topic_hidden;
+
+    /**
+     * Optional. Service message: the 'General' forum topic unhidden
+     *
+     * @var GeneralForumTopicUnhidden|null
+     */
+    private $general_forum_topic_unhidden;
 
     /**
      * Optional. Service message: video chat scheduled
@@ -481,6 +558,22 @@ class Message
     public function setMessageId(int $message_id): void
     {
         $this->message_id = $message_id;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMessageThreadId(): ?int
+    {
+        return $this->message_thread_id;
+    }
+
+    /**
+     * @param int|null $message_thread_id
+     */
+    public function setMessageThreadId(?int $message_thread_id): void
+    {
+        $this->message_thread_id = $message_thread_id;
     }
 
     /**
@@ -641,6 +734,22 @@ class Message
     public function setForwardDate(?int $forward_date): void
     {
         $this->forward_date = $forward_date;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isTopicMessage(): ?bool
+    {
+        return $this->is_topic_message;
+    }
+
+    /**
+     * @param bool|null $is_topic_message
+     */
+    public function setIsTopicMessage(?bool $is_topic_message): void
+    {
+        $this->is_topic_message = $is_topic_message;
     }
 
     /**
@@ -945,6 +1054,22 @@ class Message
     public function setCaptionEntities(?array $caption_entities): void
     {
         $this->caption_entities = $caption_entities;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function hasMediaSpoiler(): ?bool
+    {
+        return $this->has_media_spoiler;
+    }
+
+    /**
+     * @param bool|null $has_media_spoiler
+     */
+    public function setHasMediaSpoiler(?bool $has_media_spoiler): void
+    {
+        $this->has_media_spoiler = $has_media_spoiler;
     }
 
     /**
@@ -1284,6 +1409,22 @@ class Message
     }
 
     /**
+     * @return WriteAccessAllowed|null
+     */
+    public function getWriteAccessAllowed(): ?WriteAccessAllowed
+    {
+        return $this->write_access_allowed;
+    }
+
+    /**
+     * @param WriteAccessAllowed|null $write_access_allowed
+     */
+    public function setWriteAccessAllowed(?WriteAccessAllowed $write_access_allowed): void
+    {
+        $this->write_access_allowed = $write_access_allowed;
+    }
+
+    /**
      * @return PassportData|null
      */
     public function getPassportData(): ?PassportData
@@ -1313,6 +1454,102 @@ class Message
     public function setProximityAlertTriggered(?ProximityAlertTriggered $proximity_alert_triggered): void
     {
         $this->proximity_alert_triggered = $proximity_alert_triggered;
+    }
+
+    /**
+     * @return ForumTopicCreated|null
+     */
+    public function getForumTopicCreated(): ?ForumTopicCreated
+    {
+        return $this->forum_topic_created;
+    }
+
+    /**
+     * @param ForumTopicCreated|null $forum_topic_created
+     */
+    public function setForumTopicCreated(?ForumTopicCreated $forum_topic_created): void
+    {
+        $this->forum_topic_created = $forum_topic_created;
+    }
+
+    /**
+     * @return ForumTopicEdited|null
+     */
+    public function getForumTopicEdited(): ?ForumTopicEdited
+    {
+        return $this->forum_topic_edited;
+    }
+
+    /**
+     * @param ForumTopicEdited|null $forum_topic_edited
+     */
+    public function setForumTopicEdited(?ForumTopicEdited $forum_topic_edited): void
+    {
+        $this->forum_topic_edited = $forum_topic_edited;
+    }
+
+    /**
+     * @return ForumTopicClosed|null
+     */
+    public function getForumTopicClosed(): ?ForumTopicClosed
+    {
+        return $this->forum_topic_closed;
+    }
+
+    /**
+     * @param ForumTopicClosed|null $forum_topic_closed
+     */
+    public function setForumTopicClosed(?ForumTopicClosed $forum_topic_closed): void
+    {
+        $this->forum_topic_closed = $forum_topic_closed;
+    }
+
+    /**
+     * @return ForumTopicReopened|null
+     */
+    public function getForumTopicReopened(): ?ForumTopicReopened
+    {
+        return $this->forum_topic_reopened;
+    }
+
+    /**
+     * @param ForumTopicReopened|null $forum_topic_reopened
+     */
+    public function setForumTopicReopened(?ForumTopicReopened $forum_topic_reopened): void
+    {
+        $this->forum_topic_reopened = $forum_topic_reopened;
+    }
+
+    /**
+     * @return GeneralForumTopicHidden|null
+     */
+    public function getGeneralForumTopicHidden(): ?GeneralForumTopicHidden
+    {
+        return $this->general_forum_topic_hidden;
+    }
+
+    /**
+     * @param GeneralForumTopicHidden|null $general_forum_topic_hidden
+     */
+    public function setGeneralForumTopicHidden(?GeneralForumTopicHidden $general_forum_topic_hidden): void
+    {
+        $this->general_forum_topic_hidden = $general_forum_topic_hidden;
+    }
+
+    /**
+     * @return GeneralForumTopicUnhidden|null
+     */
+    public function getGeneralForumTopicUnhidden(): ?GeneralForumTopicUnhidden
+    {
+        return $this->general_forum_topic_unhidden;
+    }
+
+    /**
+     * @param GeneralForumTopicUnhidden|null $general_forum_topic_unhidden
+     */
+    public function setGeneralForumTopicUnhidden(?GeneralForumTopicUnhidden $general_forum_topic_unhidden): void
+    {
+        $this->general_forum_topic_unhidden = $general_forum_topic_unhidden;
     }
 
     /**

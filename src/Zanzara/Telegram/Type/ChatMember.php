@@ -36,8 +36,6 @@ class ChatMember
     /**
      * Optional. Owner and administrators only. True, if the user's presence in the chat is hidden
      *
-     * @since zanzara 0.5.0, Telegram Bot Api 5.0
-     *
      * @var bool|null
      */
     private $is_anonymous;
@@ -115,6 +113,13 @@ class ChatMember
      * @var bool|null
      */
     private $can_pin_messages;
+
+    /**
+     * Optional. True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
+     *
+     * @var bool|null
+     */
+    private $can_manage_topics;
 
     /**
      * Optional. Restricted only. True, if the user is a member of the chat at the moment of the request
@@ -423,6 +428,22 @@ class ChatMember
     public function setCanPinMessages(?bool $can_pin_messages): void
     {
         $this->can_pin_messages = $can_pin_messages;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function canManageTopics(): ?bool
+    {
+        return $this->can_manage_topics;
+    }
+
+    /**
+     * @param bool|null $can_manage_topics
+     */
+    public function setCanManageTopics(?bool $can_manage_topics): void
+    {
+        $this->can_manage_topics = $can_manage_topics;
     }
 
     /**
