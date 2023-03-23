@@ -433,6 +433,20 @@ class Message
     private $successful_payment;
 
     /**
+     * Optional. Service message: a user was shared with the bot
+     *
+     * @var UserShared|null
+     */
+    private $user_shared;
+
+    /**
+     * Optional. Service message: a chat was shared with the bot
+     *
+     * @var ChatShared|null
+     */
+    private $chat_shared;
+
+    /**
      * Optional. The domain name of the website on which the user has logged in
      *
      * @var string|null
@@ -1390,6 +1404,38 @@ class Message
     public function setSuccessfulPayment(?SuccessfulPayment $successful_payment): void
     {
         $this->successful_payment = $successful_payment;
+    }
+
+    /**
+     * @return UserShared|null
+     */
+    public function getUserShared(): ?UserShared
+    {
+        return $this->user_shared;
+    }
+
+    /**
+     * @param UserShared|null $user_shared
+     */
+    public function setUserShared(?UserShared $user_shared): void
+    {
+        $this->user_shared = $user_shared;
+    }
+
+    /**
+     * @return ChatShared|null
+     */
+    public function getChatShared(): ?ChatShared
+    {
+        return $this->chat_shared;
+    }
+
+    /**
+     * @param ChatShared|null $chat_shared
+     */
+    public function setChatShared(?ChatShared $chat_shared): void
+    {
+        $this->chat_shared = $chat_shared;
     }
 
     /**

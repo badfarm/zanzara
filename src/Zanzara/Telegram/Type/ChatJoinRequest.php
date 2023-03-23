@@ -13,6 +13,13 @@ class ChatJoinRequest
 {
 
     /**
+     * Chat to which the request was sent
+     *
+     * @var Chat
+     */
+    private $chat;
+
+    /**
      * User that sent the join request
      *
      * @var User
@@ -20,18 +27,21 @@ class ChatJoinRequest
     private $from;
 
     /**
+     * Identifier of a private chat with the user who sent the join request.
+     * This number may have more than 32 significant bits.
+     * The bot can use this identifier for 24 hours to send messages until the join request
+     * is processed, assuming no other administrator contacted the user.
+     *
+     * @var int
+     */
+    private $user_chat_id;
+
+    /**
      * Date the request was sent in Unix time
      *
      * @var int
      */
     private $date;
-
-    /**
-     * Chat to which the request was sent
-     *
-     * @var Chat
-     */
-    private $chat;
 
     /**
      * Optional. Bio of the user.
@@ -46,6 +56,22 @@ class ChatJoinRequest
      * @var ChatInviteLink|null
      */
     private $invite_link;
+
+    /**
+     * @return Chat
+     */
+    public function getChat(): Chat
+    {
+        return $this->chat;
+    }
+
+    /**
+     * @param Chat $chat
+     */
+    public function setChat(Chat $chat): void
+    {
+        $this->chat = $chat;
+    }
 
     /**
      * @return User
@@ -66,6 +92,22 @@ class ChatJoinRequest
     /**
      * @return int
      */
+    public function getUserChatId(): int
+    {
+        return $this->user_chat_id;
+    }
+
+    /**
+     * @param int $user_chat_id
+     */
+    public function setUserChatId(int $user_chat_id): void
+    {
+        $this->user_chat_id = $user_chat_id;
+    }
+
+    /**
+     * @return int
+     */
     public function getDate(): int
     {
         return $this->date;
@@ -77,22 +119,6 @@ class ChatJoinRequest
     public function setDate(int $date): void
     {
         $this->date = $date;
-    }
-
-    /**
-     * @return Chat
-     */
-    public function getChat(): Chat
-    {
-        return $this->chat;
-    }
-
-    /**
-     * @param Chat $chat
-     */
-    public function setChat(Chat $chat): void
-    {
-        $this->chat = $chat;
     }
 
     /**

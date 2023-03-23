@@ -24,6 +24,24 @@ class KeyboardButton
     private $text;
 
     /**
+     * Optional. If specified, pressing the button will open a list of suitable users.
+     * Tapping on any user will send their identifier to the bot in a “user_shared” service message.
+     * Available in private chats only.
+     *
+     * @var KeyboardButtonRequestUser|null
+     */
+    private $request_user;
+
+    /**
+     * Optional. If specified, pressing the button will open a list of suitable chats.
+     * Tapping on a chat will send its identifier to the bot in a “chat_shared” service message.
+     * Available in private chats only.
+     *
+     * @var KeyboardButtonRequestChat|null
+     */
+    private $request_chat;
+
+    /**
      * Optional. If True, the user's phone number will be sent as a contact when the button is pressed. Available in private
      * chats only
      *
@@ -69,6 +87,38 @@ class KeyboardButton
     public function setText(string $text): void
     {
         $this->text = $text;
+    }
+
+    /**
+     * @return KeyboardButtonRequestUser|null
+     */
+    public function getRequestUser(): ?KeyboardButtonRequestUser
+    {
+        return $this->request_user;
+    }
+
+    /**
+     * @param KeyboardButtonRequestUser|null $request_user
+     */
+    public function setRequestUser(?KeyboardButtonRequestUser $request_user): void
+    {
+        $this->request_user = $request_user;
+    }
+
+    /**
+     * @return KeyboardButtonRequestChat|null
+     */
+    public function getRequestChat(): ?KeyboardButtonRequestChat
+    {
+        return $this->request_chat;
+    }
+
+    /**
+     * @param KeyboardButtonRequestChat|null $request_chat
+     */
+    public function setRequestChat(?KeyboardButtonRequestChat $request_chat): void
+    {
+        $this->request_chat = $request_chat;
     }
 
     /**

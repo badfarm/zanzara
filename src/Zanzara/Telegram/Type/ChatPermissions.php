@@ -20,12 +20,46 @@ class ChatPermissions
     private $can_send_messages;
 
     /**
-     * Optional. True, if the user is allowed to send audios, documents, photos, videos, video notes and voice notes,
-     * implies can_send_messages
+     * Optional. True, if the user is allowed to send audios
      *
      * @var bool|null
      */
-    private $can_send_media_messages;
+    private $can_send_audios;
+
+    /**
+     * Optional. True, if the user is allowed to send documents
+     *
+     * @var bool|null
+     */
+    private $can_send_documents;
+
+    /**
+     * Optional. True, if the user is allowed to send photos
+     *
+     * @var bool|null
+     */
+    private $can_send_photos;
+
+    /**
+     * Optional. True, if the user is allowed to send videos
+     *
+     * @var bool|null
+     */
+    private $can_send_videos;
+
+    /**
+     * Optional. True, if the user is allowed to send video notes
+     *
+     * @var bool|null
+     */
+    private $can_send_video_notes;
+
+    /**
+     * Optional. True, if the user is allowed to send voice notes
+     *
+     * @var bool|null
+     */
+    private $can_send_voice_notes;
 
     /**
      * Optional. True, if the user is allowed to send polls, implies can_send_messages
@@ -96,17 +130,97 @@ class ChatPermissions
     /**
      * @return bool|null
      */
-    public function getCanSendMediaMessages(): ?bool
+    public function getCanSendAudios(): ?bool
     {
-        return $this->can_send_media_messages;
+        return $this->can_send_audios;
     }
 
     /**
-     * @param bool|null $can_send_media_messages
+     * @param bool|null $can_send_audios
      */
-    public function setCanSendMediaMessages(?bool $can_send_media_messages): void
+    public function setCanSendAudios(?bool $can_send_audios): void
     {
-        $this->can_send_media_messages = $can_send_media_messages;
+        $this->can_send_audios = $can_send_audios;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getCanSendDocuments(): ?bool
+    {
+        return $this->can_send_documents;
+    }
+
+    /**
+     * @param bool|null $can_send_documents
+     */
+    public function setCanSendDocuments(?bool $can_send_documents): void
+    {
+        $this->can_send_documents = $can_send_documents;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getCanSendPhotos(): ?bool
+    {
+        return $this->can_send_photos;
+    }
+
+    /**
+     * @param bool|null $can_send_photos
+     */
+    public function setCanSendPhotos(?bool $can_send_photos): void
+    {
+        $this->can_send_photos = $can_send_photos;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getCanSendVideos(): ?bool
+    {
+        return $this->can_send_videos;
+    }
+
+    /**
+     * @param bool|null $can_send_videos
+     */
+    public function setCanSendVideos(?bool $can_send_videos): void
+    {
+        $this->can_send_videos = $can_send_videos;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getCanSendVideoNotes(): ?bool
+    {
+        return $this->can_send_video_notes;
+    }
+
+    /**
+     * @param bool|null $can_send_video_notes
+     */
+    public function setCanSendVideoNotes(?bool $can_send_video_notes): void
+    {
+        $this->can_send_video_notes = $can_send_video_notes;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getCanSendVoiceNotes(): ?bool
+    {
+        return $this->can_send_voice_notes;
+    }
+
+    /**
+     * @param bool|null $can_send_voice_notes
+     */
+    public function setCanSendVoiceNotes(?bool $can_send_voice_notes): void
+    {
+        $this->can_send_voice_notes = $can_send_voice_notes;
     }
 
     /**
