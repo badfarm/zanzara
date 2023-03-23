@@ -27,6 +27,20 @@ class ChatMember
     private $status;
 
     /**
+     * Optional. Not yet added to api documentations; unix time
+     *
+     * @var int|null
+     */
+    private $joined_date;
+
+    /**
+     * Optional. Not yet added to api documentations
+     *
+     * @var User
+     */
+    private $inviter;
+
+    /**
      * Optional. Owner and administrators only. Custom title for this user
      *
      * @var string|null
@@ -231,6 +245,38 @@ class ChatMember
     public function setStatus(string $status): void
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getJoinedDate(): ?int
+    {
+        return $this->joined_date;
+    }
+
+    /**
+     * @param int|null $joined_date
+     */
+    public function setJoinedDate(?int $joined_date): void
+    {
+        $this->joined_date = $joined_date;
+    }
+
+    /**
+     * @return User
+     */
+    public function getInviter(): User
+    {
+        return $this->inviter;
+    }
+
+    /**
+     * @param User $inviter
+     */
+    public function setInviter(User $inviter): void
+    {
+        $this->inviter = $inviter;
     }
 
     /**
