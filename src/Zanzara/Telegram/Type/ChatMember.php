@@ -179,27 +179,6 @@ class ChatMember
     private $can_add_web_page_previews;
 
     /**
-     * Chat the user belongs to
-     *
-     * @var Chat
-     */
-    private $chat;
-
-    /**
-     * Performer of the action, which resulted in the change.
-     *
-     * @var User
-     */
-    private $from;
-
-    /**
-     * Date the change was done in Unix time.
-     *
-     * @var integer
-     */
-    private $date;
-
-    /**
      * True, if the administrator can manage video chats
      *
      * @var bool
@@ -581,54 +560,6 @@ class ChatMember
     public function setIsAnonymous(?bool $is_anonymous): void
     {
         $this->is_anonymous = $is_anonymous;
-    }
-
-    /**
-     * @return Chat
-     */
-    public function getChat(): Chat
-    {
-        return $this->chat;
-    }
-
-    /**
-     * @param Chat $chat
-     */
-    public function setChat(Chat $chat): void
-    {
-        $this->chat = $chat;
-    }
-
-    /**
-     * @return User
-     */
-    public function getFrom(): User
-    {
-        return $this->from;
-    }
-
-    /**
-     * @param User $from
-     */
-    public function setFrom(User $from): void
-    {
-        $this->from = $from;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDate(): int
-    {
-        return $this->date;
-    }
-
-    /**
-     * @param int $date
-     */
-    public function setDate(int $date): void
-    {
-        $this->date = $date;
     }
 
     /**
