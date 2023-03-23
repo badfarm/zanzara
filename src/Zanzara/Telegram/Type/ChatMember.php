@@ -186,27 +186,6 @@ class ChatMember
     private $date;
 
     /**
-     * Previous information about the chat member.
-     *
-     * @var ChatMember
-     */
-    private $old_chat_member;
-
-    /**
-     * New information about the chat member
-     *
-     * @var ChatMember
-     */
-    private $new_chat_member;
-
-    /**
-     * Optional. Chat invite link, which was used by the user to join the chat; for joining by invite link events only.
-     *
-     * @var ChatInviteLink|null
-     */
-    private $invite_link;
-
-    /**
      * True, if the administrator can manage video chats
      *
      * @var bool
@@ -604,54 +583,6 @@ class ChatMember
     public function setDate(int $date): void
     {
         $this->date = $date;
-    }
-
-    /**
-     * @return ChatMember
-     */
-    public function getOldChatMember(): ChatMember
-    {
-        return $this->old_chat_member;
-    }
-
-    /**
-     * @param ChatMember $old_chat_member
-     */
-    public function setOldChatMember(ChatMember $old_chat_member): void
-    {
-        $this->old_chat_member = $old_chat_member;
-    }
-
-    /**
-     * @return ChatMember
-     */
-    public function getNewChatMember(): ChatMember
-    {
-        return $this->new_chat_member;
-    }
-
-    /**
-     * @param ChatMember $new_chat_member
-     */
-    public function setNewChatMember(ChatMember $new_chat_member): void
-    {
-        $this->new_chat_member = $new_chat_member;
-    }
-
-    /**
-     * @return ChatInviteLink|null
-     */
-    public function getInviteLink(): ?ChatInviteLink
-    {
-        return $this->invite_link;
-    }
-
-    /**
-     * @param ChatInviteLink|null $invite_link
-     */
-    public function setInviteLink(?ChatInviteLink $invite_link): void
-    {
-        $this->invite_link = $invite_link;
     }
 
     /**

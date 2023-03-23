@@ -128,7 +128,7 @@ class Update implements \JsonSerializable
      * Optional. The bot's chat member status was updated in a chat. For private chats, this update is received only
      * when the bot is blocked or unblocked by the user.
      *
-     * @var ChatMember|null
+     * @var ChatMemberUpdated|null
      */
     private $my_chat_member;
 
@@ -408,6 +408,10 @@ class Update implements \JsonSerializable
         } else if ($this->poll_answer) {
             $this->updateType = PollAnswer::class;
             $this->effectiveUser = $this->poll_answer->getUser();
+        } else if ($this->my_chat_member) {
+            $this->updateType = ChatMemberUpdated::class;
+            $this->effectiveUser = $this->my_chat_member->getFrom();
+            $this->effectiveChat = $this->my_chat_member->getChat();
         } else if ($this->chat_join_request) {
             $this->updateType = ChatJoinRequest::class;
             $this->effectiveUser = $this->chat_join_request->getFrom();
@@ -448,17 +452,17 @@ class Update implements \JsonSerializable
     }
 
     /**
-     * @return ChatMember|null
+     * @return ChatMemberUpdated|null
      */
-    public function getMyChatMember(): ?ChatMember
+    public function getMyChatMember(): ?ChatMemberUpdated
     {
         return $this->my_chat_member;
     }
 
     /**
-     * @param ChatMember|null $my_chat_member
+     * @param ChatMemberUpdated|null $my_chat_member
      */
-    public function setMyChatMember(?ChatMember $my_chat_member): void
+    public function setMyChatMember(?ChatMemberUpdated $my_chat_member): void
     {
         $this->my_chat_member = $my_chat_member;
     }
