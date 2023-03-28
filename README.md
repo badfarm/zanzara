@@ -4,7 +4,7 @@
 
 Asynchronous PHP Telegram Bot Framework built on top of [ReactPHP](https://reactphp.org/)
 
-[![Bot API](https://img.shields.io/badge/Bot%20API-6.4%20(December%202022)-blue)](https://core.telegram.org/bots/api)
+[![Bot API](https://img.shields.io/badge/Bot%20API-6.6%20(March%202023)-blue)](https://core.telegram.org/bots/api)
 [![PHP](https://img.shields.io/badge/PHP-%3E%3D7.3-blue)](https://www.php.net/)
 [![Build](https://github.com/badfarm/zanzara/actions/workflows/build.yml/badge.svg)](https://github.com/badfarm/zanzara/actions/workflows/build.yml)
 [![Code style](https://img.shields.io/badge/code%20style-standard-green)](https://www.php-fig.org/psr/psr-2/)
