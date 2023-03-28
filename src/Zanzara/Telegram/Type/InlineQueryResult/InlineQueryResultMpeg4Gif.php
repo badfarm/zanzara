@@ -50,7 +50,7 @@ class InlineQueryResultMpeg4Gif extends InlineQueryResult
      *
      * @var string
      */
-    private $thumb_url;
+    private $thumbnail_url;
 
     /**
      * Optional. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to
@@ -58,7 +58,7 @@ class InlineQueryResultMpeg4Gif extends InlineQueryResult
      *
      * @var string|null
      */
-    private $thumb_mime_type;
+    private $thumbnail_mime_type;
 
     /**
      * Optional. Title for the result
@@ -174,15 +174,15 @@ class InlineQueryResultMpeg4Gif extends InlineQueryResult
      */
     public function getThumbUrl(): string
     {
-        return $this->thumb_url;
+        return $this->thumbnail_url;
     }
 
     /**
-     * @param string $thumb_url
+     * @param string $thumbnail_url
      */
-    public function setThumbUrl(string $thumb_url): void
+    public function setThumbUrl(string $thumbnail_url): void
     {
-        $this->thumb_url = $thumb_url;
+        $this->thumbnail_url = $thumbnail_url;
     }
 
     /**
@@ -270,15 +270,15 @@ class InlineQueryResultMpeg4Gif extends InlineQueryResult
      */
     public function getThumbMimeType(): ?string
     {
-        return $this->thumb_mime_type;
+        return $this->thumbnail_mime_type;
     }
 
     /**
-     * @param string|null $thumb_mime_type
+     * @param string|null $thumbnail_mime_type
      */
-    public function setThumbMimeType(?string $thumb_mime_type): void
+    public function setThumbMimeType(?string $thumbnail_mime_type): void
     {
-        $this->thumb_mime_type = $thumb_mime_type;
+        $this->thumbnail_mime_type = $thumbnail_mime_type;
     }
 
     /**

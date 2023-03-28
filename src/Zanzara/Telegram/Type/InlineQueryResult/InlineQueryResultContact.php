@@ -63,21 +63,21 @@ class InlineQueryResultContact extends InlineQueryResult
      *
      * @var string|null
      */
-    private $thumb_url;
+    private $thumbnail_url;
 
     /**
      * Optional. Thumbnail width
      *
      * @var int|null
      */
-    private $thumb_width;
+    private $thumbnail_width;
 
     /**
      * Optional. Thumbnail height
      *
      * @var int|null
      */
-    private $thumb_height;
+    private $thumbnail_height;
 
     /**
      * @return string
@@ -180,15 +180,15 @@ class InlineQueryResultContact extends InlineQueryResult
      */
     public function getThumbUrl(): ?string
     {
-        return $this->thumb_url;
+        return $this->thumbnail_url;
     }
 
     /**
-     * @param string|null $thumb_url
+     * @param string|null $thumbnail_url
      */
-    public function setThumbUrl(?string $thumb_url): void
+    public function setThumbUrl(?string $thumbnail_url): void
     {
-        $this->thumb_url = $thumb_url;
+        $this->thumbnail_url = $thumbnail_url;
     }
 
     /**
@@ -196,15 +196,15 @@ class InlineQueryResultContact extends InlineQueryResult
      */
     public function getThumbWidth(): ?int
     {
-        return $this->thumb_width;
+        return $this->thumbnail_width;
     }
 
     /**
-     * @param int|null $thumb_width
+     * @param int|null $thumbnail_width
      */
-    public function setThumbWidth(?int $thumb_width): void
+    public function setThumbWidth(?int $thumbnail_width): void
     {
-        $this->thumb_width = $thumb_width;
+        $this->thumbnail_width = $thumbnail_width;
     }
 
     /**
@@ -212,15 +212,15 @@ class InlineQueryResultContact extends InlineQueryResult
      */
     public function getThumbHeight(): ?int
     {
-        return $this->thumb_height;
+        return $this->thumbnail_height;
     }
 
     /**
-     * @param int|null $thumb_height
+     * @param int|null $thumbnail_height
      */
-    public function setThumbHeight(?int $thumb_height): void
+    public function setThumbHeight(?int $thumbnail_height): void
     {
-        $this->thumb_height = $thumb_height;
+        $this->thumbnail_height = $thumbnail_height;
     }
 
 }

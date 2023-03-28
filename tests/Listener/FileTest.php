@@ -34,12 +34,12 @@ class FileTest extends TestCase
             $this->assertSame(2, $animation->getDuration());
             $this->assertSame(480, $animation->getWidth());
             $this->assertSame(360, $animation->getHeight());
-            $thumb = $animation->getThumb();
-            $this->assertSame('xxxxxxxxxxxxxxxxxxxxxxxxxxxx', $thumb->getFileId());
-            $this->assertSame('xxxxxxxxxxxxxxxxxxxxxxxxxxxx', $thumb->getFileUniqueId());
-            $this->assertSame(15993, $thumb->getFileSize());
-            $this->assertSame(320, $thumb->getWidth());
-            $this->assertSame(240, $thumb->getHeight());
+            $thumbnail = $animation->getThumbnail();
+            $this->assertSame('xxxxxxxxxxxxxxxxxxxxxxxxxxxx', $thumbnail->getFileId());
+            $this->assertSame('xxxxxxxxxxxxxxxxxxxxxxxxxxxx', $thumbnail->getFileUniqueId());
+            $this->assertSame(15993, $thumbnail->getFileSize());
+            $this->assertSame(320, $thumbnail->getWidth());
+            $this->assertSame(240, $thumbnail->getHeight());
             $this->assertSame('xxxxxxxxxxxxxxxxxxxxxxxxxxxx', $animation->getFileId());
             $this->assertSame('xxxxxxxxxxxxxxxxxxxxxxxxxxxx', $animation->getFileUniqueId());
             $this->assertSame(541685, $animation->getFileSize());
@@ -195,7 +195,7 @@ class FileTest extends TestCase
             $this->assertSame('😂', $sticker->getEmoji());
             $this->assertSame('DaisyRomashka', $sticker->getSetName());
             $this->assertSame(true, $sticker->isAnimated());
-            $thumb = $sticker->getThumb();
+            $thumb = $sticker->getThumbnail();
             $this->assertSame('xxxxxxxxxxxxxxxxxxxxxxxxxxxx', $thumb->getFileId());
             $this->assertSame('xxxxxxxxxxxxxxxxxxxxxxxxxxxx', $thumb->getFileUniqueId());
             $this->assertSame(6574, $thumb->getFileSize());
@@ -227,7 +227,7 @@ class FileTest extends TestCase
             $this->assertSame(480, $video->getWidth());
             $this->assertSame(480, $video->getHeight());
             $this->assertSame('video/mp4', $video->getMimeType());
-            $thumb = $video->getThumb();
+            $thumb = $video->getThumbnail();
             $this->assertSame('xxxxxxxxxxxxxxxxxxxxxxxxxxxx', $thumb->getFileId());
             $this->assertSame('xxxxxxxxxxxxxxxxxxxxxxxxxxxx', $thumb->getFileUniqueId());
             $this->assertSame(18081, $thumb->getFileSize());

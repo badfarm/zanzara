@@ -53,7 +53,7 @@ class Video
      *
      * @var PhotoSize|null
      */
-    private $thumb;
+    private $thumbnail;
 
     /**
      * Optional. Original filename as defined by sender
@@ -161,17 +161,17 @@ class Video
     /**
      * @return PhotoSize|null
      */
-    public function getThumb(): ?PhotoSize
+    public function getThumbnail(): ?PhotoSize
     {
-        return $this->thumb;
+        return $this->thumbnail;
     }
 
     /**
-     * @param PhotoSize|null $thumb
+     * @param PhotoSize|null $thumbnail
      */
-    public function setThumb(?PhotoSize $thumb): void
+    public function setThumbnail(?PhotoSize $thumbnail): void
     {
-        $this->thumb = $thumb;
+        $this->thumbnail = $thumbnail;
     }
 
     /**

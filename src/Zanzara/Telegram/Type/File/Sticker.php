@@ -69,7 +69,7 @@ class Sticker
      *
      * @var PhotoSize|null
      */
-    private $thumb;
+    private $thumbnail;
 
     /**
      * Optional. Emoji associated with the sticker
@@ -105,6 +105,14 @@ class Sticker
      * @var string|null
      */
     private $custom_emoji_id;
+
+    /**
+     * Optional. True, if the sticker must be repainted to a text color in messages, the color of the
+     * Telegram Premium badge in emoji status, white color on chat photos, or another appropriate color in other places
+     *
+     * @var true|null
+     */
+    private $needs_repainting;
 
     /**
      * Optional. File size
@@ -228,17 +236,17 @@ class Sticker
     /**
      * @return PhotoSize|null
      */
-    public function getThumb(): ?PhotoSize
+    public function getThumbnail(): ?PhotoSize
     {
-        return $this->thumb;
+        return $this->thumbnail;
     }
 
     /**
-     * @param PhotoSize|null $thumb
+     * @param PhotoSize|null $thumbnail
      */
-    public function setThumb(?PhotoSize $thumb): void
+    public function setThumbnail(?PhotoSize $thumbnail): void
     {
-        $this->thumb = $thumb;
+        $this->thumbnail = $thumbnail;
     }
 
     /**
@@ -319,6 +327,22 @@ class Sticker
     public function setCustomEmojiId(?string $custom_emoji_id): void
     {
         $this->custom_emoji_id = $custom_emoji_id;
+    }
+
+    /**
+     * @return true|null
+     */
+    public function getNeedsRepainting(): ?bool
+    {
+        return $this->needs_repainting;
+    }
+
+    /**
+     * @param true|null $needs_repainting
+     */
+    public function setNeedsRepainting(?bool $needs_repainting): void
+    {
+        $this->needs_repainting = $needs_repainting;
     }
 
     /**
