@@ -9,7 +9,7 @@ use DI\Container;
 use Psr\Log\LoggerInterface;
 use React\Cache\ArrayCache;
 use React\Cache\CacheInterface;
-use React\EventLoop\Factory;
+use React\EventLoop\Loop;
 use React\EventLoop\LoopInterface;
 use React\Http\Browser;
 use React\Http\Server;
@@ -54,7 +54,7 @@ class Zanzara extends ListenerResolver
         $this->config = $config ?? new Config();
         $this->config->setBotToken($botToken);
         $this->container = $this->config->getContainer() ?? new Container();
-        $this->loop = $this->config->getLoop() ?? Factory::create();
+        $this->loop = $this->config->getLoop() ?? Loop::get();
         $this->container->set(LoopInterface::class, $this->loop); // loop cannot be created by container
         $this->container->set(LoggerInterface::class, $this->config->getLogger());
         $connector = $this->config->getConnector();

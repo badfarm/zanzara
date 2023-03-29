@@ -7,7 +7,7 @@ namespace Zanzara\Test\PromiseWrapper;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
-use React\EventLoop\Factory;
+use React\EventLoop\Loop;
 use React\Http\Browser;
 
 /**
@@ -24,7 +24,7 @@ class TestMultiplePromise extends TestCase
 
     public function testMultiplePromises()
     {
-        $loop = Factory::create();
+        $loop = Loop::get();
         $browser = new Browser($loop);
 
         $promise = $browser->get('https://google.it');
@@ -48,8 +48,6 @@ class TestMultiplePromise extends TestCase
         );
 
         $this->assertTrue(true);
-
-        $loop->run();
     }
 
 }

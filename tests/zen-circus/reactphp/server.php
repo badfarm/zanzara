@@ -6,7 +6,7 @@ use React\Http\Server;
 
 require __DIR__ . '/../../bootstrap.php';
 
-$loop = \React\EventLoop\Factory::create();
+$loop = \React\EventLoop\Loop::get();
 
 $server = new Server(function (ServerRequestInterface $request) {
     $path = $request->getUri()->getPath();
