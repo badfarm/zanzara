@@ -63,14 +63,17 @@ class Zanzara extends ListenerResolver
         $proxyHttpHeaders = $this->config->getProxyHttpHeaders();
         if (!$connector && (!empty($connectorOptions) || $proxyUrl || !empty($proxyHttpHeaders))) {
             if ($proxyUrl) {
-                $proxy = new ProxyConnector($proxyUrl, new Connector($this->loop), $proxyHttpHeaders);
+                $proxy = new ProxyConnector($proxyUrl, new Connector(array(), $this->loop), $proxyHttpHeaders);
                 $connectorOptions['tcp'] = $proxy;
             }
-            $connector = new Connector($this->loop, $connectorOptions);
+            $connector = new Connector($connectorOptions, $this->loop);
             $this->config->setConnector($connector);
         }
-        $this->container->set(Browser::class, $this->config->getBrowser() ?? (new Browser($this->loop, $this->config->getConnector())) // browser cannot be created by container
-        ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botToken}/"));
+        $this->container->set(
+            Browser::class,
+            $this->config->getBrowser() ?? (new Browser($this->config->getConnector(), $this->loop))
+                ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botToken}/")
+        );
         $this->telegram = $this->container->get(Telegram::class);
         $this->container->set(CacheInterface::class, $this->config->getCache() ?? new ArrayCache());
         $this->container->set(Config::class, $this->config);
