@@ -133,6 +133,11 @@ class Config
     private $logger;
 
     /**
+     * @var bool
+     */
+    private $disableZanzaraLogger = false;
+
+    /**
      * @var callable|null
      */
     private $errorHandler;
@@ -388,10 +393,28 @@ class Config
 
     /**
      * @param LoggerInterface|null $logger
+     * @param bool $disableZanzaraLogger
      */
-    public function setLogger(?LoggerInterface $logger): void
+    public function setLogger(?LoggerInterface $logger, bool $disableZanzaraLogger = false): void
     {
         $this->logger = $logger;
+        $this->disableZanzaraLogger = $disableZanzaraLogger;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDisableZanzaraLogger(): bool
+    {
+        return $this->disableZanzaraLogger;
+    }
+
+    /**
+     * @param bool $bool
+     */
+    public function setDisableZanzaraLogger(bool $bool): void
+    {
+        $this->disableZanzaraLogger = $bool;
     }
 
     /**
