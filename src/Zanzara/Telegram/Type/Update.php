@@ -349,6 +349,14 @@ class Update implements \JsonSerializable
     }
 
     /**
+     * @param string $updateType
+     */
+    public function setUpdateType(string $updateType): void
+    {
+        $this->updateType = $updateType;
+    }
+
+    /**
      *
      */
     public function detectUpdateType()
