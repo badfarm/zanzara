@@ -377,6 +377,14 @@ class Update implements \JsonSerializable
             $this->updateType = WebAppData::class;
             $this->effectiveUser = $this->message->getFrom();
             $this->effectiveChat = $this->message->getChat();
+        } else if ($this->message && $this->message->getUserShared()) {
+            $this->updateType = UserShared::class;
+            $this->effectiveUser = $this->message->getFrom();
+            $this->effectiveChat = $this->message->getChat();
+        } else if ($this->message && $this->message->getChatShared()) {
+            $this->updateType = ChatShared::class;
+            $this->effectiveUser = $this->message->getFrom();
+            $this->effectiveChat = $this->message->getChat();
         } else if ($this->message) {
             $this->updateType = Message::class;
             $this->effectiveUser = $this->message->getFrom();
