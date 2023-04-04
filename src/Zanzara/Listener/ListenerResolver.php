@@ -67,12 +67,16 @@ abstract class ListenerResolver extends ListenerCollector
                         // call the listeners by the update type
                         $this->mergeListenersByType($update, $listeners, $updateType);
                         $this->mergeListenersByType($update, $listeners, Update::class);
-                        // find a listener for the type, and call the fallback only
-                        // when we are not in a conversation, so the callback will be null
-                        $listener = null;
-                        if ($update->getMessage() && $update->getMessage()->getText()) {
-                            $listener = $this->findListenerAndPush($update, $listeners, 'messages', $update->getMessage()->getText(), $callback !== null);
+
+                        // find a listener for the input (matched text)
+                        $listener = $this->findListenerAndPush($update, $listeners, 'messages', $update->getMessage()->getText());
+
+                        // if there was no listener & we are not in a conversation, then call the fallback
+                        if (!$listener && !$callback && isset($this->listeners['fallback'])) {
+                            $listeners[] = $this->listeners['fallback'];
+                            $listener = $this->listeners['fallback'];
                         }
+
                         // if the conversation is not skipping listeners, escape the conversation
                         if ($listener && $callback && !$skipListeners) {
                             $this->conversationManager->deleteConversationHandler($chatId);
@@ -104,10 +108,9 @@ abstract class ListenerResolver extends ListenerCollector
      * @param  Listener[]  $listeners
      * @param  string  $listenerType
      * @param  string|null  $listenerId
-     * @param  bool  $skipFallback
      * @return Listener|null
      */
-    private function findListenerAndPush(Update $update, array &$listeners, string $listenerType, ?string $listenerId = null, bool $skipFallback = false): ?Listener
+    private function findListenerAndPush(Update $update, array &$listeners, string $listenerType, ?string $listenerId = null): ?Listener
     {
         if ($listenerId !== null) {
             $typedListeners = $this->listeners[$listenerType] ?? [];
@@ -120,11 +123,6 @@ abstract class ListenerResolver extends ListenerCollector
                     return $listener;
                 }
             }
-        }
-
-        if (isset($this->listeners['fallback']) && !$skipFallback) {
-            $listeners[] = $this->listeners['fallback'];
-            return $this->listeners['fallback'];
         }
 
         return null;
