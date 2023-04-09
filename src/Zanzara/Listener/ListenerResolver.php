@@ -43,10 +43,10 @@ abstract class ListenerResolver extends ListenerCollector
                         $this->mergeListenersByType($update, $listeners, $updateType);
                         $this->mergeListenersByType($update, $listeners, Update::class);
                         if ($callbackQuery->getData()) {
-                            $this->findListenerAndPush($update, $listeners, 'cb_query_data', $callbackQuery->getData(), true);
+                            $this->findListenerAndPush($update, $listeners, 'cb_query_data', $callbackQuery->getData());
                         }
                         if ($text) {
-                            $this->findListenerAndPush($update, $listeners, 'cb_query_texts', $text, true);
+                            $this->findListenerAndPush($update, $listeners, 'cb_query_texts', $text);
                         }
                     } else { // if we are in a conversation, redirect it only to the conversation step
                         $listener = new Listener($handlerInfo[0], $this->container);
@@ -68,17 +68,19 @@ abstract class ListenerResolver extends ListenerCollector
                         $this->mergeListenersByType($update, $listeners, $updateType);
                         $this->mergeListenersByType($update, $listeners, Update::class);
 
-                        // find a listener for the input (matched text)
-                        $listener = $this->findListenerAndPush($update, $listeners, 'messages', $update->getMessage()->getText());
+                        if ($update->getMessage() && $update->getMessage()->getText() !== null) {
+                            // find a listener for the input (matched text)
+                            $listener = $this->findListenerAndPush($update, $listeners, 'messages', $update->getMessage()->getText());
 
-                        // if there was no listener & we are not in a conversation, then call the fallback
-                        if (!$listener && !$callback && isset($this->listeners['fallback'])) {
-                            $listeners[] = $this->listeners['fallback'];
-                            $listener = $this->listeners['fallback'];
+                            // if there was no listener & we are not in a conversation, then call the fallback
+                            if (!$listener && !$callback && isset($this->listeners['fallback'])) {
+                                $listeners[] = $this->listeners['fallback'];
+                                $listener = $this->listeners['fallback'];
+                            }
                         }
 
                         // if the conversation is not skipping listeners, escape the conversation
-                        if ($listener && $callback && !$skipListeners) {
+                        if (isset($listener) && $callback && !$skipListeners) {
                             $this->conversationManager->deleteConversationHandler($chatId);
                             $callback = null;
                         }
