@@ -166,4 +166,23 @@ class MessageTest extends TestCase
         $bot->run();
     }
 
+    /**
+     *
+     */
+    public function testMessageZero()
+    {
+        $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setUpdateStream(__DIR__ . '/../update_types/message_zero.json');
+        $bot = new Zanzara("test", $config);
+
+        $bot->onText('0', function (Context $ctx) {
+            $update = $ctx->getUpdate();
+            $message = $update->getMessage();
+            $this->assertSame("0", $message->getText());
+        });
+
+        $bot->run();
+    }
+
 }
