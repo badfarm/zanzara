@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Zanzara\Telegram\Type;
 
 /**
- * This object represents a service message about a voice chat ended in the chat.
+ * This object represents a service message about a video chat ended in the chat.
  *
- * More on https://core.telegram.org/bots/api#voicechatended
+ * More on https://core.telegram.org/bots/api#videochatended
  *
  */
-class VoiceChatEnded
+class VideoChatEnded
 {
 
     /**
-     * Voice chat duration; in seconds
+     * Video chat duration; in seconds
      *
      * @var int
      */

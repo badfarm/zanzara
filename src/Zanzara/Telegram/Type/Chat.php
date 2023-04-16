@@ -57,6 +57,13 @@ class Chat implements \JsonSerializable
     private $last_name;
 
     /**
+     * Optional. True, if the supergroup chat is a forum (has topics enabled)
+     *
+     * @var bool|null
+     */
+    private $is_forum;
+
+    /**
      * Optional. Chat photo. Returned only in getChat.
      *
      * @var ChatPhoto|null
@@ -64,9 +71,22 @@ class Chat implements \JsonSerializable
     private $photo;
 
     /**
-     * Optional. Bio of the other party in a private chat. Returned only in getChat.
+     * Optional. If non-empty, the list of all active chat usernames; for private chats, supergroups and channels.
+     * Returned only in getChat.
      *
-     * @since zanzara 0.5.0, Telegram Bot Api 5.0
+     * @var string[]|null
+     */
+    private $active_usernames;
+
+    /**
+     * Optional. Custom emoji identifier of emoji status of the other party in a private chat. Returned only in getChat.
+     *
+     * @var string|null
+     */
+    private $emoji_status_custom_emoji_id;
+
+    /**
+     * Optional. Bio of the other party in a private chat. Returned only in getChat.
      *
      * @var string|null
      */
@@ -79,6 +99,29 @@ class Chat implements \JsonSerializable
      * @var bool|null
      */
     private $has_private_forwards;
+
+    /**
+     * Optional. True, if the privacy settings of the other party restrict sending voice and video note messages in
+     * the private chat. Returned only in getChat.
+     *
+     * @var bool|null
+     */
+    private $has_restricted_voice_and_video_messages;
+
+    /**
+     * Optional. True, if users need to join the supergroup before they can send messages. Returned only in getChat.
+     *
+     * @var bool|null
+     */
+    private $join_to_send_messages;
+
+    /**
+     * Optional. True, if all users directly joining the supergroup need to be approved by supergroup administrators.
+     * Returned only in getChat.
+     *
+     * @var bool|null
+     */
+    private $join_by_request;
 
     /**
      * Optional. Description, for groups, supergroups and channel chats. Returned only in getChat.
@@ -126,6 +169,22 @@ class Chat implements \JsonSerializable
     private $message_auto_delete_time;
 
     /**
+     * Optional. True, if aggressive anti-spam checks are enabled in the supergroup.
+     * The field is only available to chat administrators. Returned only in getChat.
+     *
+     * @var bool|null
+     */
+    private $has_aggressive_anti_spam_enabled;
+
+    /**
+     * Optional. True, if non-administrators can only get the list of bots and administrators in the chat.
+     * Returned only in getChat.
+     *
+     * @var bool|null
+     */
+    private $has_hidden_members;
+
+    /**
      * Optional. True, if messages from the chat can't be forwarded to other chats. Returned only in getChat.
      *
      * @var bool|null
@@ -151,8 +210,6 @@ class Chat implements \JsonSerializable
      * versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming
      * languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64
      * bit integer or double-precision float type are safe for storing this identifier. Returned only in getChat.
-     *
-     * @since zanzara 0.5.0, Telegram Bot Api 5.0
      *
      * @var int|null
      */
@@ -264,6 +321,22 @@ class Chat implements \JsonSerializable
     }
 
     /**
+     * @return bool|null
+     */
+    public function isForum(): ?bool
+    {
+        return $this->is_forum;
+    }
+
+    /**
+     * @param bool|null $is_forum
+     */
+    public function setIsForum(?bool $is_forum): void
+    {
+        $this->is_forum = $is_forum;
+    }
+
+    /**
      * @return ChatPhoto|null
      */
     public function getPhoto(): ?ChatPhoto
@@ -277,6 +350,86 @@ class Chat implements \JsonSerializable
     public function setPhoto(?ChatPhoto $photo): void
     {
         $this->photo = $photo;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getActiveUsernames(): ?array
+    {
+        return $this->active_usernames;
+    }
+
+    /**
+     * @param string[]|null $active_usernames
+     */
+    public function setActiveUsernames(?array $active_usernames): void
+    {
+        $this->active_usernames = $active_usernames;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEmojiStatusCustomEmojiId(): ?string
+    {
+        return $this->emoji_status_custom_emoji_id;
+    }
+
+    /**
+     * @param string|null $emoji_status_custom_emoji_id
+     */
+    public function setEmojiStatusCustomEmojiId(?string $emoji_status_custom_emoji_id): void
+    {
+        $this->emoji_status_custom_emoji_id = $emoji_status_custom_emoji_id;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getHasRestrictedVoiceAndVideoMessages(): ?bool
+    {
+        return $this->has_restricted_voice_and_video_messages;
+    }
+
+    /**
+     * @param bool|null $has_restricted_voice_and_video_messages
+     */
+    public function setHasRestrictedVoiceAndVideoMessages(?bool $has_restricted_voice_and_video_messages): void
+    {
+        $this->has_restricted_voice_and_video_messages = $has_restricted_voice_and_video_messages;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getJoinToSendMessages(): ?bool
+    {
+        return $this->join_to_send_messages;
+    }
+
+    /**
+     * @param bool|null $join_to_send_messages
+     */
+    public function setJoinToSendMessages(?bool $join_to_send_messages): void
+    {
+        $this->join_to_send_messages = $join_to_send_messages;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getJoinByRequest(): ?bool
+    {
+        return $this->join_by_request;
+    }
+
+    /**
+     * @param bool|null $join_by_request
+     */
+    public function setJoinByRequest(?bool $join_by_request): void
+    {
+        $this->join_by_request = $join_by_request;
     }
 
     /**
@@ -488,6 +641,38 @@ class Chat implements \JsonSerializable
     public function setMessageAutoDeleteTime(?int $message_auto_delete_time): void
     {
         $this->message_auto_delete_time = $message_auto_delete_time;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function hasAggressiveAntiSpamEnabled(): ?bool
+    {
+        return $this->has_aggressive_anti_spam_enabled;
+    }
+
+    /**
+     * @param bool|null $has_aggressive_anti_spam_enabled
+     */
+    public function setHasAggressiveAntiSpamEnabled(?bool $has_aggressive_anti_spam_enabled): void
+    {
+        $this->has_aggressive_anti_spam_enabled = $has_aggressive_anti_spam_enabled;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function hasHiddenMembers(): ?bool
+    {
+        return $this->has_hidden_members;
+    }
+
+    /**
+     * @param bool|null $has_hidden_members
+     */
+    public function setHasHiddenMembers(?bool $has_hidden_members): void
+    {
+        $this->has_hidden_members = $has_hidden_members;
     }
 
     /**

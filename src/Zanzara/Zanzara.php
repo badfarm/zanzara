@@ -9,7 +9,7 @@ use DI\Container;
 use Psr\Log\LoggerInterface;
 use React\Cache\ArrayCache;
 use React\Cache\CacheInterface;
-use React\EventLoop\Factory;
+use React\EventLoop\Loop;
 use React\EventLoop\LoopInterface;
 use React\Http\Browser;
 use React\Http\Server;
@@ -46,15 +46,15 @@ class Zanzara extends ListenerResolver
     private $cache;
 
     /**
-     * @param  string  $botToken
-     * @param  Config|null  $config
+     * @param string $botToken
+     * @param Config|null $config
      */
     public function __construct(string $botToken, ?Config $config = null)
     {
         $this->config = $config ?? new Config();
         $this->config->setBotToken($botToken);
         $this->container = $this->config->getContainer() ?? new Container();
-        $this->loop = $this->config->getLoop() ?? Factory::create();
+        $this->loop = $this->config->getLoop() ?? Loop::get();
         $this->container->set(LoopInterface::class, $this->loop); // loop cannot be created by container
         $this->container->set(LoggerInterface::class, $this->config->getLogger());
         $connector = $this->config->getConnector();
@@ -63,14 +63,17 @@ class Zanzara extends ListenerResolver
         $proxyHttpHeaders = $this->config->getProxyHttpHeaders();
         if (!$connector && (!empty($connectorOptions) || $proxyUrl || !empty($proxyHttpHeaders))) {
             if ($proxyUrl) {
-                $proxy = new ProxyConnector($proxyUrl, new Connector($this->loop), $proxyHttpHeaders);
+                $proxy = new ProxyConnector($proxyUrl, new Connector(array(), $this->loop), $proxyHttpHeaders);
                 $connectorOptions['tcp'] = $proxy;
             }
-            $connector = new Connector($this->loop, $connectorOptions);
+            $connector = new Connector($connectorOptions, $this->loop);
             $this->config->setConnector($connector);
         }
-        $this->container->set(Browser::class, (new Browser($this->loop, $this->config->getConnector())) // browser cannot be created by container
-        ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botToken}/"));
+        $this->container->set(
+            Browser::class,
+            $this->config->getBrowser() ?? (new Browser($this->config->getConnector(), $this->loop))
+                ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botToken}/")
+        );
         $this->telegram = $this->container->get(Telegram::class);
         $this->container->set(CacheInterface::class, $this->config->getCache() ?? new ArrayCache());
         $this->container->set(Config::class, $this->config);
@@ -187,7 +190,7 @@ class Zanzara extends ListenerResolver
 
     /**
      * @param $exception
-     * @param  Context  $ctx
+     * @param Context $ctx
      * @return bool|void
      */
     public function callOnException(Context $ctx, $exception)

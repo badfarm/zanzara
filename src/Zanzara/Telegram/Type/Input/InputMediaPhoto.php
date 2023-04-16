@@ -48,11 +48,16 @@ class InputMediaPhoto
     /**
      * Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
      *
-     * @since zanzara 0.5.0, Telegram Bot Api 5.0
-     *
-     * @var \Zanzara\Telegram\Type\MessageEntity[]|null
+     * @var MessageEntity[]|null
      */
     private $caption_entities;
+
+    /**
+     * Optional. Pass True if the photo needs to be covered with a spoiler animation
+     *
+     * @var bool|null
+     */
+    private $has_spoiler;
 
     /**
      * @return string
@@ -132,6 +137,22 @@ class InputMediaPhoto
     public function setCaptionEntities(?array $caption_entities): void
     {
         $this->caption_entities = $caption_entities;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function hasSpoiler(): ?bool
+    {
+        return $this->has_spoiler;
+    }
+
+    /**
+     * @param bool|null $has_spoiler
+     */
+    public function setHasSpoiler(?bool $has_spoiler): void
+    {
+        $this->has_spoiler = $has_spoiler;
     }
 
 }

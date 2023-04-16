@@ -8,6 +8,7 @@ use DI\Container;
 use Psr\Log\LoggerInterface;
 use React\Cache\CacheInterface;
 use React\EventLoop\LoopInterface;
+use React\Http\Browser;
 use React\Socket\Connector;
 use Zanzara\UpdateMode\Polling;
 use Zanzara\UpdateMode\ReactPHPWebhook;
@@ -132,6 +133,11 @@ class Config
     private $logger;
 
     /**
+     * @var bool
+     */
+    private $disableZanzaraLogger = false;
+
+    /**
      * @var callable|null
      */
     private $errorHandler;
@@ -174,6 +180,11 @@ class Config
      * @var array
      */
     private $proxyHttpHeaders = [];
+
+    /**
+     * @var Browser|null
+     */
+    private $browser;
 
     /**
      * @var string
@@ -382,10 +393,28 @@ class Config
 
     /**
      * @param LoggerInterface|null $logger
+     * @param bool $disableZanzaraLogger
      */
-    public function setLogger(?LoggerInterface $logger): void
+    public function setLogger(?LoggerInterface $logger, bool $disableZanzaraLogger = false): void
     {
         $this->logger = $logger;
+        $this->disableZanzaraLogger = $disableZanzaraLogger;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDisableZanzaraLogger(): bool
+    {
+        return $this->disableZanzaraLogger;
+    }
+
+    /**
+     * @param bool $bool
+     */
+    public function setDisableZanzaraLogger(bool $bool): void
+    {
+        $this->disableZanzaraLogger = $bool;
     }
 
     /**
@@ -550,6 +579,22 @@ class Config
     public function setProxyHttpHeaders(array $proxyHttpHeaders): void
     {
         $this->proxyHttpHeaders = $proxyHttpHeaders;
+    }
+
+    /**
+     * @return Browser|null
+     */
+    public function getBrowser(): ?Browser
+    {
+        return $this->browser;
+    }
+
+    /**
+     * @param Browser|null $browser
+     */
+    public function setBrowser(?Browser $browser): void
+    {
+        $this->browser = $browser;
     }
 
     /**

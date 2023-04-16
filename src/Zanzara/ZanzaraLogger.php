@@ -27,21 +27,30 @@ class ZanzaraLogger
     private $logger;
 
     /**
+     * @var bool
+     */
+    private $enabled;
+
+    /**
      * ZanzaraLogger constructor.
      * @param LoggerInterface|null $logger
+     * @param Config|null $config
      */
-    public function __construct(?LoggerInterface $logger)
+    public function __construct(?LoggerInterface $logger, ?Config $config)
     {
         $this->logger = $logger;
+        $this->enabled = !($config->getDisableZanzaraLogger() ?? false);
     }
 
     public function __call($name, $arguments)
     {
-        $message = $arguments[0];
-        if ($name === 'error') {
-            file_put_contents('php://stderr', $message . PHP_EOL);
-        } else {
-            echo $message . PHP_EOL;
+        if ($this->enabled) {
+            $message = $arguments[0];
+            if ($name === 'error') {
+                file_put_contents('php://stderr', $message . PHP_EOL);
+            } else {
+                echo $message . PHP_EOL;
+            }
         }
         if ($this->logger) {
             call_user_func_array([$this->logger, $name], $arguments);

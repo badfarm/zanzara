@@ -36,7 +36,7 @@ class InputMediaAudio
      *
      * @var InputFile or String|null
      */
-    private $thumb;
+    private $thumbnail;
 
     /**
      * Optional. Caption of the audio to be sent, 0-1024 characters after entities parsing
@@ -118,17 +118,17 @@ class InputMediaAudio
     /**
      * @return InputFile
      */
-    public function getThumb(): InputFile
+    public function getThumbnail(): InputFile
     {
-        return $this->thumb;
+        return $this->thumbnail;
     }
 
     /**
-     * @param InputFile $thumb
+     * @param InputFile $thumbnail
      */
-    public function setThumb(InputFile $thumb): void
+    public function setThumbnail(InputFile $thumbnail): void
     {
-        $this->thumb = $thumb;
+        $this->thumbnail = $thumbnail;
     }
 
     /**

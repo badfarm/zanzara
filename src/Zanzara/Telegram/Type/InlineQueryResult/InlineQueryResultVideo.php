@@ -36,7 +36,7 @@ class InlineQueryResultVideo extends InlineQueryResult
      *
      * @var string
      */
-    private $thumb_url;
+    private $thumbnail_url;
 
     /**
      * Title for the result
@@ -149,15 +149,15 @@ class InlineQueryResultVideo extends InlineQueryResult
      */
     public function getThumbUrl(): string
     {
-        return $this->thumb_url;
+        return $this->thumbnail_url;
     }
 
     /**
-     * @param string $thumb_url
+     * @param string $thumbnail_url
      */
-    public function setThumbUrl(string $thumb_url): void
+    public function setThumbUrl(string $thumbnail_url): void
     {
-        $this->thumb_url = $thumb_url;
+        $this->thumbnail_url = $thumbnail_url;
     }
 
     /**

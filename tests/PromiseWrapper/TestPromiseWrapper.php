@@ -22,7 +22,7 @@ class TestPromiseWrapper extends TestCase
      */
     public function testPromiseWrapper()
     {
-        $loop = \React\EventLoop\Factory::create();
+        $loop = \React\EventLoop\Loop::get();
         $this->send($loop)->then(
             function ($updates) {
                 $this->assertIsArray($updates);

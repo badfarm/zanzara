@@ -12,6 +12,8 @@ use Zanzara\Middleware\MiddlewareInterface;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\ChannelPost;
 use Zanzara\Telegram\Type\ChatJoinRequest;
+use Zanzara\Telegram\Type\ChatMemberUpdated;
+use Zanzara\Telegram\Type\ChatShared;
 use Zanzara\Telegram\Type\ChosenInlineResult;
 use Zanzara\Telegram\Type\EditedChannelPost;
 use Zanzara\Telegram\Type\EditedMessage;
@@ -25,6 +27,8 @@ use Zanzara\Telegram\Type\Shipping\PreCheckoutQuery;
 use Zanzara\Telegram\Type\Shipping\ShippingQuery;
 use Zanzara\Telegram\Type\Shipping\SuccessfulPayment;
 use Zanzara\Telegram\Type\Update;
+use Zanzara\Telegram\Type\UserShared;
+use Zanzara\Telegram\Type\WebApp\WebAppData;
 
 /**
  * Class ListenerCollector
@@ -478,6 +482,83 @@ abstract class ListenerCollector
     {
         $listener = new Listener($callback, $this->container, null, $filters);
         $this->listeners[ChatJoinRequest::class][] = $listener;
+        return $listener;
+    }
+
+    /**
+     * Listen for a chat member updated.
+     * You can call this function more than once, every callback will be executed.
+     *
+     * Eg. $bot->onChatMemberUpdated(function(Context $ctx) {});
+     *
+     * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
+     * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function onChatMemberUpdated($callback, array $filters = []): MiddlewareCollector
+    {
+        $listener = new Listener($callback, $this->container, null, $filters);
+        $this->listeners[ChatMemberUpdated::class][] = $listener;
+        return $listener;
+    }
+
+    /**
+     * Listen for a service message: data sent by a Web App.
+     *
+     * Eg. $bot->onWebAppData(function(Context $ctx) {});
+     *
+     * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
+     * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function onWebAppData($callback, array $filters = []): MiddlewareCollector
+    {
+        $listener = new Listener($callback, $this->container, null, $filters);
+        $this->listeners[WebAppData::class][] = $listener;
+        return $listener;
+    }
+
+    /**
+     * Listen for a service message: a user was shared with the bot.
+     *
+     * Eg. $bot->onUserShared(function(Context $ctx) {});
+     *
+     * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
+     * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function onUserShared($callback, array $filters = []): MiddlewareCollector
+    {
+        $listener = new Listener($callback, $this->container, null, $filters);
+        $this->listeners[UserShared::class][] = $listener;
+        return $listener;
+    }
+
+    /**
+     * Listen for a service message: a chat was shared with the bot.
+     *
+     * Eg. $bot->onChatShared(function(Context $ctx) {});
+     *
+     * @param  $callback
+     * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
+     * message is sent in a group chat.
+     * @return MiddlewareCollector
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function onChatShared($callback, array $filters = []): MiddlewareCollector
+    {
+        $listener = new Listener($callback, $this->container, null, $filters);
+        $this->listeners[ChatShared::class][] = $listener;
         return $listener;
     }
 

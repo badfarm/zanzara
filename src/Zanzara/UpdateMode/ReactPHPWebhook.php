@@ -7,8 +7,8 @@ namespace Zanzara\UpdateMode;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use React\EventLoop\LoopInterface;
+use React\Http\HttpServer;
 use React\Http\Message\Response;
-use React\Http\Server;
 use Zanzara\Config;
 use Zanzara\Context;
 use Zanzara\Telegram\Telegram;
@@ -25,7 +25,7 @@ class ReactPHPWebhook extends BaseWebhook
 {
 
     /**
-     * @var Server
+     * @var HttpServer
      */
     private $server;
 
@@ -39,7 +39,7 @@ class ReactPHPWebhook extends BaseWebhook
     private function init()
     {
         $processingUpdate = null;
-        $server = new Server($this->loop, function (ServerRequestInterface $request) use (&$processingUpdate) {
+        $server = new HttpServer($this->loop, function (ServerRequestInterface $request) use (&$processingUpdate) {
             $token = $this->resolveTokenFromPath($request->getUri()->getPath());
             if (!$this->isWebhookAuthorized($token)) {
                 $this->logger->errorNotAuthorized();
@@ -81,23 +81,23 @@ class ReactPHPWebhook extends BaseWebhook
 
     private function startListening()
     {
-        $socket = new \React\Socket\Server($this->config->getServerUri(), $this->loop, $this->config->getServerContext());
+        $socket = new \React\Socket\SocketServer($this->config->getServerUri(), $this->config->getServerContext(), $this->loop);
         $this->server->listen($socket);
         $this->logger->logIsListening();
     }
 
     /**
-     * @return Server
+     * @return HttpServer
      */
-    public function getServer(): Server
+    public function getServer(): HttpServer
     {
         return $this->server;
     }
 
     /**
-     * @param Server $server
+     * @param HttpServer $server
      */
-    public function setServer(Server $server): void
+    public function setServer(HttpServer $server): void
     {
         $this->server = $server;
     }

@@ -55,6 +55,20 @@ class User implements \JsonSerializable
     private $language_code;
 
     /**
+     * Optional. True, if this user is a Telegram Premium user
+     *
+     * @var bool|null
+     */
+    private $is_premium;
+
+    /**
+     * Optional. True, if this user added the bot to the attachment menu
+     *
+     * @var bool|null
+     */
+    private $added_to_attachment_menu;
+
+    /**
      * Optional. True, if the bot can be invited to groups. Returned only in getMe.
      *
      * @var bool|null
@@ -169,6 +183,38 @@ class User implements \JsonSerializable
     public function setLanguageCode(?string $language_code): void
     {
         $this->language_code = $language_code;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isPremium(): ?bool
+    {
+        return $this->is_premium;
+    }
+
+    /**
+     * @param bool|null $is_premium
+     */
+    public function setIsPremium(?bool $is_premium): void
+    {
+        $this->is_premium = $is_premium;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getAddedToAttachmentMenu(): ?bool
+    {
+        return $this->added_to_attachment_menu;
+    }
+
+    /**
+     * @param bool|null $added_to_attachment_menu
+     */
+    public function setAddedToAttachmentMenu(?bool $added_to_attachment_menu): void
+    {
+        $this->added_to_attachment_menu = $added_to_attachment_menu;
     }
 
     /**

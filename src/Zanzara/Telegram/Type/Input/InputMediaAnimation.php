@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Input;
+use Zanzara\Telegram\Type\MessageEntity;
+
 /**
  * Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent.
  *
@@ -36,7 +38,7 @@ class InputMediaAnimation
      *
      * @var InputFile or String|null
      */
-    private $thumb;
+    private $thumbnail;
 
     /**
      * Optional. Caption of the animation to be sent, 0-1024 characters after entities parsing
@@ -56,9 +58,7 @@ class InputMediaAnimation
     /**
      * Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
      *
-     * @since zanzara 0.5.0, Telegram Bot Api 5.0
-     *
-     * @var \Zanzara\Telegram\Type\MessageEntity[]|null
+     * @var MessageEntity[]|null
      */
     private $caption_entities;
 
@@ -82,6 +82,13 @@ class InputMediaAnimation
      * @var int|null
      */
     private $duration;
+
+    /**
+     * Optional. Pass True if the animation needs to be covered with a spoiler animation
+     *
+     * @var bool|null
+     */
+    private $has_spoiler;
 
     /**
      * @return string
@@ -118,17 +125,17 @@ class InputMediaAnimation
     /**
      * @return InputFile
      */
-    public function getThumb(): InputFile
+    public function getThumbnail(): InputFile
     {
-        return $this->thumb;
+        return $this->thumbnail;
     }
 
     /**
-     * @param InputFile $thumb
+     * @param InputFile $thumbnail
      */
-    public function setThumb(InputFile $thumb): void
+    public function setThumbnail(InputFile $thumbnail): void
     {
-        $this->thumb = $thumb;
+        $this->thumbnail = $thumbnail;
     }
 
     /**
@@ -212,7 +219,7 @@ class InputMediaAnimation
     }
 
     /**
-     * @return \Zanzara\Telegram\Type\MessageEntity[]|null
+     * @return MessageEntity[]|null
      */
     public function getCaptionEntities(): ?array
     {
@@ -220,11 +227,27 @@ class InputMediaAnimation
     }
 
     /**
-     * @param \Zanzara\Telegram\Type\MessageEntity[]|null $caption_entities
+     * @param MessageEntity[]|null $caption_entities
      */
     public function setCaptionEntities(?array $caption_entities): void
     {
         $this->caption_entities = $caption_entities;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function hasSpoiler(): ?bool
+    {
+        return $this->has_spoiler;
+    }
+
+    /**
+     * @param bool|null $has_spoiler
+     */
+    public function setHasSpoiler(?bool $has_spoiler): void
+    {
+        $this->has_spoiler = $has_spoiler;
     }
 
 }

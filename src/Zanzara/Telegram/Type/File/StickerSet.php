@@ -27,6 +27,13 @@ class StickerSet
     private $title;
 
     /**
+     * Type of stickers in the set, currently one of “regular”, “mask”, “custom_emoji”
+     *
+     * @var string
+     */
+    private $sticker_type;
+
+    /**
      * True, if the sticker set contains animated stickers
      *
      * @var bool
@@ -34,11 +41,11 @@ class StickerSet
     private $is_animated;
 
     /**
-     * True, if the sticker set contains masks
+     * True, if the sticker set contains video stickers
      *
      * @var bool
      */
-    private $contains_masks;
+    private $is_video;
 
     /**
      * List of all set stickers
@@ -48,11 +55,11 @@ class StickerSet
     private $stickers;
 
     /**
-     * Optional. Sticker set thumbnail in the .WEBP or .TGS format
+     * Optional. Sticker set thumbnail in the .WEBP, .TGS, or .WEBM format
      *
      * @var PhotoSize|null
      */
-    private $thumb;
+    private $thumbnail;
 
     /**
      * @return string
@@ -68,6 +75,22 @@ class StickerSet
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStickerType(): string
+    {
+        return $this->sticker_type;
+    }
+
+    /**
+     * @param string $sticker_type
+     */
+    public function setStickerType(string $sticker_type): void
+    {
+        $this->sticker_type = $sticker_type;
     }
 
     /**
@@ -89,7 +112,7 @@ class StickerSet
     /**
      * @return bool
      */
-    public function isIsAnimated(): bool
+    public function isAnimated(): bool
     {
         return $this->is_animated;
     }
@@ -105,17 +128,17 @@ class StickerSet
     /**
      * @return bool
      */
-    public function isContainsMasks(): bool
+    public function isVideo(): bool
     {
-        return $this->contains_masks;
+        return $this->is_video;
     }
 
     /**
-     * @param bool $contains_masks
+     * @param bool $is_video
      */
-    public function setContainsMasks(bool $contains_masks): void
+    public function setIsVideo(bool $is_video): void
     {
-        $this->contains_masks = $contains_masks;
+        $this->is_video = $is_video;
     }
 
     /**
@@ -137,17 +160,17 @@ class StickerSet
     /**
      * @return PhotoSize|null
      */
-    public function getThumb(): ?PhotoSize
+    public function getThumbnail(): ?PhotoSize
     {
-        return $this->thumb;
+        return $this->thumbnail;
     }
 
     /**
-     * @param PhotoSize|null $thumb
+     * @param PhotoSize|null $thumbnail
      */
-    public function setThumb(?PhotoSize $thumb): void
+    public function setThumbnail(?PhotoSize $thumbnail): void
     {
-        $this->thumb = $thumb;
+        $this->thumbnail = $thumbnail;
     }
 
 }

@@ -20,12 +20,21 @@ class Sticker
     private $file_id;
 
     /**
-     * Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to
-     * download or reuse the file.
+     * Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used
+     * to download or reuse the file.
      *
      * @var string
      */
     private $file_unique_id;
+
+    /**
+     * Type of the sticker, currently one of “regular”, “mask”, “custom_emoji”.
+     * The type of the sticker is independent from its format, which
+     * is determined by the fields is_animated and is_video.
+     * 
+     * @var string
+     */
+    private $type;
 
     /**
      * Sticker width
@@ -49,11 +58,18 @@ class Sticker
     private $is_animated;
 
     /**
+     * True, if the sticker is a video sticker
+     *
+     * @var bool
+     */
+    private $is_video;
+
+    /**
      * Optional. Sticker thumbnail in the .WEBP or .JPG format
      *
      * @var PhotoSize|null
      */
-    private $thumb;
+    private $thumbnail;
 
     /**
      * Optional. Emoji associated with the sticker
@@ -70,11 +86,33 @@ class Sticker
     private $set_name;
 
     /**
+     * Optional. For premium regular stickers, premium animation for the sticker
+     *
+     * @var File|null
+     */
+    private $premium_animation;
+
+    /**
      * Optional. For mask stickers, the position where the mask should be placed
      *
      * @var MaskPosition|null
      */
     private $mask_position;
+
+    /**
+     * Optional. For custom emoji stickers, unique identifier of the custom emoji
+     *
+     * @var string|null
+     */
+    private $custom_emoji_id;
+
+    /**
+     * Optional. True, if the sticker must be repainted to a text color in messages, the color of the
+     * Telegram Premium badge in emoji status, white color on chat photos, or another appropriate color in other places
+     *
+     * @var true|null
+     */
+    private $needs_repainting;
 
     /**
      * Optional. File size
@@ -113,6 +151,22 @@ class Sticker
     public function setFileUniqueId(string $file_unique_id): void
     {
         $this->file_unique_id = $file_unique_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type): void
+    {
+        $this->type = $type;
     }
 
     /**
@@ -164,19 +218,35 @@ class Sticker
     }
 
     /**
-     * @return PhotoSize|null
+     * @return bool
      */
-    public function getThumb(): ?PhotoSize
+    public function isVideo(): bool
     {
-        return $this->thumb;
+        return $this->is_video;
     }
 
     /**
-     * @param PhotoSize|null $thumb
+     * @param bool $is_video
      */
-    public function setThumb(?PhotoSize $thumb): void
+    public function setIsVideo(bool $is_video): void
     {
-        $this->thumb = $thumb;
+        $this->is_video = $is_video;
+    }
+
+    /**
+     * @return PhotoSize|null
+     */
+    public function getThumbnail(): ?PhotoSize
+    {
+        return $this->thumbnail;
+    }
+
+    /**
+     * @param PhotoSize|null $thumbnail
+     */
+    public function setThumbnail(?PhotoSize $thumbnail): void
+    {
+        $this->thumbnail = $thumbnail;
     }
 
     /**
@@ -212,6 +282,22 @@ class Sticker
     }
 
     /**
+     * @return File|null
+     */
+    public function getPremiumAnimation(): ?File
+    {
+        return $this->premium_animation;
+    }
+
+    /**
+     * @param File|null $premium_animation
+     */
+    public function setPremiumAnimation(?File $premium_animation): void
+    {
+        $this->premium_animation = $premium_animation;
+    }
+
+    /**
      * @return MaskPosition|null
      */
     public function getMaskPosition(): ?MaskPosition
@@ -225,6 +311,38 @@ class Sticker
     public function setMaskPosition(?MaskPosition $mask_position): void
     {
         $this->mask_position = $mask_position;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCustomEmojiId(): ?string
+    {
+        return $this->custom_emoji_id;
+    }
+
+    /**
+     * @param string|null $custom_emoji_id
+     */
+    public function setCustomEmojiId(?string $custom_emoji_id): void
+    {
+        $this->custom_emoji_id = $custom_emoji_id;
+    }
+
+    /**
+     * @return true|null
+     */
+    public function getNeedsRepainting(): ?bool
+    {
+        return $this->needs_repainting;
+    }
+
+    /**
+     * @param true|null $needs_repainting
+     */
+    public function setNeedsRepainting(?bool $needs_repainting): void
+    {
+        $this->needs_repainting = $needs_repainting;
     }
 
     /**

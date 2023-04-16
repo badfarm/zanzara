@@ -14,19 +14,28 @@ use Zanzara\Config;
 use Zanzara\MessageQueue;
 use Zanzara\Telegram\Type\CallbackQuery;
 use Zanzara\Telegram\Type\Chat;
+use Zanzara\Telegram\Type\ChatInviteLink;
 use Zanzara\Telegram\Type\ChatMember;
+use Zanzara\Telegram\Type\ChatAdministratorRights;
 use Zanzara\Telegram\Type\File\File;
+use Zanzara\Telegram\Type\File\Sticker;
 use Zanzara\Telegram\Type\File\StickerSet;
 use Zanzara\Telegram\Type\File\UserProfilePhotos;
+use Zanzara\Telegram\Type\Forum\ForumTopic;
 use Zanzara\Telegram\Type\Game\GameHighScore;
 use Zanzara\Telegram\Type\Input\InputFile;
+use Zanzara\Telegram\Type\MenuButton;
 use Zanzara\Telegram\Type\Message;
 use Zanzara\Telegram\Type\MessageId;
 use Zanzara\Telegram\Type\Miscellaneous\BotCommand;
+use Zanzara\Telegram\Type\Miscellaneous\BotDescription;
+use Zanzara\Telegram\Type\Miscellaneous\BotShortDescription;
+use Zanzara\Telegram\Type\Miscellaneous\InputSticker;
 use Zanzara\Telegram\Type\Poll\Poll;
 use Zanzara\Telegram\Type\Response\TelegramException;
 use Zanzara\Telegram\Type\Update;
 use Zanzara\Telegram\Type\User;
+use Zanzara\Telegram\Type\WebApp\SentWebAppMessage;
 use Zanzara\Telegram\Type\Webhook\WebhookInfo;
 use Zanzara\ZanzaraLogger;
 use Zanzara\ZanzaraMapper;
@@ -101,14 +110,17 @@ trait TelegramTrait
      *     'parse_mode' => 'HTML',
      *     'disable_web_page_preview' => true,
      *     'disable_notification' => true,
+     *     'protect_content' => true,
      *     'reply_to_message_id' => 123456789,
+     *     'allow_sending_without_reply' => true,
      *     'reply_markup' => ['force_reply' => true],
      *     'reply_markup' => ['inline_keyboard' => [[
-     *          ['callback_data' => 'data', 'text' => 'text']
+     *          ['text' => 'text', 'callback_data' => 'data', 'url' => 'HTTPS or tg:// URL']
      *      ]]],
      *      'reply_markup' => ['resize_keyboard' => true, 'one_time_keyboard' => true, 'selective' => true, 'keyboard' => [[
      *          ['text' => 'text', 'request_contact' => true, 'request_location' => true, 'request_poll' => ['type' => 'quiz']]
-     *      ]]]
+     *      ]]],
+     *     'reply_markup' => ['remove_keyboard' => true, 'selective' => true]
      * ]
      * @return PromiseInterface
      */
@@ -263,7 +275,7 @@ trait TelegramTrait
      * must be in the .MP3 or .M4A format. On success, the sent @see Message is returned. Bots can currently send audio files
      * of up to 50 MB in size, this limit may be changed in the future.
      *
-     * The audio and thumb params can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * The audio and thumbnail params can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
      * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
@@ -288,7 +300,7 @@ trait TelegramTrait
      * Use this method to send general files. On success, the sent @see Message is returned. Bots can currently send files of any
      * type of up to 50 MB in size, this limit may be changed in the future.
      *
-     * The document and thumb params can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * The document and thumbnail params can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
      * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
@@ -314,7 +326,7 @@ trait TelegramTrait
      * success, the sent @see Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may
      * be changed in the future.
      *
-     * The video and thumb params can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * The video and thumbnail params can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
      * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
@@ -340,7 +352,7 @@ trait TelegramTrait
      * is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the
      * future.
      *
-     * The animation and thumb params can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * The animation and thumbnail params can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
      * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
@@ -392,7 +404,7 @@ trait TelegramTrait
      * As of v.4.0, Telegram clients support rounded square mp4 videos of up to 1 minute long. Use this method to send video
      * messages. On success, the sent @see Message is returned.
      *
-     * The video_note and thumb params can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * The video_note and thumbnail params can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
      * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
@@ -1072,6 +1084,222 @@ trait TelegramTrait
     }
 
     /**
+     * Use this method to get custom emoji stickers, which can be used as a forum topic icon by any user.
+     * Requires no parameters. Returns an Array of Sticker objects.
+     *
+     * More on https://core.telegram.org/bots/api#getforumtopiciconstickers
+     *
+     * @return PromiseInterface
+     */
+    public function getForumTopicIconStickers(): PromiseInterface
+    {
+        return $this->callApi("getForumTopicIconStickers", [], Sticker::class);
+    }
+
+    /**
+     * Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for
+     * this to work and must have the can_manage_topics administrator rights.
+     * Returns information about the created topic as a @see ForumTopic object.
+     *
+     * More on https://core.telegram.org/bots/api#createforumtopic
+     *
+     * @param $chat_id
+     * @param string $name
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function createForumTopic($chat_id, string $name, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "name");
+        $params = array_merge($required, $opt);
+        return $this->callApi("createForumTopic", $params, ForumTopic::class);
+    }
+
+    /**
+     * Use this method to edit name and icon of a topic in a forum supergroup chat.The bot must be an administrator
+     * in the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator
+     * of the topic. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#editforumtopic
+     *
+     * @param $chat_id
+     * @param $message_thread_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function editForumTopic($chat_id, $message_thread_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "message_thread_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("editForumTopic", $params);
+    }
+
+    /**
+     * Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat
+     * for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic.
+     * Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#closeforumtopic
+     *
+     * @param $chat_id
+     * @param $message_thread_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function closeForumTopic($chat_id, $message_thread_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "message_thread_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("closeForumTopic", $params);
+    }
+
+    /**
+     * Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator
+     * in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator
+     * of the topic. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#reopenforumtopic
+     *
+     * @param $chat_id
+     * @param $message_thread_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function reopenForumTopic($chat_id, $message_thread_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "message_thread_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("reopenForumTopic", $params);
+    }
+
+    /**
+     * Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be
+     * an administrator in the chat for this to work and must have the can_delete_messages administrator rights.
+     * Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#deleteforumtopic
+     *
+     * @param $chat_id
+     * @param $message_thread_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function deleteForumTopic($chat_id, $message_thread_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "message_thread_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("deleteForumTopic", $params);
+    }
+
+    /**
+     * Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in
+     * the chat for this to work and must have the can_pin_messages administrator right in the supergroup.
+     * Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#unpinallforumtopicmessages
+     *
+     * @param $chat_id
+     * @param $message_thread_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function unpinAllForumTopicMessages($chat_id, $message_thread_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "message_thread_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("unpinAllForumTopicMessages", $params);
+    }
+
+    /**
+     * Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be
+     * an administrator in the chat for this to work and must have can_manage_topics administrator rights.
+     * Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#editgeneralforumtopic
+     *
+     * @param $chat_id
+     * @param string $name
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function editGeneralForumTopic($chat_id, string $name, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id", "name");
+        $params = array_merge($required, $opt);
+        return $this->callApi("editGeneralForumTopic", $params);
+    }
+
+    /**
+     * Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in
+     * the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#closegeneralforumtopic
+     *
+     * @param $chat_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function closeGeneralForumTopic($chat_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("closeGeneralForumTopic", $params);
+    }
+
+    /**
+     * Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in
+     * the chat for this to work and must have the can_manage_topics administrator rights.
+     * The topic will be automatically unhidden if it was hidden. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#reopengeneralforumtopic
+     *
+     * @param $chat_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function reopenGeneralForumTopic($chat_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("reopenGeneralForumTopic", $params);
+    }
+
+    /**
+     * Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in
+     * the chat for this to work and must have the can_manage_topics administrator rights.
+     * The topic will be automatically closed if it was open. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#hidegeneralforumtopic
+     *
+     * @param $chat_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function hideGeneralForumTopic($chat_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("hideGeneralForumTopic", $params);
+    }
+
+    /**
+     * Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in
+     * the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#unhidegeneralforumtopic
+     *
+     * @param $chat_id
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function unhideGeneralForumTopic($chat_id, array $opt = []): PromiseInterface
+    {
+        $required = compact("chat_id");
+        $params = array_merge($required, $opt);
+        return $this->callApi("unhideGeneralForumTopic", $params);
+    }
+
+    /**
      * Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the
      * user as a notification at the top of the chat screen or as an alert. On success, True is returned.
      *
@@ -1108,8 +1336,22 @@ trait TelegramTrait
     }
 
     /**
+     * Use this method to delete the list of the bot's commands for the given scope and user language. After deletion,
+     * higher level commands will be shown to affected users. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#deletemycommands
+     *
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function deleteMyCommands(array $opt = []): PromiseInterface
+    {
+        return $this->callApi("deleteMyCommands", $opt);
+    }
+
+    /**
      * Use this method to get the current list of the bot's commands for the given scope and user language. Returns
-     * Array of BotCommand on success. If commands aren't set, an empty list is returned.
+     * Array of @see BotCommand on success. If commands aren't set, an empty list is returned.
      *
      * More on https://core.telegram.org/bots/api#getmycommands
      *
@@ -1122,17 +1364,133 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to delete the list of the bot's commands for the given scope and user language. After deletion,
-     * higher level commands will be shown to affected users. Returns True on success.
+     * Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty.
+     * Returns True on success.
      *
-     * More on https://core.telegram.org/bots/api#deletemycommands
+     * More on https://core.telegram.org/bots/api#setmydescription
      *
      * @param array $opt
      * @return PromiseInterface
      */
-    public function deleteMyCommands(array $opt = []): PromiseInterface
+    public function setMyDescription(array $opt = []): PromiseInterface
     {
-        return $this->callApi("deleteMyCommands", $opt);
+        return $this->callApi("setMyDescription", $opt);
+    }
+
+    /**
+     * Use this method to get the current bot description for the given user language.
+     * Returns @see BotDescription on success.
+     *
+     * More on https://core.telegram.org/bots/api#getmydescription
+     *
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function getMyDescription(array $opt = []): PromiseInterface
+    {
+        return $this->callApi("getMyDescription", $opt, BotDescription::class);
+    }
+
+    /**
+     * Use this method to change the bot's short description, which is shown on the bot's profile page and is sent
+     * together with the link when users share the bot. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#setmyshortdescription
+     *
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function setMyShortDescription(array $opt = []): PromiseInterface
+    {
+        return $this->callApi("setMyShortDescription", $opt);
+    }
+
+    /**
+     * Use this method to get the current bot short description for the given user language.
+     * Returns @see BotShortDescription on success.
+     *
+     * More on https://core.telegram.org/bots/api#getmyshortdescription
+     *
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function getMyShortDescription(array $opt = []): PromiseInterface
+    {
+        return $this->callApi("getMyShortDescription", $opt, BotShortDescription::class);
+    }
+
+    /**
+     * Use this method to change the bot's menu button in a private chat, or the default menu button.
+     *
+     * Returns True on success.
+     *
+     * @see https://core.telegram.org/bots/api#setchatmenubutton
+     * @param array $opt = [
+     *     'chat_id' => 123456789, // If not specified, default bot's menu button will be changed
+     *     'menu_button' => ['type' => 'commands'],
+     *     'menu_button' => ['type' => 'web_app', 'text' => 'Text on the button', 'web_app' => ['url' => 'https://']]
+     * ]
+     * @return PromiseInterface
+     */
+    public function setChatMenuButton(array $opt = []): PromiseInterface
+    {
+        return $this->callApi("setChatMenuButton", $opt);
+    }
+
+    /**
+     * Use this method to get the current value of the bot's menu button in a private chat, or the default menu button.
+     *
+     * Returns @see MenuButton on success.
+     *
+     * @see https://core.telegram.org/bots/api#setchatmenubutton
+     * @param array $opt = [
+     *     'chat_id' => 123456789, // If not specified, default bot's menu button will be returned
+     * ]
+     * @return PromiseInterface
+     */
+    public function getChatMenuButton(array $opt = []): PromiseInterface
+    {
+        return $this->callApi("getChatMenuButton", $opt, MenuButton::class);
+    }
+
+    /**
+     * Use this method to change the default administrator rights requested by the bot
+     * when it's added as an administrator to groups or channels.
+     * These rights will be suggested to users, but they are free to modify the list before adding the bot.
+     *
+     * Returns True on success.
+     *
+     * @see https://core.telegram.org/bots/api#setmydefaultadministratorrights
+     * @param array $opt = [
+     *     'rights' => [ // If not specified, the default administrator rights will be cleared.
+     *       'is_anonymous' => true, 'can_manage_chat' => true, 'can_delete_messages' => true,
+     *       'can_manage_video_chats' => true, 'can_restrict_members' => true, 'can_promote_members' => true,
+     *       'can_change_info' => true, 'can_invite_users' => true, 'can_post_messages' => true,
+     *       'can_edit_messages' => true, 'can_pin_messages' => true, 'can_manage_topics' => true
+     *     ],
+     *     'for_channels' => false
+     * ]
+     * @return PromiseInterface
+     */
+    public function setMyDefaultAdministratorRights(array $opt = []): PromiseInterface
+    {
+        return $this->callApi("setMyDefaultAdministratorRights", $opt);
+    }
+
+    /**
+     * Use this method to get the current default administrator rights of the bot.
+     *
+     * Returns @see ChatAdministratorRights on success.
+     *
+     * @see https://core.telegram.org/bots/api#getmydefaultadministratorrights
+     * @param array $opt = [
+     *     'for_channels' => true, // Pass True to get default administrator rights of the bot in channels.
+     * ]
+     * @return PromiseInterface
+     */
+    public function getMyDefaultAdministratorRights(array $opt = []): PromiseInterface
+    {
+        return $this->callApi("getMyDefaultAdministratorRights", $opt, ChatAdministratorRights::class);
     }
 
     /**
@@ -1326,68 +1684,82 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to upload a .PNG file with a sticker for later use in createNewStickerSet and addStickerToSet methods
-     * (can be used multiple times). Returns the uploaded @see File on success.
+     * Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of @see Sticker objects.
+     *
+     * More on https://core.telegram.org/bots/api#getcustomemojistickers
+     *
+     * @param string[] $custom_emoji_ids
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function getCustomEmojiStickers(array $custom_emoji_ids, array $opt = []): PromiseInterface
+    {
+        $required = compact("custom_emoji_ids");
+        $params = array_merge($required, $opt);
+        return $this->callApi("getCustomEmojiStickers", $params, Sticker::class);
+    }
+
+    /**
+     * Use this method to upload a file with a sticker for later use in the createNewStickerSet and
+     * addStickerToSet methods (the file can be used multiple times). Returns the uploaded @see File on success.
+     *
+     * The sticker param has @see InputFile type. Note that if you use the latter the file reading
+     * operation is synchronous, so the main thread is blocked.
+     * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
      * More on https://core.telegram.org/bots/api#uploadstickerfile
      *
      * @param $user_id
-     * @param $png_sticker
+     * @param string|InputFile $sticker
+     * @param string $sticker_format,
      * @param array $opt
      * @return PromiseInterface
      */
-    public function uploadStickerFile($user_id, $png_sticker, array $opt = []): PromiseInterface
+    public function uploadStickerFile($user_id, $sticker, string $sticker_format, array $opt = []): PromiseInterface
     {
-        $required = compact("user_id", "png_sticker");
+        $required = compact("user_id", "sticker", "sticker_format");
         $params = array_merge($required, $opt);
         return $this->callApi("uploadStickerFile", $params, File::class);
     }
 
     /**
-     * Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus
-     * created. You must use exactly one of the fields png_sticker or tgs_sticker. Returns True on success.
-     *
-     * The png_sticker param can be either a string or a @see InputFile. Note that if you use the latter the file reading
-     * operation is synchronous, so the main thread is blocked.
-     * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
+     * Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus created.
+     * Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#createnewstickerset
      *
      * @param $user_id
      * @param string $name
      * @param string $title
-     * @param string $emojis
+     * @param InputSticker[] $stickers
+     * @param string $sticker_format
      * @param array $opt
      * @return PromiseInterface
      */
-    public function createNewStickerSet($user_id, string $name, string $title, string $emojis, array $opt = []): PromiseInterface
+    public function createNewStickerSet($user_id, string $name, string $title, array $stickers, string $sticker_format, array $opt = []): PromiseInterface
     {
-        $required = compact("user_id", "name", "title", "emojis");
+        $required = compact("user_id", "name", "title", "stickers", "sticker_format");
         $params = array_merge($required, $opt);
         return $this->callApi("createNewStickerSet", $params);
     }
 
     /**
-     * Use this method to add a new sticker to a set created by the bot. You must use exactly one of the fields png_sticker
-     * or tgs_sticker. Animated stickers can be added to animated sticker sets and only to them. Animated sticker sets
-     * can have up to 50 stickers. Static sticker sets can have up to 120 stickers. Returns True on success.
-     *
-     * The png_sticker param can be either a string or a @see InputFile. Note that if you use the latter the file reading
-     * operation is synchronous, so the main thread is blocked.
-     * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
+     * Use this method to add a new sticker to a set created by the bot. The format of the added sticker must match
+     * the format of the other stickers in the set. Emoji sticker sets can have up to 200 stickers.
+     * Animated and video sticker sets can have up to 50 stickers. Static sticker sets can have up to 120 stickers.
+     * Returns True on success.
      *
      * More on https://core.telegram.org/bots/api#addstickertoset
      *
      * @param $user_id
      * @param string $name
-     * @param $png_sticker
-     * @param string $emojis
+     * @param InputSticker $sticker
      * @param array $opt
      * @return PromiseInterface
      */
-    public function addStickerToSet($user_id, string $name, $png_sticker, string $emojis, array $opt = []): PromiseInterface
+    public function addStickerToSet($user_id, string $name, $sticker, array $opt = []): PromiseInterface
     {
-        $required = compact("user_id", "name", "png_sticker", "emojis");
+        $required = compact("user_id", "name", "sticker");
         $params = array_merge($required, $opt);
         return $this->callApi("addStickerToSet", $params);
     }
@@ -1426,25 +1798,126 @@ trait TelegramTrait
     }
 
     /**
-     * Use this method to set the thumbnail of a sticker set. Animated thumbnails can be set for animated sticker sets only.
-     * Returns True on success.
+     * Use this method to change the list of emoji assigned to a regular or custom emoji sticker.
+     * The sticker must belong to a sticker set created by the bot. Returns True on success.
      *
-     * The thumb param in $opt can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * More on https://core.telegram.org/bots/api#setstickeremojilist
+     *
+     * @param string $sticker
+     * @param string[] $emoji_list
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function setStickerEmojiList(string $sticker, array $emoji_list, array $opt = []): PromiseInterface
+    {
+        $required = compact("sticker", "emoji_list");
+        $params = array_merge($required, $opt);
+        return $this->callApi("setStickerEmojiList", $params);
+    }
+
+    /**
+     * Use this method to change search keywords assigned to a regular or custom emoji sticker.
+     * The sticker must belong to a sticker set created by the bot. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#setstickerkeywords
+     *
+     * @param string $sticker
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function setStickerKeywords(string $sticker, array $opt = []): PromiseInterface
+    {
+        $required = compact("sticker");
+        $params = array_merge($required, $opt);
+        return $this->callApi("setStickerKeywords", $params);
+    }
+
+    /**
+     * Use this method to change the mask position of a mask sticker.
+     * The sticker must belong to a sticker set that was created by the bot. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#setstickermaskposition
+     *
+     * @param string $sticker
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function setStickerMaskPosition(string $sticker, array $opt = []): PromiseInterface
+    {
+        $required = compact("sticker");
+        $params = array_merge($required, $opt);
+        return $this->callApi("setStickerMaskPosition", $params);
+    }
+
+    /**
+     * Use this method to set the title of a created sticker set. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#setstickersettitle
+     *
+     * @param string $sticker
+     * @param string $title
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function setStickerSetTitle(string $sticker, string $title, array $opt = []): PromiseInterface
+    {
+        $required = compact("sticker", "title");
+        $params = array_merge($required, $opt);
+        return $this->callApi("setStickerSetTitle", $params);
+    }
+
+    /**
+     * Use this method to set the thumbnail of a regular or mask sticker set.
+     * The format of the thumbnail file must match the format of the stickers in the set. Returns True on success.
+     *
+     * The thumbnail param in $opt can be either a string or a @see InputFile. Note that if you use the latter the file reading
      * operation is synchronous, so the main thread is blocked.
      * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
      *
-     * More on https://core.telegram.org/bots/api#setstickersetthumb
+     * More on https://core.telegram.org/bots/api#setstickersetthumbnail
      *
      * @param string $name
      * @param $user_id
      * @param array $opt
      * @return PromiseInterface
      */
-    public function setStickerSetThumb(string $name, $user_id, array $opt = []): PromiseInterface
+    public function setStickerSetThumbnail(string $name, $user_id, array $opt = []): PromiseInterface
     {
         $required = compact("name", "user_id");
         $params = array_merge($required, $opt);
-        return $this->callApi("setStickerSetThumb", $params);
+        return $this->callApi("setStickerSetThumbnail", $params);
+    }
+
+    /**
+     * Use this method to set the thumbnail of a custom emoji sticker set. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#setcustomemojistickersetthumbnail
+     *
+     * @param string $name
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function setCustomEmojiStickerSetThumbnail(string $name, array $opt = []): PromiseInterface
+    {
+        $required = compact("name");
+        $params = array_merge($required, $opt);
+        return $this->callApi("setCustomEmojiStickerSetThumbnail", $params);
+    }
+
+    /**
+     * Use this method to delete a sticker set that was created by the bot. Returns True on success.
+     *
+     * More on https://core.telegram.org/bots/api#deletestickerset
+     *
+     * @param string $name
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function deleteStickerSet(string $name, array $opt = []): PromiseInterface
+    {
+        $required = compact("name");
+        $params = array_merge($required, $opt);
+        return $this->callApi("deleteStickerSet", $params);
     }
 
     /**
@@ -1468,6 +1941,25 @@ trait TelegramTrait
         $required = compact("results");
         $params = array_merge($required, $opt);
         return $this->callApi("answerInlineQuery", $params);
+    }
+
+    /**
+     * Use this method to set the result of an interaction with a Web App and send a corresponding message
+     * on behalf of the user to the chat from which the query originated.
+     *
+     * On success, a {@see SentWebAppMessage} object is returned.
+     *
+     * @see https://core.telegram.org/bots/api#answerwebappquery
+     * @param String $web_app_query_id Unique identifier for the query to be answered
+     * @param array $result A JSON-serialized object describing the message to be sent
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function answerWebAppQuery(string $web_app_query_id, array $result, array $opt = []): PromiseInterface
+    {
+        $required = compact("web_app_query_id","result");
+        $params = array_merge($required, $opt);
+        return $this->callApi("answerWebAppQuery", $params, SentWebAppMessage::class);
     }
 
     /**
@@ -1506,6 +1998,28 @@ trait TelegramTrait
             $params['chat_id'] = $this->update->getEffectiveChat()->getId();
         }
         return $this->callApi("sendInvoice", $params, Message::class);
+    }
+
+    /**
+     * Use this method to create a link for an invoice. Returns the created invoice link as String on success.
+     *
+     * More on https://core.telegram.org/bots/api#createinvoicelink
+     *
+     * @param string $title
+     * @param string $description
+     * @param string $payload
+     * @param string $provider_token
+     * @param string $currency
+     * @param $prices
+     * @param array $opt
+     * @return PromiseInterface
+     */
+    public function createInvoiceLink(string $title, string $description, string $payload, string $provider_token, string $currency, $prices, array $opt = []): PromiseInterface
+    {
+        $opt = $this->resolveChatId($opt);
+        $required = compact("title", "description", "payload", "provider_token", "currency", "prices");
+        $params = array_merge($required, $opt);
+        return $this->callApi("createInvoiceLink", $params);
     }
 
     /**
@@ -1856,7 +2370,7 @@ trait TelegramTrait
         foreach ($params as $key => $value) {
 
             if ($value instanceof InputFile) {
-                array_push($promises, $filesystem->getContents($value->getPath())->then(function ($contents) use ($value, $key) {
+                $promises[] = $filesystem->getContents($value->getPath())->then(function ($contents) use ($value, $key) {
                     $data = ['name' => $key];
                     $data['contents'] = $contents;
                     $data['filename'] = basename($value->getPath());
@@ -1864,11 +2378,11 @@ trait TelegramTrait
                 }, function ($error) {
                     $this->container->get(ZanzaraLogger::class)->error($error);
                     return $error;
-                }));
+                });
 
             } else {
                 $data = ['name' => $key];
-                $data['contents'] = strval($value);
+                $data['contents'] = is_array($value) ? json_encode($value) : strval($value);
                 array_push($multipart_data, $data);
             }
         }
@@ -1899,7 +2413,7 @@ trait TelegramTrait
                 }
 
             } else {
-                $data['contents'] = strval($value);
+                $data['contents'] = is_array($value) ? json_encode($value) : strval($value);
             }
             array_push($multipart_data, $data);
         }

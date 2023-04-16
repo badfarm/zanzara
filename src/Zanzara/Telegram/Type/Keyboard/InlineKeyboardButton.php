@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram\Type\Keyboard;
 
-use Zanzara\Telegram\Type\CallbackGame;
 use Zanzara\Telegram\Type\Miscellaneous\LoginUrl;
+use Zanzara\Telegram\Type\WebApp\WebAppInfo;
+use Zanzara\Telegram\Type\CallbackGame;
 
 /**
  * This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
@@ -30,19 +31,28 @@ class InlineKeyboardButton
     private $url;
 
     /**
+     * Optional. Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes
+     *
+     * @var string|null
+     */
+    private $callback_data;
+
+    /**
+     * Optional. Description of the Web App that will be launched when the user presses the button.
+     * The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery.
+     * Available only in private chats between a user and the bot.
+     *
+     * @var WebAppInfo|null
+     */
+    private $web_app;
+
+    /**
      * Optional. An HTTP URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login
      * Widget.
      *
      * @var LoginUrl|null
      */
     private $login_url;
-
-    /**
-     * Optional. Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes
-     *
-     * @var string|null
-     */
-    private $callback_data;
 
     /**
      * Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert
@@ -113,22 +123,6 @@ class InlineKeyboardButton
     }
 
     /**
-     * @return LoginUrl|null
-     */
-    public function getLoginUrl(): ?LoginUrl
-    {
-        return $this->login_url;
-    }
-
-    /**
-     * @param LoginUrl|null $login_url
-     */
-    public function setLoginUrl(?LoginUrl $login_url): void
-    {
-        $this->login_url = $login_url;
-    }
-
-    /**
      * @return string|null
      */
     public function getCallbackData(): ?string
@@ -142,6 +136,38 @@ class InlineKeyboardButton
     public function setCallbackData(?string $callback_data): void
     {
         $this->callback_data = $callback_data;
+    }
+
+    /**
+     * @return WebAppInfo|null
+     */
+    public function getWebApp(): ?WebAppInfo
+    {
+        return $this->web_app;
+    }
+
+    /**
+     * @param WebAppInfo|null $web_app
+     */
+    public function setWebApp(?WebAppInfo $web_app): void
+    {
+        $this->web_app = $web_app;
+    }
+
+    /**
+     * @return LoginUrl|null
+     */
+    public function getLoginUrl(): ?LoginUrl
+    {
+        return $this->login_url;
+    }
+
+    /**
+     * @param LoginUrl|null $login_url
+     */
+    public function setLoginUrl(?LoginUrl $login_url): void
+    {
+        $this->login_url = $login_url;
     }
 
     /**
