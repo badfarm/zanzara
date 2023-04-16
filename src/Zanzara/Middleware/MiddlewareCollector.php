@@ -29,7 +29,7 @@ abstract class MiddlewareCollector
 
     /**
      * MiddlewareCollector constructor.
-     * @param  ContainerInterface  $container
+     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -39,7 +39,7 @@ abstract class MiddlewareCollector
     /**
      * Last in, first out.
      *
-     * @param  MiddlewareInterface|callable  $middleware
+     * @param MiddlewareInterface|callable $middleware
      * @return MiddlewareCollector
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException

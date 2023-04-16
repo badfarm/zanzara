@@ -622,7 +622,7 @@ class Config
     }
 
     /**
-     * @param  float  $pollingRetry
+     * @param float $pollingRetry
      */
     public function setPollingRetry(float $pollingRetry): void
     {

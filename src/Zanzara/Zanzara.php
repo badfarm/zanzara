@@ -72,7 +72,7 @@ class Zanzara extends ListenerResolver
         $this->container->set(
             Browser::class,
             $this->config->getBrowser() ?? (new Browser($this->config->getConnector(), $this->loop))
-                ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botToken}/")
+            ->withBase("{$this->config->getApiTelegramUrl()}/bot{$botToken}/")
         );
         $this->telegram = $this->container->get(Telegram::class);
         $this->container->set(CacheInterface::class, $this->config->getCache() ?? new ArrayCache());

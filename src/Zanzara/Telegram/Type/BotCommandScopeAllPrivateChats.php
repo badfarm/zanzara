@@ -35,5 +35,5 @@ class BotCommandScopeAllPrivateChats extends BotCommandScope
     {
         $this->type = $type;
     }
-    
+
 }

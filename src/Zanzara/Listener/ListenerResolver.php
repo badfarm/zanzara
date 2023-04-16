@@ -23,7 +23,7 @@ abstract class ListenerResolver extends ListenerCollector
     protected $conversationManager;
 
     /**
-     * @param  Update  $update
+     * @param Update $update
      * @return PromiseInterface
      */
     public function resolveListeners(Update $update): PromiseInterface
@@ -95,7 +95,7 @@ abstract class ListenerResolver extends ListenerCollector
                     $deferred->reject($e);
                 });
         } else {
-            if (is_string($updateType)){
+            if (is_string($updateType)) {
                 $this->mergeListenersByType($update, $listeners, $updateType);
             }
             $this->mergeListenersByType($update, $listeners, Update::class);
@@ -106,10 +106,10 @@ abstract class ListenerResolver extends ListenerCollector
     }
 
     /**
-     * @param  Update  $update
-     * @param  Listener[]  $listeners
-     * @param  string  $listenerType
-     * @param  string|null  $listenerId
+     * @param Update $update
+     * @param Listener[] $listeners
+     * @param string $listenerType
+     * @param string|null $listenerId
      * @return Listener|null
      */
     private function findListenerAndPush(Update $update, array &$listeners, string $listenerType, ?string $listenerId = null): ?Listener
@@ -117,7 +117,7 @@ abstract class ListenerResolver extends ListenerCollector
         if ($listenerId !== null) {
             $typedListeners = $this->listeners[$listenerType] ?? [];
             foreach ($typedListeners as $regex => $listener) {
-                $regexMatched = (bool) preg_match($regex, $listenerId, $matches, PREG_UNMATCHED_AS_NULL);
+                $regexMatched = (bool)preg_match($regex, $listenerId, $matches, PREG_UNMATCHED_AS_NULL);
                 $filterPassed = $this->filterListener($update, $listener->getFilters());
                 if ($regexMatched && $filterPassed) {
                     $parameters = array_unique(array_values(array_slice($matches, 1)));
@@ -131,9 +131,9 @@ abstract class ListenerResolver extends ListenerCollector
     }
 
     /**
-     * @param  Update  $update
-     * @param  Listener[]  $listeners
-     * @param  string  $listenerType
+     * @param Update $update
+     * @param Listener[] $listeners
+     * @param string $listenerType
      */
     private function mergeListenersByType(Update $update, array &$listeners, string $listenerType)
     {

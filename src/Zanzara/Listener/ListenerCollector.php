@@ -90,7 +90,7 @@ abstract class ListenerCollector
      * You can also parameterized the command, eg:
      * Eg. $bot->onCommand('start {myParam}', function(Context $ctx, $myParam) {});
      *
-     * @param  string  $command
+     * @param string $command
      * @param $callback
      * @param array $filters eg. ['chat_type' => 'group']
      * @return MiddlewareCollector
@@ -100,7 +100,7 @@ abstract class ListenerCollector
     public function onCommand(string $command, $callback, array $filters = []): MiddlewareCollector
     {
         $pattern = str_replace('/', '\/', "/{$command}");
-        $command = '/^'.preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $pattern).' ?$/miu';
+        $command = '/^' . preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $pattern) . ' ?$/miu';
 
         $listener = new Listener($callback, $this->container, $command, $filters);
         $this->listeners['messages'][$command] = $listener;
@@ -117,7 +117,7 @@ abstract class ListenerCollector
      * You can also parameterized the text, eg:
      * Eg. $bot->onText('Hello {name}', function(Context $ctx, $name) {});
      *
-     * @param  string  $text
+     * @param string $text
      * @param  $callback
      * @param array $filters eg. ['chat_type' => 'group']
      * @return MiddlewareCollector
@@ -126,7 +126,7 @@ abstract class ListenerCollector
      */
     public function onText(string $text, $callback, array $filters = []): MiddlewareCollector
     {
-        $text = '/^'.preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $text).' ?$/miu';
+        $text = '/^' . preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $text) . ' ?$/miu';
         $listener = new Listener($callback, $this->container, $text, $filters);
         $this->listeners['messages'][$text] = $listener;
         return $listener;
@@ -203,7 +203,7 @@ abstract class ListenerCollector
      * You can also parameterized the text, eg:
      * Eg. $bot->onCbQueryText('Hello {name}', function(Context $ctx, $name) {});
      *
-     * @param  string  $text
+     * @param string $text
      * @param  $callback
      * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
      * message is sent in a group chat.
@@ -213,7 +213,7 @@ abstract class ListenerCollector
      */
     public function onCbQueryText(string $text, $callback, array $filters = []): MiddlewareCollector
     {
-        $text = '/^'.preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $text).' ?$/miu';
+        $text = '/^' . preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $text) . ' ?$/miu';
         $listener = new Listener($callback, $this->container, $text, $filters);
         $this->listeners['cb_query_texts'][$text] = $listener;
         return $listener;
@@ -227,7 +227,7 @@ abstract class ListenerCollector
      * Data values are a regex, so you could also do something like:
      * $bot->onCbQueryData(['acc.'], function(Context $ctx) {});
      *
-     * @param  array  $data
+     * @param array $data
      * @param  $callback
      * @param array $filters for ex. ['chat_type' => 'group'], in this case the listener will be executed only if the
      * message is sent in a group chat.
@@ -239,7 +239,7 @@ abstract class ListenerCollector
     {
         // merge values with "|" (eg. "accept|refuse|later"), then ListenerResolver will check the callback data
         // against that regex.
-        $id = '/'.implode('|', $data).'/';
+        $id = '/' . implode('|', $data) . '/';
         $listener = new Listener($callback, $this->container, $id, $filters);
         $this->listeners['cb_query_data'][$id] = $listener;
         return $listener;
@@ -582,7 +582,6 @@ abstract class ListenerCollector
         return $listener;
     }
 
-
     /**
      * If the processing of the current update gives an error, this listener will be called.
      *
@@ -626,7 +625,7 @@ abstract class ListenerCollector
      *
      * In this case GenericMiddleware will be executed before SpecificMiddleware.
      *
-     * @param  MiddlewareInterface|callable  $middleware
+     * @param MiddlewareInterface|callable $middleware
      * @return self
      */
     public function middleware($middleware): self
@@ -650,7 +649,7 @@ abstract class ListenerCollector
 
     /**
      * Add cross-request middlewares to a listener.
-     * @param  Listener  $listener
+     * @param Listener $listener
      * @return Listener
      * @throws DependencyException
      * @throws NotFoundException

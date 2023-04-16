@@ -29,7 +29,7 @@ class Polling extends UpdateMode
                     $this->logger->logIsListening();
                     return;
                 }
-                $message = "Your bot has a webhook set, please delete it before running Zanzara in polling mode. ".
+                $message = "Your bot has a webhook set, please delete it before running Zanzara in polling mode. " .
                     "See https://core.telegram.org/bots/api#deletewebhook";
                 $this->logger->error($message);
                 echo "Type 'yes' if you want to delete the webhook: ";

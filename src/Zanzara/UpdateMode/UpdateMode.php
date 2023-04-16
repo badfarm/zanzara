@@ -66,7 +66,7 @@ abstract class UpdateMode implements UpdateModeInterface
      * @param ZanzaraMapper $zanzaraMapper
      */
     public function __construct(ContainerInterface $container, Zanzara $zanzara, Telegram $telegram, Config $config,
-                                ZanzaraLogger $logger, LoopInterface $loop, ZanzaraMapper $zanzaraMapper)
+                                ZanzaraLogger      $logger, LoopInterface $loop, ZanzaraMapper $zanzaraMapper)
     {
         $this->container = $container;
         $this->zanzara = $zanzara;
@@ -93,7 +93,7 @@ abstract class UpdateMode implements UpdateModeInterface
                     $middlewareTip($context);
                 }
             })->otherwise(function ($e) use ($context, $update) {
-                if (!$this->zanzara->callOnException($context, $e)){
+                if (!$this->zanzara->callOnException($context, $e)) {
                     $this->logger->error("Unable to resolve listeners for update $update, reason: $e");
                 }
             });

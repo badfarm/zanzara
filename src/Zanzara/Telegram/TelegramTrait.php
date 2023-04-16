@@ -1012,7 +1012,6 @@ trait TelegramTrait
         return $this->callApi("getChatMembersCount", $params); //integer
     }
 
-
     /**
      * Use this method to get the number of members in a chat. Returns Int on success.
      *
@@ -1711,7 +1710,7 @@ trait TelegramTrait
      *
      * @param $user_id
      * @param string|InputFile $sticker
-     * @param string $sticker_format,
+     * @param string $sticker_format ,
      * @param array $opt
      * @return PromiseInterface
      */
@@ -1957,7 +1956,7 @@ trait TelegramTrait
      */
     public function answerWebAppQuery(string $web_app_query_id, array $result, array $opt = []): PromiseInterface
     {
-        $required = compact("web_app_query_id","result");
+        $required = compact("web_app_query_id", "result");
         $params = array_merge($required, $opt);
         return $this->callApi("answerWebAppQuery", $params, SentWebAppMessage::class);
     }

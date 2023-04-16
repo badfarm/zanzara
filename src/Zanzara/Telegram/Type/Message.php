@@ -1701,25 +1701,25 @@ class Message
     {
         return (
             $this->delete_chat_photo !== null ||
-            $this->group_chat_created!== null ||
-            $this->supergroup_chat_created!== null ||
-            $this->channel_chat_created!== null ||
-            $this->message_auto_delete_timer_changed!== null ||
-            $this->successful_payment!== null ||
-            $this->user_shared!== null ||
-            $this->chat_shared!== null ||
-            $this->write_access_allowed!== null ||
-            $this->proximity_alert_triggered!== null ||
-            $this->forum_topic_created!== null ||
-            $this->forum_topic_edited!== null ||
-            $this->forum_topic_closed!== null ||
-            $this->forum_topic_reopened!== null ||
-            $this->general_forum_topic_hidden!== null ||
-            $this->general_forum_topic_unhidden!== null ||
-            $this->video_chat_scheduled!== null ||
-            $this->video_chat_started!== null ||
-            $this->video_chat_ended!== null ||
-            $this->video_chat_participants_invited!== null ||
+            $this->group_chat_created !== null ||
+            $this->supergroup_chat_created !== null ||
+            $this->channel_chat_created !== null ||
+            $this->message_auto_delete_timer_changed !== null ||
+            $this->successful_payment !== null ||
+            $this->user_shared !== null ||
+            $this->chat_shared !== null ||
+            $this->write_access_allowed !== null ||
+            $this->proximity_alert_triggered !== null ||
+            $this->forum_topic_created !== null ||
+            $this->forum_topic_edited !== null ||
+            $this->forum_topic_closed !== null ||
+            $this->forum_topic_reopened !== null ||
+            $this->general_forum_topic_hidden !== null ||
+            $this->general_forum_topic_unhidden !== null ||
+            $this->video_chat_scheduled !== null ||
+            $this->video_chat_started !== null ||
+            $this->video_chat_ended !== null ||
+            $this->video_chat_participants_invited !== null ||
             $this->web_app_data !== null
         );
     }

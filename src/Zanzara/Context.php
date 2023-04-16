@@ -123,9 +123,9 @@ class Context
      *
      * This callable must be take on parameter of type Context
      * @param $handler
-     * @param  bool  $skipListeners  if true the conversation handler has precedence over the listeners, so the listener
+     * @param bool $skipListeners if true the conversation handler has precedence over the listeners, so the listener
      * callbacks are not executed.
-     * @param  bool  $skipMiddlewares if true, the next conversation handler will be called without apply middlewares
+     * @param bool $skipMiddlewares if true, the next conversation handler will be called without apply middlewares
      * @return PromiseInterface
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException

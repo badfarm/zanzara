@@ -30,7 +30,7 @@ class ReactPHPWebhook extends BaseWebhook
     private $server;
 
     public function __construct(ContainerInterface $container, Zanzara $zanzara, Telegram $telegram, Config $config,
-                                ZanzaraLogger $logger, LoopInterface $loop, ZanzaraMapper $zanzaraMapper)
+                                ZanzaraLogger      $logger, LoopInterface $loop, ZanzaraMapper $zanzaraMapper)
     {
         parent::__construct($container, $zanzara, $telegram, $config, $logger, $loop, $zanzaraMapper);
         $this->init();
