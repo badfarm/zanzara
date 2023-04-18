@@ -24,12 +24,12 @@ class ZanzaraLogger
     /**
      * @var LoggerInterface|null
      */
-    private $logger;
+    private ?LoggerInterface $logger;
 
     /**
      * @var bool
      */
-    private $enabled;
+    private bool $enabled;
 
     /**
      * ZanzaraLogger constructor.
@@ -57,54 +57,74 @@ class ZanzaraLogger
         }
     }
 
-    public function errorUpdate($error, ?Update $update = null)
+    public function errorUpdate($error, ?Update $update = null): void
     {
         $message = "Failed to process Telegram update $update, reason: $error";
         $this->error($message);
     }
 
-    public function errorGetCache()
+    public function errorGetCache(): void
     {
         $message = "Failed to get data from cache";
         $this->error($message);
     }
 
-    public function errorClearCache()
+    public function errorClearCache(): void
     {
         $message = "Failed to clear conversation state from cache";
         $this->error($message);
     }
 
-    public function errorWriteCache()
+    public function errorWriteCache(): void
     {
         $message = "Failed to write into cache";
         $this->error($message);
     }
 
-    public function errorNotAuthorized()
+    public function errorNotAuthorized(): void
     {
         $this->error($this->getNotAuthorizedMessage());
     }
 
-    public function errorTelegramApi($method, $params, $e)
+    public function errorTelegramApi($method, $params, $e): void
     {
         $this->error("Failed to call Telegram Bot Api, method: $method, params: " .
             json_encode($params, JSON_PRETTY_PRINT) . ", reason: $e");
     }
 
-    public function getNotAuthorizedMessage()
+    public function getNotAuthorizedMessage(): string
     {
         return "Not authorized, please provide a valid bot token";
     }
 
-    public function logIsListening()
+    public function logIsListening(): void
     {
         $this->info($this->getIsListening());
     }
 
-    public function getIsListening()
+    public function getIsListening(): string
     {
         return 'Zanzara is listening...';
+    }
+
+    public function errorNotAuthorizedIp(string $ip): void
+    {
+        $this->error("Not authorized ip address: " . $ip);
+    }
+
+    public function getNotAuthorizedIp(): string
+    {
+        return "Not authorized ip!";
+    }
+
+    public function getNotAuthorizedRequestMethod(): string
+    {
+        return "Not authorized request method.";
+    }
+
+    public function errorNotAuthorizedRequestMethod(): void
+    {
+        $this->error($this->getNotAuthorizedRequestMethod());
     }
 
 }

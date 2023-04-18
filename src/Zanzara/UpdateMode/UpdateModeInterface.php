@@ -14,6 +14,6 @@ interface UpdateModeInterface
      *
      * @return void
      */
-    function run();
+    function run(): void;
 
 }

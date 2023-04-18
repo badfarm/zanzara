@@ -22,7 +22,7 @@
             "duration": 2,
             "width": 480,
             "height": 360,
-            "thumb": {
+            "thumbnail": {
                 "file_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
                 "file_unique_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
                 "file_size": 15993,
@@ -36,7 +36,7 @@
         "document": {
             "file_name": "giphy.mp4",
             "mime_type": "video/mp4",
-            "thumb": {
+            "thumbnail": {
                 "file_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
                 "file_unique_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
                 "file_size": 15993,

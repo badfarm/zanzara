@@ -22,6 +22,7 @@ class FileTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
         $config->setUpdateStream(__DIR__ . '/../update_types/animation.json');
         $bot = new Zanzara("test", $config);
 
@@ -55,6 +56,7 @@ class FileTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
         $config->setUpdateStream(__DIR__ . '/../update_types/contact.json');
         $bot = new Zanzara("test", $config);
 
@@ -77,6 +79,7 @@ class FileTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
         $config->setUpdateStream(__DIR__ . '/../update_types/document.json');
         $bot = new Zanzara("test", $config);
 
@@ -101,6 +104,7 @@ class FileTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
         $config->setUpdateStream(__DIR__ . '/../update_types/voice.json');
         $bot = new Zanzara("test", $config);
 
@@ -125,6 +129,7 @@ class FileTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
         $config->setUpdateStream(__DIR__ . '/../update_types/location.json');
         $bot = new Zanzara("test", $config);
 
@@ -146,6 +151,7 @@ class FileTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
         $config->setUpdateStream(__DIR__ . '/../update_types/photo.json');
         $bot = new Zanzara("test", $config);
 
@@ -183,6 +189,7 @@ class FileTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
         $config->setUpdateStream(__DIR__ . '/../update_types/sticker.json');
         $bot = new Zanzara("test", $config);
 
@@ -216,6 +223,7 @@ class FileTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
         $config->setUpdateStream(__DIR__ . '/../update_types/video.json');
         $bot = new Zanzara("test", $config);
 

@@ -21,7 +21,7 @@
             "width": 480,
             "height": 480,
             "mime_type": "video/mp4",
-            "thumb": {
+            "thumbnail": {
                 "file_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
                 "file_unique_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
                 "file_size": 18081,

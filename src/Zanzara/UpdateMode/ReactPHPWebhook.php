@@ -9,8 +9,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use React\EventLoop\LoopInterface;
 use React\Http\HttpServer;
 use React\Http\Message\Response;
+use React\Socket\SocketServer;
 use Zanzara\Config;
-use Zanzara\Context;
 use Zanzara\Telegram\Telegram;
 use Zanzara\Telegram\Type\Update;
 use Zanzara\Telegram\Type\Webhook\WebhookInfo;
@@ -27,24 +27,31 @@ class ReactPHPWebhook extends BaseWebhook
     /**
      * @var HttpServer
      */
-    private $server;
+    private HttpServer $server;
 
-    public function __construct(ContainerInterface $container, Zanzara $zanzara, Telegram $telegram, Config $config,
-                                ZanzaraLogger      $logger, LoopInterface $loop, ZanzaraMapper $zanzaraMapper)
+    public function __construct(ContainerInterface $container, Zanzara $zanzara, Telegram $telegram, Config $config, ZanzaraLogger $logger, LoopInterface $loop, ZanzaraMapper $zanzaraMapper)
     {
         parent::__construct($container, $zanzara, $telegram, $config, $logger, $loop, $zanzaraMapper);
         $this->init();
     }
 
-    private function init()
+    private function init(): void
     {
         $processingUpdate = null;
-        $server = new HttpServer($this->loop, function (ServerRequestInterface $request) use (&$processingUpdate) {
-            $token = $this->resolveTokenFromPath($request->getUri()->getPath());
-            if (!$this->isWebhookAuthorized($token)) {
-                $this->logger->errorNotAuthorized();
+        $server = new HttpServer($this->loop, function (ServerRequestInterface $request) use (&$processingUpdate): Response {
+
+            if (!$this->verifyTelegramIpSrc($request->getHeaderLine('X-Forwarded-For') ?? $request->getServerParams()['REMOTE_ADDR'])) {
+                return new Response(403, [], $this->logger->getNotAuthorizedIp());
+            }
+
+            if (!$this->verifyRequestMethod($request->getMethod())) {
+                return new Response(403, [], $this->logger->getNotAuthorizedRequestMethod());
+            }
+
+            if (!$this->verifyAuthorizedWebHook($request->getUri()->getPath())) {
                 return new Response(403, [], $this->logger->getNotAuthorizedMessage());
             }
+
             $json = (string)$request->getBody();
             /** @var Update $processingUpdate */
             $processingUpdate = $this->zanzaraMapper->mapJson($json, Update::class);
@@ -64,7 +71,7 @@ class ReactPHPWebhook extends BaseWebhook
     /**
      * @inheritDoc
      */
-    public function run()
+    public function run(): void
     {
         $this->telegram->getWebhookInfo()->then(
             function (WebhookInfo $webhookInfo) {
@@ -79,9 +86,9 @@ class ReactPHPWebhook extends BaseWebhook
         );
     }
 
-    private function startListening()
+    private function startListening(): void
     {
-        $socket = new \React\Socket\SocketServer($this->config->getServerUri(), $this->config->getServerContext(), $this->loop);
+        $socket = new SocketServer($this->config->getServerUri(), $this->config->getServerContext(), $this->loop);
         $this->server->listen($socket);
         $this->logger->logIsListening();
     }

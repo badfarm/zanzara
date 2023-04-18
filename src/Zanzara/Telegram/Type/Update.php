@@ -24,11 +24,11 @@ class Update implements \JsonSerializable
      * The update's unique identifier. Update identifiers start from a certain positive number and increase sequentially.
      * This ID becomes especially handy if you're using Webhooks, since it allows you to ignore repeated updates or to
      * restore the correct update sequence, should they get out of order. If there are no new updates for at least a
-     * week, then identifier of the next update will be chosen randomly instead of sequentially.
+     * week, then the identifier of the next update will be chosen randomly instead of sequentially.
      *
      * @var int
      */
-    private $update_id;
+    private int $update_id;
 
     /**
      * Optional. New incoming message of any kind -- text, photo, sticker, etc.
@@ -112,7 +112,7 @@ class Update implements \JsonSerializable
     /**
      * @var string
      */
-    private $updateType;
+    private string $updateType;
 
     /**
      * @var User|null
@@ -341,7 +341,7 @@ class Update implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getUpdateType(): ?string
     {
@@ -350,88 +350,110 @@ class Update implements \JsonSerializable
 
     /**
      * @param string $updateType
+     * @param User|null $effectiveUser
+     * @param Chat|null $effectiveChat
+     * @return void
      */
-    public function setUpdateType(string $updateType): void
+    public function setUpdateType(string $updateType, ?User $effectiveUser, ?Chat $effectiveChat): void
     {
         $this->updateType = $updateType;
+        $this->effectiveUser = $effectiveUser;
+        $this->effectiveChat = $effectiveChat;
     }
 
     /**
      *
      */
-    public function detectUpdateType()
+    public function detectUpdateType(): void
     {
-        if ($this->message && $this->message->getSuccessfulPayment()) {
-            $this->updateType = SuccessfulPayment::class;
-            $this->effectiveUser = $this->message->getFrom();
-            $this->effectiveChat = $this->message->getChat();
-        } else if ($this->message && $this->message->getReplyToMessage()) {
-            $this->updateType = ReplyToMessage::class;
-            $this->effectiveUser = $this->message->getFrom();
-            $this->effectiveChat = $this->message->getChat();
-        } else if ($this->message && $this->message->getPassportData()) {
-            $this->updateType = PassportData::class;
-            $this->effectiveUser = $this->message->getFrom();
-            $this->effectiveChat = $this->message->getChat();
-        } else if ($this->message && $this->message->getWebAppData()) {
-            $this->updateType = WebAppData::class;
-            $this->effectiveUser = $this->message->getFrom();
-            $this->effectiveChat = $this->message->getChat();
-        } else if ($this->message && $this->message->getUserShared()) {
-            $this->updateType = UserShared::class;
-            $this->effectiveUser = $this->message->getFrom();
-            $this->effectiveChat = $this->message->getChat();
-        } else if ($this->message && $this->message->getChatShared()) {
-            $this->updateType = ChatShared::class;
-            $this->effectiveUser = $this->message->getFrom();
-            $this->effectiveChat = $this->message->getChat();
-        } else if ($this->message) {
-            $this->updateType = Message::class;
-            $this->effectiveUser = $this->message->getFrom();
-            $this->effectiveChat = $this->message->getChat();
-        } else if ($this->edited_message) {
-            $this->updateType = EditedMessage::class;
-            $this->effectiveUser = $this->edited_message->getFrom();
-            $this->effectiveChat = $this->edited_message->getChat();
-        } else if ($this->channel_post) {
-            $this->updateType = ChannelPost::class;
-            $this->effectiveUser = $this->channel_post->getFrom();
-            $this->effectiveChat = $this->channel_post->getChat();
-        } else if ($this->edited_channel_post) {
-            $this->updateType = EditedChannelPost::class;
-            $this->effectiveUser = $this->edited_channel_post->getFrom();
-            $this->effectiveChat = $this->edited_channel_post->getChat();
-        } else if ($this->callback_query) {
-            $this->updateType = CallbackQuery::class;
-            $this->effectiveUser = $this->callback_query->getFrom();
-            $this->effectiveChat = $this->callback_query->getMessage()
-                ? $this->callback_query->getMessage()->getChat()
-                : null;
-        } else if ($this->shipping_query) {
-            $this->updateType = ShippingQuery::class;
-            $this->effectiveUser = $this->shipping_query->getFrom();
-        } else if ($this->pre_checkout_query) {
-            $this->updateType = PreCheckoutQuery::class;
-            $this->effectiveUser = $this->pre_checkout_query->getFrom();
-        } else if ($this->inline_query) {
-            $this->updateType = InlineQuery::class;
-            $this->effectiveUser = $this->inline_query->getFrom();
-        } else if ($this->chosen_inline_result) {
-            $this->updateType = ChosenInlineResult::class;
-            $this->effectiveUser = $this->chosen_inline_result->getFrom();
-        } else if ($this->poll) {
-            $this->updateType = Poll::class;
-        } else if ($this->poll_answer) {
-            $this->updateType = PollAnswer::class;
-            $this->effectiveUser = $this->poll_answer->getUser();
-        } else if ($this->my_chat_member) {
-            $this->updateType = ChatMemberUpdated::class;
-            $this->effectiveUser = $this->my_chat_member->getFrom();
-            $this->effectiveChat = $this->my_chat_member->getChat();
-        } else if ($this->chat_join_request) {
-            $this->updateType = ChatJoinRequest::class;
-            $this->effectiveUser = $this->chat_join_request->getFrom();
-            $this->effectiveChat = $this->chat_join_request->getChat();
+        if ($this->message) {
+            $effectiveUser = $this->message->getFrom();
+            $effectiveChat = $this->message->getChat();
+
+            $updateTypeMapping = [
+                SuccessfulPayment::class => $this->message->getSuccessfulPayment(),
+                ReplyToMessage::class => $this->message->getReplyToMessage(),
+                PassportData::class => $this->message->getPassportData(),
+                WebAppData::class => $this->message->getWebAppData(),
+                UserShared::class => $this->message->getUserShared(),
+                ChatShared::class => $this->message->getChatShared()
+            ];
+
+            $updateType = array_keys(array_filter($updateTypeMapping))[0] ?? Message::class;
+            $this->setUpdateType($updateType, $effectiveUser, $effectiveChat);
+            return;
+        }
+
+        $updateTypeMapping = [
+            'edited_message' => [
+                'class' => EditedMessage::class,
+                'user' => 'getFrom',
+                'chat' => 'getChat'
+            ],
+            'channel_post' => [
+                'class' => ChannelPost::class,
+                'user' => 'getFrom',
+                'chat' => 'getChat'
+            ],
+            'edited_channel_post' => [
+                'class' => EditedChannelPost::class,
+                'user' => 'getFrom',
+                'chat' => 'getChat'
+            ],
+            'callback_query' => [
+                'class' => CallbackQuery::class,
+                'user' => 'getFrom',
+                'chat' => fn(CallbackQuery $callbackQuery) => $callbackQuery->getMessage() ? $callbackQuery->getMessage()->getChat() : null
+            ],
+            'shipping_query' => [
+                'class' => ShippingQuery::class,
+                'user' => 'getFrom',
+                'chat' => null
+            ],
+            'pre_checkout_query' => [
+                'class' => PreCheckoutQuery::class,
+                'user' => 'getFrom',
+                'chat' => null
+            ],
+            'inline_query' => [
+                'class' => InlineQuery::class,
+                'user' => 'getFrom',
+                'chat' => null
+            ],
+            'chosen_inline_result' => [
+                'class' => ChosenInlineResult::class,
+                'user' => 'getFrom',
+                'chat' => null
+            ],
+            'poll' => [
+                'class' => Poll::class,
+                    'user' => null,
+                'chat' => null
+            ],
+            'poll_answer' => [
+                'class' => PollAnswer::class,
+                'user' => 'getUser',
+                'chat' => null
+            ],
+            'my_chat_member' => [
+                'class' => ChatMemberUpdated::class,
+                'user' => 'getFrom',
+                'chat' => 'getChat'
+            ],
+            'chat_join_request' => [
+                'class' => ChatJoinRequest::class,
+                'user' => 'getFrom',
+                'chat' => 'getChat'
+            ]
+        ];
+
+        foreach ($updateTypeMapping as $type => $data) {
+            if ($this->{$type}) {
+                $user = $data['user'] ? $this->{$type}->{$data['user']}() : null;
+                $chat = $data['chat'] ? (is_callable($data['chat']) ? $data['chat']($this->{$type}) : $this->{$type}->{$data['chat']}()) : null;
+                $this->setUpdateType($data['class'], $user, $chat);
+                break;
+            }
         }
     }
 
