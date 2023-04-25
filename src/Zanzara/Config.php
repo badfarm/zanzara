@@ -197,6 +197,14 @@ class Config
     private bool $safeMode = false;
 
     /**
+     * @var array
+     */
+    private array $telegramIpv4Ranges = [
+        '149.154.160.0' => '149.154.175.255', // literally 149.154.160.0/20
+        '91.108.4.0' => '91.108.7.255',    // literally 91.108.4.0/22
+    ];
+
+    /**
      * @return LoopInterface|null
      */
     public function getLoop(): ?LoopInterface
@@ -665,5 +673,21 @@ class Config
     public function getSafeMode(): bool
     {
         return $this->safeMode;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTelegramIpv4Ranges(): array
+    {
+        return $this->telegramIpv4Ranges;
+    }
+
+    /**
+     * @param array $telegramIpv4Ranges
+     */
+    public function setTelegramIpv4Ranges(array $telegramIpv4Ranges): void
+    {
+        $this->telegramIpv4Ranges = $telegramIpv4Ranges;
     }
 }

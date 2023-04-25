@@ -11,14 +11,6 @@ abstract class BaseWebhook extends UpdateMode
 {
 
     /**
-     * @var array|string[]
-     */
-    protected const TELEGRAM_IPV4_RANGES = [
-        '149.154.160.0' => '149.154.175.255', // literally 149.154.160.0/20
-        '91.108.4.0' => '91.108.7.255',    // literally 91.108.4.0/22
-    ];
-
-    /**
      * @return bool
      */
     private function isSafeMode(): bool
@@ -65,7 +57,7 @@ abstract class BaseWebhook extends UpdateMode
             return false;
         }
 
-        foreach (self::TELEGRAM_IPV4_RANGES as $lower => $upper) {
+        foreach ($this->config->getTelegramIpv4Ranges() as $lower => $upper) {
             // Make sure the IPv4 is valid telegram ip.
             if ($ip >= ip2long($lower) && $ip <= ip2long($upper)) {
                 return true;
