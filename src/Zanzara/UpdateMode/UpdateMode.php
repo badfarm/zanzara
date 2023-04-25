@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+/** @noinspection PhpVoidFunctionResultUsedInspection */
 
 declare(strict_types=1);
 
@@ -7,7 +8,6 @@ namespace Zanzara\UpdateMode;
 use Psr\Container\ContainerInterface;
 use React\EventLoop\LoopInterface;
 use Zanzara\Config;
-use Zanzara\Context;
 use Zanzara\Listener\Listener;
 use Zanzara\Telegram\Telegram;
 use Zanzara\Telegram\Type\Update;
@@ -24,37 +24,37 @@ abstract class UpdateMode implements UpdateModeInterface
     /**
      * @var ContainerInterface
      */
-    protected $container;
+    protected ContainerInterface $container;
 
     /**
      * @var Zanzara
      */
-    protected $zanzara;
+    protected Zanzara $zanzara;
 
     /**
      * @var Telegram
      */
-    protected $telegram;
+    protected Telegram $telegram;
 
     /**
      * @var Config
      */
-    protected $config;
+    protected Config $config;
 
     /**
      * @var ZanzaraLogger
      */
-    protected $logger;
+    protected ZanzaraLogger $logger;
 
     /**
      * @var LoopInterface
      */
-    protected $loop;
+    protected LoopInterface $loop;
 
     /**
      * @var ZanzaraMapper
      */
-    protected $zanzaraMapper;
+    protected ZanzaraMapper $zanzaraMapper;
 
     /**
      * @param ContainerInterface $container
@@ -65,8 +65,7 @@ abstract class UpdateMode implements UpdateModeInterface
      * @param LoopInterface $loop
      * @param ZanzaraMapper $zanzaraMapper
      */
-    public function __construct(ContainerInterface $container, Zanzara $zanzara, Telegram $telegram, Config $config,
-                                ZanzaraLogger      $logger, LoopInterface $loop, ZanzaraMapper $zanzaraMapper)
+    public function __construct(ContainerInterface $container, Zanzara $zanzara, Telegram $telegram, Config $config, ZanzaraLogger $logger, LoopInterface $loop, ZanzaraMapper $zanzaraMapper)
     {
         $this->container = $container;
         $this->zanzara = $zanzara;
@@ -80,13 +79,13 @@ abstract class UpdateMode implements UpdateModeInterface
     /**
      * @param Update $update
      */
-    protected function processUpdate(Update $update)
+    protected function processUpdate(Update $update): void
     {
         $update->detectUpdateType();
         $contextClass = $this->config->getContextClass();
         $context = new $contextClass($update, $this->container);
         $this->zanzara->resolveListeners($update)
-            ->then(function ($listeners) use ($context, $update) {
+            ->then(function ($listeners) use ($context) {
                 /** @var Listener[] $listeners */
                 foreach ($listeners as $listener) {
                     $middlewareTip = $listener->getTip();

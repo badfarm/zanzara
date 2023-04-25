@@ -22,6 +22,7 @@ class UpdateTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
         $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
         $bot = new Zanzara("test", $config);
 
@@ -40,6 +41,7 @@ class UpdateTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
         $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
         $bot = new Zanzara("test", $config);
 
@@ -57,6 +59,7 @@ class UpdateTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
         $config->setUpdateStream(__DIR__ . '/../update_types/command.json');
         $bot = new Zanzara("test", $config);
 

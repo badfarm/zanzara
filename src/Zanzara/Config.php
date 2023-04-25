@@ -192,6 +192,11 @@ class Config
     private $contextClass = Context::class;
 
     /**
+     * @var bool
+     */
+    private bool $safeMode = false;
+
+    /**
      * @return LoopInterface|null
      */
     public function getLoop(): ?LoopInterface
@@ -645,4 +650,20 @@ class Config
         $this->contextClass = $contextClass;
     }
 
+    /**
+     * @param bool $mode
+     * @return void
+     */
+    public function setSafeMode(bool $mode): void
+    {
+        $this->safeMode = $mode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSafeMode(): bool
+    {
+        return $this->safeMode;
+    }
 }

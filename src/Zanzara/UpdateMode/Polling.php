@@ -20,7 +20,7 @@ class Polling extends UpdateMode
     /**
      * @inheritDoc
      */
-    public function run()
+    public function run(): void
     {
         $this->telegram->getWebhookInfo()->then(
             function (WebhookInfo $webhookInfo) {
@@ -52,7 +52,7 @@ class Polling extends UpdateMode
             });
     }
 
-    public function startPolling()
+    public function startPolling(): void
     {
         $processingUpdate = null;
         $this->telegram->getUpdates([

@@ -23,6 +23,7 @@ class CallbackQueryTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
         $config->setUpdateStream(__DIR__ . '/../update_types/callback_query.json');
         $bot = new Zanzara("test", $config);
 
@@ -41,6 +42,7 @@ class CallbackQueryTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
         $config->setUpdateStream(__DIR__ . '/../update_types/callback_query.json');
         $bot = new Zanzara("test", $config);
 
@@ -83,6 +85,7 @@ class CallbackQueryTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
         $config->setUpdateStream(__DIR__ . '/../update_types/cb_query_by_inline_query.json');
         $bot = new Zanzara("test", $config);
 
@@ -109,6 +112,7 @@ class CallbackQueryTest extends TestCase
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
         $config->setUpdateStream(__DIR__ . '/../update_types/callback_query.json');
         $bot = new Zanzara("test", $config);
 
