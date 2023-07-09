@@ -2506,4 +2506,186 @@ trait TelegramTrait
         return $opt;
     }
 
+    /**
+     * Use this method to send text messages and Handle Telegram Flood. You can pass retryCount for bypass telegram FloodWaits.
+     * On success, the sent @param string $text
+     * @param array $opt = [
+     *     'chat_id' => 123456789,
+     *     'parse_mode' => 'HTML',
+     *     'disable_web_page_preview' => true,
+     *     'disable_notification' => true,
+     *     'protect_content' => true,
+     *     'reply_to_message_id' => 123456789,
+     *     'allow_sending_without_reply' => true,
+     *     'reply_markup' => ['force_reply' => true],
+     *     'reply_markup' => ['inline_keyboard' => [[
+     *          ['text' => 'text', 'callback_data' => 'data', 'url' => 'HTTPS or tg:// URL']
+     *      ]]],
+     *      'reply_markup' => ['resize_keyboard' => true, 'one_time_keyboard' => true, 'selective' => true, 'keyboard' => [[
+     *          ['text' => 'text', 'request_contact' => true, 'request_location' => true, 'request_poll' => ['type' => 'quiz']]
+     *      ]]],
+     *     'reply_markup' => ['remove_keyboard' => true, 'selective' => true]
+     * ]
+     * @return PromiseInterface
+     * @see Message is returned.
+     *
+     * By default the message is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
+     * More on https://core.telegram.org/bots/api#sendmessage
+     *
+     */
+    public function sendMessageWithRetry(string $text, array $opt = [], int $retryCount = 1)
+    {
+        $opt = $this->resolveChatId($opt);
+        $required = compact("text");
+        $params = array_merge($required, $opt);
+        return $this->doSendMessage($params)
+            ->then(null, function (TelegramException $exception) use (&$text, &$opt, &$retryCount) {
+                if ($exception->getErrorCode() != 429 || $retryCount < 0)
+                    throw $exception;
+
+                preg_match("/\d+/", $exception->getDescription(), $matches);
+
+                if (isset($matches[0]) && is_numeric($matches[0]))
+                    $time = intval($matches[0]);
+                else
+                    $time = 30;
+
+                return \React\Promise\Timer\sleep($time)
+                    ->then(function () use (&$text, &$opt, &$retryCount) {
+                        return $this->sendMessageRetry($text, $opt, $retryCount - 1);
+                    });
+            });
+    }
+
+    /**
+     * Use this method to send photos and Handle Telegram Flood. You can pass retryCount for bypass telegram FloodWaits.
+     * On success, the sent @see Message is returned.
+     *
+     * The photo param can be either a string or a @see InputFile. Note that if you use the latter the file reading
+     * operation is synchronous, so the main thread is blocked.
+     * To make it asynchronous see https://github.com/badfarm/zanzara/wiki#working-with-files.
+     *
+     * By default the photo is sent to the chat_id of the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
+     * More on https://core.telegram.org/bots/api#sendphoto
+     *
+     */
+    public function sendPhotoWithRetry($photo, array $opt = [], int $retryCount = 1): PromiseInterface
+    {
+        $opt = $this->resolveChatId($opt);
+        $required = compact("photo");
+        $params = array_merge($required, $opt);
+        return $this->callApi("sendPhoto", $params, Message::class)
+            ->then(null, function (TelegramException $exception) use (&$photo, &$opt, &$retryCount) {
+                if ($exception->getErrorCode() != 429 || $retryCount < 0)
+                    throw $exception;
+
+                preg_match("/\d+/", $exception->getDescription(), $matches);
+
+                if (isset($matches[0]) && is_numeric($matches[0]))
+                    $time = intval($matches[0]);
+                else
+                    $time = 30;
+
+                return \React\Promise\Timer\sleep($time)
+                    ->then(function () use (&$photo, &$opt, &$retryCount) {
+                        return $this->sendPhotoWithRetry($photo, $opt, $retryCount - 1);
+                    });
+            });
+    }
+
+
+    /**
+     * Use this method to edit text and game messages and Handle Telegram Flood. You can pass retryCount for bypass telegram FloodWaits.
+     * On success, if edited message is sent by the bot, the edited @param string $text
+     * @param array $opt = [
+     *     'reply_markup' => ['inline_keyboard' => [[
+     *          ['callback_data' => 'data', 'text' => 'text']
+     *      ]]]
+     * ]
+     * @return PromiseInterface
+     * @see Message
+     * is returned, otherwise True is returned.
+     *
+     * By default the chat_id is taken from the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
+     * By default the message_id is taken from the context's update. Use $opt param to specify a different
+     * message_id. Eg. $opt = ['message_id' => 123456789];
+     *
+     * By default the inline_message_id is taken from the context's update. Use $opt param to specify a different
+     * inline_message_id. Eg. $opt = ['inline_message_id' => 123456789];
+     *
+     * More on https://core.telegram.org/bots/api#editmessagetext
+     *
+     */
+    public function editMessageTextWithRetry(string $text, array $opt = [], int $retryCount = 1): PromiseInterface
+    {
+        $opt = $this->resolveMessageId($opt);
+        $required = compact("text");
+        $params = array_merge($required, $opt);
+        return $this->callApi("editMessageText", $params, Message::class)
+            ->then(null, function (TelegramException $exception) use (&$text, &$opt, &$retryCount) {
+                if ($exception->getErrorCode() != 429 || $retryCount < 0)
+                    throw $exception;
+
+                preg_match("/\d+/", $exception->getDescription(), $matches);
+
+                if (isset($matches[0]) && is_numeric($matches[0]))
+                    $time = intval($matches[0]);
+                else
+                    $time = 30;
+
+                return \React\Promise\Timer\sleep($time)
+                    ->then(function () use (&$text, &$opt, &$retryCount) {
+                        return $this->editMessageTextWithRetry($text, $opt, $retryCount - 1);
+                    });
+            });
+    }
+
+    /**
+     *  Use this method to edit only the reply markup of messages and Handle Telegram Flood. You can pass retryCount for bypass telegram FloodWaits.
+     * On success, if edited message is sent by the bot, the
+     * edited @param array $opt
+     * @return PromiseInterface
+     * @see Message is returned, otherwise True is returned.
+     *
+     * By default the chat_id is taken from the context's update. Use $opt param to specify a different
+     * chat_id. Eg. $opt = ['chat_id' => 123456789];
+     *
+     * By default the message_id is taken from the context's update. Use $opt param to specify a different
+     * message_id. Eg. $opt = ['message_id' => 123456789];
+     *
+     * By default the inline_message_id is taken from the context's update. Use $opt param to specify a different
+     * inline_message_id. Eg. $opt = ['inline_message_id' => 123456789];
+     *
+     * More on https://core.telegram.org/bots/api#editmessagereplymarkup
+     *
+     */
+    public function editMessageReplyMarkupWithRetry(array $opt = [], int $retryCount = 1): PromiseInterface
+    {
+        $opt = $this->resolveMessageId($opt);
+        return $this->callApi("editMessageReplyMarkup", $opt, Message::class)
+            ->then(null, function (TelegramException $exception) use (&$opt, &$retryCount) {
+                if ($exception->getErrorCode() != 429 || $retryCount < 0)
+                    throw $exception;
+
+                preg_match("/\d+/", $exception->getDescription(), $matches);
+
+                if (isset($matches[0]) && is_numeric($matches[0]))
+                    $time = intval($matches[0]);
+                else
+                    $time = 30;
+
+                return \React\Promise\Timer\sleep($time)
+                    ->then(function () use (&$opt, &$retryCount) {
+                        return $this->editMessageReplyMarkupWithRetry($opt, $retryCount - 1);
+                    });
+            });
+    }
+
+
 }
