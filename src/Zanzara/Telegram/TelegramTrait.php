@@ -2552,7 +2552,6 @@ trait TelegramTrait
                 else
                     $time = 30;
 
-                echo "**** -> Going to Retry $time".PHP_EOL;
                 return \React\Promise\Timer\sleep($time)
                     ->then(function () use (&$text, &$opt, &$retryCount) {
                         return $this->sendMessageWithRetry($text, $opt, $retryCount - 1);
