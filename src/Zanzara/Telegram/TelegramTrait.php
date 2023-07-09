@@ -2552,9 +2552,10 @@ trait TelegramTrait
                 else
                     $time = 30;
 
+                echo "**** -> Going to Retry $time".PHP_EOL;
                 return \React\Promise\Timer\sleep($time)
                     ->then(function () use (&$text, &$opt, &$retryCount) {
-                        return $this->sendMessageRetry($text, $opt, $retryCount - 1);
+                        return $this->sendMessageWithRetry($text, $opt, $retryCount - 1);
                     });
             });
     }
