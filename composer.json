@@ -1,5 +1,5 @@
 {
-    "name": "badfarm/zanzara",
+    "name": "parsoolak/zanzara",
     "type": "library",
     "description": "Asynchronous PHP Telegram Bot Framework",
     "keywords": [
