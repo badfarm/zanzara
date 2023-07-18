@@ -153,6 +153,43 @@ class Context
     }
 
     /**
+     * Sets an item of the chat data.
+     *
+     * Eg:
+     * $ctx->setChatDataItem('age', 21)->then(function($result) {
+     *
+     * });
+     *
+     * @param $key
+     * @param $data
+     * @param $ttl float|false
+     * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
+     */
+    public function setChatDataItem($key, $data, $ttl = false): PromiseInterface
+    {
+        $chatId = $this->update->getEffectiveChat()->getId();
+        return $this->cache->setChatDataItem($chatId, $key, $data, $ttl);
+    }
+
+    /**
+     * Sets multiple items of the chat data.
+     *
+     * Eg:
+     * $ctx->setChatDataItems(['name' => 'forsen', 'age' => 21])->then(function($result) {
+     *
+     * });
+     *
+     * @param $values array
+     * @param $ttl float|false
+     * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
+     */
+    public function setChatDataItems(array $values, $ttl = false): PromiseInterface
+    {
+        $chatId = $this->update->getEffectiveChat()->getId();
+        return $this->cache->setChatDataItems($chatId, $values, $ttl);
+    }
+
+    /**
      * Gets an item of the chat data.
      *
      * Eg:
@@ -170,22 +207,20 @@ class Context
     }
 
     /**
-     * Sets an item of the chat data.
+     * Gets multiple items of the chat data.
      *
      * Eg:
-     * $ctx->setChatData('age', 21)->then(function($result) {
+     * $ctx->getChatDataItems(['name', 'age'])->then(function($results) {
      *
      * });
      *
-     * @param $key
-     * @param $data
-     * @param $ttl
+     * @param $keys string[]
      * @return PromiseInterface
      */
-    public function setChatDataItem($key, $data, $ttl = false): PromiseInterface
+    public function getChatDataItems(array $keys): PromiseInterface
     {
         $chatId = $this->update->getEffectiveChat()->getId();
-        return $this->cache->setChatDataItem($chatId, $key, $data, $ttl);
+        return $this->cache->getChatDataItems($chatId, $keys);
     }
 
     /**
@@ -206,6 +241,60 @@ class Context
     }
 
     /**
+     * Deletes multiple items from the chat data.
+     *
+     * Eg:
+     * $ctx->deleteChatDataItems(['name', 'age'])->then(function($result) {
+     *
+     * });
+     *
+     * @param $keys string[]
+     * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
+     */
+    public function deleteChatDataItems(array $keys): PromiseInterface
+    {
+        $chatId = $this->update->getEffectiveChat()->getId();
+        return $this->cache->deleteChatDataItems($chatId, $keys);
+    }
+
+    /**
+     * Sets an item of the user data.
+     *
+     * Eg:
+     * $ctx->setUserDataItem('age', 21)->then(function($result) {
+     *
+     * });
+     *
+     * @param $key
+     * @param $data
+     * @param $ttl float|false
+     * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
+     */
+    public function setUserDataItem($key, $data, $ttl = false): PromiseInterface
+    {
+        $userId = $this->update->getEffectiveUser()->getId();
+        return $this->cache->setUserDataItem($userId, $key, $data, $ttl);
+    }
+
+    /**
+     * Sets multiple items of the user data.
+     *
+     * Eg:
+     * $ctx->setUserDataItems(['name' => 'forsen', 'age' => 21])->then(function($result) {
+     *
+     * });
+     *
+     * @param $values array
+     * @param $ttl float|false
+     * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
+     */
+    public function setUserDataItems(array $values, $ttl = false): PromiseInterface
+    {
+        $userId = $this->update->getEffectiveUser()->getId();
+        return $this->cache->setUserDataItems($userId, $values, $ttl);
+    }
+
+    /**
      * Gets an item of the user data.
      *
      * Eg:
@@ -223,22 +312,20 @@ class Context
     }
 
     /**
-     * Sets an item of the user data.
+     * Gets multiple items of the user data.
      *
      * Eg:
-     * $ctx->setUserData('age', 21)->then(function($result) {
+     * $ctx->getUserDataItems(['name', 'age'])->then(function($results) {
      *
      * });
      *
-     * @param $key
-     * @param $data
-     * @param $ttl
+     * @param $keys string[]
      * @return PromiseInterface
      */
-    public function setUserDataItem($key, $data, $ttl = false): PromiseInterface
+    public function getUserDataItems(array $keys): PromiseInterface
     {
         $userId = $this->update->getEffectiveUser()->getId();
-        return $this->cache->setUserDataItem($userId, $key, $data, $ttl);
+        return $this->cache->getUserDataItems($userId, $keys);
     }
 
     /**
@@ -259,22 +346,57 @@ class Context
     }
 
     /**
+     * Deletes multiple items from the user data.
+     *
+     * Eg:
+     * $ctx->deleteUserDataItems(['name', 'age'])->then(function($result) {
+     *
+     * });
+     *
+     * @param $keys string[]
+     * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
+     */
+    public function deleteUserDataItems(array $keys): PromiseInterface
+    {
+        $userId = $this->update->getEffectiveUser()->getId();
+        return $this->cache->deleteUserDataItems($userId, $keys);
+    }
+
+    /**
      * Sets an item of the global data.
      * This cache is not related to any chat or user.
      *
      * Eg:
-     * $ctx->setGlobalData('age', 21)->then(function($result) {
+     * $ctx->setGlobalDataItem('age', 21)->then(function($result) {
      *
      * });
      *
      * @param $key
      * @param $data
-     * @param $ttl
-     * @return PromiseInterface
+     * @param $ttl float|false
+     * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
      */
     public function setGlobalDataItem($key, $data, $ttl = false): PromiseInterface
     {
         return $this->cache->setGlobalDataItem($key, $data, $ttl);
+    }
+
+    /**
+     * Sets multiple items of the global data.
+     * This cache is not related to any chat or user.
+     *
+     * Eg:
+     * $ctx->setGlobalDataItems(['name' => 'forsen', 'age' => 21])->then(function($result) {
+     *
+     * });
+     *
+     * @param $values array
+     * @param $ttl float|false
+     * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
+     */
+    public function setGlobalDataItems(array $values, $ttl = false): PromiseInterface
+    {
+        return $this->cache->setGlobalDataItems($values, $ttl);
     }
 
     /**
@@ -295,6 +417,23 @@ class Context
     }
 
     /**
+     * Gets multiple items of the global data.
+     * This cache is not related to any chat or user.
+     *
+     * Eg:
+     * $ctx->getGlobalDataItems(['name', 'age'])->then(function($results) {
+     *
+     * });
+     *
+     * @param $keys string[]
+     * @return PromiseInterface
+     */
+    public function getGlobalDataItems(array $keys): PromiseInterface
+    {
+        return $this->cache->getGlobalDataItems($keys);
+    }
+
+    /**
      * Deletes an item from the global data.
      * This cache is not related to any chat or user.
      *
@@ -309,6 +448,23 @@ class Context
     public function deleteGlobalDataItem($key): PromiseInterface
     {
         return $this->cache->deleteGlobalDataItem($key);
+    }
+
+    /**
+     * Deletes multiple items from the global data.
+     * This cache is not related to any chat or user.
+     *
+     * Eg:
+     * $ctx->deleteGlobalDataItems(['name', 'age'])->then(function($result) {
+     *
+     * });
+     *
+     * @param $keys string[]
+     * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
+     */
+    public function deleteGlobalDataItems(array $keys): PromiseInterface
+    {
+        return $this->cache->deleteGlobalDataItems($keys);
     }
 
     /**

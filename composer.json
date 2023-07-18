@@ -22,7 +22,7 @@
         "test": "vendor/bin/phpunit"
     },
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.1",
         "ext-json": "*",
         "ext-readline": "*",
         "react/event-loop": "^1.3",

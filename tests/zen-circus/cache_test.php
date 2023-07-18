@@ -17,19 +17,19 @@ $config->setUpdateMode(Config::POLLING_MODE);
 $bot = new Zanzara($_ENV['BOT_TOKEN'], $config);
 
 /**
- *  There are 3 separed cache environment:
+ *  There are 3 separated cache environment:
  *
  *  - chatdata --> indexed by chatid
  *  - userdata --> indexed by userid
  *  - globaldata --> global data, shared by every user/chat
  *
- *  Example for chatdata but it's applicable for each of them:
+ *  Example for chatdata, but it's applicable for each of them:
  *
  *  $ctx->setChatData("key1", "value1")
  *  $ctx->setChatData("key2", "value2")
  *  With these methods I'm writing inside the cache data of the chatId of the context.
  *  You can get that that data with $ctx->getChatData(). This method will return in a promise
- *  the assoc array of the data previusly saved. In this case ["key1" => "value1", "key2" => "value2"].
+ *  the assoc array of the data previously saved. In this case ["key1" => "value1", "key2" => "value2"].
  *  The key must be a string but the value can be a generic object (another assoc array for example).
  *  If you want to access only one item of the chat you must use $ctx->getItemChatData("key2"). This method in a promise
  *  will return only the value associated with key2.
@@ -38,7 +38,7 @@ $bot = new Zanzara($_ENV['BOT_TOKEN'], $config);
  *
  *  For userdata it's the same, but it's indexed on the userId of the context.
  *
- *  The only differenct with global data is that it can be accessed with the $ctx(only for simplicity but it's
+ *  The only different with global data is that it can be accessed with the $ctx(only for simplicity but it's
  *  not referred to the context) and with the $bot instance.
  *
  *
