@@ -165,9 +165,9 @@ class Context
      * @param $ttl float|false
      * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
      */
-    public function setChatDataItem($key, $data, $ttl = false): PromiseInterface
+    public function setChatDataItem($key, $data, $ttl = false, $chatId = null): PromiseInterface
     {
-        $chatId = $this->update->getEffectiveChat()->getId();
+        $chatId = $chatId ?? $this->update->getEffectiveChat()->getId();
         return $this->cache->setChatDataItem($chatId, $key, $data, $ttl);
     }
 
@@ -183,16 +183,16 @@ class Context
      * @param $ttl float|false
      * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
      */
-    public function setChatDataItems(array $values, $ttl = false): PromiseInterface
+    public function setChatDataItems(array $values, $ttl = false, $chatId = null): PromiseInterface
     {
-        $chatId = $this->update->getEffectiveChat()->getId();
+        $chatId = $chatId ?? $this->update->getEffectiveChat()->getId();
         return $this->cache->setChatDataItems($chatId, $values, $ttl);
     }
 
     /**
      * Gets an item of the chat data.
      *
-     * Eg:
+     * Eg:q
      * $ctx->getChatDataItem('age')->then(function($age) {
      *
      * });
@@ -200,9 +200,9 @@ class Context
      * @param $key
      * @return PromiseInterface
      */
-    public function getChatDataItem($key): PromiseInterface
+    public function getChatDataItem($key, $chatId = null): PromiseInterface
     {
-        $chatId = $this->update->getEffectiveChat()->getId();
+        $chatId = $chatId ?? $this->update->getEffectiveChat()->getId();
         return $this->cache->getChatDataItem($chatId, $key);
     }
 
@@ -217,9 +217,9 @@ class Context
      * @param $keys string[]
      * @return PromiseInterface
      */
-    public function getChatDataItems(array $keys): PromiseInterface
+    public function getChatDataItems(array $keys, $chatId = null): PromiseInterface
     {
-        $chatId = $this->update->getEffectiveChat()->getId();
+        $chatId = $chatId ?? $this->update->getEffectiveChat()->getId();
         return $this->cache->getChatDataItems($chatId, $keys);
     }
 
@@ -234,9 +234,9 @@ class Context
      * @param $key
      * @return PromiseInterface
      */
-    public function deleteChatDataItem($key): PromiseInterface
+    public function deleteChatDataItem($key, $chatId = null): PromiseInterface
     {
-        $chatId = $this->update->getEffectiveChat()->getId();
+        $chatId = $chatId ?? $this->update->getEffectiveChat()->getId();
         return $this->cache->deleteChatDataItem($chatId, $key);
     }
 
@@ -251,9 +251,9 @@ class Context
      * @param $keys string[]
      * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
      */
-    public function deleteChatDataItems(array $keys): PromiseInterface
+    public function deleteChatDataItems(array $keys, $chatId = null): PromiseInterface
     {
-        $chatId = $this->update->getEffectiveChat()->getId();
+        $chatId = $chatId ?? $this->update->getEffectiveChat()->getId();
         return $this->cache->deleteChatDataItems($chatId, $keys);
     }
 
@@ -270,9 +270,9 @@ class Context
      * @param $ttl float|false
      * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
      */
-    public function setUserDataItem($key, $data, $ttl = false): PromiseInterface
+    public function setUserDataItem($key, $data, $ttl = false, $userId = null): PromiseInterface
     {
-        $userId = $this->update->getEffectiveUser()->getId();
+        $userId = $userId ?? $this->update->getEffectiveUser()->getId();
         return $this->cache->setUserDataItem($userId, $key, $data, $ttl);
     }
 
@@ -288,9 +288,9 @@ class Context
      * @param $ttl float|false
      * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
      */
-    public function setUserDataItems(array $values, $ttl = false): PromiseInterface
+    public function setUserDataItems(array $values, $ttl = false, $userId = null): PromiseInterface
     {
-        $userId = $this->update->getEffectiveUser()->getId();
+        $userId = $userId ?? $this->update->getEffectiveUser()->getId();
         return $this->cache->setUserDataItems($userId, $values, $ttl);
     }
 
@@ -305,9 +305,9 @@ class Context
      * @param $key
      * @return PromiseInterface
      */
-    public function getUserDataItem($key): PromiseInterface
+    public function getUserDataItem($key, $userId = null): PromiseInterface
     {
-        $userId = $this->update->getEffectiveUser()->getId();
+        $userId = $userId ?? $this->update->getEffectiveUser()->getId();
         return $this->cache->getUserDataItem($userId, $key);
     }
 
@@ -322,9 +322,9 @@ class Context
      * @param $keys string[]
      * @return PromiseInterface
      */
-    public function getUserDataItems(array $keys): PromiseInterface
+    public function getUserDataItems(array $keys, $userId = null): PromiseInterface
     {
-        $userId = $this->update->getEffectiveUser()->getId();
+        $userId = $userId ?? $this->update->getEffectiveUser()->getId();
         return $this->cache->getUserDataItems($userId, $keys);
     }
 
@@ -339,9 +339,9 @@ class Context
      * @param $key
      * @return PromiseInterface
      */
-    public function deleteUserDataItem($key): PromiseInterface
+    public function deleteUserDataItem($key, $userId = null): PromiseInterface
     {
-        $userId = $this->update->getEffectiveUser()->getId();
+        $userId = $userId ?? $this->update->getEffectiveUser()->getId();
         return $this->cache->deleteUserDataItem($userId, $key);
     }
 
@@ -356,9 +356,9 @@ class Context
      * @param $keys string[]
      * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
      */
-    public function deleteUserDataItems(array $keys): PromiseInterface
+    public function deleteUserDataItems(array $keys, $userId = null): PromiseInterface
     {
-        $userId = $this->update->getEffectiveUser()->getId();
+        $userId = $userId ?? $this->update->getEffectiveUser()->getId();
         return $this->cache->deleteUserDataItems($userId, $keys);
     }
 
