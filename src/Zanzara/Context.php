@@ -478,6 +478,15 @@ class Context
     }
 
     /**
+     * Get message queue instance
+     * @return MessageQueue
+     */
+    public function getMessageQueue(): MessageQueue
+    {
+        return $this->container->get(MessageQueue::class);
+    }
+
+    /**
      * Get container instance
      * @return ContainerInterface
      */

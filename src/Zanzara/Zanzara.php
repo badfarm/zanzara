@@ -240,6 +240,16 @@ class Zanzara extends ListenerResolver
     }
 
     /**
+     * Get message queue instance
+     *
+     * @return MessageQueue
+     */
+    public function getMessageQueue(): MessageQueue
+    {
+        return $this->container->get(MessageQueue::class);
+    }
+
+    /**
      * @param $exception
      * @param Context $ctx
      * @return bool
