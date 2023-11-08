@@ -37,6 +37,21 @@ class ConversationTest extends TestCase
         });
 
         $bot->onUpdate(function (Context $ctx) {
+            $ctx->setChatDataItems(['first_test' => 'first_value', 'second_test' => 'second_value'])->then(function () use ($ctx) {
+                $ctx->getChatDataItems(['first_test', 'second_test'])->then(function ($res) use ($ctx) {
+                    $this->assertEquals('first_value', $res['first_test']);
+                    $this->assertEquals('second_value', $res['second_test']);
+                    $ctx->deleteChatDataItems(['first_test', 'second_test'])->then(function () use ($ctx) {
+                        $ctx->getChatDataItems(['first_test', 'second_test'])->then(function ($res) use ($ctx) {
+                            $this->assertNull($res['first_test']);
+                            $this->assertNull($res['second_test']);
+                        });
+                    });
+                });
+            });
+        });
+
+        $bot->onUpdate(function (Context $ctx) {
             $ctx->setUserDataItem('key_test', 'value_test')->then(function () use ($ctx) {
                 $ctx->getUserDataItem('key_test')->then(function ($res) use ($ctx) {
                     $this->assertEquals('value_test', $res);
@@ -49,12 +64,40 @@ class ConversationTest extends TestCase
             });
         });
 
+        $bot->onUpdate(function (Context $ctx) {
+            $ctx->setUserDataItems(['first_test' => 'first_value', 'second_test' => 'second_value'])->then(function () use ($ctx) {
+                $ctx->getUserDataItems(['first_test', 'second_test'])->then(function ($res) use ($ctx) {
+                    $this->assertEquals('first_value', $res['first_test']);
+                    $this->assertEquals('second_value', $res['second_test']);
+                    $ctx->deleteUserDataItems(['first_test', 'second_test'])->then(function () use ($ctx) {
+                        $ctx->getUserDataItems(['first_test', 'second_test'])->then(function ($res) use ($ctx) {
+                            $this->assertNull($res['first_test']);
+                            $this->assertNull($res['second_test']);
+                        });
+                    });
+                });
+            });
+        });
+
         $bot->setGlobalDataItem('key_test', 'value_test')->then(function () use ($bot) {
             $bot->getGlobalDataItem('key_test')->then(function ($res) use ($bot) {
                 $this->assertEquals('value_test', $res);
                 $bot->deleteGlobalDataItem('key_test')->then(function () use ($bot) {
                     $bot->getGlobalDataItem('key_test')->then(function ($res) use ($bot) {
                         $this->assertNull($res);
+                    });
+                });
+            });
+        });
+
+        $bot->setGlobalDataItems(['first_test' => 'first_value', 'second_test' => 'second_value'])->then(function () use ($bot) {
+            $bot->getGlobalDataItems(['first_test', 'second_test'])->then(function ($res) use ($bot) {
+                $this->assertEquals('first_value', $res['first_test']);
+                $this->assertEquals('second_value', $res['second_test']);
+                $bot->deleteGlobalDataItems(['first_test', 'second_test'])->then(function () use ($bot) {
+                    $bot->getGlobalDataItems(['first_test', 'second_test'])->then(function ($res) use ($bot) {
+                        $this->assertNull($res['first_test']);
+                        $this->assertNull($res['second_test']);
                     });
                 });
             });

@@ -24,7 +24,6 @@ use Zanzara\UpdateMode\ReactPHPWebhook;
  */
 class Zanzara extends ListenerResolver
 {
-
     /**
      * @var Config
      */
@@ -130,18 +129,36 @@ class Zanzara extends ListenerResolver
      * This cache is not related to any chat or user.
      *
      * Eg:
-     * $ctx->setGlobalData('age', 21)->then(function($result) {
+     * $ctx->setGlobalDataItem('age', 21)->then(function($result) {
      *
      * });
      *
      * @param $key
      * @param $data
-     * @param $ttl
-     * @return PromiseInterface
+     * @param $ttl float|false
+     * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
      */
     public function setGlobalDataItem($key, $data, $ttl = false): PromiseInterface
     {
         return $this->cache->setGlobalDataItem($key, $data, $ttl);
+    }
+
+    /**
+     * Sets multiple items of the global data.
+     * This cache is not related to any chat or user.
+     *
+     * Eg:
+     * $ctx->setGlobalDataItems(['name' => 'forsen', 'age' => 21])->then(function($result) {
+     *
+     * });
+     *
+     * @param $values array
+     * @param $ttl float|false
+     * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
+     */
+    public function setGlobalDataItems(array $values, $ttl = false): PromiseInterface
+    {
+        return $this->cache->setGlobalDataItems($values, $ttl);
     }
 
     /**
@@ -162,6 +179,23 @@ class Zanzara extends ListenerResolver
     }
 
     /**
+     * Gets multiple items of the global data.
+     * This cache is not related to any chat or user.
+     *
+     * Eg:
+     * $ctx->getGlobalDataItems(['name', 'age'])->then(function($results) {
+     *
+     * });
+     *
+     * @param $keys string[]
+     * @return PromiseInterface
+     */
+    public function getGlobalDataItems(array $keys): PromiseInterface
+    {
+        return $this->cache->getGlobalDataItems($keys);
+    }
+
+    /**
      * Deletes an item from the global data.
      * This cache is not related to any chat or user.
      *
@@ -179,6 +213,23 @@ class Zanzara extends ListenerResolver
     }
 
     /**
+     * Deletes multiple items from the global data.
+     * This cache is not related to any chat or user.
+     *
+     * Eg:
+     * $ctx->deleteGlobalDataItems(['name', 'age'])->then(function($result) {
+     *
+     * });
+     *
+     * @param $keys string[]
+     * @return PromiseInterface<bool> Returns a promise which resolves to `true` on success or `false` on error
+     */
+    public function deleteGlobalDataItems(array $keys): PromiseInterface
+    {
+        return $this->cache->deleteGlobalDataItems($keys);
+    }
+
+    /**
      * Wipe entire cache.
      *
      * @return PromiseInterface
@@ -189,9 +240,19 @@ class Zanzara extends ListenerResolver
     }
 
     /**
+     * Get message queue instance
+     *
+     * @return MessageQueue
+     */
+    public function getMessageQueue(): MessageQueue
+    {
+        return $this->container->get(MessageQueue::class);
+    }
+
+    /**
      * @param $exception
      * @param Context $ctx
-     * @return bool|void
+     * @return bool
      */
     public function callOnException(Context $ctx, $exception)
     {
@@ -203,5 +264,4 @@ class Zanzara extends ListenerResolver
 
         return true;
     }
-
 }

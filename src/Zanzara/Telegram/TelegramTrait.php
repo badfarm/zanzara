@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Zanzara\Telegram;
 
+use DI\DependencyException;
+use DI\NotFoundException;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use React\Http\Browser;
 use React\Http\Message\ResponseException;
@@ -150,16 +154,26 @@ trait TelegramTrait
      *
      * Eg. $ctx->sendBulkMessage([1111111111, 2222222222, 333333333], 'A wonderful notification', [parse_mode => 'HTML']);
      *
+     * You can Also provide a callback function which gets called when all requests are done.
+     * Returns queue list id
+     *
      * More on https://core.telegram.org/bots/api#sendmessage
      *
      * @param array $chatIds
      * @param string $text
      * @param array $opt
+     * @param null $callback
+     * @return int
+     * @throws ContainerExceptionInterface
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws NotFoundExceptionInterface
      */
-    public function sendBulkMessage(array $chatIds, string $text, array $opt = []): void
+    public function sendBulkMessage(array $chatIds, string $text, array $opt = [], $callback = null): int
     {
-        $this->container->get(MessageQueue::class)
-            ->push($chatIds, $text, $opt);
+        $opt['text'] = $text;
+        return $this->container->get(MessageQueue::class)
+            ->new('sendMessage', $chatIds, $opt, $callback);
     }
 
     /**
@@ -2445,7 +2459,7 @@ trait TelegramTrait
                 $json = (string)$response->getBody();
                 $object = json_decode($json);
 
-                if (is_scalar($object->result) && $class === "Scalar") {
+                if (is_scalar($object->result) || $class === "Scalar") {
                     return $object->result;
                 }
 

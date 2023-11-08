@@ -1,0 +1,56 @@
+{
+    "update_id": 52259546,
+    "callback_query": {
+        "id": "666728699048485871",
+        "from": {
+            "id": 222222222,
+            "is_bot": false,
+            "first_name": "Michael",
+            "username": "mscott",
+            "language_code": "it"
+        },
+        "message": {
+            "message_id": 23759,
+            "from": {
+                "id": 333333333,
+                "is_bot": true,
+                "first_name": "ScottBot",
+                "username": "ScottBot"
+            },
+            "chat": {
+                "id": 222222222,
+                "first_name": "Michael",
+                "username": "mscott",
+                "type": "private"
+            },
+            "date": 1584984731,
+            "text": "Manage your data",
+            "reply_markup": {
+                "inline_keyboard": [
+                    [
+                        {
+                            "text": "Add",
+                            "callback_data": "add 12345"
+                        },
+                        {
+                            "text": "Modify",
+                            "callback_data": "modify 12345"
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Remove",
+                            "callback_data": "remove 12345"
+                        },
+                        {
+                            "text": "Read",
+                            "callback_data": "read 12345"
+                        }
+                    ]
+                ]
+            }
+        },
+        "chat_instance": "4628664761794766620",
+        "data": "modify 12345"
+    }
+}

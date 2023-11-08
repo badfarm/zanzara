@@ -6,6 +6,7 @@ namespace Zanzara;
 
 use React\Cache\CacheInterface;
 use React\Promise\PromiseInterface;
+use function React\Promise\resolve;
 
 /**
  * @method get($key, $default = null)
@@ -75,6 +76,36 @@ class ZanzaraCache
         return $res;
     }
 
+    private function resolveKeys($dataType, $id, $keys): array
+    {
+        if (array_is_list($keys)) {
+            return array_map(fn($key) => $this->resolveKey($dataType, $id, $key), $keys);
+        }
+
+        return array_combine(
+            array_map(fn($key) => $this->resolveKey($dataType, $id, $key), array_keys($keys)),
+            array_values($keys)
+        );
+    }
+
+    public function resolveGetItems($result)
+    {
+        return resolve(array_combine(
+            array_map(
+                function ($key) {
+                    $ex = explode('@', $key, 3);
+                    // there is no @$id in global data
+                    if ($ex[0] === 'GLOBAL_DATA') {
+                        return $ex[1];
+                    }
+
+                    return $ex[2];
+                },
+                array_keys($result)),
+            array_values($result)
+        ));
+    }
+
     /**
      * Default ttl is false. That means that user doesn't pass any value, so we use the ttl set in config.
      * If ttl is different from false simply return the ttl, it means that the value is set calling the function.
@@ -95,9 +126,19 @@ class ZanzaraCache
         return $this->cache->set($this->resolveKey(self::GLOBAL_DATA, null, $key), $data, $this->checkTtl($ttl));
     }
 
+    public function setGlobalDataItems(array $values, $ttl = false): PromiseInterface
+    {
+        return $this->cache->setMultiple($this->resolveKeys(self::GLOBAL_DATA, null, $values), $this->checkTtl($ttl));
+    }
+
     public function getGlobalDataItem(string $key): PromiseInterface
     {
         return $this->cache->get($this->resolveKey(self::GLOBAL_DATA, null, $key));
+    }
+
+    public function getGlobalDataItems(array $keys): PromiseInterface
+    {
+        return $this->cache->getMultiple($this->resolveKeys(self::GLOBAL_DATA, null, $keys))->then([$this, 'resolveGetItems']);
     }
 
     public function deleteGlobalDataItem(string $key): PromiseInterface
@@ -105,15 +146,30 @@ class ZanzaraCache
         return $this->cache->delete($this->resolveKey(self::GLOBAL_DATA, null, $key));
     }
 
+    public function deleteGlobalDataItems(array $keys): PromiseInterface
+    {
+        return $this->cache->deleteMultiple($this->resolveKeys(self::GLOBAL_DATA, null, $keys));
+    }
+
     // ************************************************** CHAT DATA **********************************************
+    public function setChatDataItem(int $chatId, string $key, $data, $ttl = false): PromiseInterface
+    {
+        return $this->cache->set($this->resolveKey(self::CHAT_DATA, $chatId, $key), $data, $this->checkTtl($ttl));
+    }
+
+    public function setChatDataItems(int $chatId, array $values, $ttl = false): PromiseInterface
+    {
+        return $this->cache->setMultiple($this->resolveKeys(self::CHAT_DATA, $chatId, $values), $this->checkTtl($ttl));
+    }
+
     public function getChatDataItem(int $chatId, string $key): PromiseInterface
     {
         return $this->cache->get($this->resolveKey(self::CHAT_DATA, $chatId, $key));
     }
 
-    public function setChatDataItem(int $chatId, string $key, $data, $ttl = false): PromiseInterface
+    public function getChatDataItems(int $chatId, array $keys): PromiseInterface
     {
-        return $this->cache->set($this->resolveKey(self::CHAT_DATA, $chatId, $key), $data, $this->checkTtl($ttl));
+        return $this->cache->getMultiple($this->resolveKeys(self::CHAT_DATA, $chatId, $keys))->then([$this, 'resolveGetItems']);
     }
 
     public function deleteChatDataItem(int $chatId, string $key): PromiseInterface
@@ -121,15 +177,30 @@ class ZanzaraCache
         return $this->cache->delete($this->resolveKey(self::CHAT_DATA, $chatId, $key));
     }
 
+    public function deleteChatDataItems(int $chatId, array $keys): PromiseInterface
+    {
+        return $this->cache->deleteMultiple($this->resolveKeys(self::CHAT_DATA, $chatId, $keys));
+    }
+
     // ************************************************** USER DATA **********************************************
+    public function setUserDataItem(int $userId, string $key, $data, $ttl = false): PromiseInterface
+    {
+        return $this->cache->set($this->resolveKey(self::USER_DATA, $userId, $key), $data, $this->checkTtl($ttl));
+    }
+
+    public function setUserDataItems(int $userId, array $values, $ttl = false): PromiseInterface
+    {
+        return $this->cache->setMultiple($this->resolveKeys(self::USER_DATA, $userId, $values), $this->checkTtl($ttl));
+    }
+
     public function getUserDataItem(int $userId, string $key): PromiseInterface
     {
         return $this->cache->get($this->resolveKey(self::USER_DATA, $userId, $key));
     }
 
-    public function setUserDataItem(int $userId, string $key, $data, $ttl = false): PromiseInterface
+    public function getUserDataItems(int $userId, array $keys): PromiseInterface
     {
-        return $this->cache->set($this->resolveKey(self::USER_DATA, $userId, $key), $data, $this->checkTtl($ttl));
+        return $this->cache->getMultiple($this->resolveKeys(self::USER_DATA, $userId, $keys))->then([$this, 'resolveGetItems']);
     }
 
     public function deleteUserDataItem(int $userId, string $key): PromiseInterface
@@ -137,4 +208,8 @@ class ZanzaraCache
         return $this->cache->delete($this->resolveKey(self::USER_DATA, $userId, $key));
     }
 
+    public function deleteUserDataItems(int $userId, array $keys): PromiseInterface
+    {
+        return $this->cache->deleteMultiple($this->resolveKeys(self::USER_DATA, $userId, $keys));
+    }
 }
