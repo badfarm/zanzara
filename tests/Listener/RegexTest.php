@@ -139,7 +139,7 @@ class RegexTest extends TestCase
         $bot->run();
     }
 
-    public function testCallbackQuery()
+    public function testCallbackQueryText()
     {
         $config = new Config();
         $config->setUpdateMode(Config::WEBHOOK_MODE);
@@ -173,6 +173,45 @@ class RegexTest extends TestCase
             $this->assertSame('remove', $inlineKeyboard[1][0]->getCallbackData());
             $this->assertSame('Read', $inlineKeyboard[1][1]->getText());
             $this->assertSame('read', $inlineKeyboard[1][1]->getCallbackData());
+        });
+
+        $bot->run();
+    }
+    public function testCallbackQueryData()
+    {
+        $config = new Config();
+        $config->setUpdateMode(Config::WEBHOOK_MODE);
+        $config->setSafeMode(true);
+        $config->setUpdateStream(__DIR__ . '/../update_types/callback_query_parameters.json');
+        $bot = new Zanzara('test', $config);
+
+        $bot->onCbQueryData('modify {id}', function (Context $ctx, $id) {
+            $this->assertSame('12345', $id);
+            $callbackQuery = $ctx->getCallbackQuery();
+            $message = $callbackQuery->getMessage();
+            $this->assertSame('666728699048485871', $callbackQuery->getId());
+            $this->assertSame(222222222, $callbackQuery->getFrom()->getId());
+            $this->assertSame(false, $callbackQuery->getFrom()->isBot());
+            $this->assertSame('Michael', $callbackQuery->getFrom()->getFirstName());
+            $this->assertSame('mscott', $callbackQuery->getFrom()->getUsername());
+            $this->assertSame('it', $callbackQuery->getFrom()->getLanguageCode());
+            $this->assertSame(23759, $message->getMessageId());
+            $this->assertSame(222222222, $message->getChat()->getId());
+            $this->assertSame('Michael', $message->getChat()->getFirstName());
+            $this->assertSame('mscott', $message->getChat()->getUsername());
+            $this->assertSame('private', $message->getChat()->getType());
+            $this->assertSame(1584984731, $message->getDate());
+            $this->assertSame('Manage your data', $message->getText());
+            $this->assertSame('modify 12345', $callbackQuery->getData());
+            $inlineKeyboard = $message->getReplyMarkup()->getInlineKeyboard();
+            $this->assertSame('Add', $inlineKeyboard[0][0]->getText());
+            $this->assertSame('add 12345', $inlineKeyboard[0][0]->getCallbackData());
+            $this->assertSame('Modify', $inlineKeyboard[0][1]->getText());
+            $this->assertSame('modify 12345', $inlineKeyboard[0][1]->getCallbackData());
+            $this->assertSame('Remove', $inlineKeyboard[1][0]->getText());
+            $this->assertSame('remove 12345', $inlineKeyboard[1][0]->getCallbackData());
+            $this->assertSame('Read', $inlineKeyboard[1][1]->getText());
+            $this->assertSame('read 12345', $inlineKeyboard[1][1]->getCallbackData());
         });
 
         $bot->run();

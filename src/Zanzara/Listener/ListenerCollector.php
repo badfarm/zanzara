@@ -235,11 +235,17 @@ abstract class ListenerCollector
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function onCbQueryData(array $data, $callback, array $filters = []): MiddlewareCollector
+    public function onCbQueryData(string|array $data, $callback, array $filters = []): MiddlewareCollector
     {
-        // merge values with "|" (eg. "accept|refuse|later"), then ListenerResolver will check the callback data
-        // against that regex.
-        $id = '/' . implode('|', $data) . '/';
+        // if it's an array:
+        // we merge options with "|" (eg. "accept|refuse|later"),
+        // then ListenerResolver will check the callback data against that regex.
+        // if not we'll make it parameterised (ex. "accept {user_id}")
+
+        $id = is_array($data) ?
+            '/' . implode('|', $data) . '/' :
+            '/^' . preg_replace(self::PARAMETER_REGEX, '(?<$1>.*)', $data) . ' ?$/miu';
+
         $listener = new Listener($callback, $this->container, $id, $filters);
         $this->listeners['cb_query_data'][$id] = $listener;
         return $listener;
